@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/auth-server/auth-server.iml" filepath="$PROJECT_DIR$/auth-server/auth-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core-server.iml" filepath="$PROJECT_DIR$/core-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/nearme.iml" filepath="$PROJECT_DIR$/.idea/nearme.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shared-server/shared-server.iml" filepath="$PROJECT_DIR$/shared-server/shared-server.iml" />
+    </modules>
+  </component>
+</project>
