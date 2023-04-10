@@ -21,7 +21,11 @@ dependencies:
   get_it: ^7.2.0
   bloc: ^8.1.1
   flutter_bloc: ^8.1.2
-  modal_bottom_sheet: ^2.1.2
+  modal_bottom_sheet:
+    git:
+      url: https://github.com/followthemoney1/modal_bottom_sheet.git
+      ref: main
+      path: modal_bottom_sheet
   pinput: ^2.2.31
   dartz: ^0.10.1
   lottie: ^2.3.2

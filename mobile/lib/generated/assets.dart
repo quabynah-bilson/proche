@@ -2,6 +2,11 @@
 class Assets {
   Assets._();
 
+  static const String animError = 'assets/anim/error.json';
+  static const String animPhoneVerification = 'assets/anim/phone_verification.json';
+  static const String animSuccess = 'assets/anim/success.json';
+  static const String animWelcomeNewUser = 'assets/anim/welcome_new_user.json';
+  static const String animWorkInProgress = 'assets/anim/work_in_progress.json';
   static const String avatarsLorelei0 = 'assets/img/avatars/lorelei_0.png';
   static const String avatarsLorelei1 = 'assets/img/avatars/lorelei_1.png';
   static const String avatarsLorelei10 = 'assets/img/avatars/lorelei_10.png';
