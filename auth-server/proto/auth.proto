@@ -34,19 +34,22 @@ service AuthService {
 
 }
 
+// verify phone number request message
 message VerifyPhoneRequest {
   string phone_number = 1;
   string verification_code = 2;
 }
 
+// login request message
 message LoginRequest {
   string phone_number = 1;
   string password = 2;
   string language_id = 3;
 }
 
+// auth response message contains token and refresh token
 message AuthResponse {
-  string token = 1;
+  Session session = 1;
 }
 
 message RegisterRequest {
@@ -80,9 +83,11 @@ message Account {
 
 message Session {
   string id = 1;
-  string token = 2;
+  string access_token = 2;
   string account_id = 3;
   string language_id = 4;
   google.protobuf.Timestamp created_at = 5;
-  google.protobuf.Timestamp expires_at = 6;
+  google.protobuf.Timestamp access_token_expires_at = 6;
+  string refresh_token = 7;
+  google.protobuf.Timestamp refresh_token_expires_at = 8;
 }

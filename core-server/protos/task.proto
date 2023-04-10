@@ -1,0 +1,107 @@
+syntax = "proto3";
+package task;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "com.github/quabynah-bilson/nearme;core";
+
+// TaskService is the service that handles task related operations
+service TaskService {
+  // task related operations
+  rpc create_task(CreateTaskRequest) returns (Task);
+  rpc get_task(google.protobuf.StringValue) returns (stream Task);
+  rpc get_tasks(google.protobuf.Empty) returns (stream TaskList);
+  rpc update_task(UpdateTaskRequest) returns (Task);
+  rpc delete_task(google.protobuf.StringValue) returns (google.protobuf.Empty);
+
+  // task event related operations
+  rpc create_task_event(CreateTaskEventRequest) returns (TaskEvent);
+  rpc get_task_event(google.protobuf.StringValue) returns (stream TaskEvent);
+  rpc get_task_events(google.protobuf.StringValue) returns (stream TaskEventList);
+  rpc cancel_task_event(google.protobuf.StringValue) returns (TaskEvent);
+  rpc complete_task_event(CompleteTaskEventRequest) returns (TaskEvent);
+  rpc get_task_events_for_user(google.protobuf.StringValue) returns (stream TaskEventList);
+  rpc get_task_events_for_task(google.protobuf.StringValue) returns (stream TaskEventList);
+  rpc get_task_events_for_user_and_task(TaskEventRequest) returns (stream TaskEventList);
+  rpc delete_task_event(google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc delete_task_events_for_task(google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc delete_task_events_for_user(google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc delete_task_events_for_user_and_task(TaskEventRequest) returns (google.protobuf.Empty);
+}
+
+// TaskEventRequest is the request object for getting task events for a user and task
+message TaskEventRequest {
+  string user_id = 1;
+  string task_id = 2;
+}
+
+// CompleteTaskEventRequest is the request object for completing a task event
+message CompleteTaskEventRequest {
+  string task_id = 1;
+  google.protobuf.Timestamp end_time = 2;
+  optional string notes = 3;
+}
+
+// TaskEventList is the list of task events
+message TaskEventList {
+  repeated TaskEvent task_events = 1;
+}
+
+// CreateTaskEventRequest is the request object for creating a task event
+message CreateTaskEventRequest {
+  string task_id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp start_time = 3;
+  optional string notes = 4;
+  optional string vaccine_card_url = 5;
+}
+
+// CreateTaskRequest is the request object for creating a task
+message CreateTaskRequest {
+  string title = 1;
+  string description = 2;
+  google.protobuf.Timestamp due_date = 3;
+  google.protobuf.Duration duration = 4;
+}
+
+// UpdateTaskRequest is the request object for updating a task
+message UpdateTaskRequest {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp due_date = 4;
+  google.protobuf.Duration duration = 5;
+  google.protobuf.BoolValue completed = 6;
+}
+
+// TaskList is the list of tasks
+message TaskList {
+  repeated Task tasks = 1;
+}
+
+// Task is the task object
+message Task {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp due_date = 6;
+  google.protobuf.Duration duration = 7;
+  bool completed = 8;
+  optional double charge_per_hour = 9;
+  string user_id = 10;
+}
+
+// TaskEvent is the task event object
+message TaskEvent {
+  string id = 1;
+  string task_id = 2;
+  string user_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  optional string notes = 6;
+}
