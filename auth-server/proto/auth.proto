@@ -1,0 +1,88 @@
+syntax = "proto3";
+package auth;
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+// authentication service for user login, register, reset password, refresh token, logout and etc.
+service AuthService {
+  // auth
+  rpc login (LoginRequest) returns (AuthResponse);
+  rpc register (RegisterRequest) returns (AuthResponse);
+  rpc reset_password (ResetPasswordRequest) returns (AuthResponse);
+  rpc refresh_token (google.protobuf.Empty) returns (AuthResponse);
+  rpc logout (google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // account
+  rpc get_account (google.protobuf.Empty) returns (Account);
+  rpc get_account_by_phone_number (google.protobuf.StringValue) returns (Account);
+  rpc update_account (Account) returns (Account);
+  rpc delete_account (google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // session
+  rpc get_session (google.protobuf.Empty) returns (Session);
+  rpc update_session (Session) returns (Session);
+  rpc delete_session (google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // referral code
+  rpc get_referral_code (google.protobuf.Empty) returns (google.protobuf.StringValue);
+  rpc get_referral_code_by_phone_number (google.protobuf.StringValue) returns (google.protobuf.StringValue);
+
+  // phone verification
+  rpc send_phone_verification_code (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc verify_phone_verification_code (VerifyPhoneRequest) returns (google.protobuf.Empty);
+
+}
+
+message VerifyPhoneRequest {
+  string phone_number = 1;
+  string verification_code = 2;
+}
+
+message LoginRequest {
+  string phone_number = 1;
+  string password = 2;
+  string language_id = 3;
+}
+
+message AuthResponse {
+  string token = 1;
+}
+
+message RegisterRequest {
+  string phone_number = 1;
+  string password = 2;
+  string language_id = 3;
+  string display_name = 4;
+  optional string avatar_url = 5;
+  optional string referral_code = 6;
+  optional string id_card_url = 7;
+  optional string vaccine_card_url = 8;
+}
+
+message ResetPasswordRequest {
+  string phone_number = 1;
+  string language_id = 3;
+}
+
+message Account {
+  string id = 1;
+  string phone_number = 2;
+  string display_name = 3;
+  string language_id = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  optional string avatar_url = 7;
+  optional string id_card_url = 8;
+  optional string vaccine_card_url = 9;
+  optional string referral_code = 10;
+}
+
+message Session {
+  string id = 1;
+  string token = 2;
+  string account_id = 3;
+  string language_id = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp expires_at = 6;
+}
