@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.qcodelabs.nearme.mobile"
+          package="com.qcodelabsllc.proche.mobile">
           android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET"/>

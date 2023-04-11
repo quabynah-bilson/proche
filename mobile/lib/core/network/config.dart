@@ -1,8 +1,8 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/network/log.interceptor.dart';
 import 'package:mobile/core/network/token.interceptor.dart';
-import 'package:mobile/core/utils/constants.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:mobile/generated/protos/event.pbgrpc.dart';
 import 'package:mobile/generated/protos/giveaway.pbgrpc.dart';
@@ -17,41 +17,47 @@ abstract class NetworkConfigModule {
 
   ClientInterceptor get _tokenInterceptor => TokenGrpcInterceptor();
 
-  ClientChannel _createChannel(int port, [String host = '<your-local-ip>']) =>
+  ClientChannel _createChannel(int port, [String? host = '<your-local-ip>']) =>
       ClientChannel(
-        host,
+        host ?? '0.0.0.0',
         port: port,
-        options: const ChannelOptions(
-            credentials: ChannelCredentials.insecure(), userAgent: kAppName),
+        options:
+            const ChannelOptions(credentials: ChannelCredentials.insecure()),
       );
 
   @injectable
-  AuthServiceClient get authServiceClient =>
-      AuthServiceClient(_createChannel(1800),
-          interceptors: [_tokenInterceptor, _logInterceptor]);
+  AuthServiceClient get authServiceClient => AuthServiceClient(
+      _createChannel(int.parse(dotenv.env['AUTH_SERVER_PORT'].toString()),
+          dotenv.env['AUTH_SERVER_URL']),
+      interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable
   SharedServiceClient get sharedServiceClient =>
-      SharedServiceClient(_createChannel(1900),
+      SharedServiceClient(_createChannel(int.parse(dotenv.env['SHARED_SERVER_URL'].toString()),
+          dotenv.env['SHARED_SERVER_PORT']),
           interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable
   TaskServiceClient get taskServiceClient =>
-      TaskServiceClient(_createChannel(2000),
+      TaskServiceClient(_createChannel(int.parse(dotenv.env['CORE_SERVER_PORT'].toString()),
+          dotenv.env['CORE_SERVER_URL']),
           interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable
   EventServiceClient get eventServiceClient =>
-      EventServiceClient(_createChannel(2000),
+      EventServiceClient(_createChannel(int.parse(dotenv.env['CORE_SERVER_PORT'].toString()),
+          dotenv.env['CORE_SERVER_URL']),
           interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable
   TripServiceClient get tripServiceClient =>
-      TripServiceClient(_createChannel(2000),
+      TripServiceClient(_createChannel(int.parse(dotenv.env['CORE_SERVER_PORT'].toString()),
+          dotenv.env['CORE_SERVER_URL']),
           interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable
-  GiveAwayServiceClient get savingsServiceClient =>
-      GiveAwayServiceClient(_createChannel(2000),
+  GiveAwayServiceClient get giveAwayServiceClient =>
+      GiveAwayServiceClient(_createChannel(int.parse(dotenv.env['CORE_SERVER_PORT'].toString()),
+          dotenv.env['CORE_SERVER_URL']),
           interceptors: [_tokenInterceptor, _logInterceptor]);
 }

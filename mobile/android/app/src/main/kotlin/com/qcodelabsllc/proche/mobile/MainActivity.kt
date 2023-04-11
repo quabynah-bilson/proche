@@ -1,4 +1,4 @@
-package io.qcodelabs.nearme.mobile
+package com.qcodelabsllc.proche.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

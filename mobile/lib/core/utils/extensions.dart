@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/features/shared/presentation/manager/auth/auth_bloc.dart';
@@ -9,11 +12,12 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:protobuf/protobuf.dart';
 import 'package:shared_utils/shared_utils.dart';
 
-import 'constants.dart';
 import 'validator.dart';
 
 extension BuildContextX on BuildContext {
-  NavigatorState get navigator => Navigator.of(this);
+  TextTheme get textTheme => theme.textTheme;
+
+  AppLocalizations get localizer => AppLocalizations.of(this);
 
   void showFeatureUnderDevSheet() async {
     showCupertinoModalBottomSheet(
@@ -29,12 +33,38 @@ extension BuildContextX on BuildContext {
                   height: height * 0.25,
                   width: width * 0.7)
               .bottom(24),
-          const EmptyContentPlaceholder(
-              title: kFeatureUnderDev, subtitle: kFeatureUnderDevSubhead),
+          EmptyContentPlaceholder(
+              title: localizer.underMaintenanceHeader,
+              subtitle: localizer.underMaintenanceSubhead),
           SafeArea(
             top: false,
             child: AppRoundedButton(
-                    text: 'Thanks, got it!', onTap: context.navigator.pop)
+                    text: localizer.gotIt, onTap: context.navigator.pop)
+                .top(40),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// shows a dialog to confirm user's language preference
+  /// TODO add a checkbox to remember user's preference
+  void showLanguagePickerFieldSheet() async {
+    showCupertinoModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.surface,
+      useRootNavigator: true,
+      bounce: true,
+      builder: (context) => AnimatedColumn(
+        animateType: AnimateType.slideDown,
+        children: [
+          EmptyContentPlaceholder(
+              title: localizer.underMaintenanceHeader,
+              subtitle: localizer.underMaintenanceSubhead),
+          SafeArea(
+            top: false,
+            child: AppRoundedButton(
+                text: localizer.gotIt, onTap: context.navigator.pop)
                 .top(40),
           ),
         ],
@@ -58,10 +88,10 @@ extension BuildContextX on BuildContext {
                   height: height * 0.25,
                   width: width * 0.7)
               .bottom(24),
-          const EmptyContentPlaceholder(
-              title: 'Thanks for exploring $kAppName🎉',
-              subtitle: kAppWelcomeText),
-          AppRoundedButton(text: 'Got it', onTap: context.navigator.pop)
+          EmptyContentPlaceholder(
+              title: localizer.thanksForExploring(localizer.appName),
+              subtitle: localizer.appWelcomeText),
+          AppRoundedButton(text: localizer.gotIt, onTap: context.navigator.pop)
               .top(40),
           SafeArea(
             top: false,
@@ -70,7 +100,7 @@ extension BuildContextX on BuildContext {
                 context.navigator.pop();
                 doAfterDelay(showLoginSheet);
               },
-              child: 'Done exploring? Join us now'.button(context),
+              child: localizer.joinUs.button(context),
             ).top(8),
           ),
         ],
@@ -82,8 +112,7 @@ extension BuildContextX on BuildContext {
   void showAccountSetupSheet(Account account) async {
     final authBloc = AuthBloc(),
         formKey = GlobalKey<FormState>(),
-        firstNameController = TextEditingController(),
-        lastNameController = TextEditingController();
+        usernameController = TextEditingController();
 
     showCupertinoModalBottomSheet(
       context: this,
@@ -100,8 +129,11 @@ extension BuildContextX on BuildContext {
           child: Material(
             color: colorScheme.surface,
             child: LoadingIndicator(
-              lottieAnimResource: kProcheLoadingAnimUrl,
+              lottieAnimResource: Assets.animLoading,
               isLoading: state is LoadingState,
+              loadingAnimIsAsset: true,
+              package: Platform.packageConfig,
+              // fixme: package name
               child: ListView(
                 shrinkWrap: true,
                 controller: ModalScrollController.of(context),
@@ -133,19 +165,11 @@ extension BuildContextX on BuildContext {
                     child: Column(
                       children: [
                         AppTextField(
-                          'First Name',
-                          controller: firstNameController,
+                          localizer.username,
+                          controller: usernameController,
                           capitalization: TextCapitalization.words,
                           validator: Validators.validate,
                           prefixIcon: const Icon(Icons.alternate_email),
-                          enabled: state is! LoadingState,
-                        ),
-                        AppTextField(
-                          'Last Name',
-                          controller: lastNameController,
-                          capitalization: TextCapitalization.words,
-                          validator: Validators.validate,
-                          prefixIcon: const Icon(TablerIcons.credit_card),
                           enabled: state is! LoadingState,
                         ),
                       ],
@@ -166,8 +190,7 @@ extension BuildContextX on BuildContext {
                               .pushNamed(AppRouter.phoneVerificationRoute);
 
                           if (phoneNumber is String) {
-                            var name =
-                                '${firstNameController.text.trim()} ${lastNameController.text.trim()}';
+                            var name = usernameController.text.trim();
                             var updatedAccount = account.rebuild((acct) {
                               acct.phoneNumber = phoneNumber;
                               acct.displayName = name;
@@ -186,7 +209,7 @@ extension BuildContextX on BuildContext {
                                 .withOpacity(kEmphasisLowest),
                             endIndent: 24),
                       ),
-                      'or continue with'
+                      localizer.continueWith
                           .bodyText2(context, emphasis: kEmphasisMedium),
                       Expanded(
                         child: Divider(
@@ -197,7 +220,7 @@ extension BuildContextX on BuildContext {
                     ],
                   ).top(16),
                   AppRoundedButton(
-                    text: 'Continue with Apple',
+                    text: localizer.continueWithApple,
                     icon: TablerIcons.brand_apple,
                     backgroundColor: colorScheme.onSurface,
                     textColor: colorScheme.surface,
@@ -206,7 +229,7 @@ extension BuildContextX on BuildContext {
                     onTap: showFeatureUnderDevSheet,
                   ).horizontal(20).top(24),
                   AppRoundedButton(
-                    text: 'Continue with Google',
+                    text: localizer.continueWithGoogle,
                     icon: TablerIcons.brand_google,
                     backgroundColor: colorScheme.error,
                     textColor: colorScheme.onError,
@@ -226,8 +249,8 @@ extension BuildContextX on BuildContext {
   void showMessageDialog(
     String message, {
     bool showAsError = true,
-    String title = 'We\'re sorry...',
-    String actionLabel = 'Okay',
+    String? title,
+    String? actionLabel,
     String? animationAsset,
     VoidCallback? onTap,
   }) async {
@@ -249,11 +272,13 @@ extension BuildContextX on BuildContext {
                   height: height * 0.1,
                   width: width * 0.7)
               .bottom(24),
-          EmptyContentPlaceholder(title: title, subtitle: message),
+          EmptyContentPlaceholder(
+              title: title ?? localizer.errorHeader, subtitle: message),
           SafeArea(
             top: false,
             child: AppRoundedButton(
-                    text: actionLabel, onTap: onTap ?? context.navigator.pop)
+                    text: actionLabel ?? localizer.okay,
+                    onTap: onTap ?? context.navigator.pop)
                 .top(40),
           ),
         ],
@@ -275,13 +300,13 @@ extension BuildContextX on BuildContext {
         bloc: read<AuthBloc>(),
         listener: (context, state) {
           if (state is ErrorState<String>) {
-            showMessageDialog(state.failure, title: 'Authentication failed');
+            showMessageDialog(state.failure, title: localizer.authFailed);
           }
 
           if (state is SuccessState<Account>) {
             showMessageDialog(
-              'You\'re signed in as ${state.data.displayName}',
-              title: 'Welcome back🎉',
+              localizer.signedInAs(state.data.displayName),
+              title: localizer.welcomeBack,
               showAsError: false,
               onTap: () => navigator.pushNamedAndRemoveUntil(
                   AppRouter.dashboardRoute, (route) => false),
@@ -289,9 +314,12 @@ extension BuildContextX on BuildContext {
           }
         },
         builder: (context, state) => LoadingIndicator(
-          lottieAnimResource: kProcheLoadingAnimUrl,
+          lottieAnimResource: Assets.animLoading,
           isLoading: state is LoadingState,
-          message: 'Signing in...',
+          // fixme package name
+          package: Platform.packageConfig,
+          loadingAnimIsAsset: true,
+          message: localizer.authenticating,
           child: Container(
             width: width,
             padding: EdgeInsets.fromLTRB(
@@ -309,34 +337,36 @@ extension BuildContextX on BuildContext {
                     children: [
                       Assets.imgAppLogo.asAssetImage(
                           height: height * 0.15, width: width * 0.5),
-                      '$kAppName with ease'.h5(this,
+                      localizer.appName.h5(this,
                           weight: FontWeight.bold,
                           color: colorScheme.onSurface,
                           alignment: TextAlign.center),
-                      kAppLongDesc
+                      localizer.appLongDesc
                           .bodyText2(context, alignment: TextAlign.center)
                           .top(8)
                           .bottom(40),
                       AppTextField(
-                        'Phone Number',
+                        localizer.phoneNumber,
                         enabled: state is! LoadingState,
                         controller: phoneNumberController,
                         textFieldType: AppTextFieldType.phone,
                         validator: Validators.validatePhone,
                         // this may vary based on language id
                         maxLength: 10,
+                        floatLabel: true,
                         prefixIcon: const Icon(TablerIcons.phone_plus),
                       ),
                       AppTextField(
-                        'Password',
+                        localizer.password,
                         enabled: state is! LoadingState,
                         controller: passwordController,
+                        floatLabel: true,
                         textFieldType: AppTextFieldType.password,
                         prefixIcon: const Icon(Icons.password),
                         validator: Validators.validatePassword,
                       ),
                       AppRoundedButton(
-                        text: 'Let\'s go',
+                        text: localizer.signIn,
                         enabled: state is! LoadingState,
                         onTap: () async {
                           if (formKey.currentState != null &&
@@ -345,32 +375,31 @@ extension BuildContextX on BuildContext {
                             var phoneNumber = phoneNumberController.text.trim(),
                                 password = passwordController.text.trim();
                             // TODO sign in
-                            read<AuthBloc>().add(
-                                SignInEvent(phoneNumber: phoneNumber, password: password));
+                            read<AuthBloc>().add(SignInEvent(
+                                phoneNumber: phoneNumber, password: password));
                           }
                         },
                       ),
                       TextButton(
                         // todo
-                        onPressed: () => showMessageDialog(kFeatureUnderDev),
+                        onPressed: () =>
+                            showMessageDialog(localizer.underMaintenanceHeader),
                         child: Text.rich(
                           TextSpan(
                             style: theme.textTheme.labelSmall?.copyWith(
                                 color: context.colorScheme.onSurface
                                     .withOpacity(kEmphasisHigh)),
-                            children: const [
+                            children: [
+                              TextSpan(text: '${localizer.tos1} '),
                               TextSpan(
-                                  text:
-                                      'By continuing, you agree to Quabynah Codelabs LLC '),
+                                  text: localizer.termsOfService,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              TextSpan(text: ' ${localizer.and} '),
                               TextSpan(
-                                  text: 'Terms of Service',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              TextSpan(text: ' and '),
-                              TextSpan(
-                                  text: 'Privacy Policy',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
+                                  text: localizer.privacyPolicy,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
                             ],
                           ),
                           textAlign: TextAlign.center,
