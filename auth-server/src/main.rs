@@ -8,13 +8,13 @@ use log::{LevelFilter, Level};
 use std::io::Write;
 use crate::proto::auth_service_server::AuthServiceServer;
 use crate::server::AuthServiceImpl;
-use rust_i18n::t;
 
 // Init translations for current crate.
 // You must keep this path is same as the path you set `load-path` in [package.metadata.i18n] in Cargo.toml.
 i18n!("locales");
 
 mod server;
+mod config;
 
 mod proto {
     tonic::include_proto!("auth");
@@ -40,13 +40,6 @@ fn init_logger() {
         writeln!(buf, "[{}] {}", style.value(level), record.args())
     });
     builder.init();
-
-    // Log some messages
-    log::error!("This is an error message");
-    log::warn!("This is a warning message");
-    log::info!("This is an information message");
-    log::debug!("This is a debug message");
-    log::trace!("This is a trace message");
 }
 
 #[tokio::main]
@@ -58,10 +51,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv::dotenv().ok();
 
     // Use `available_locales` method to get all available locales.
-    println!("available locales -> {:?}", available_locales());
-
-    // Use `t!` macro to translate text.
-    println!("hello -> {}", t!("app_name", locale="fr"));
+    log::info!("available locales -> {:?}", available_locales());
 
     // initialize mongo database
     let mongo_url = std::env::var("DATABASE_URI").expect("MONGO_URL must be set");
@@ -72,8 +62,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mongo_db = mongo_client.database(&mongo_db);
 
     // create collections based on proto
-    let account_collection = mongo_db.collection::<proto::Account>(&account_collection_name);
-    let session_collection = mongo_db.collection::<proto::Session>(&session_collection_name);
+    let account_collection = mongo_db.collection/*::<proto::Account>*/(&account_collection_name);
+    let session_collection = mongo_db.collection/*::<proto::Session>*/(&session_collection_name);
 
     // create grpc services
     let auth_service = AuthServiceImpl::new(account_collection.clone(), session_collection.clone());
@@ -85,7 +75,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap();
 
     // bind to address
-    let addr = "[::1]:1800".parse().unwrap();
+    let addr = "0.0.0.0:1800".parse().unwrap();
 
     // build grpc server
     println!("starting rust auth server on {}", addr);

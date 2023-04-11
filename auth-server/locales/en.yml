@@ -1,3 +1,17 @@
-app_name: Nearby
-messages:
-  app_name: Welcome to %{name}
+app_name: Nearme
+invalid_credentials: Invalid phone number or password
+account_locked: Your account has been locked
+account_not_verified: Your account has not been verified
+account_not_found: Account not found
+account_expired: Your account has expired
+invalid_otp: Invalid OTP
+invalid_phone_number: Invalid phone number
+invalid_token: Invalid token
+access_denied: Access denied
+auth_failed: Authentication failed
+auth_started: Authentication started
+auth_success: Authentication successful
+session_created: Session created
+session_expired: Session expired
+session_verified: Session verified
+invalid_language_code: Invalid language code

@@ -1,3 +1,17 @@
 app_name: Proche
-messages:
-  app_name: Bienvenue à %{name}
+invalid_credentials: Numéro de téléphone ou mot de passe invalide
+account_locked: Votre compte a été bloqué
+account_not_verified: Votre compte n'est pas vérifié
+account_not_found: Votre compte n'a pas été trouvé
+account_expired: Votre compte a expiré
+invalid_otp: Code invalide
+invalid_phone_number: Numéro de téléphone invalide
+invalid_token: Token invalide
+access_denied: Accès refusé
+auth_failed: Échec de l'authentification
+auth_started: Authentification en cours
+auth_success: Authentification réussie
+session_created: Session créée
+session_expired: Session expirée
+session_verified: Session vérifiée
+invalid_language_code: Code de langue invalide
