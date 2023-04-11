@@ -1,30 +1,30 @@
 # Proche 🧭🗺️: GRPC Microservices with MongoDB and Flutter
 ###### (means Nearby in French)
 
-[//]: # ([![Coverage Status]&#40;https://coveralls.io/repos/github/quabynah-bilson/nearme/badge.svg?branch=master&#41;]&#40;https://coveralls.io/github/quabynah-bilson/nearme?branch=dev&#41;)
+[//]: # ([![Coverage Status]&#40;https://coveralls.io/repos/github/quabynah-bilson/proche/badge.svg?branch=master&#41;]&#40;https://coveralls.io/github/quabynah-bilson/proche?branch=dev&#41;)
 
-[//]: # ([![Go Report Card]&#40;https://goreportcard.com/badge/github.com/quabynah-bilson/nearme&#41;]&#40;https://goreportcard.com/report/github.com/quabynah-bilson/nearme&#41;)
-[![GoDoc](https://godoc.org/github.com/quabynah-bilson/nearme?status.svg)](https://godoc.org/github.com/quabynah-bilson/nearme)
-[![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)](https://github.com/quabynah-bilson/nearme)
-[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://github.com/quabynah-bilson/nearme)
-[![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://github.com/quabynah-bilson/nearme)
+[//]: # ([![Go Report Card]&#40;https://goreportcard.com/badge/github.com/quabynah-bilson/proche&#41;]&#40;https://goreportcard.com/report/github.com/quabynah-bilson/proche&#41;)
+[![GoDoc](https://godoc.org/github.com/quabynah-bilson/proche?status.svg)](https://godoc.org/github.com/quabynah-bilson/proche)
+[![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)](https://github.com/quabynah-bilson/proche)
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://github.com/quabynah-bilson/proche)
+[![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://github.com/quabynah-bilson/proche)
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/quabynah-bilson/nearme/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/quabynah-bilson/proche/master/LICENSE)
 
-[![GitHub stars](https://img.shields.io/github/stars/quabynah-bilson/nearme.svg?style=social&label=Star)](https://github.com/quabynah-bilson/nearme/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme/issues)
+[![GitHub stars](https://img.shields.io/github/stars/quabynah-bilson/proche.svg?style=social&label=Star)](https://github.com/quabynah-bilson/proche/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche/issues)
 
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme/pulls)
-[![GitHub pull requests closed](https://img.shields.io/github/issues-pr-closed/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme/pulls)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche/pulls)
+[![GitHub pull requests closed](https://img.shields.io/github/issues-pr-closed/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche/pulls)
 
-[![GitHub contributors](https://img.shields.io/github/contributors/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme/settings/access?query=filter%3Acollaborators)
-[![GitHub last commit](https://img.shields.io/github/last-commit/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme/commits/dev)
+[![GitHub contributors](https://img.shields.io/github/contributors/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche/settings/access?query=filter%3Acollaborators)
+[![GitHub last commit](https://img.shields.io/github/last-commit/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche/commits/dev)
 
-[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme)
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme)
+[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche)
 
-[![GitHub language count](https://img.shields.io/github/languages/count/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme)
-[![GitHub top language](https://img.shields.io/github/languages/top/quabynah-bilson/nearme.svg)](https://github.com/quabynah-bilson/nearme)
+[![GitHub language count](https://img.shields.io/github/languages/count/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche)
+[![GitHub top language](https://img.shields.io/github/languages/top/quabynah-bilson/proche.svg)](https://github.com/quabynah-bilson/proche)
 
 This project is an example of a GRPC-based microservices architecture that utilizes MongoDB as its database and is
 integrated with a Flutter mobile application.
