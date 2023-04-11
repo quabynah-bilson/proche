@@ -20,3 +20,9 @@ generate-splash-screen-and-launcher-icons:
 	cd mobile && \
 	flutter pub run flutter_launcher_icons:main && \
 	flutter pub run flutter_native_splash:create
+
+generate-language-auth:
+	cd auth-server && cargo install rust-i18n && cargo i18n
+
+generate-language-mobile:
+	cd mobile && flutter gen-l10n

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/features/shared/presentation/manager/auth/auth_bloc.dart';
@@ -13,6 +14,13 @@ import 'constants.dart';
 import 'validator.dart';
 
 extension BuildContextX on BuildContext {
+  // get the default locale language code
+  String get languageId =>
+      Localizations.maybeLocaleOf(this)?.languageCode ?? 'en';
+
+  AppLocalizations? get localizer => AppLocalizations.of(this);
+
+  // flutter widget navigator state
   NavigatorState get navigator => Navigator.of(this);
 
   void showFeatureUnderDevSheet() async {
@@ -345,8 +353,8 @@ extension BuildContextX on BuildContext {
                             var phoneNumber = phoneNumberController.text.trim(),
                                 password = passwordController.text.trim();
                             // TODO sign in
-                            read<AuthBloc>().add(
-                                SignInEvent(phoneNumber: phoneNumber, password: password));
+                            read<AuthBloc>().add(SignInEvent(
+                                phoneNumber: phoneNumber, password: password));
                           }
                         },
                       ),

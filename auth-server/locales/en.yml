@@ -1,0 +1,3 @@
+hello: Nearby
+messages:
+  hello: Hello, %{name}

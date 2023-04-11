@@ -1,0 +1,7 @@
+{
+  "appName": "Proche",
+  "helloWorld": "Nearby",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  }
+}

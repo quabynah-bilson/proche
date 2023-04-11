@@ -53,7 +53,7 @@ class _WelcomePageState extends State<WelcomePage>
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        kAppName.h4(context, weight: FontWeight.bold),
+                        context.localizer!.appName.h4(context, weight: FontWeight.bold),
                         kAppDesc.bodyText2(context).top(8).bottom(40),
                       ],
                     ).horizontal(24),
