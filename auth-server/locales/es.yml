@@ -1,3 +1,0 @@
-hello: Cercano
-messages:
-  hello: Hello, %{name}
