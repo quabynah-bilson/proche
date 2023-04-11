@@ -15,6 +15,8 @@ import 'package:shared_utils/shared_utils.dart';
 import 'validator.dart';
 
 extension BuildContextX on BuildContext {
+  TextTheme get textTheme => theme.textTheme;
+
   AppLocalizations get localizer => AppLocalizations.of(this);
 
   void showFeatureUnderDevSheet() async {
@@ -38,6 +40,31 @@ extension BuildContextX on BuildContext {
             top: false,
             child: AppRoundedButton(
                     text: localizer.gotIt, onTap: context.navigator.pop)
+                .top(40),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// shows a dialog to confirm user's language preference
+  /// TODO add a checkbox to remember user's preference
+  void showLanguagePickerFieldSheet() async {
+    showCupertinoModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.surface,
+      useRootNavigator: true,
+      bounce: true,
+      builder: (context) => AnimatedColumn(
+        animateType: AnimateType.slideDown,
+        children: [
+          EmptyContentPlaceholder(
+              title: localizer.underMaintenanceHeader,
+              subtitle: localizer.underMaintenanceSubhead),
+          SafeArea(
+            top: false,
+            child: AppRoundedButton(
+                text: localizer.gotIt, onTap: context.navigator.pop)
                 .top(40),
           ),
         ],
@@ -288,7 +315,7 @@ extension BuildContextX on BuildContext {
         },
         builder: (context, state) => LoadingIndicator(
           lottieAnimResource: Assets.animLoading,
-          isLoading: true,
+          isLoading: state is LoadingState,
           // fixme package name
           package: Platform.packageConfig,
           loadingAnimIsAsset: true,
@@ -326,12 +353,14 @@ extension BuildContextX on BuildContext {
                         validator: Validators.validatePhone,
                         // this may vary based on language id
                         maxLength: 10,
+                        floatLabel: true,
                         prefixIcon: const Icon(TablerIcons.phone_plus),
                       ),
                       AppTextField(
                         localizer.password,
                         enabled: state is! LoadingState,
                         controller: passwordController,
+                        floatLabel: true,
                         textFieldType: AppTextFieldType.password,
                         prefixIcon: const Icon(Icons.password),
                         validator: Validators.validatePassword,

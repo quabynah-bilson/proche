@@ -29,5 +29,7 @@
   "joinUs" : "Vous avez fini d'explorer? Rejoignez nous maintenant",
   "signUp" : "S'inscrire",
   "signInLater" : "Connectez-vous plus tard",
-  "unsupportedLocale" : "Langue non prise en charge"
+  "unsupportedLocale" : "Langue non prise en charge",
+  "english" : "Anglais",
+  "french" : "Français"
 }

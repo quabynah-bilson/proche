@@ -50,7 +50,7 @@ extension GetItInjectableX on _i1.GetIt {
     gh.factory<_i5.FlutterSecureStorage>(
         () => persistentStorageModule.localStorage);
     gh.factory<_i6.GiveAwayServiceClient>(
-        () => networkConfigModule.savingsServiceClient);
+        () => networkConfigModule.giveAwayServiceClient);
     gh.factory<_i7.SharedServiceClient>(
         () => networkConfigModule.sharedServiceClient);
     gh.factory<_i8.TaskServiceClient>(

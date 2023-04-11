@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/features/shared/presentation/manager/auth/auth_bloc.dart';
+import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
@@ -94,6 +95,53 @@ class _WelcomePageState extends State<WelcomePage>
                   quarterTurns: 1,
                   child: context.localizer.appDev
                       .overline(context, emphasis: kEmphasisMedium),
+                ),
+              ),
+
+              Positioned(
+                top: 12,
+                right: 16,
+                child: BlocBuilder(
+                  bloc: context.read<LocaleCubit>(),
+                  builder: (context, state) => state is SuccessState<String>
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: context.colorScheme.primary
+                                .withOpacity(kEmphasisLowest),
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              state.data
+                                  .toUpperCase()
+                                  .subtitle2(context,
+                                      color: context.colorScheme.primary,
+                                      weight: FontWeight.bold)
+                                  .right(8),
+                              PopupMenuButton<String>(
+                                color: context.colorScheme.background,
+                                icon: Icon(TablerIcons.chevron_down,
+                                    color: context.colorScheme.primary),
+                                onSelected: (value) => context
+                                    .read<LocaleCubit>()
+                                    .setLocale(value),
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 'en',
+                                    child: Text(context.localizer.english),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 'fr',
+                                    child: Text(context.localizer.french),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : const SizedBox.shrink(),
                 ),
               ),
             ],

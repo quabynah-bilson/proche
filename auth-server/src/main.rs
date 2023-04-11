@@ -61,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("available locales -> {:?}", available_locales());
 
     // Use `t!` macro to translate text.
-    println!("hello -> {}", t!("hello", locale="fr"));
+    println!("hello -> {}", t!("app_name", locale="fr"));
 
     // initialize mongo database
     let mongo_url = std::env::var("DATABASE_URI").expect("MONGO_URL must be set");

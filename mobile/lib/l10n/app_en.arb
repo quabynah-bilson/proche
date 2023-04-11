@@ -29,5 +29,7 @@
   "joinUs" : "Done exploring? Join us now",
   "signUp" : "Sign up",
   "signInLater" : "Sign in later",
-  "unsupportedLocale" : "Unsupported language"
+  "unsupportedLocale" : "Unsupported language",
+  "english" : "English",
+  "french" : "French"
  }

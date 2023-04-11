@@ -37,6 +37,7 @@ dependencies:
     git: https://github.com/quabynah-bilson/shared_utils.git
   intl: any
   local_auth: ^2.1.6
+  flutter_dotenv: ^5.0.2
 
 
 dev_dependencies:
@@ -59,6 +60,7 @@ flutter:
     - assets/anim/
     - assets/img/
     - assets/img/avatars/
+    - .env
 
 
 # flutter pub run flutter_launcher_icons

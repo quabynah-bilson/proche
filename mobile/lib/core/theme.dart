@@ -37,7 +37,7 @@ ColorScheme useColorScheme([ThemeMode mode = ThemeMode.light]) =>
           );
 
 /// setup font
-const _primaryFont = GoogleFonts.dmSans,
+const _primaryFont = GoogleFonts.dmMono,
     _secondaryFont = GoogleFonts.dmSans;
 
 TextTheme _textTheme([Color textColor = Colors.black]) => TextTheme(
