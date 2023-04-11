@@ -38,7 +38,7 @@ all from the convenience of their mobile device.
 
 To run this app on your device, follow these steps:
 
-- Clone this repository to your local machine using git clone https://github.com/your-username/eventfinder-app.git.
+- Clone this repository to your local machine using git clone https://github.com/your-username/proche.git.
 
 - Install the necessary dependencies by running flutter pub get.
 
