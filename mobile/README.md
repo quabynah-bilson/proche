@@ -41,6 +41,16 @@ To run this app on your device, follow these steps:
 - Clone this repository to your local machine using git clone https://github.com/your-username/proche.git.
 
 - Install the necessary dependencies by running flutter pub get.
+- Setup your environment variables with file `.env` like this:
+  ```.env
+  # microservices
+  AUTH_SERVER_URL=0.0.0.0
+  AUTH_SERVER_PORT=1800
+  SHARED_SERVER_URL=0.0.0.0
+  SHARED_SERVER_PORT=1900
+  CORE_SERVER_URL=0.0.0.0
+  CORE_SERVER_PORT=2000
+  ```
 
 - Connect your device to your computer and run the app using flutter run.
 
