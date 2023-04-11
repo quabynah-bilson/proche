@@ -1,8 +1,8 @@
 // validate language id from request
 pub fn validate_language_id(language_id: &str) -> Result<bool, Box<dyn std::error::Error>> {
-    let mut result = match language_id {
+    let result = match language_id {
         "en" => true,
-        "fa" => true,
+        "fr" => true,
         _ => false,
     };
     if !&result {

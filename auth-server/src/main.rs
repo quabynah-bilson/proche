@@ -2,6 +2,8 @@
 #[macro_use]
 extern crate rust_i18n;
 
+extern crate bcrypt;
+
 use env_logger;
 use env_logger::{Builder, fmt::Color};
 use log::{LevelFilter, Level};

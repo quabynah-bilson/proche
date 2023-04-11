@@ -4,6 +4,7 @@ account_locked: Votre compte a été bloqué
 account_not_verified: Votre compte n'est pas vérifié
 account_not_found: Votre compte n'a pas été trouvé
 account_expired: Votre compte a expiré
+account_exists: Le compte existe déjà
 invalid_otp: Code invalide
 invalid_phone_number: Numéro de téléphone invalide
 invalid_token: Token invalide

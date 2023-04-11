@@ -30,8 +30,8 @@ pub async fn create_session_for_account(account_doc: &Document, session_col: &mo
     match session_col.insert_one(&doc, None).await {
         Ok(insert_result) => {
             log::info!("{}: {:?}", t!("session_created"), &doc);
-            doc.insert("id", &insert_result.inserted_id.to_string());
-            session_col.replace_one(doc! {"account_id": &account_doc.get_str("account_id").unwrap().to_string()}, &doc, None).await.unwrap();
+            doc.insert("id", &insert_result.inserted_id.as_object_id().unwrap().to_hex());
+            session_col.replace_one(doc! {"account_id": &account_doc.get_str("id").unwrap().to_string()}, &doc, None).await.unwrap();
             Ok(doc)
         }
         Err(e) => {
