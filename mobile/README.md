@@ -50,10 +50,7 @@ To run this app on your device, follow these steps:
 
 - `Flutter`: A cross-platform framework for building high-performance, high-fidelity mobile apps for iOS and Android.
 
-- `Firebase Messaging`: A comprehensive platform for building and managing mobile and web applications, including
-  backend
-  services,
-  analytics, and more.
+- `Firebase Messaging`: A cloud messaging platform that allows developers to send notifications and messages to users across multiple platforms, including Android, iOS, and web. It provides a simple and reliable way to deliver messages and engage with users in real-time. With Firebase Messaging, developers can send targeted messages to specific users or groups, track message delivery and engagement, and customize the look and feel of notifications.
 
 - `Google Maps API`: A set of tools and services for building interactive, location-based applications.
 - `gRPC`: A high-performance, open-source framework for building distributed systems and microservices.
