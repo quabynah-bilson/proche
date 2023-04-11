@@ -23,8 +23,8 @@ ColorScheme useColorScheme([ThemeMode mode = ThemeMode.light]) =>
         ? const ColorScheme.light(
             background: Color(0xffffffff),
             onBackground: Colors.black,
-            primary: Color(0xff171C51),
-            onPrimary: Color(0xffFFE7AB),
+            onPrimary: Color(0xff000000),
+            primary: Color(0xffFF6600),
             secondary: Color(0xff2B2921),
             onSecondary: Color(0xffFFE7AB),
             surface: Color(0xffFFFFFF),

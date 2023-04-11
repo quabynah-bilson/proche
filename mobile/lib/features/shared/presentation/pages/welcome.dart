@@ -66,17 +66,16 @@ class _WelcomePageState extends State<WelcomePage>
                       ).horizontal(24),
                     } else if (state is! LoadingState) ...{
                       AppRoundedButton(
-                        text: 'Let\'s get start',
-                        icon: TablerIcons.activity,
+                        text: 'Sign up',
+                        icon: TablerIcons.shield_check,
                         onTap: context.showLoginSheet,
                       ),
                       SafeArea(
                         top: false,
                         child: TextButton(
-                          onPressed: () => context.navigator
-                              .pushNamedAndRemoveUntil(
-                                  AppRouter.dashboardRoute, (_) => false),
-                          child: 'Skip for now'.button(context),
+                          // TODO navigate to dashboard
+                          onPressed: context.showFeatureUnderDevSheet,
+                          child: 'Sign in later'.button(context),
                         ).top(8),
                       ),
                     },

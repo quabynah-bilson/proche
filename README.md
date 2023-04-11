@@ -1,4 +1,5 @@
-# Proche (Nearby) 🧭🗺️: GRPC Microservices with MongoDB and Flutter
+# Proche 🧭🗺️: GRPC Microservices with MongoDB and Flutter
+###### (means Nearby in French)
 
 [//]: # ([![Coverage Status]&#40;https://coveralls.io/repos/github/quabynah-bilson/nearme/badge.svg?branch=master&#41;]&#40;https://coveralls.io/github/quabynah-bilson/nearme?branch=dev&#41;)
 

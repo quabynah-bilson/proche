@@ -338,13 +338,15 @@ extension BuildContextX on BuildContext {
                       AppRoundedButton(
                         text: 'Let\'s go',
                         enabled: state is! LoadingState,
-                        onTap: () {
+                        onTap: () async {
                           if (formKey.currentState != null &&
                               formKey.currentState!.validate()) {
                             formKey.currentState?.save();
                             var phoneNumber = phoneNumberController.text.trim(),
                                 password = passwordController.text.trim();
                             // TODO sign in
+                            read<AuthBloc>().add(
+                                SignInEvent(phoneNumber: phoneNumber, password: password));
                           }
                         },
                       ),
