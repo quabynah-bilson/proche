@@ -1034,10 +1034,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "0064062e2495b8fb8dcc3b1bf152745d9a6eee06"
+      resolved-ref: "86f2a2e196f0e7240aabf39d9621bc206cb90a89"
       url: "https://github.com/quabynah-bilson/shared_utils.git"
     source: git
-    version: "0.0.43-dev.43"
+    version: "0.0.45-dev.45"
   shelf:
     dependency: transitive
     description:

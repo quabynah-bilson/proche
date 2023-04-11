@@ -2,7 +2,6 @@ import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/network/log.interceptor.dart';
 import 'package:mobile/core/network/token.interceptor.dart';
-import 'package:mobile/core/utils/constants.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:mobile/generated/protos/event.pbgrpc.dart';
 import 'package:mobile/generated/protos/giveaway.pbgrpc.dart';
@@ -21,8 +20,8 @@ abstract class NetworkConfigModule {
       ClientChannel(
         host,
         port: port,
-        options: const ChannelOptions(
-            credentials: ChannelCredentials.insecure(), userAgent: kAppName),
+        options:
+            const ChannelOptions(credentials: ChannelCredentials.insecure()),
       );
 
   @injectable

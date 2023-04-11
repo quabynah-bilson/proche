@@ -11,7 +11,8 @@ import 'package:shared_utils/shared_utils.dart';
 class ProcheLocalStorageRepository extends BaseLocalStorageRepository {
   final FlutterSecureStorage storage;
   final _kSessionKey = 'proche-session-key',
-      _kAccountKey = 'proche-account-key';
+      _kAccountKey = 'proche-account-key',
+      _kLocaleKey = 'proche-locale-key';
 
   ProcheLocalStorageRepository(this.storage);
 
@@ -57,4 +58,12 @@ class ProcheLocalStorageRepository extends BaseLocalStorageRepository {
     logger.d('writing account to persistent storage -> $encodedAccountJson');
     await storage.write(key: _kAccountKey, value: encodedAccountJson);
   }
+
+  @override
+  Future<String> get defaultLocale async =>
+      await storage.read(key: _kLocaleKey) ?? 'en';
+
+  @override
+  Future<void> setLocale(String locale) async =>
+      await storage.write(key: _kLocaleKey, value: locale);
 }

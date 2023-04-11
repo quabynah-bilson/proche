@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mobile/core/utils/constants.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/validator.dart';
 import 'package:mobile/features/shared/presentation/manager/auth/auth_bloc.dart';
@@ -133,8 +132,10 @@ class _PhoneNumberVerificationPageState
             child: SafeArea(
               bottom: false,
               child: LoadingIndicator(
-                lottieAnimResource: kProcheLoadingAnimUrl,
+                lottieAnimResource: Assets.animLoading,
                 isLoading: _loading,
+                package: 'mobile',
+                loadingAnimIsAsset: true,
                 child: Material(
                   color: context.colorScheme.surface,
                   child: Form(

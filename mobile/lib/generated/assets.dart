@@ -3,6 +3,7 @@ class Assets {
   Assets._();
 
   static const String animError = 'assets/anim/error.json';
+  static const String animLoading = 'assets/anim/loading.json';
   static const String animPhoneVerification = 'assets/anim/phone_verification.json';
   static const String animSuccess = 'assets/anim/success.json';
   static const String animWelcomeNewUser = 'assets/anim/welcome_new_user.json';

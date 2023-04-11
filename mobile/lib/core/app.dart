@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/theme.dart';
 import 'package:mobile/features/shared/presentation/manager/auth/auth_bloc.dart';
+import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 /// root widget for application
@@ -15,23 +16,35 @@ class ProcheApp extends StatefulWidget {
 }
 
 class _ProcheAppState extends State<ProcheApp> {
+  late final _localeBloc = LocaleCubit(context);
+
+  @override
+  void initState() {
+    super.initState();
+    doAfterDelay(_localeBloc.getCurrentLocale);
+  }
+
   @override
   Widget build(BuildContext context) => DismissKeyboard(
         child: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => AuthBloc()),
+            BlocProvider(create: (context) => _localeBloc),
           ],
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            onGenerateTitle: (context) =>
-                AppLocalizations.of(context).appName,
-            theme: context.useLightTheme,
-            darkTheme: context.useDarkTheme,
-            themeMode: ThemeMode.system,
-            onGenerateRoute: AppRouterConfig.setupRoutes,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: const Locale('fr'),
+          child: BlocBuilder(
+            bloc: _localeBloc,
+            builder: (context, state) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              onGenerateTitle: (context) =>
+                  AppLocalizations.of(context).appName,
+              theme: context.useLightTheme,
+              darkTheme: context.useDarkTheme,
+              themeMode: ThemeMode.system,
+              onGenerateRoute: AppRouterConfig.setupRoutes,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: state is SuccessState<String> ? Locale(state.data) : null,
+            ),
           ),
         ),
       );

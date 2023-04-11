@@ -12,4 +12,8 @@ abstract class BaseLocalStorageRepository {
   Future<void> saveAccount(Account account);
 
   Future<void> clearSessionAndAccount();
+
+  Future<String> get defaultLocale;
+
+  Future<void> setLocale(String locale);
 }

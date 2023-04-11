@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/core/routing/router.dart';
-import 'package:mobile/core/utils/constants.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/features/shared/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/generated/assets.dart';
@@ -53,8 +52,12 @@ class _WelcomePageState extends State<WelcomePage>
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        context.localizer!.appName.h4(context, weight: FontWeight.bold),
-                        kAppDesc.bodyText2(context).top(8).bottom(40),
+                        context.localizer.appName
+                            .h4(context, weight: FontWeight.bold),
+                        context.localizer.appDesc
+                            .bodyText2(context)
+                            .top(8)
+                            .bottom(40),
                       ],
                     ).horizontal(24),
                     if (state is SuccessState<Account>) ...{
@@ -66,7 +69,7 @@ class _WelcomePageState extends State<WelcomePage>
                       ).horizontal(24),
                     } else if (state is! LoadingState) ...{
                       AppRoundedButton(
-                        text: 'Sign up',
+                        text: context.localizer.signUp,
                         icon: TablerIcons.shield_check,
                         onTap: context.showLoginSheet,
                       ),
@@ -75,7 +78,7 @@ class _WelcomePageState extends State<WelcomePage>
                         child: TextButton(
                           // TODO navigate to dashboard
                           onPressed: context.showFeatureUnderDevSheet,
-                          child: 'Sign in later'.button(context),
+                          child: context.localizer.signInLater.button(context),
                         ).top(8),
                       ),
                     },
@@ -89,8 +92,8 @@ class _WelcomePageState extends State<WelcomePage>
                 left: 16,
                 child: RotatedBox(
                   quarterTurns: 1,
-                  child:
-                  kAppNameLong.overline(context, emphasis: kEmphasisMedium),
+                  child: context.localizer.appDev
+                      .overline(context, emphasis: kEmphasisMedium),
                 ),
               ),
             ],
