@@ -1,11 +1,11 @@
-use std::str::FromStr;
-
+use std::error::Error;
 use mongodb::bson::{doc, Document};
-use mongodb::bson::oid::ObjectId;
-use tonic::metadata::{Ascii, MetadataMap, MetadataValue};
+use tonic::metadata::MetadataMap;
 use tonic::Status;
 
 use crate::config::tokenizer;
+
+
 
 // create session for account and return it
 pub async fn create_access_token(account_id: &str, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<String, Status> {
@@ -20,7 +20,7 @@ pub async fn create_access_token(account_id: &str, language_id: &str, token_col:
     let refresh_token = tokenizer::generate_token(&account_id, &language_id, refresh_token_expires_at).unwrap();
 
     // create token store
-    let mut doc = doc! {
+    let doc = doc! {
         "access_token": &access_token,
         "refresh_token": &refresh_token,
     };
@@ -50,18 +50,53 @@ pub async fn verify_access_token(request: &MetadataMap, language_id: &str, token
             return Err(Status::unauthenticated(t!("access_token_not_found")));
         }
     };
-    log::info!("{}: {:?}", t!("access_token_found"), &access_token);
+    log::info!("{}: {:?}", t!("access_token_found_in_request"), &access_token);
 
     // validate token extracted and return it if it's valid or can be refreshed else return error
     match tokenizer::validate_token(&access_token, &language_id, &token_col).await {
         Ok(updated_token) => {
             // get account id from token
-            let result = tokenizer::get_payload_from_token(&updated_token).unwrap();
+            let result = match tokenizer::get_payload_from_token(&updated_token) {
+                Ok(data) => data,
+                Err(_) => {
+                    return Err(Status::unauthenticated(t!("token_expired")));
+                }
+            };
             Ok((result.0, result.1))
         }
         Err(e) => {
             log::error!("{}: {:?}", t!("token_expired"), e);
             Err(Status::unauthenticated(t!("token_expired")))
+        }
+    }
+}
+
+// get access token from request header
+pub async fn verify_public_access_token(request: &MetadataMap, language_id: &str) -> Result<(), Status> {
+    rust_i18n::set_locale(&language_id.to_string());
+    // extract token from authorization header
+    let access_token = match request.get("Authorization") {
+        Some(token) => {
+            // remove `Bearer ` from token
+            let token = token.to_str().unwrap();
+            let token = token.replace("Bearer ", "");
+            token
+        }
+        None => {
+            log::error!("{}: {:?}", t!("access_token_not_found"), request);
+            return Err(Status::unauthenticated(t!("access_token_not_found")));
+        }
+    };
+    log::info!("{}: {:?}", t!("access_token_found_in_request"), &access_token);
+
+    // validate token extracted and return it if it's valid or can be refreshed else return error
+    match tokenizer::validate_public_token(&access_token, &language_id).await {
+        Ok(_) => {
+            Ok(())
+        }
+        Err(e) => {
+            log::error!("{}: {:?}", t!("token_expired"), e);
+            Err(Status::unauthenticated(t!("token_expired", locale=&language_id)))
         }
     }
 }

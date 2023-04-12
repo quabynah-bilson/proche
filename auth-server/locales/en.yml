@@ -25,5 +25,8 @@ refresh_token_not_found: Refresh token not found
 invalid_token: Invalid token
 access_token_not_found: Access token not found
 access_token_found: Access token found
+access_token_found_in_request: Access token found in request
+unable_to_create_token: Unable to create token
 access_token_verified: Access token verified
 token_expired: Your session has expired
+generating_new_access_token: Generating new access token

@@ -25,5 +25,8 @@ refresh_token_not_found: Token de rafraîchissement non trouvé
 invalid_token: Token invalide
 access_token_not_found: Token d'accès non trouvé
 access_token_found: Token d'accès trouvé
+access_token_found_in_request: Token d'accès trouvé dans la requête
+unable_to_create_token: Impossible de créer le token
 access_token_verified: Token d'accès vérifié
 token_expired: Votre compte a expiré
+generating_new_access_token: Génération d'un nouveau token d'accès

@@ -32,6 +32,7 @@ rust-i18n = "1"
 log = "0.4.17"
 paseto = "2.0.0+1.0.3"
 bcrypt = "0.14.0"
+ring = { version = "^0.16", features = ["std"] }
 
 [build-dependencies]
 tonic-build = "0.9.1"

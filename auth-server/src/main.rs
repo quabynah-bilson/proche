@@ -7,7 +7,7 @@ use std::io::Write;
 
 use env_logger;
 use env_logger::{Builder, fmt::Color};
-use log::{Level, LevelFilter};
+use log::{Level, LevelFilter, log};
 
 use crate::proto::auth_service_server::AuthServiceServer;
 use crate::server::AuthServiceImpl;
@@ -54,7 +54,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv::dotenv().ok();
 
     // Use `available_locales` method to get all available locales.
-    log::info!("available locales -> {:?}", available_locales());
+    log::info!("available locales -> {:?}\n", available_locales());
 
     // initialize mongo database
     let mongo_url = std::env::var("DATABASE_URI").expect("MONGO_URL must be set");
@@ -78,15 +78,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap();
 
     // bind to address
-    let addr = "0.0.0.0:1800".parse().unwrap();
+    let host = "0.0.0.0";
+    let port = 1800;
+    let addr = format!("{}:{}", &host, &port).parse().unwrap();
 
     // build grpc server
-    println!("starting rust auth server on {}", addr);
+    log::info!("starting rust auth server on {}", &addr);
     tonic::transport::Server::builder()
         .add_service(service)
         .add_service(AuthServiceServer::new(auth_service))
         .serve(addr)
         .await?;
+
 
     Ok(())
 }

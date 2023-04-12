@@ -12,6 +12,9 @@ service AuthService {
   rpc reset_password (ResetPasswordRequest) returns (google.protobuf.StringValue);
   rpc logout (google.protobuf.Empty) returns (google.protobuf.Empty);
 
+  // request public access token for unauthenticated calls
+  rpc request_public_access_token (google.protobuf.Empty) returns (google.protobuf.StringValue);
+
   // account
   rpc get_account (google.protobuf.Empty) returns (Account);
   rpc get_account_by_phone_number (google.protobuf.StringValue) returns (Account);
@@ -32,14 +35,12 @@ service AuthService {
 message VerifyPhoneRequest {
   string phone_number = 1;
   string verification_code = 2;
-  string language_id = 3;
 }
 
 // login request message
 message LoginRequest {
   string phone_number = 1;
   string password = 2;
-  string language_id = 3;
 }
 
 // auth response message contains token and refresh token
@@ -47,7 +48,6 @@ message LoginRequest {
 message RegisterRequest {
   string phone_number = 1;
   string password = 2;
-  string language_id = 3;
   string display_name = 4;
   optional string avatar_url = 5;
   optional string referral_code = 6;
@@ -57,7 +57,6 @@ message RegisterRequest {
 
 message ResetPasswordRequest {
   string phone_number = 1;
-  string language_id = 3;
   string password = 4;
 }
 

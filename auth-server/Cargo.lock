@@ -108,6 +108,7 @@ dependencies = [
  "paseto",
  "prost",
  "prost-types",
+ "ring",
  "rust-i18n",
  "serde",
  "serde-protobuf",
