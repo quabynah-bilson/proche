@@ -9,8 +9,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'package:protobuf_google/protobuf_google.dart' as $7;
 import 'package:protobuf_google/protobuf_google.dart' as $8;
-import 'package:protobuf_google/protobuf_google.dart' as $9;
 
 import 'trip.pbenum.dart';
 
@@ -103,8 +103,8 @@ class BookTripRequest extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..aOM<TripCoordinates>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: TripCoordinates.create)
     ..aOM<TripCoordinates>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: TripCoordinates.create)
-    ..aOM<$8.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $8.Timestamp.create)
-    ..aOM<$9.Duration>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $9.Duration.create)
+    ..aOM<$7.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Duration>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
     ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'vaccineCardUrl')
     ..hasRequiredFields = false
   ;
@@ -114,8 +114,8 @@ class BookTripRequest extends $pb.GeneratedMessage {
     $core.String? userId,
     TripCoordinates? origin,
     TripCoordinates? destination,
-    $8.Timestamp? departureTime,
-    $9.Duration? duration,
+    $7.Timestamp? departureTime,
+    $8.Duration? duration,
     $core.String? vaccineCardUrl,
   }) {
     final _result = create();
@@ -192,26 +192,26 @@ class BookTripRequest extends $pb.GeneratedMessage {
   TripCoordinates ensureDestination() => $_ensure(2);
 
   @$pb.TagNumber(4)
-  $8.Timestamp get departureTime => $_getN(3);
+  $7.Timestamp get departureTime => $_getN(3);
   @$pb.TagNumber(4)
-  set departureTime($8.Timestamp v) { setField(4, v); }
+  set departureTime($7.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasDepartureTime() => $_has(3);
   @$pb.TagNumber(4)
   void clearDepartureTime() => clearField(4);
   @$pb.TagNumber(4)
-  $8.Timestamp ensureDepartureTime() => $_ensure(3);
+  $7.Timestamp ensureDepartureTime() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $9.Duration get duration => $_getN(4);
+  $8.Duration get duration => $_getN(4);
   @$pb.TagNumber(5)
-  set duration($9.Duration v) { setField(5, v); }
+  set duration($8.Duration v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasDuration() => $_has(4);
   @$pb.TagNumber(5)
   void clearDuration() => clearField(5);
   @$pb.TagNumber(5)
-  $9.Duration ensureDuration() => $_ensure(4);
+  $8.Duration ensureDuration() => $_ensure(4);
 
   @$pb.TagNumber(6)
   $core.String get vaccineCardUrl => $_getSZ(5);
@@ -229,10 +229,10 @@ class Trip extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..aOM<TripCoordinates>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: TripCoordinates.create)
     ..aOM<TripCoordinates>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: TripCoordinates.create)
-    ..aOM<$8.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $8.Timestamp.create)
-    ..aOM<$9.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $9.Duration.create)
-    ..aOM<$8.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
-    ..aOM<$8.Timestamp>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$7.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
+    ..aOM<$7.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -242,10 +242,10 @@ class Trip extends $pb.GeneratedMessage {
     $core.String? userId,
     TripCoordinates? origin,
     TripCoordinates? destination,
-    $8.Timestamp? departureTime,
-    $9.Duration? duration,
-    $8.Timestamp? createdAt,
-    $8.Timestamp? updatedAt,
+    $7.Timestamp? departureTime,
+    $8.Duration? duration,
+    $7.Timestamp? createdAt,
+    $7.Timestamp? updatedAt,
   }) {
     final _result = create();
     if (id != null) {
@@ -336,48 +336,48 @@ class Trip extends $pb.GeneratedMessage {
   TripCoordinates ensureDestination() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $8.Timestamp get departureTime => $_getN(4);
+  $7.Timestamp get departureTime => $_getN(4);
   @$pb.TagNumber(5)
-  set departureTime($8.Timestamp v) { setField(5, v); }
+  set departureTime($7.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasDepartureTime() => $_has(4);
   @$pb.TagNumber(5)
   void clearDepartureTime() => clearField(5);
   @$pb.TagNumber(5)
-  $8.Timestamp ensureDepartureTime() => $_ensure(4);
+  $7.Timestamp ensureDepartureTime() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  $9.Duration get duration => $_getN(5);
+  $8.Duration get duration => $_getN(5);
   @$pb.TagNumber(6)
-  set duration($9.Duration v) { setField(6, v); }
+  set duration($8.Duration v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasDuration() => $_has(5);
   @$pb.TagNumber(6)
   void clearDuration() => clearField(6);
   @$pb.TagNumber(6)
-  $9.Duration ensureDuration() => $_ensure(5);
+  $8.Duration ensureDuration() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $8.Timestamp get createdAt => $_getN(6);
+  $7.Timestamp get createdAt => $_getN(6);
   @$pb.TagNumber(7)
-  set createdAt($8.Timestamp v) { setField(7, v); }
+  set createdAt($7.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
   void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $8.Timestamp ensureCreatedAt() => $_ensure(6);
+  $7.Timestamp ensureCreatedAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $8.Timestamp get updatedAt => $_getN(7);
+  $7.Timestamp get updatedAt => $_getN(7);
   @$pb.TagNumber(8)
-  set updatedAt($8.Timestamp v) { setField(8, v); }
+  set updatedAt($7.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasUpdatedAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearUpdatedAt() => clearField(8);
   @$pb.TagNumber(8)
-  $8.Timestamp ensureUpdatedAt() => $_ensure(7);
+  $7.Timestamp ensureUpdatedAt() => $_ensure(7);
 }
 
 class TripEvent extends $pb.GeneratedMessage {
@@ -387,11 +387,11 @@ class TripEvent extends $pb.GeneratedMessage {
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..aOM<TripCoordinates>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: TripCoordinates.create)
     ..aOM<TripCoordinates>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: TripCoordinates.create)
-    ..aOM<$8.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $8.Timestamp.create)
-    ..aOM<$9.Duration>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $9.Duration.create)
-    ..aOM<$8.Timestamp>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
-    ..aOM<$8.Timestamp>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
-    ..aOM<$8.Timestamp>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'eventTime', subBuilder: $8.Timestamp.create)
+    ..aOM<$7.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Duration>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
+    ..aOM<$7.Timestamp>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'eventTime', subBuilder: $7.Timestamp.create)
     ..e<TripEventType>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'eventType', $pb.PbFieldType.OE, defaultOrMaker: TripEventType.EVENT_UNKNOWN, valueOf: TripEventType.valueOf, enumValues: TripEventType.values)
     ..hasRequiredFields = false
   ;
@@ -403,11 +403,11 @@ class TripEvent extends $pb.GeneratedMessage {
     $core.String? userId,
     TripCoordinates? origin,
     TripCoordinates? destination,
-    $8.Timestamp? departureTime,
-    $9.Duration? duration,
-    $8.Timestamp? createdAt,
-    $8.Timestamp? updatedAt,
-    $8.Timestamp? eventTime,
+    $7.Timestamp? departureTime,
+    $8.Duration? duration,
+    $7.Timestamp? createdAt,
+    $7.Timestamp? updatedAt,
+    $7.Timestamp? eventTime,
     TripEventType? eventType,
   }) {
     final _result = create();
@@ -517,59 +517,59 @@ class TripEvent extends $pb.GeneratedMessage {
   TripCoordinates ensureDestination() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  $8.Timestamp get departureTime => $_getN(5);
+  $7.Timestamp get departureTime => $_getN(5);
   @$pb.TagNumber(6)
-  set departureTime($8.Timestamp v) { setField(6, v); }
+  set departureTime($7.Timestamp v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasDepartureTime() => $_has(5);
   @$pb.TagNumber(6)
   void clearDepartureTime() => clearField(6);
   @$pb.TagNumber(6)
-  $8.Timestamp ensureDepartureTime() => $_ensure(5);
+  $7.Timestamp ensureDepartureTime() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $9.Duration get duration => $_getN(6);
+  $8.Duration get duration => $_getN(6);
   @$pb.TagNumber(7)
-  set duration($9.Duration v) { setField(7, v); }
+  set duration($8.Duration v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasDuration() => $_has(6);
   @$pb.TagNumber(7)
   void clearDuration() => clearField(7);
   @$pb.TagNumber(7)
-  $9.Duration ensureDuration() => $_ensure(6);
+  $8.Duration ensureDuration() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $8.Timestamp get createdAt => $_getN(7);
+  $7.Timestamp get createdAt => $_getN(7);
   @$pb.TagNumber(8)
-  set createdAt($8.Timestamp v) { setField(8, v); }
+  set createdAt($7.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasCreatedAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearCreatedAt() => clearField(8);
   @$pb.TagNumber(8)
-  $8.Timestamp ensureCreatedAt() => $_ensure(7);
+  $7.Timestamp ensureCreatedAt() => $_ensure(7);
 
   @$pb.TagNumber(9)
-  $8.Timestamp get updatedAt => $_getN(8);
+  $7.Timestamp get updatedAt => $_getN(8);
   @$pb.TagNumber(9)
-  set updatedAt($8.Timestamp v) { setField(9, v); }
+  set updatedAt($7.Timestamp v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasUpdatedAt() => $_has(8);
   @$pb.TagNumber(9)
   void clearUpdatedAt() => clearField(9);
   @$pb.TagNumber(9)
-  $8.Timestamp ensureUpdatedAt() => $_ensure(8);
+  $7.Timestamp ensureUpdatedAt() => $_ensure(8);
 
   @$pb.TagNumber(10)
-  $8.Timestamp get eventTime => $_getN(9);
+  $7.Timestamp get eventTime => $_getN(9);
   @$pb.TagNumber(10)
-  set eventTime($8.Timestamp v) { setField(10, v); }
+  set eventTime($7.Timestamp v) { setField(10, v); }
   @$pb.TagNumber(10)
   $core.bool hasEventTime() => $_has(9);
   @$pb.TagNumber(10)
   void clearEventTime() => clearField(10);
   @$pb.TagNumber(10)
-  $8.Timestamp ensureEventTime() => $_ensure(9);
+  $7.Timestamp ensureEventTime() => $_ensure(9);
 
   @$pb.TagNumber(11)
   TripEventType get eventType => $_getN(10);
@@ -587,9 +587,9 @@ class TripEventRequest extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..aOM<TripCoordinates>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: TripCoordinates.create)
     ..aOM<TripCoordinates>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: TripCoordinates.create)
-    ..aOM<$8.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $8.Timestamp.create)
-    ..aOM<$9.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $9.Duration.create)
-    ..aOM<$8.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'eventTime', subBuilder: $8.Timestamp.create)
+    ..aOM<$7.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
+    ..aOM<$7.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'eventTime', subBuilder: $7.Timestamp.create)
     ..e<TripEventType>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'eventType', $pb.PbFieldType.OE, defaultOrMaker: TripEventType.EVENT_UNKNOWN, valueOf: TripEventType.valueOf, enumValues: TripEventType.values)
     ..hasRequiredFields = false
   ;
@@ -600,9 +600,9 @@ class TripEventRequest extends $pb.GeneratedMessage {
     $core.String? userId,
     TripCoordinates? origin,
     TripCoordinates? destination,
-    $8.Timestamp? departureTime,
-    $9.Duration? duration,
-    $8.Timestamp? eventTime,
+    $7.Timestamp? departureTime,
+    $8.Duration? duration,
+    $7.Timestamp? eventTime,
     TripEventType? eventType,
   }) {
     final _result = create();
@@ -694,37 +694,37 @@ class TripEventRequest extends $pb.GeneratedMessage {
   TripCoordinates ensureDestination() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $8.Timestamp get departureTime => $_getN(4);
+  $7.Timestamp get departureTime => $_getN(4);
   @$pb.TagNumber(5)
-  set departureTime($8.Timestamp v) { setField(5, v); }
+  set departureTime($7.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasDepartureTime() => $_has(4);
   @$pb.TagNumber(5)
   void clearDepartureTime() => clearField(5);
   @$pb.TagNumber(5)
-  $8.Timestamp ensureDepartureTime() => $_ensure(4);
+  $7.Timestamp ensureDepartureTime() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  $9.Duration get duration => $_getN(5);
+  $8.Duration get duration => $_getN(5);
   @$pb.TagNumber(6)
-  set duration($9.Duration v) { setField(6, v); }
+  set duration($8.Duration v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasDuration() => $_has(5);
   @$pb.TagNumber(6)
   void clearDuration() => clearField(6);
   @$pb.TagNumber(6)
-  $9.Duration ensureDuration() => $_ensure(5);
+  $8.Duration ensureDuration() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $8.Timestamp get eventTime => $_getN(6);
+  $7.Timestamp get eventTime => $_getN(6);
   @$pb.TagNumber(7)
-  set eventTime($8.Timestamp v) { setField(7, v); }
+  set eventTime($7.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasEventTime() => $_has(6);
   @$pb.TagNumber(7)
   void clearEventTime() => clearField(7);
   @$pb.TagNumber(7)
-  $8.Timestamp ensureEventTime() => $_ensure(6);
+  $7.Timestamp ensureEventTime() => $_ensure(6);
 
   @$pb.TagNumber(8)
   TripEventType get eventType => $_getN(7);

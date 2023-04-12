@@ -14,11 +14,12 @@ const VerifyPhoneRequest$json = const {
   '2': const [
     const {'1': 'phone_number', '3': 1, '4': 1, '5': 9, '10': 'phoneNumber'},
     const {'1': 'verification_code', '3': 2, '4': 1, '5': 9, '10': 'verificationCode'},
+    const {'1': 'language_id', '3': 3, '4': 1, '5': 9, '10': 'languageId'},
   ],
 };
 
 /// Descriptor for `VerifyPhoneRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List verifyPhoneRequestDescriptor = $convert.base64Decode('ChJWZXJpZnlQaG9uZVJlcXVlc3QSIQoMcGhvbmVfbnVtYmVyGAEgASgJUgtwaG9uZU51bWJlchIrChF2ZXJpZmljYXRpb25fY29kZRgCIAEoCVIQdmVyaWZpY2F0aW9uQ29kZQ==');
+final $typed_data.Uint8List verifyPhoneRequestDescriptor = $convert.base64Decode('ChJWZXJpZnlQaG9uZVJlcXVlc3QSIQoMcGhvbmVfbnVtYmVyGAEgASgJUgtwaG9uZU51bWJlchIrChF2ZXJpZmljYXRpb25fY29kZRgCIAEoCVIQdmVyaWZpY2F0aW9uQ29kZRIfCgtsYW5ndWFnZV9pZBgDIAEoCVIKbGFuZ3VhZ2VJZA==');
 @$core.Deprecated('Use loginRequestDescriptor instead')
 const LoginRequest$json = const {
   '1': 'LoginRequest',
@@ -31,16 +32,6 @@ const LoginRequest$json = const {
 
 /// Descriptor for `LoginRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List loginRequestDescriptor = $convert.base64Decode('CgxMb2dpblJlcXVlc3QSIQoMcGhvbmVfbnVtYmVyGAEgASgJUgtwaG9uZU51bWJlchIaCghwYXNzd29yZBgCIAEoCVIIcGFzc3dvcmQSHwoLbGFuZ3VhZ2VfaWQYAyABKAlSCmxhbmd1YWdlSWQ=');
-@$core.Deprecated('Use authResponseDescriptor instead')
-const AuthResponse$json = const {
-  '1': 'AuthResponse',
-  '2': const [
-    const {'1': 'session', '3': 1, '4': 1, '5': 11, '6': '.auth.Session', '10': 'session'},
-  ],
-};
-
-/// Descriptor for `AuthResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List authResponseDescriptor = $convert.base64Decode('CgxBdXRoUmVzcG9uc2USJwoHc2Vzc2lvbhgBIAEoCzINLmF1dGguU2Vzc2lvblIHc2Vzc2lvbg==');
 @$core.Deprecated('Use registerRequestDescriptor instead')
 const RegisterRequest$json = const {
   '1': 'RegisterRequest',
@@ -70,11 +61,12 @@ const ResetPasswordRequest$json = const {
   '2': const [
     const {'1': 'phone_number', '3': 1, '4': 1, '5': 9, '10': 'phoneNumber'},
     const {'1': 'language_id', '3': 3, '4': 1, '5': 9, '10': 'languageId'},
+    const {'1': 'password', '3': 4, '4': 1, '5': 9, '10': 'password'},
   ],
 };
 
 /// Descriptor for `ResetPasswordRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List resetPasswordRequestDescriptor = $convert.base64Decode('ChRSZXNldFBhc3N3b3JkUmVxdWVzdBIhCgxwaG9uZV9udW1iZXIYASABKAlSC3Bob25lTnVtYmVyEh8KC2xhbmd1YWdlX2lkGAMgASgJUgpsYW5ndWFnZUlk');
+final $typed_data.Uint8List resetPasswordRequestDescriptor = $convert.base64Decode('ChRSZXNldFBhc3N3b3JkUmVxdWVzdBIhCgxwaG9uZV9udW1iZXIYASABKAlSC3Bob25lTnVtYmVyEh8KC2xhbmd1YWdlX2lkGAMgASgJUgpsYW5ndWFnZUlkEhoKCHBhc3N3b3JkGAQgASgJUghwYXNzd29yZA==');
 @$core.Deprecated('Use accountDescriptor instead')
 const Account$json = const {
   '1': 'Account',
@@ -100,20 +92,14 @@ const Account$json = const {
 
 /// Descriptor for `Account`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List accountDescriptor = $convert.base64Decode('CgdBY2NvdW50Eg4KAmlkGAEgASgJUgJpZBIhCgxwaG9uZV9udW1iZXIYAiABKAlSC3Bob25lTnVtYmVyEiEKDGRpc3BsYXlfbmFtZRgDIAEoCVILZGlzcGxheU5hbWUSHwoLbGFuZ3VhZ2VfaWQYBCABKAlSCmxhbmd1YWdlSWQSOQoKY3JlYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0EiIKCmF2YXRhcl91cmwYByABKAlIAFIJYXZhdGFyVXJsiAEBEiMKC2lkX2NhcmRfdXJsGAggASgJSAFSCWlkQ2FyZFVybIgBARItChB2YWNjaW5lX2NhcmRfdXJsGAkgASgJSAJSDnZhY2NpbmVDYXJkVXJsiAEBEigKDXJlZmVycmFsX2NvZGUYCiABKAlIA1IMcmVmZXJyYWxDb2RliAEBQg0KC19hdmF0YXJfdXJsQg4KDF9pZF9jYXJkX3VybEITChFfdmFjY2luZV9jYXJkX3VybEIQCg5fcmVmZXJyYWxfY29kZQ==');
-@$core.Deprecated('Use sessionDescriptor instead')
-const Session$json = const {
-  '1': 'Session',
+@$core.Deprecated('Use accessTokenStoreDescriptor instead')
+const AccessTokenStore$json = const {
+  '1': 'AccessTokenStore',
   '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'access_token', '3': 2, '4': 1, '5': 9, '10': 'accessToken'},
-    const {'1': 'account_id', '3': 3, '4': 1, '5': 9, '10': 'accountId'},
-    const {'1': 'language_id', '3': 4, '4': 1, '5': 9, '10': 'languageId'},
-    const {'1': 'created_at', '3': 5, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
-    const {'1': 'access_token_expires_at', '3': 6, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'accessTokenExpiresAt'},
-    const {'1': 'refresh_token', '3': 7, '4': 1, '5': 9, '10': 'refreshToken'},
-    const {'1': 'refresh_token_expires_at', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'refreshTokenExpiresAt'},
+    const {'1': 'access_token', '3': 1, '4': 1, '5': 9, '10': 'accessToken'},
+    const {'1': 'refresh_token', '3': 3, '4': 1, '5': 9, '10': 'refreshToken'},
   ],
 };
 
-/// Descriptor for `Session`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List sessionDescriptor = $convert.base64Decode('CgdTZXNzaW9uEg4KAmlkGAEgASgJUgJpZBIhCgxhY2Nlc3NfdG9rZW4YAiABKAlSC2FjY2Vzc1Rva2VuEh0KCmFjY291bnRfaWQYAyABKAlSCWFjY291bnRJZBIfCgtsYW5ndWFnZV9pZBgEIAEoCVIKbGFuZ3VhZ2VJZBI5CgpjcmVhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3JlYXRlZEF0ElEKF2FjY2Vzc190b2tlbl9leHBpcmVzX2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIUYWNjZXNzVG9rZW5FeHBpcmVzQXQSIwoNcmVmcmVzaF90b2tlbhgHIAEoCVIMcmVmcmVzaFRva2VuElMKGHJlZnJlc2hfdG9rZW5fZXhwaXJlc19hdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSFXJlZnJlc2hUb2tlbkV4cGlyZXNBdA==');
+/// Descriptor for `AccessTokenStore`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List accessTokenStoreDescriptor = $convert.base64Decode('ChBBY2Nlc3NUb2tlblN0b3JlEiEKDGFjY2Vzc190b2tlbhgBIAEoCVILYWNjZXNzVG9rZW4SIwoNcmVmcmVzaF90b2tlbhgDIAEoCVIMcmVmcmVzaFRva2Vu');

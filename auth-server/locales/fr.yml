@@ -1,18 +1,29 @@
 app_name: Proche
+
+# account messages
 invalid_credentials: Numéro de téléphone ou mot de passe invalide
 account_locked: Votre compte a été bloqué
 account_not_verified: Votre compte n'est pas vérifié
 account_not_found: Votre compte n'a pas été trouvé
-account_expired: Votre compte a expiré
+account_found: Votre compte a été trouvé
 account_exists: Le compte existe déjà
 invalid_otp: Code invalide
 invalid_phone_number: Numéro de téléphone invalide
-invalid_token: Token invalide
-access_denied: Accès refusé
+password_reset_failed: Échec de la réinitialisation du mot de passe
+
+# auth messages
 auth_failed: Échec de l'authentification
 auth_started: Authentification en cours
 auth_success: Authentification réussie
-session_created: Session créée
-session_expired: Session expirée
-session_verified: Session vérifiée
+access_denied: Accès refusé
+
+# misc
 invalid_language_code: Code de langue invalide
+
+# access token
+refresh_token_not_found: Token de rafraîchissement non trouvé
+invalid_token: Token invalide
+access_token_not_found: Token d'accès non trouvé
+access_token_found: Token d'accès trouvé
+access_token_verified: Token d'accès vérifié
+token_expired: Votre compte a expiré

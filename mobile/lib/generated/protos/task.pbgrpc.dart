@@ -10,205 +10,205 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
-import 'task.pb.dart' as $4;
-import 'package:protobuf_google/protobuf_google.dart' as $2;
+import 'task.pb.dart' as $3;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
+import 'package:protobuf_google/protobuf_google.dart' as $2;
 export 'task.pb.dart';
 
 class TaskServiceClient extends $grpc.Client {
   static final _$create_task =
-      $grpc.ClientMethod<$4.CreateTaskRequest, $4.Task>(
+      $grpc.ClientMethod<$3.CreateTaskRequest, $3.Task>(
           '/task.TaskService/create_task',
-          ($4.CreateTaskRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.Task.fromBuffer(value));
-  static final _$get_task = $grpc.ClientMethod<$2.StringValue, $4.Task>(
+          ($3.CreateTaskRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.Task.fromBuffer(value));
+  static final _$get_task = $grpc.ClientMethod<$1.StringValue, $3.Task>(
       '/task.TaskService/get_task',
-      ($2.StringValue value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $4.Task.fromBuffer(value));
-  static final _$get_tasks = $grpc.ClientMethod<$1.Empty, $4.TaskList>(
+      ($1.StringValue value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.Task.fromBuffer(value));
+  static final _$get_tasks = $grpc.ClientMethod<$2.Empty, $3.TaskList>(
       '/task.TaskService/get_tasks',
-      ($1.Empty value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $4.TaskList.fromBuffer(value));
+      ($2.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.TaskList.fromBuffer(value));
   static final _$update_task =
-      $grpc.ClientMethod<$4.UpdateTaskRequest, $4.Task>(
+      $grpc.ClientMethod<$3.UpdateTaskRequest, $3.Task>(
           '/task.TaskService/update_task',
-          ($4.UpdateTaskRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.Task.fromBuffer(value));
-  static final _$delete_task = $grpc.ClientMethod<$2.StringValue, $1.Empty>(
+          ($3.UpdateTaskRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.Task.fromBuffer(value));
+  static final _$delete_task = $grpc.ClientMethod<$1.StringValue, $2.Empty>(
       '/task.TaskService/delete_task',
-      ($2.StringValue value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
+      ($1.StringValue value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
   static final _$create_task_event =
-      $grpc.ClientMethod<$4.CreateTaskEventRequest, $4.TaskEvent>(
+      $grpc.ClientMethod<$3.CreateTaskEventRequest, $3.TaskEvent>(
           '/task.TaskService/create_task_event',
-          ($4.CreateTaskEventRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.TaskEvent.fromBuffer(value));
+          ($3.CreateTaskEventRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskEvent.fromBuffer(value));
   static final _$get_task_event =
-      $grpc.ClientMethod<$2.StringValue, $4.TaskEvent>(
+      $grpc.ClientMethod<$1.StringValue, $3.TaskEvent>(
           '/task.TaskService/get_task_event',
-          ($2.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.TaskEvent.fromBuffer(value));
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskEvent.fromBuffer(value));
   static final _$get_task_events =
-      $grpc.ClientMethod<$2.StringValue, $4.TaskEventList>(
+      $grpc.ClientMethod<$1.StringValue, $3.TaskEventList>(
           '/task.TaskService/get_task_events',
-          ($2.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.TaskEventList.fromBuffer(value));
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskEventList.fromBuffer(value));
   static final _$cancel_task_event =
-      $grpc.ClientMethod<$2.StringValue, $4.TaskEvent>(
+      $grpc.ClientMethod<$1.StringValue, $3.TaskEvent>(
           '/task.TaskService/cancel_task_event',
-          ($2.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.TaskEvent.fromBuffer(value));
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskEvent.fromBuffer(value));
   static final _$complete_task_event =
-      $grpc.ClientMethod<$4.CompleteTaskEventRequest, $4.TaskEvent>(
+      $grpc.ClientMethod<$3.CompleteTaskEventRequest, $3.TaskEvent>(
           '/task.TaskService/complete_task_event',
-          ($4.CompleteTaskEventRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.TaskEvent.fromBuffer(value));
+          ($3.CompleteTaskEventRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskEvent.fromBuffer(value));
   static final _$get_task_events_for_user =
-      $grpc.ClientMethod<$2.StringValue, $4.TaskEventList>(
+      $grpc.ClientMethod<$1.StringValue, $3.TaskEventList>(
           '/task.TaskService/get_task_events_for_user',
-          ($2.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.TaskEventList.fromBuffer(value));
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskEventList.fromBuffer(value));
   static final _$get_task_events_for_task =
-      $grpc.ClientMethod<$2.StringValue, $4.TaskEventList>(
+      $grpc.ClientMethod<$1.StringValue, $3.TaskEventList>(
           '/task.TaskService/get_task_events_for_task',
-          ($2.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.TaskEventList.fromBuffer(value));
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskEventList.fromBuffer(value));
   static final _$get_task_events_for_user_and_task =
-      $grpc.ClientMethod<$4.TaskEventRequest, $4.TaskEventList>(
+      $grpc.ClientMethod<$3.TaskEventRequest, $3.TaskEventList>(
           '/task.TaskService/get_task_events_for_user_and_task',
-          ($4.TaskEventRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.TaskEventList.fromBuffer(value));
+          ($3.TaskEventRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskEventList.fromBuffer(value));
   static final _$delete_task_event =
-      $grpc.ClientMethod<$2.StringValue, $1.Empty>(
+      $grpc.ClientMethod<$1.StringValue, $2.Empty>(
           '/task.TaskService/delete_task_event',
-          ($2.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
   static final _$delete_task_events_for_task =
-      $grpc.ClientMethod<$2.StringValue, $1.Empty>(
+      $grpc.ClientMethod<$1.StringValue, $2.Empty>(
           '/task.TaskService/delete_task_events_for_task',
-          ($2.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
   static final _$delete_task_events_for_user =
-      $grpc.ClientMethod<$2.StringValue, $1.Empty>(
+      $grpc.ClientMethod<$1.StringValue, $2.Empty>(
           '/task.TaskService/delete_task_events_for_user',
-          ($2.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
   static final _$delete_task_events_for_user_and_task =
-      $grpc.ClientMethod<$4.TaskEventRequest, $1.Empty>(
+      $grpc.ClientMethod<$3.TaskEventRequest, $2.Empty>(
           '/task.TaskService/delete_task_events_for_user_and_task',
-          ($4.TaskEventRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
+          ($3.TaskEventRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
 
   TaskServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
       : super(channel, options: options, interceptors: interceptors);
 
-  $grpc.ResponseFuture<$4.Task> create_task($4.CreateTaskRequest request,
+  $grpc.ResponseFuture<$3.Task> create_task($3.CreateTaskRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$create_task, request, options: options);
   }
 
-  $grpc.ResponseStream<$4.Task> get_task($2.StringValue request,
+  $grpc.ResponseStream<$3.Task> get_task($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_task, $async.Stream.fromIterable([request]),
         options: options);
   }
 
-  $grpc.ResponseStream<$4.TaskList> get_tasks($1.Empty request,
+  $grpc.ResponseStream<$3.TaskList> get_tasks($2.Empty request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_tasks, $async.Stream.fromIterable([request]),
         options: options);
   }
 
-  $grpc.ResponseFuture<$4.Task> update_task($4.UpdateTaskRequest request,
+  $grpc.ResponseFuture<$3.Task> update_task($3.UpdateTaskRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$update_task, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.Empty> delete_task($2.StringValue request,
+  $grpc.ResponseFuture<$2.Empty> delete_task($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_task, request, options: options);
   }
 
-  $grpc.ResponseFuture<$4.TaskEvent> create_task_event(
-      $4.CreateTaskEventRequest request,
+  $grpc.ResponseFuture<$3.TaskEvent> create_task_event(
+      $3.CreateTaskEventRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$create_task_event, request, options: options);
   }
 
-  $grpc.ResponseStream<$4.TaskEvent> get_task_event($2.StringValue request,
+  $grpc.ResponseStream<$3.TaskEvent> get_task_event($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_task_event, $async.Stream.fromIterable([request]),
         options: options);
   }
 
-  $grpc.ResponseStream<$4.TaskEventList> get_task_events($2.StringValue request,
+  $grpc.ResponseStream<$3.TaskEventList> get_task_events($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_task_events, $async.Stream.fromIterable([request]),
         options: options);
   }
 
-  $grpc.ResponseFuture<$4.TaskEvent> cancel_task_event($2.StringValue request,
+  $grpc.ResponseFuture<$3.TaskEvent> cancel_task_event($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$cancel_task_event, request, options: options);
   }
 
-  $grpc.ResponseFuture<$4.TaskEvent> complete_task_event(
-      $4.CompleteTaskEventRequest request,
+  $grpc.ResponseFuture<$3.TaskEvent> complete_task_event(
+      $3.CompleteTaskEventRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$complete_task_event, request, options: options);
   }
 
-  $grpc.ResponseStream<$4.TaskEventList> get_task_events_for_user(
-      $2.StringValue request,
+  $grpc.ResponseStream<$3.TaskEventList> get_task_events_for_user(
+      $1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_task_events_for_user, $async.Stream.fromIterable([request]),
         options: options);
   }
 
-  $grpc.ResponseStream<$4.TaskEventList> get_task_events_for_task(
-      $2.StringValue request,
+  $grpc.ResponseStream<$3.TaskEventList> get_task_events_for_task(
+      $1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_task_events_for_task, $async.Stream.fromIterable([request]),
         options: options);
   }
 
-  $grpc.ResponseStream<$4.TaskEventList> get_task_events_for_user_and_task(
-      $4.TaskEventRequest request,
+  $grpc.ResponseStream<$3.TaskEventList> get_task_events_for_user_and_task(
+      $3.TaskEventRequest request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$get_task_events_for_user_and_task,
         $async.Stream.fromIterable([request]),
         options: options);
   }
 
-  $grpc.ResponseFuture<$1.Empty> delete_task_event($2.StringValue request,
+  $grpc.ResponseFuture<$2.Empty> delete_task_event($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_task_event, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.Empty> delete_task_events_for_task(
-      $2.StringValue request,
+  $grpc.ResponseFuture<$2.Empty> delete_task_events_for_task(
+      $1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_task_events_for_task, request,
         options: options);
   }
 
-  $grpc.ResponseFuture<$1.Empty> delete_task_events_for_user(
-      $2.StringValue request,
+  $grpc.ResponseFuture<$2.Empty> delete_task_events_for_user(
+      $1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_task_events_for_user, request,
         options: options);
   }
 
-  $grpc.ResponseFuture<$1.Empty> delete_task_events_for_user_and_task(
-      $4.TaskEventRequest request,
+  $grpc.ResponseFuture<$2.Empty> delete_task_events_for_user_and_task(
+      $3.TaskEventRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_task_events_for_user_and_task, request,
         options: options);
@@ -219,248 +219,248 @@ abstract class TaskServiceBase extends $grpc.Service {
   $core.String get $name => 'task.TaskService';
 
   TaskServiceBase() {
-    $addMethod($grpc.ServiceMethod<$4.CreateTaskRequest, $4.Task>(
+    $addMethod($grpc.ServiceMethod<$3.CreateTaskRequest, $3.Task>(
         'create_task',
         create_task_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $4.CreateTaskRequest.fromBuffer(value),
-        ($4.Task value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $4.Task>(
+        ($core.List<$core.int> value) => $3.CreateTaskRequest.fromBuffer(value),
+        ($3.Task value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.Task>(
         'get_task',
         get_task_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($4.Task value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.Empty, $4.TaskList>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($3.Task value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.Empty, $3.TaskList>(
         'get_tasks',
         get_tasks_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $1.Empty.fromBuffer(value),
-        ($4.TaskList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.UpdateTaskRequest, $4.Task>(
+        ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
+        ($3.TaskList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.UpdateTaskRequest, $3.Task>(
         'update_task',
         update_task_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $4.UpdateTaskRequest.fromBuffer(value),
-        ($4.Task value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $1.Empty>(
+        ($core.List<$core.int> value) => $3.UpdateTaskRequest.fromBuffer(value),
+        ($3.Task value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
         'delete_task',
         delete_task_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($1.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.CreateTaskEventRequest, $4.TaskEvent>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.CreateTaskEventRequest, $3.TaskEvent>(
         'create_task_event',
         create_task_event_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $4.CreateTaskEventRequest.fromBuffer(value),
-        ($4.TaskEvent value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $4.TaskEvent>(
+            $3.CreateTaskEventRequest.fromBuffer(value),
+        ($3.TaskEvent value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.TaskEvent>(
         'get_task_event',
         get_task_event_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($4.TaskEvent value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $4.TaskEventList>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($3.TaskEvent value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.TaskEventList>(
         'get_task_events',
         get_task_events_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($4.TaskEventList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $4.TaskEvent>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($3.TaskEventList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.TaskEvent>(
         'cancel_task_event',
         cancel_task_event_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($4.TaskEvent value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.CompleteTaskEventRequest, $4.TaskEvent>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($3.TaskEvent value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.CompleteTaskEventRequest, $3.TaskEvent>(
         'complete_task_event',
         complete_task_event_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $4.CompleteTaskEventRequest.fromBuffer(value),
-        ($4.TaskEvent value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $4.TaskEventList>(
+            $3.CompleteTaskEventRequest.fromBuffer(value),
+        ($3.TaskEvent value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.TaskEventList>(
         'get_task_events_for_user',
         get_task_events_for_user_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($4.TaskEventList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $4.TaskEventList>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($3.TaskEventList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.TaskEventList>(
         'get_task_events_for_task',
         get_task_events_for_task_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($4.TaskEventList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.TaskEventRequest, $4.TaskEventList>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($3.TaskEventList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.TaskEventRequest, $3.TaskEventList>(
         'get_task_events_for_user_and_task',
         get_task_events_for_user_and_task_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $4.TaskEventRequest.fromBuffer(value),
-        ($4.TaskEventList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $1.Empty>(
+        ($core.List<$core.int> value) => $3.TaskEventRequest.fromBuffer(value),
+        ($3.TaskEventList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
         'delete_task_event',
         delete_task_event_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($1.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $1.Empty>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
         'delete_task_events_for_task',
         delete_task_events_for_task_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($1.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.StringValue, $1.Empty>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
         'delete_task_events_for_user',
         delete_task_events_for_user_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.StringValue.fromBuffer(value),
-        ($1.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.TaskEventRequest, $1.Empty>(
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.TaskEventRequest, $2.Empty>(
         'delete_task_events_for_user_and_task',
         delete_task_events_for_user_and_task_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $4.TaskEventRequest.fromBuffer(value),
-        ($1.Empty value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $3.TaskEventRequest.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
   }
 
-  $async.Future<$4.Task> create_task_Pre($grpc.ServiceCall call,
-      $async.Future<$4.CreateTaskRequest> request) async {
+  $async.Future<$3.Task> create_task_Pre($grpc.ServiceCall call,
+      $async.Future<$3.CreateTaskRequest> request) async {
     return create_task(call, await request);
   }
 
-  $async.Stream<$4.Task> get_task_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async* {
+  $async.Stream<$3.Task> get_task_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async* {
     yield* get_task(call, await request);
   }
 
-  $async.Stream<$4.TaskList> get_tasks_Pre(
-      $grpc.ServiceCall call, $async.Future<$1.Empty> request) async* {
+  $async.Stream<$3.TaskList> get_tasks_Pre(
+      $grpc.ServiceCall call, $async.Future<$2.Empty> request) async* {
     yield* get_tasks(call, await request);
   }
 
-  $async.Future<$4.Task> update_task_Pre($grpc.ServiceCall call,
-      $async.Future<$4.UpdateTaskRequest> request) async {
+  $async.Future<$3.Task> update_task_Pre($grpc.ServiceCall call,
+      $async.Future<$3.UpdateTaskRequest> request) async {
     return update_task(call, await request);
   }
 
-  $async.Future<$1.Empty> delete_task_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async {
+  $async.Future<$2.Empty> delete_task_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return delete_task(call, await request);
   }
 
-  $async.Future<$4.TaskEvent> create_task_event_Pre($grpc.ServiceCall call,
-      $async.Future<$4.CreateTaskEventRequest> request) async {
+  $async.Future<$3.TaskEvent> create_task_event_Pre($grpc.ServiceCall call,
+      $async.Future<$3.CreateTaskEventRequest> request) async {
     return create_task_event(call, await request);
   }
 
-  $async.Stream<$4.TaskEvent> get_task_event_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async* {
+  $async.Stream<$3.TaskEvent> get_task_event_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async* {
     yield* get_task_event(call, await request);
   }
 
-  $async.Stream<$4.TaskEventList> get_task_events_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async* {
+  $async.Stream<$3.TaskEventList> get_task_events_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async* {
     yield* get_task_events(call, await request);
   }
 
-  $async.Future<$4.TaskEvent> cancel_task_event_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async {
+  $async.Future<$3.TaskEvent> cancel_task_event_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return cancel_task_event(call, await request);
   }
 
-  $async.Future<$4.TaskEvent> complete_task_event_Pre($grpc.ServiceCall call,
-      $async.Future<$4.CompleteTaskEventRequest> request) async {
+  $async.Future<$3.TaskEvent> complete_task_event_Pre($grpc.ServiceCall call,
+      $async.Future<$3.CompleteTaskEventRequest> request) async {
     return complete_task_event(call, await request);
   }
 
-  $async.Stream<$4.TaskEventList> get_task_events_for_user_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async* {
+  $async.Stream<$3.TaskEventList> get_task_events_for_user_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async* {
     yield* get_task_events_for_user(call, await request);
   }
 
-  $async.Stream<$4.TaskEventList> get_task_events_for_task_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async* {
+  $async.Stream<$3.TaskEventList> get_task_events_for_task_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async* {
     yield* get_task_events_for_task(call, await request);
   }
 
-  $async.Stream<$4.TaskEventList> get_task_events_for_user_and_task_Pre(
+  $async.Stream<$3.TaskEventList> get_task_events_for_user_and_task_Pre(
       $grpc.ServiceCall call,
-      $async.Future<$4.TaskEventRequest> request) async* {
+      $async.Future<$3.TaskEventRequest> request) async* {
     yield* get_task_events_for_user_and_task(call, await request);
   }
 
-  $async.Future<$1.Empty> delete_task_event_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async {
+  $async.Future<$2.Empty> delete_task_event_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return delete_task_event(call, await request);
   }
 
-  $async.Future<$1.Empty> delete_task_events_for_task_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async {
+  $async.Future<$2.Empty> delete_task_events_for_task_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return delete_task_events_for_task(call, await request);
   }
 
-  $async.Future<$1.Empty> delete_task_events_for_user_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.StringValue> request) async {
+  $async.Future<$2.Empty> delete_task_events_for_user_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return delete_task_events_for_user(call, await request);
   }
 
-  $async.Future<$1.Empty> delete_task_events_for_user_and_task_Pre(
+  $async.Future<$2.Empty> delete_task_events_for_user_and_task_Pre(
       $grpc.ServiceCall call,
-      $async.Future<$4.TaskEventRequest> request) async {
+      $async.Future<$3.TaskEventRequest> request) async {
     return delete_task_events_for_user_and_task(call, await request);
   }
 
-  $async.Future<$4.Task> create_task(
-      $grpc.ServiceCall call, $4.CreateTaskRequest request);
-  $async.Stream<$4.Task> get_task(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Stream<$4.TaskList> get_tasks(
-      $grpc.ServiceCall call, $1.Empty request);
-  $async.Future<$4.Task> update_task(
-      $grpc.ServiceCall call, $4.UpdateTaskRequest request);
-  $async.Future<$1.Empty> delete_task(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Future<$4.TaskEvent> create_task_event(
-      $grpc.ServiceCall call, $4.CreateTaskEventRequest request);
-  $async.Stream<$4.TaskEvent> get_task_event(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Stream<$4.TaskEventList> get_task_events(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Future<$4.TaskEvent> cancel_task_event(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Future<$4.TaskEvent> complete_task_event(
-      $grpc.ServiceCall call, $4.CompleteTaskEventRequest request);
-  $async.Stream<$4.TaskEventList> get_task_events_for_user(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Stream<$4.TaskEventList> get_task_events_for_task(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Stream<$4.TaskEventList> get_task_events_for_user_and_task(
-      $grpc.ServiceCall call, $4.TaskEventRequest request);
-  $async.Future<$1.Empty> delete_task_event(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Future<$1.Empty> delete_task_events_for_task(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Future<$1.Empty> delete_task_events_for_user(
-      $grpc.ServiceCall call, $2.StringValue request);
-  $async.Future<$1.Empty> delete_task_events_for_user_and_task(
-      $grpc.ServiceCall call, $4.TaskEventRequest request);
+  $async.Future<$3.Task> create_task(
+      $grpc.ServiceCall call, $3.CreateTaskRequest request);
+  $async.Stream<$3.Task> get_task(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Stream<$3.TaskList> get_tasks(
+      $grpc.ServiceCall call, $2.Empty request);
+  $async.Future<$3.Task> update_task(
+      $grpc.ServiceCall call, $3.UpdateTaskRequest request);
+  $async.Future<$2.Empty> delete_task(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$3.TaskEvent> create_task_event(
+      $grpc.ServiceCall call, $3.CreateTaskEventRequest request);
+  $async.Stream<$3.TaskEvent> get_task_event(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Stream<$3.TaskEventList> get_task_events(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$3.TaskEvent> cancel_task_event(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$3.TaskEvent> complete_task_event(
+      $grpc.ServiceCall call, $3.CompleteTaskEventRequest request);
+  $async.Stream<$3.TaskEventList> get_task_events_for_user(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Stream<$3.TaskEventList> get_task_events_for_task(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Stream<$3.TaskEventList> get_task_events_for_user_and_task(
+      $grpc.ServiceCall call, $3.TaskEventRequest request);
+  $async.Future<$2.Empty> delete_task_event(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$2.Empty> delete_task_events_for_task(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$2.Empty> delete_task_events_for_user(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$2.Empty> delete_task_events_for_user_and_task(
+      $grpc.ServiceCall call, $3.TaskEventRequest request);
 }

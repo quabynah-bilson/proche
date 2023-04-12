@@ -9,8 +9,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'package:protobuf_google/protobuf_google.dart' as $9;
 import 'package:protobuf_google/protobuf_google.dart' as $8;
+import 'package:protobuf_google/protobuf_google.dart' as $7;
 
 import 'giveaway.pbenum.dart';
 
@@ -127,7 +127,7 @@ class CreateGiveAwayRequest extends $pb.GeneratedMessage {
     ..pPS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'images')
     ..aOM<GiveAwayCoordinates>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coordinates', subBuilder: GiveAwayCoordinates.create)
     ..e<GiveAwayDispatchType>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dispatchType', $pb.PbFieldType.OE, defaultOrMaker: GiveAwayDispatchType.GIVEAWAY_PICKUP, valueOf: GiveAwayDispatchType.valueOf, enumValues: GiveAwayDispatchType.values)
-    ..aOM<$9.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dispatchDuration', subBuilder: $9.Duration.create)
+    ..aOM<$8.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dispatchDuration', subBuilder: $8.Duration.create)
     ..hasRequiredFields = false
   ;
 
@@ -138,7 +138,7 @@ class CreateGiveAwayRequest extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? images,
     GiveAwayCoordinates? coordinates,
     GiveAwayDispatchType? dispatchType,
-    $9.Duration? dispatchDuration,
+    $8.Duration? dispatchDuration,
   }) {
     final _result = create();
     if (name != null) {
@@ -224,15 +224,15 @@ class CreateGiveAwayRequest extends $pb.GeneratedMessage {
   void clearDispatchType() => clearField(5);
 
   @$pb.TagNumber(6)
-  $9.Duration get dispatchDuration => $_getN(5);
+  $8.Duration get dispatchDuration => $_getN(5);
   @$pb.TagNumber(6)
-  set dispatchDuration($9.Duration v) { setField(6, v); }
+  set dispatchDuration($8.Duration v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasDispatchDuration() => $_has(5);
   @$pb.TagNumber(6)
   void clearDispatchDuration() => clearField(6);
   @$pb.TagNumber(6)
-  $9.Duration ensureDispatchDuration() => $_ensure(5);
+  $8.Duration ensureDispatchDuration() => $_ensure(5);
 }
 
 class GiveAway extends $pb.GeneratedMessage {
@@ -242,8 +242,8 @@ class GiveAway extends $pb.GeneratedMessage {
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'description')
     ..pPS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'images')
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'owner')
-    ..aOM<$8.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
-    ..aOM<$8.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$7.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..aOM<GiveAwayCoordinates>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coordinates', subBuilder: GiveAwayCoordinates.create)
     ..hasRequiredFields = false
   ;
@@ -255,8 +255,8 @@ class GiveAway extends $pb.GeneratedMessage {
     $core.String? description,
     $core.Iterable<$core.String>? images,
     $core.String? owner,
-    $8.Timestamp? createdAt,
-    $8.Timestamp? updatedAt,
+    $7.Timestamp? createdAt,
+    $7.Timestamp? updatedAt,
     GiveAwayCoordinates? coordinates,
   }) {
     final _result = create();
@@ -347,26 +347,26 @@ class GiveAway extends $pb.GeneratedMessage {
   void clearOwner() => clearField(5);
 
   @$pb.TagNumber(6)
-  $8.Timestamp get createdAt => $_getN(5);
+  $7.Timestamp get createdAt => $_getN(5);
   @$pb.TagNumber(6)
-  set createdAt($8.Timestamp v) { setField(6, v); }
+  set createdAt($7.Timestamp v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasCreatedAt() => $_has(5);
   @$pb.TagNumber(6)
   void clearCreatedAt() => clearField(6);
   @$pb.TagNumber(6)
-  $8.Timestamp ensureCreatedAt() => $_ensure(5);
+  $7.Timestamp ensureCreatedAt() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $8.Timestamp get updatedAt => $_getN(6);
+  $7.Timestamp get updatedAt => $_getN(6);
   @$pb.TagNumber(7)
-  set updatedAt($8.Timestamp v) { setField(7, v); }
+  set updatedAt($7.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasUpdatedAt() => $_has(6);
   @$pb.TagNumber(7)
   void clearUpdatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $8.Timestamp ensureUpdatedAt() => $_ensure(6);
+  $7.Timestamp ensureUpdatedAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
   GiveAwayCoordinates get coordinates => $_getN(7);

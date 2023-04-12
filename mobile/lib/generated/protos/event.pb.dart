@@ -9,8 +9,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'package:protobuf_google/protobuf_google.dart' as $7;
 import 'package:protobuf_google/protobuf_google.dart' as $8;
-import 'package:protobuf_google/protobuf_google.dart' as $9;
 
 import 'event.pbenum.dart';
 
@@ -98,9 +98,9 @@ class CreateEventRequest extends $pb.GeneratedMessage {
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'location')
     ..a<$core.double>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aOM<$8.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'startTime', subBuilder: $8.Timestamp.create)
-    ..aOM<$8.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'endTime', subBuilder: $8.Timestamp.create)
-    ..aOM<$9.Duration>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $9.Duration.create)
+    ..aOM<$7.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'startTime', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'endTime', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Duration>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
     ..aOS(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..pPS(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'photos')
     ..aOS(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'video')
@@ -114,9 +114,9 @@ class CreateEventRequest extends $pb.GeneratedMessage {
     $core.String? location,
     $core.double? latitude,
     $core.double? longitude,
-    $8.Timestamp? startTime,
-    $8.Timestamp? endTime,
-    $9.Duration? duration,
+    $7.Timestamp? startTime,
+    $7.Timestamp? endTime,
+    $8.Duration? duration,
     $core.String? userId,
     $core.Iterable<$core.String>? photos,
     $core.String? video,
@@ -224,37 +224,37 @@ class CreateEventRequest extends $pb.GeneratedMessage {
   void clearLongitude() => clearField(5);
 
   @$pb.TagNumber(6)
-  $8.Timestamp get startTime => $_getN(5);
+  $7.Timestamp get startTime => $_getN(5);
   @$pb.TagNumber(6)
-  set startTime($8.Timestamp v) { setField(6, v); }
+  set startTime($7.Timestamp v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasStartTime() => $_has(5);
   @$pb.TagNumber(6)
   void clearStartTime() => clearField(6);
   @$pb.TagNumber(6)
-  $8.Timestamp ensureStartTime() => $_ensure(5);
+  $7.Timestamp ensureStartTime() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $8.Timestamp get endTime => $_getN(6);
+  $7.Timestamp get endTime => $_getN(6);
   @$pb.TagNumber(7)
-  set endTime($8.Timestamp v) { setField(7, v); }
+  set endTime($7.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasEndTime() => $_has(6);
   @$pb.TagNumber(7)
   void clearEndTime() => clearField(7);
   @$pb.TagNumber(7)
-  $8.Timestamp ensureEndTime() => $_ensure(6);
+  $7.Timestamp ensureEndTime() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $9.Duration get duration => $_getN(7);
+  $8.Duration get duration => $_getN(7);
   @$pb.TagNumber(8)
-  set duration($9.Duration v) { setField(8, v); }
+  set duration($8.Duration v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasDuration() => $_has(7);
   @$pb.TagNumber(8)
   void clearDuration() => clearField(8);
   @$pb.TagNumber(8)
-  $9.Duration ensureDuration() => $_ensure(7);
+  $8.Duration ensureDuration() => $_ensure(7);
 
   @$pb.TagNumber(9)
   $core.String get userId => $_getSZ(8);
@@ -286,9 +286,9 @@ class ProcheEvent extends $pb.GeneratedMessage {
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'location')
     ..a<$core.double>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aOM<$8.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'startTime', subBuilder: $8.Timestamp.create)
-    ..aOM<$8.Timestamp>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'endTime', subBuilder: $8.Timestamp.create)
-    ..aOM<$9.Duration>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $9.Duration.create)
+    ..aOM<$7.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'startTime', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'endTime', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Duration>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
     ..aOS(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..e<ProcheEventStatus>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: ProcheEventStatus.ACTIVE, valueOf: ProcheEventStatus.valueOf, enumValues: ProcheEventStatus.values)
     ..pPS(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'photos')
@@ -304,9 +304,9 @@ class ProcheEvent extends $pb.GeneratedMessage {
     $core.String? location,
     $core.double? latitude,
     $core.double? longitude,
-    $8.Timestamp? startTime,
-    $8.Timestamp? endTime,
-    $9.Duration? duration,
+    $7.Timestamp? startTime,
+    $7.Timestamp? endTime,
+    $8.Duration? duration,
     $core.String? userId,
     ProcheEventStatus? status,
     $core.Iterable<$core.String>? photos,
@@ -430,37 +430,37 @@ class ProcheEvent extends $pb.GeneratedMessage {
   void clearLongitude() => clearField(6);
 
   @$pb.TagNumber(7)
-  $8.Timestamp get startTime => $_getN(6);
+  $7.Timestamp get startTime => $_getN(6);
   @$pb.TagNumber(7)
-  set startTime($8.Timestamp v) { setField(7, v); }
+  set startTime($7.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasStartTime() => $_has(6);
   @$pb.TagNumber(7)
   void clearStartTime() => clearField(7);
   @$pb.TagNumber(7)
-  $8.Timestamp ensureStartTime() => $_ensure(6);
+  $7.Timestamp ensureStartTime() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $8.Timestamp get endTime => $_getN(7);
+  $7.Timestamp get endTime => $_getN(7);
   @$pb.TagNumber(8)
-  set endTime($8.Timestamp v) { setField(8, v); }
+  set endTime($7.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasEndTime() => $_has(7);
   @$pb.TagNumber(8)
   void clearEndTime() => clearField(8);
   @$pb.TagNumber(8)
-  $8.Timestamp ensureEndTime() => $_ensure(7);
+  $7.Timestamp ensureEndTime() => $_ensure(7);
 
   @$pb.TagNumber(9)
-  $9.Duration get duration => $_getN(8);
+  $8.Duration get duration => $_getN(8);
   @$pb.TagNumber(9)
-  set duration($9.Duration v) { setField(9, v); }
+  set duration($8.Duration v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasDuration() => $_has(8);
   @$pb.TagNumber(9)
   void clearDuration() => clearField(9);
   @$pb.TagNumber(9)
-  $9.Duration ensureDuration() => $_ensure(8);
+  $8.Duration ensureDuration() => $_ensure(8);
 
   @$pb.TagNumber(10)
   $core.String get userId => $_getSZ(9);

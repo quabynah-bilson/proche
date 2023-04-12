@@ -1,39 +1,33 @@
+use std::str::FromStr;
+
 use mongodb::bson::{doc, Document};
-use tonic::{Response, Status};
+use mongodb::bson::oid::ObjectId;
+use tonic::metadata::{Ascii, MetadataMap, MetadataValue};
+use tonic::Status;
 
 use crate::config::tokenizer;
-use crate::proto::{AuthResponse, Session};
 
 // create session for account and return it
-pub async fn create_session_for_account(account_doc: &Document, session_col: &mongodb::Collection<Document>) -> Result<Document, Status> {
-    let mut request = account_doc.clone();
-    log::info!("creating a new session for account -> {}", &request.get("phone_number").unwrap());
+pub async fn create_access_token(account_id: &str, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<String, Status> {
+    // get 10 minutes later timestamp for access token
+    let access_token_expires_at = chrono::Utc::now().timestamp() + 600;
 
-    // generate access token from phone number
-    let mut phone_number = request.get_str("phone_number").unwrap().to_string();
-    let mut language_id = request.get_str("language_id").unwrap().to_string();
-    let access_token = tokenizer::generate_token(&phone_number, &language_id, 1).unwrap();
-    let refresh_token = tokenizer::generate_token(&phone_number, &language_id, 3).unwrap();
+    // get 3 days later timestamp for refresh token
+    let refresh_token_expires_at = chrono::Utc::now().timestamp() + 259200;
 
-    // create session document
+    // generate access token from account id & language id
+    let access_token = tokenizer::generate_token(&account_id, &language_id, access_token_expires_at).unwrap();
+    let refresh_token = tokenizer::generate_token(&account_id, &language_id, refresh_token_expires_at).unwrap();
+
+    // create token store
     let mut doc = doc! {
-        "account_id": &request.get_str("id").unwrap(),
-        "access_token": access_token,
-        "refresh_token": refresh_token,
-        "language_id": &language_id,
-        // "created_at": &session.created_at.unwrap(),
-        // "access_token_expires_at": &session.access_token_expires_at,
-        // "refresh_token_expires_at": &session.refresh_token_expires_at,
+        "access_token": &access_token,
+        "refresh_token": &refresh_token,
     };
 
     // insert session to db
-    match session_col.insert_one(&doc, None).await {
-        Ok(insert_result) => {
-            log::info!("{}: {:?}", t!("session_created"), &doc);
-            doc.insert("id", &insert_result.inserted_id.as_object_id().unwrap().to_hex());
-            session_col.replace_one(doc! {"account_id": &account_doc.get_str("id").unwrap().to_string()}, &doc, None).await.unwrap();
-            Ok(doc)
-        }
+    match token_col.insert_one(&doc, None).await {
+        Ok(_) => Ok(access_token),
         Err(e) => {
             log::error!("{}: {:?}", t!("auth_failed"), e);
             Err(Status::internal(t!("auth_failed")))
@@ -41,19 +35,52 @@ pub async fn create_session_for_account(account_doc: &Document, session_col: &mo
     }
 }
 
-// verify session by account id and access token
-pub async fn verify_session(access_token: &str, language_id: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let result = match tokenizer::validate_token(&access_token, &language_id) {
-        Ok(data) => true,
-        Err(e) => {
-            log::error!("{}: {:?}", t!("session_expired"), e);
-            false
+// get access token from request header
+pub async fn verify_access_token(request: &MetadataMap, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<(), Status> {
+    // extract token from authorization header
+    let access_token = match request.get("Authorization") {
+        Some(token) => {
+            // remove `Bearer ` from token
+            let token = token.to_str().unwrap();
+            let token = token.replace("Bearer ", "");
+            token
+        }
+        None => {
+            log::error!("{}: {:?}", t!("access_token_not_found"), request);
+            return Err(Status::unauthenticated(t!("access_token_not_found")));
         }
     };
-    if !result {
-        return Err(Box::try_from(t!("session_expired")).unwrap());
+    log::info!("{}: {:?}", t!("access_token_found"), &access_token);
+
+    // validate token extracted and return it if it's valid or can be refreshed else return error
+    match tokenizer::validate_token(&access_token, &language_id, &token_col).await {
+        Ok(_) => Ok(()),
+        Err(e) => {
+            log::error!("{}: {:?}", t!("token_expired"), e);
+            Err(Status::unauthenticated(t!("token_expired")))
+        }
     }
-    log::info!("{}: {:?}", t!("session_verified"), &result);
-    Ok(())
 }
 
+// clear access token from db when user logout
+pub async fn clear_access_token(metadata: &MetadataMap, token_col: &mongodb::Collection<Document>) -> Result<(), Status> {
+    // get access token from request header
+    match metadata.get("Authorization").ok_or(Status::unauthenticated(t!("access_token_not_found"))) {
+        Ok(_) => {
+            // remove `Bearer ` from token
+            let access_token = metadata.get("Authorization").unwrap().to_str().unwrap();
+            let access_token = access_token.replace("Bearer ", "");
+            log::info!("{}: {:#?}", t!("access_token_found"), &access_token);
+
+            // delete session from db
+            match token_col.delete_one(doc! { "access_token": access_token }, None).await {
+                Ok(_) => Ok(()),
+                Err(e) => {
+                    log::error!("{}: {:?}", t!("auth_failed"), e);
+                    Err(Status::internal(t!("auth_failed")))
+                }
+            }
+        }
+        Err(e) => Err(e)
+    }
+}

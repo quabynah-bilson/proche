@@ -1,52 +1,48 @@
-use mongodb::bson;
 use mongodb::bson::{doc, Document};
 use rust_i18n::t;
 use tonic::{async_trait, Request, Response, Status};
 
 use crate::config;
-use crate::config::tokenizer;
-use crate::proto::{Account, AuthResponse, LoginRequest, RegisterRequest, ResetPasswordRequest, Session, VerifyPhoneRequest};
+use crate::config::{locale, tokenizer};
+use crate::proto::{Account, LoginRequest, RegisterRequest, ResetPasswordRequest, VerifyPhoneRequest};
 use crate::proto::auth_service_server::AuthService;
 
 rust_i18n::i18n!("locales");
 
 pub struct AuthServiceImpl {
     pub account_col: mongodb::Collection<Document>,
-    pub session_col: mongodb::Collection<Document>,
+    pub token_col: mongodb::Collection<Document>,
 }
 
 impl AuthServiceImpl {
     pub fn new(account_col: mongodb::Collection<Document>, session_col: mongodb::Collection<Document>) -> Self {
         Self {
             account_col,
-            session_col,
+            token_col: session_col,
         }
     }
 }
 
 #[async_trait]
 impl AuthService for AuthServiceImpl {
-    async fn login(&self, request: Request<LoginRequest>) -> Result<Response<AuthResponse>, Status> {
+    // done
+    async fn login(&self, request: Request<LoginRequest>) -> Result<Response<String>, Status> {
         // start login
         log::info!("{}", t!("auth_started"));
 
         // parse request
-        let mut req = request.into_inner();
+        let req = request.into_inner();
 
         // validate language id from request
-        let valid = match config::locale::validate_language_id(&req.language_id) {
-            Ok(_) => true,
-            Err(_) => false
+        match locale::validate_language_id(&req.language_id) {
+            Ok(_) => (),
+            Err(e) => {
+                return Err(Status::invalid_argument(t!("invalid_language_id")));
+            }
         };
-        if !valid {
-            return Err(Status::invalid_argument(t!("invalid_language_id")));
-        }
-
-        // set locale
-        rust_i18n::set_locale(&req.language_id);
 
         // get account from db
-        let mut account = match self.account_col.find_one(doc! {"phone_number": &req.phone_number}, None).await {
+        let account = match self.account_col.find_one(doc! {"phone_number": &req.phone_number}, None).await {
             Ok(account) => account,
             Err(e) => {
                 log::error!("{}: {:?}", t!("account_not_found"), e);
@@ -56,8 +52,8 @@ impl AuthService for AuthServiceImpl {
 
         // create a new session for account
         match account {
-            Some(mut account_doc) => {
-                log::info!("{}: {:?}", t!("account_found"), &account_doc);
+            Some(account_doc) => {
+                log::info!("{}: {:#?}", t!("account_found"), &account_doc);
 
                 // compare password
                 let is_valid_password = match tokenizer::compare_password(&req.password, &account_doc.get_str("password").unwrap().to_string()) {
@@ -72,35 +68,9 @@ impl AuthService for AuthServiceImpl {
                     return Err(Status::unauthenticated(t!("invalid_credentials")));
                 }
 
-                // todo -> v2. check if account is locked or verified
-                // // check if account is verified
-                // if !account_doc.get_bool("verified").unwrap().unwrap() {
-                //     log::error!("{}: {:?}", t!("account_not_verified"), &account);
-                //     return Err(Status::unauthenticated(t!("account_not_verified")));
-                // }
-                //
-                // // check if account is locked
-                // if account_doc.get_bool("locked").unwrap().unwrap() {
-                //     log::error!("{}: {:?}", t!("account_locked"), &account);
-                //     return Err(Status::unauthenticated(t!("account_locked")));
-                // }
-
-                // generate session
-                let mut session_doc = config::session_manager::create_session_for_account(&account_doc, &self.session_col).await.unwrap();
-                let session = Session {
-                    id: session_doc.get_str("id").unwrap().to_string(),
-                    account_id: session_doc.get_str("account_id").unwrap().to_string(),
-                    access_token: session_doc.get_str("access_token").unwrap().to_string(),
-                    refresh_token: session_doc.get_str("refresh_token").unwrap().to_string(),
-                    language_id: session_doc.get_str("language_id").unwrap().to_string(),
-                    created_at: None,
-                    access_token_expires_at: None,
-                    refresh_token_expires_at: None,
-                };
-
-                Ok(Response::new(AuthResponse {
-                    session: Some(session),
-                }))
+                // generate access token
+                let access_token = config::session_manager::create_access_token(&account_doc.get_str("id").unwrap().to_string(), &req.language_id, &self.token_col).await.unwrap();
+                Ok(Response::new(access_token))
             }
             None => {
                 log::error!("{}: {:?}", t!("account_not_found"), &account);
@@ -109,29 +79,26 @@ impl AuthService for AuthServiceImpl {
         }
     }
 
-    async fn register(&self, request: Request<RegisterRequest>) -> Result<Response<AuthResponse>, Status> {
+    // done
+    async fn register(&self, request: Request<RegisterRequest>) -> Result<Response<String>, Status> {
         // start login
         log::info!("{}", t!("auth_started"));
 
         // parse request
-        let mut req = request.into_inner();
+        let req = request.into_inner();
 
         // validate language id from request
-        let valid = match config::locale::validate_language_id(&req.language_id) {
-            Ok(_) => true,
-            Err(_) => false
+        match locale::validate_language_id(&req.language_id) {
+            Ok(_) => (),
+            Err(e) => {
+                return Err(Status::invalid_argument(t!("invalid_language_id")));
+            }
         };
-        if !valid {
-            return Err(Status::invalid_argument(t!("invalid_language_id")));
-        }
-
-        // set locale
-        rust_i18n::set_locale(&req.language_id);
 
         // get account from db
-        let mut has_existing_account = match self.account_col.find_one(doc! {"phone_number": &req.phone_number}, None).await.unwrap() {
+        let has_existing_account = match self.account_col.find_one(doc! {"phone_number": &req.phone_number}, None).await.unwrap() {
             Some(acct_doc) => {
-                log::info!("{}: {:?}", t!("account_found"), &acct_doc);
+                log::info!("{}: {:#?}", t!("account_found"), &acct_doc);
                 true
             }
             None => false
@@ -178,22 +145,9 @@ impl AuthService for AuthServiceImpl {
                     }
                 }
 
-                // create a new session for account
-                let mut session_doc = config::session_manager::create_session_for_account(&account_doc, &self.session_col).await.unwrap();
-                let session = Session {
-                    id: session_doc.get_str("id").unwrap().to_string(),
-                    account_id: session_doc.get_str("account_id").unwrap().to_string(),
-                    access_token: session_doc.get_str("access_token").unwrap().to_string(),
-                    refresh_token: session_doc.get_str("refresh_token").unwrap().to_string(),
-                    language_id: session_doc.get_str("language_id").unwrap().to_string(),
-                    created_at: None,
-                    access_token_expires_at: None,
-                    refresh_token_expires_at: None,
-                };
-
-                Ok(Response::new(AuthResponse {
-                    session: Some(session),
-                }))
+                // create a new access token
+                let access_token = config::session_manager::create_access_token(&account_doc.get_str("id").unwrap().to_string(), &req.language_id, &self.token_col).await.unwrap();
+                Ok(Response::new(access_token))
             }
             Err(e) => {
                 log::error!("{}: {:?}", t!("auth_failed"), e);
@@ -202,60 +156,112 @@ impl AuthService for AuthServiceImpl {
         }
     }
 
-    async fn reset_password(&self, _: Request<ResetPasswordRequest>) -> Result<Response<AuthResponse>, Status> {
+    // done
+    async fn reset_password(&self, request: Request<ResetPasswordRequest>) -> Result<Response<String>, Status> {
+        let req = request.into_inner();
+        // validate language id from request
+        match locale::validate_language_id(&req.language_id) {
+            Ok(_) => (),
+            Err(e) => {
+                return Err(Status::invalid_argument(t!("invalid_language_id")));
+            }
+        };
+
+        // find account by phone number
+        let mut account_doc = match self.account_col.find_one(doc! {"phone_number": &req.phone_number}, None).await.unwrap() {
+            Some(acct_doc) => {
+                log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
+                acct_doc
+            }
+            None => {
+                log::error!("{}: {:?}", t!("account_not_found"), &req.phone_number);
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        // encrypt password
+        let hashed_password = match tokenizer::hash_password(&req.password) {
+            Ok(hashed_password) => hashed_password,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("password_encryption_failed"), e);
+                return Err(Status::internal(t!("password_encryption_failed")));
+            }
+        };
+
+        // update password
+        account_doc.insert("password", &hashed_password);
+
+        // replace one in db with updated account doc
+        match self.account_col.replace_one(doc! {"phone_number": &req.phone_number}, &account_doc, None).await {
+            Ok(_) => {
+                log::info!("{}: {:?}", t!("password_reset_success"), &account_doc);
+
+                // create access token
+                let access_token = config::session_manager::create_access_token(&account_doc.get_str("id").unwrap().to_string(), &req.language_id, &self.token_col).await.unwrap();
+                Ok(Response::new(access_token))
+            }
+            Err(e) => {
+                log::error!("{}: {:?}", t!("password_reset_failed"), e);
+                return Err(Status::internal(t!("password_reset_failed")));
+            }
+        }
+    }
+
+    async fn logout(&self, request: Request<()>) -> Result<Response<()>, Status> {
+        match config::session_manager::clear_access_token(&request.metadata(), &self.token_col).await {
+            Ok(()) => Ok(Response::new(())),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("logout_failed"), e);
+                return Err(Status::internal(t!("logout_failed")));
+            }
+        }
+    }
+
+    async fn get_account(&self, request: Request<()>) -> Result<Response<Account>, Status> {
         todo!()
     }
 
-    async fn refresh_token(&self, _: Request<()>) -> Result<Response<AuthResponse>, Status> {
+    async fn get_account_by_phone_number(&self, request: Request<String>) -> Result<Response<Account>, Status> {
         todo!()
     }
 
-    async fn logout(&self, _: Request<()>) -> Result<Response<()>, Status> {
+    async fn update_account(&self, request: Request<Account>) -> Result<Response<Account>, Status> {
         todo!()
     }
 
-    async fn get_account(&self, _: Request<()>) -> Result<Response<Account>, Status> {
+    async fn delete_account(&self, request: Request<()>) -> Result<Response<()>, Status> {
         todo!()
     }
 
-    async fn get_account_by_phone_number(&self, _: Request<String>) -> Result<Response<Account>, Status> {
+    async fn get_referral_code(&self, request: Request<()>) -> Result<Response<String>, Status> {
         todo!()
     }
 
-    async fn update_account(&self, _: Request<Account>) -> Result<Response<Account>, Status> {
+    async fn get_referral_code_by_phone_number(&self, request: Request<String>) -> Result<Response<String>, Status> {
         todo!()
     }
 
-    async fn delete_account(&self, _: Request<()>) -> Result<Response<()>, Status> {
+    async fn send_phone_verification_code(&self, request: Request<String>) -> Result<Response<()>, Status> {
         todo!()
     }
 
-    async fn get_session(&self, _: Request<()>) -> Result<Response<Session>, Status> {
-        todo!()
-    }
-
-    async fn update_session(&self, _: Request<Session>) -> Result<Response<Session>, Status> {
-        todo!()
-    }
-
-    async fn delete_session(&self, _: Request<()>) -> Result<Response<()>, Status> {
-        todo!()
-    }
-
-    async fn get_referral_code(&self, _: Request<()>) -> Result<Response<String>, Status> {
-        todo!()
-    }
-
-    async fn get_referral_code_by_phone_number(&self, _: Request<String>) -> Result<Response<String>, Status> {
-        todo!()
-    }
-
-    async fn send_phone_verification_code(&self, _: Request<String>) -> Result<Response<()>, Status> {
-        todo!()
-    }
-
-    async fn verify_phone_verification_code(&self, _: Request<VerifyPhoneRequest>) -> Result<Response<()>, Status> {
+    async fn verify_phone_verification_code(&self, request: Request<VerifyPhoneRequest>) -> Result<Response<()>, Status> {
         todo!()
     }
 }
 
+// check if language id is supported
+fn _check_supported_language(language_id: &str) -> Result<(), Status> {
+    // validate language id from request
+    let valid = match config::locale::validate_language_id(&language_id) {
+        Ok(_) => true,
+        Err(_) => false
+    };
+    if !valid {
+        return Err(Status::invalid_argument(t!("invalid_language_id")));
+    }
+
+    // set locale
+    rust_i18n::set_locale(&language_id);
+    Ok(())
+}
