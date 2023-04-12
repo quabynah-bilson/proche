@@ -1,4 +1,3 @@
-use std::error::Error;
 use mongodb::bson::{doc, Document};
 use tonic::metadata::MetadataMap;
 use tonic::Status;

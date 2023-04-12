@@ -1,13 +1,9 @@
 use std::error::Error;
 use std::io::ErrorKind;
-use std::process::id;
 
-use chrono::{Datelike, Local, TimeZone, Utc};
+use chrono::{TimeZone, Utc};
 use mongodb::bson::{doc, Document};
-use paseto::PasetoPublicKey::ED25519KeyPair;
-use paseto::v2::{decrypt_paseto, local_paseto};
-use ring::rand::SystemRandom;
-use ring::signature::Ed25519KeyPair;
+use paseto::v2::{decrypt_paseto};
 use serde_json::json;
 
 // region token generator
@@ -51,7 +47,7 @@ pub fn generate_public_token(language_id: &str) -> Result<String, Box<dyn Error>
     let token_ttl = _calculate_token_expiration(ttl);
 
     // create public token
-    let mut auth_token = std::env::var("PUB_AUTH_TOKEN").expect("PUB_AUTH_TOKEN must be set");
+    let auth_token = std::env::var("PUB_AUTH_TOKEN").expect("PUB_AUTH_TOKEN must be set");
     match paseto::tokens::PasetoBuilder::new()
         .set_encryption_key(&*auth_token.to_owned().into_bytes())
         .set_issued_at(Some(Utc::now()))
@@ -88,7 +84,6 @@ pub async fn validate_public_token(token: &str, language_id: &str) -> Result<(),
 // if refresh token is expired, return error else generate new access token and return it
 pub async fn validate_token(token: &str, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<String, Box<dyn Error>> {
     // check if token is expired and return error if it is
-    let auth_token = std::env::var("AUTH_TOKEN").expect("AUTH_TOKEN must be set");
     let has_expired = match _check_token_expiration(&token, &language_id).await {
         Ok(_) => false,
         Err(_) => true,
@@ -103,13 +98,13 @@ pub async fn validate_token(token: &str, language_id: &str, token_col: &mongodb:
                     Some(session) => session,
                     None => {
                         log::error!("{}: {:?}", t!("access_token_not_found", locale=&language_id), &token);
-                        return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, t!("access_token_not_found", locale=&language_id))));
+                        return Err(Box::new(std::io::Error::new(ErrorKind::Other, t!("access_token_not_found", locale=&language_id))));
                     }
                 }
             }
             Err(e) => {
                 log::error!("{}: {:?}", t!("access_token_not_found", locale=&language_id), e);
-                return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, t!("access_token_not_found", locale=&language_id))));
+                return Err(Box::new(std::io::Error::new(ErrorKind::Other, t!("access_token_not_found", locale=&language_id))));
             }
         };
 
@@ -217,7 +212,7 @@ async fn _check_token_expiration(token: &str, language_id: &str) -> Result<(), B
         &auth_token.into_bytes(),
         &paseto::tokens::TimeBackend::Chrono,
     ) {
-        Ok(json_value) => {
+        Ok(_) => {
             Ok(())
         }
         Err(_) => Err(Box::new(std::io::Error::new(ErrorKind::Other, t!("invalid_token", locale=&language_id)))),

@@ -7,7 +7,7 @@ use std::io::Write;
 
 use env_logger;
 use env_logger::{Builder, fmt::Color};
-use log::{Level, LevelFilter, log};
+use log::{Level, LevelFilter};
 
 use crate::proto::auth_service_server::AuthServiceServer;
 use crate::server::AuthServiceImpl;

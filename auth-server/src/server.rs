@@ -6,7 +6,7 @@ use tonic::metadata::MetadataMap;
 
 use crate::config;
 use crate::config::{locale, tokenizer};
-use crate::proto::{Account, LoginRequest, RegisterRequest, ResetPasswordRequest, VerifyPhoneRequest};
+use crate::proto::{Account, LoginRequest, RegisterRequest, ResetPasswordRequest, ValidateAccessTokenResponse, VerifyPhoneRequest};
 use crate::proto::auth_service_server::AuthService;
 
 rust_i18n::i18n!("locales");
@@ -28,24 +28,24 @@ impl AuthServiceImpl {
 #[async_trait]
 impl AuthService for AuthServiceImpl {
     // done
-    async fn login(&self, mut request: Request<LoginRequest>) -> Result<Response<String>, Status> {
+    async fn login(&self, request: Request<LoginRequest>) -> Result<Response<String>, Status> {
         // start login
         log::info!("{}", t!("auth_started"));
 
+        // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_language_id"), e);
-                return Err(Status::invalid_argument(t!("invalid_language_id")));
+                log::error!("{}: {:?}", t!("invalid_language_code"), e);
+                return Err(Status::invalid_argument(t!("invalid_language_code")));
             }
         };
 
         // verify public token
         match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
-            Ok(result) => (),
+            Ok(_) => (),
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -91,24 +91,23 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn register(&self, mut request: Request<RegisterRequest>) -> Result<Response<String>, Status> {
+    async fn register(&self, request: Request<RegisterRequest>) -> Result<Response<String>, Status> {
         // start login
         log::info!("{}", t!("auth_started"));
 
+        // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_language_id"), e);
-                return Err(Status::invalid_argument(t!("invalid_language_id")));
+                return Err(e);
             }
         };
 
         // verify public token
         match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
-            Ok(result) => (),
+            Ok(_) => (),
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -179,21 +178,19 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn reset_password(&self, mut request: Request<ResetPasswordRequest>) -> Result<Response<String>, Status> {
+    async fn reset_password(&self, request: Request<ResetPasswordRequest>) -> Result<Response<String>, Status> {
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_language_id"), e);
-                return Err(Status::invalid_argument(t!("invalid_language_id")));
+                return Err(e);
             }
         };
 
         // verify public token
         match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
-            Ok(result) => (),
+            Ok(_) => (),
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -241,21 +238,19 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn logout(&self, mut request: Request<()>) -> Result<Response<()>, Status> {
+    async fn logout(&self, request: Request<()>) -> Result<Response<()>, Status> {
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_language_id"), e);
-                return Err(Status::invalid_argument(t!("invalid_language_id")));
+                return Err(e);
             }
         };
 
         // verify public token
         match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
-            Ok(result) => (),
+            Ok(_) => (),
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -282,7 +277,52 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
+    async fn validate_access_token(&self, request: Request<()>) -> Result<Response<ValidateAccessTokenResponse>, Status> {
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // verify access token using tokenizer
+        let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get account by id
+        let account_doc = match self.account_col.find_one(doc! {"id": &token.0}, None).await.unwrap() {
+            Some(acct_doc) => {
+                log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
+                acct_doc
+            }
+            None => {
+                log::error!("{}: {:?}", t!("account_not_found"), &token.0);
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        Ok(Response::new(ValidateAccessTokenResponse {
+            account_id: account_doc.get_str("id").unwrap().to_string(),
+            phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
+            display_name: account_doc.get_str("display_name").unwrap().to_string(),
+        }))
+    }
+
+    // done
     async fn get_account(&self, request: Request<()>) -> Result<Response<Account>, Status> {
+        // validate language id
+        match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
         // verify access token
         let token_payload = match config::session_manager::verify_access_token(&request.metadata(), &rust_i18n::locale().as_str().to_string(), &self.token_col).await {
             Ok(result) => (result.0, result.1),
@@ -351,22 +391,21 @@ impl AuthService for AuthServiceImpl {
         Ok(Response::new(account))
     }
 
-    //
-    async fn get_account_by_phone_number(&self, mut request: Request<String>) -> Result<Response<Account>, Status> {
+    // done
+    async fn get_account_by_phone_number(&self, request: Request<String>) -> Result<Response<Account>, Status> {
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_language_id"), e);
-                return Err(Status::invalid_argument(t!("invalid_language_id")));
+                return Err(e);
             }
         };
 
         // verify public token
         match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
-            Ok(result) => (),
+            Ok(_) => (),
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -426,28 +465,229 @@ impl AuthService for AuthServiceImpl {
         Ok(Response::new(account))
     }
 
+    // done
     async fn update_account(&self, request: Request<Account>) -> Result<Response<Account>, Status> {
-        todo!()
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // verify access token using tokenizer
+        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // extract account object from request
+        let account = request.into_inner();
+
+        // perform account update with account object from request
+        match self.account_col.find_one_and_update(doc! {"id": &account.id}, doc! {"$set": {
+            "display_name": &account.display_name,
+            "avatar": &account.avatar_url.unwrap(),
+            "id_card": &account.id_card_url.unwrap(),
+            "vaccine_card": &account.vaccine_card_url.unwrap(),
+            "updated_at": Utc::now().to_rfc3339(),
+        }}, None).await.unwrap() {
+            Some(acct_doc) => acct_doc,
+            None => {
+                log::error!("{}: {:?}", t!("account_not_found"), &account.id);
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        // get the updated account document
+        let account_doc = match self.account_col.find_one(doc! {"id": &account.id}, None).await.unwrap() {
+            Some(acct_doc) => acct_doc,
+            None => {
+                log::error!("{}: {:?}", t!("account_not_found"), &account.id);
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        // parse created_at and updated_at fields
+        let created_at_parsed = match DateTime::parse_from_rfc3339(account_doc.get_str("created_at").unwrap()) {
+            Ok(created_at) => created_at,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_created_at"), e);
+                return Err(Status::internal(t!("invalid_created_at")));
+            }
+        };
+        let updated_at_parsed = match DateTime::parse_from_rfc3339(account_doc.get_str("updated_at").unwrap()) {
+            Ok(updated_at) => updated_at,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_updated_at"), e);
+                return Err(Status::internal(t!("invalid_updated_at")));
+            }
+        };
+
+        // create account object to return
+        let account = Account {
+            id: account_doc.get_str("id").unwrap().to_string(),
+            phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
+            created_at: Some(
+                prost_types::Timestamp {
+                    seconds: created_at_parsed.timestamp(),
+                    nanos: 0,
+                }
+            ),
+            updated_at: Some(
+                prost_types::Timestamp {
+                    seconds: updated_at_parsed.timestamp(),
+                    nanos: 0,
+                }
+            ),
+            avatar_url: Some(account_doc.get_str("avatar").unwrap_or("").to_string()),
+            id_card_url: Some(account_doc.get_str("id_card").unwrap_or("").to_string()),
+            display_name: account_doc.get_str("display_name").unwrap_or("").to_string(),
+            vaccine_card_url: Some(account_doc.get_str("vaccine_card").unwrap_or("").to_string()),
+            language_id,
+            referral_code: Some(account_doc.get_str("referral_code").unwrap_or("").to_string()),
+        };
+
+        Ok(Response::new(account))
     }
 
+    // done
     async fn delete_account(&self, request: Request<()>) -> Result<Response<()>, Status> {
-        todo!()
-    }
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
 
-    async fn get_referral_code(&self, request: Request<()>) -> Result<Response<String>, Status> {
-        todo!()
-    }
+        // verify access token using tokenizer
+        let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
 
-    async fn get_referral_code_by_phone_number(&self, request: Request<String>) -> Result<Response<String>, Status> {
-        todo!()
+        // delete account using account id from token payload
+        match self.account_col.delete_one(doc! {"id": &token.0}, None).await {
+            Ok(_) => Ok(Response::new(())),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("account_not_found"), e);
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        }
     }
 
     async fn send_phone_verification_code(&self, request: Request<String>) -> Result<Response<()>, Status> {
-        todo!()
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate public access token
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+            Ok(_) => (),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get phone number from request
+        let phone_number = request.into_inner();
+
+        // send verification code to phone number
+        match config::sms_manager::send_sms(&phone_number, &language_id).await {
+            Ok(_) => Ok(Response::new(())),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("sms_send_failed"), e);
+                return Err(Status::internal(t!("sms_send_failed")));
+            }
+        }
     }
 
     async fn verify_phone_verification_code(&self, request: Request<VerifyPhoneRequest>) -> Result<Response<()>, Status> {
         todo!()
+    }
+
+    // done
+    async fn get_referral_code(&self, request: Request<()>) -> Result<Response<String>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // verify access token using tokenizer
+        let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get account using account id from token payload
+        let account_doc = match self.account_col.find_one(doc! {"id": &token.0}, None).await.unwrap() {
+            Some(acct_doc) => acct_doc,
+            None => {
+                log::error!("{}: {:?}", t!("account_not_found"), &token.0);
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        // get referral code from account document
+        match account_doc.get_str("referral_code") {
+            Ok(referral_code) => Ok(Response::new(referral_code.to_string())),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_referral_code"), e);
+                return Err(Status::internal(t!("invalid_referral_code")));
+            }
+        }
+    }
+
+    //
+    async fn get_referral_code_by_phone_number(&self, request: Request<String>) -> Result<Response<String>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get phone number from request
+        let phone_number = request.into_inner();
+
+        // get referral code using phone number from request
+        let referral_code = match self.account_col.find_one(doc! {"phone_number": &phone_number}, None).await.unwrap() {
+            Some(acct_doc) => acct_doc.get_str("referral_code").unwrap().to_string(),
+            None => {
+                log::error!("{}: {:?}", t!("account_not_found"), &token.0);
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        Ok(Response::new(referral_code))
     }
 }
 
@@ -459,18 +699,18 @@ fn _create_timestamp_field() -> Bson {
 }
 
 // validate language id
-fn _validate_language_id_from_request(md: &MetadataMap) -> Result<(String), Status> {
-    let language_id = match md.get("x-language-id").unwrap().to_str() {
-        Ok(result) => result.to_string(),
-        Err(_) => {
-            return Err(Status::invalid_argument(t!("invalid_language_id")));
+fn _validate_language_id_from_request(md: &MetadataMap) -> Result<String, Status> {
+    let language_id = match md.get("x-language-id") {
+        Some(result) => result.to_str().unwrap().to_string(),
+        None => {
+            return Err(Status::invalid_argument(t!("invalid_language_code")));
         }
     };
     // validate language id from request
     match locale::validate_language_id(&language_id) {
         Ok(_) => Ok(language_id),
-        Err(e) => {
-            return Err(Status::invalid_argument(t!("invalid_language_id")));
+        Err(_) => {
+            return Err(Status::invalid_argument(t!("invalid_language_code")));
         }
     }
 }

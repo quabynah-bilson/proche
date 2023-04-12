@@ -10,3 +10,5 @@
 - Added a new CHANGELOG.md file
 - Added localization support for the auth microservice in French and English using `rust-i18n` & `once_cell`
 - Added authentication and authorization support for the auth microservice using `paseto` & `bcrypt`
+- Added session management with `paseto` tokens for the auth microservice
+- 

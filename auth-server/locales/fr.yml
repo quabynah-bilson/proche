@@ -10,6 +10,7 @@ account_exists: Le compte existe déjà
 invalid_otp: Code invalide
 invalid_phone_number: Numéro de téléphone invalide
 password_reset_failed: Échec de la réinitialisation du mot de passe
+invalid_referral_code: Code de référence invalide
 
 # auth messages
 auth_failed: Échec de l'authentification
@@ -18,7 +19,8 @@ auth_success: Authentification réussie
 access_denied: Accès refusé
 
 # misc
-invalid_language_code: Code de langue invalide
+invalid_language_code: Code de langue non pris en charge
+sms_send_failed: Nous n'avons pas pu envoyer le SMS pour une raison quelconque. Veuillez réessayer plus tard.
 
 # access token
 refresh_token_not_found: Token de rafraîchissement non trouvé
