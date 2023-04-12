@@ -207,6 +207,7 @@ impl AuthService for AuthServiceImpl {
         }
     }
 
+    // done
     async fn logout(&self, request: Request<()>) -> Result<Response<()>, Status> {
         match config::session_manager::clear_access_token(&request.metadata(), &self.token_col).await {
             Ok(()) => Ok(Response::new(())),
@@ -218,7 +219,57 @@ impl AuthService for AuthServiceImpl {
     }
 
     async fn get_account(&self, request: Request<()>) -> Result<Response<Account>, Status> {
-        todo!()
+        let req = request.into_inner();
+
+        // verify access token
+        let mut token_payload = match config::session_manager::verify_access_token(&request.metadata(),
+                                                                                   &rust_i18n::locale().as_str().to_string(), &self.token_col).await {
+            Ok(result) => (result.0, result.1),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_access_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_access_token")));
+            }
+        };
+
+        // get account id from token payload and language id
+        let account_id = token_payload.0;
+        let language_id = token_payload.1;
+
+        // find account by id
+        let account_doc = match self.account_col.find_one(doc! {"id": &account_id}, None).await.unwrap() {
+            Some(acct_doc) => {
+                log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
+                acct_doc
+            }
+            None => {
+                log::error!("{}: {:?}", t!("account_not_found"), &account_id);
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        // create account object
+        let account = Account {
+            id: account_doc.get_str("id").unwrap().to_string(),
+            phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
+            referral_code: Some(account_doc.get_str("referral_code").unwrap().to_string()),
+            language_id: language_id.to_string(),
+            created_at: Some(prost_types::Timestamp {
+                seconds: account_doc.get_datetime("created_at").unwrap().timestamp_millis(),
+                nanos: 0,
+            }),
+            updated_at: Some(
+                prost_types::Timestamp {
+                    seconds: account_doc.get_datetime("updated_at").unwrap().timestamp_millis(),
+                    nanos: 0,
+                }
+            ),
+            avatar_url: Some(account_doc.get_str("avatar").unwrap().to_string()),
+            id_card_url: Some(account_doc.get_str("id_card").unwrap().to_string()),
+            display_name: account_doc.get_str("display_name").unwrap().to_string(),
+            vaccine_card_url: Some(account_doc.get_str("vaccine_card").unwrap().to_string()),
+        };
+
+        Ok(Response::new(account))
     }
 
     async fn get_account_by_phone_number(&self, request: Request<String>) -> Result<Response<Account>, Status> {

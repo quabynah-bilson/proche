@@ -37,10 +37,11 @@ pub fn generate_token(payload: &str, language_id: &str, ttl: i64) -> Result<Stri
     }
 }
 
+// todo: async issue: does not compile
 // validate access token. if token is expired, check for refresh token.
 // if refresh token is expired, return error else generate new access token and return it
-pub async fn validate_token(token: &str, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<String, Box<dyn std::error::Error>> {
-    match _check_token_expiration(&token, &language_id) {
+pub async fn validate_token(token: &str, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<String, Box<dyn Error>> {
+    match _check_token_expiration(&token, &language_id).await {
         Ok(_) => Ok(token.to_string()),
         Err(_) => {
             // get refresh token from database
@@ -70,7 +71,7 @@ pub async fn validate_token(token: &str, language_id: &str, token_col: &mongodb:
             };
 
             // check for refresh token expiration
-            match _check_token_expiration(&refresh_token, &language_id) {
+            match _check_token_expiration(&refresh_token, &language_id).await {
                 Ok(_) => {
                     // generate new access token
                     let account_id = match token_store.get("account_id") {
@@ -128,7 +129,7 @@ pub fn compare_password(password: &str, hashed_password: &str) -> Result<bool, B
 // region helper functions
 // helper method to validate token expiration.
 // if token is expired, return error else return Ok(())
-fn _check_token_expiration(token: &str, language_id: &str) -> Result<(), Box<dyn Error>> {
+async fn _check_token_expiration(token: &str, language_id: &str) -> Result<(), Box<dyn Error>> {
     // use key from env
     let auth_token = std::env::var("AUTH_TOKEN").expect("AUTH_TOKEN must be set");
 
@@ -159,4 +160,37 @@ fn _check_token_expiration(token: &str, language_id: &str) -> Result<(), Box<dyn
         }
     }
 }
+
+// helper method to get payload from token (account_id and language_id)
+pub(crate) fn get_payload_from_token(token: &str) -> Result<(String, String), Box<dyn Error>> {
+    // use key from env
+    let auth_token = std::env::var("AUTH_TOKEN").expect("AUTH_TOKEN must be set");
+
+    // decrypt token
+    let payload = match decrypt_paseto(&token, None, &mut &auth_token.into_bytes()) {
+        Ok(payload) => payload,
+        Err(_) => {
+            return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, t!("invalid_token"))));
+        }
+    };
+
+    // check for token expiration
+    let json: serde_json::Value = serde_json::from_str(&payload).unwrap();
+    let account_id = match json["account_id"].as_str() {
+        Some(id) => id.to_string(),
+        None => {
+            return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, t!("account_not_found"))));
+        }
+    };
+
+    // get language_id from token
+    let language_id = match json["language_id"].as_str() {
+        Some(id) => id.to_string(),
+        None => {
+            return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, t!("auth_failed"))));
+        }
+    };
+    Ok((account_id, language_id))
+}
+
 // endregion

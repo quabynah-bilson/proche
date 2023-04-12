@@ -36,7 +36,7 @@ pub async fn create_access_token(account_id: &str, language_id: &str, token_col:
 }
 
 // get access token from request header
-pub async fn verify_access_token(request: &MetadataMap, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<(), Status> {
+pub async fn verify_access_token(request: &MetadataMap, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<(String, String), Status> {
     // extract token from authorization header
     let access_token = match request.get("Authorization") {
         Some(token) => {
@@ -54,7 +54,11 @@ pub async fn verify_access_token(request: &MetadataMap, language_id: &str, token
 
     // validate token extracted and return it if it's valid or can be refreshed else return error
     match tokenizer::validate_token(&access_token, &language_id, &token_col).await {
-        Ok(_) => Ok(()),
+        Ok(updated_token) => {
+            // get account id from token
+            let result = tokenizer::get_payload_from_token(&updated_token).unwrap();
+            Ok((result.0, result.1))
+        }
         Err(e) => {
             log::error!("{}: {:?}", t!("token_expired"), e);
             Err(Status::unauthenticated(t!("token_expired")))
