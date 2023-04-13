@@ -7,6 +7,9 @@ This Flutter application is designed to make it easy for users to search for and
 them,
 all from the convenience of their mobile device.
 
+<img src="assets/img/app_logo_animated.gif" alt="welcome page" width="250">
+
+[//]: # (https://dribbble.com/shots/16905482-Bird-Eye-View-aerial-photography-logo-design-pin-pointer-bird)
 ### Features
 
 - `Task Finder`: Easily find volunteer opportunities and other tasks in your area that match your interests and
