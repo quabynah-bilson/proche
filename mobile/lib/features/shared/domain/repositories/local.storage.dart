@@ -1,19 +1,12 @@
-import 'package:dartz/dartz.dart';
-import 'package:mobile/generated/protos/auth.pb.dart';
-
 /// handles local storage of session data
 abstract class BaseLocalStorageRepository {
-  Future<Either<Session, String>> getCurrentSession();
+  Future<void> saveAccessToken(String token);
 
-  Future<Either<Account, String>> getCurrentAccount();
-
-  Future<void> saveSession(Session session);
-
-  Future<void> saveAccount(Account account);
-
-  Future<void> clearSessionAndAccount();
+  Future<void> clearAccessToken();
 
   Future<String> get defaultLocale;
+
+  Future<String?> get accessToken;
 
   Future<void> setLocale(String locale);
 }

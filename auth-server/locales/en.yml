@@ -1,18 +1,37 @@
 app_name: Nearme
+
+# account messages
 invalid_credentials: Invalid phone number or password
 account_locked: Your account has been locked
 account_not_verified: Your account has not been verified
 account_not_found: Account not found
-account_expired: Your account has expired
+account_found: Account found
 account_exists: Account already exists
 invalid_otp: Invalid OTP
 invalid_phone_number: Invalid phone number
-invalid_token: Invalid token
-access_denied: Access denied
+password_reset_failed: Password reset failed
+invalid_referral_code: Invalid referral code
+
+# auth messages
 auth_failed: Authentication failed
 auth_started: Authentication started
 auth_success: Authentication successful
-session_created: Session created
-session_expired: Session expired
-session_verified: Session verified
-invalid_language_code: Invalid language code
+access_denied: Access denied
+
+# misc
+invalid_language_code: Unsupported language code
+sms_send_failed: We were unable to send the SMS for some reason. Please try again later.
+sms_send_success: Verification code sent successfully
+sms_verification_failed: We were unable to verify the SMS for some reason. Please try again later.
+sms_verification_success: Phone number verified successfully
+
+# access token
+refresh_token_not_found: Refresh token not found
+invalid_token: Invalid token
+access_token_not_found: Access token not found
+access_token_found: Access token found
+access_token_found_in_request: Access token found in request
+unable_to_create_token: Unable to create token
+access_token_verified: Access token verified
+token_expired: Your session has expired
+generating_new_access_token: Generating new access token

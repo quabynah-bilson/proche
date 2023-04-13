@@ -9,12 +9,13 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'package:protobuf_google/protobuf_google.dart' as $8;
+import 'package:protobuf_google/protobuf_google.dart' as $3;
 
 class VerifyPhoneRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'VerifyPhoneRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'verificationCode')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
     ..hasRequiredFields = false
   ;
 
@@ -22,6 +23,7 @@ class VerifyPhoneRequest extends $pb.GeneratedMessage {
   factory VerifyPhoneRequest({
     $core.String? phoneNumber,
     $core.String? verificationCode,
+    $core.String? languageId,
   }) {
     final _result = create();
     if (phoneNumber != null) {
@@ -29,6 +31,9 @@ class VerifyPhoneRequest extends $pb.GeneratedMessage {
     }
     if (verificationCode != null) {
       _result.verificationCode = verificationCode;
+    }
+    if (languageId != null) {
+      _result.languageId = languageId;
     }
     return _result;
   }
@@ -70,6 +75,15 @@ class VerifyPhoneRequest extends $pb.GeneratedMessage {
   $core.bool hasVerificationCode() => $_has(1);
   @$pb.TagNumber(2)
   void clearVerificationCode() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get languageId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set languageId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasLanguageId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearLanguageId() => clearField(3);
 }
 
 class LoginRequest extends $pb.GeneratedMessage {
@@ -145,55 +159,6 @@ class LoginRequest extends $pb.GeneratedMessage {
   $core.bool hasLanguageId() => $_has(2);
   @$pb.TagNumber(3)
   void clearLanguageId() => clearField(3);
-}
-
-class AuthResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AuthResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
-    ..aOM<Session>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'session', subBuilder: Session.create)
-    ..hasRequiredFields = false
-  ;
-
-  AuthResponse._() : super();
-  factory AuthResponse({
-    Session? session,
-  }) {
-    final _result = create();
-    if (session != null) {
-      _result.session = session;
-    }
-    return _result;
-  }
-  factory AuthResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AuthResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  AuthResponse clone() => AuthResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  AuthResponse copyWith(void Function(AuthResponse) updates) => super.copyWith((message) => updates(message as AuthResponse)) as AuthResponse; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static AuthResponse create() => AuthResponse._();
-  AuthResponse createEmptyInstance() => create();
-  static $pb.PbList<AuthResponse> createRepeated() => $pb.PbList<AuthResponse>();
-  @$core.pragma('dart2js:noInline')
-  static AuthResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AuthResponse>(create);
-  static AuthResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  Session get session => $_getN(0);
-  @$pb.TagNumber(1)
-  set session(Session v) { setField(1, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasSession() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearSession() => clearField(1);
-  @$pb.TagNumber(1)
-  Session ensureSession() => $_ensure(0);
 }
 
 class RegisterRequest extends $pb.GeneratedMessage {
@@ -345,6 +310,7 @@ class ResetPasswordRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ResetPasswordRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'password')
     ..hasRequiredFields = false
   ;
 
@@ -352,6 +318,7 @@ class ResetPasswordRequest extends $pb.GeneratedMessage {
   factory ResetPasswordRequest({
     $core.String? phoneNumber,
     $core.String? languageId,
+    $core.String? password,
   }) {
     final _result = create();
     if (phoneNumber != null) {
@@ -359,6 +326,9 @@ class ResetPasswordRequest extends $pb.GeneratedMessage {
     }
     if (languageId != null) {
       _result.languageId = languageId;
+    }
+    if (password != null) {
+      _result.password = password;
     }
     return _result;
   }
@@ -400,6 +370,15 @@ class ResetPasswordRequest extends $pb.GeneratedMessage {
   $core.bool hasLanguageId() => $_has(1);
   @$pb.TagNumber(3)
   void clearLanguageId() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get password => $_getSZ(2);
+  @$pb.TagNumber(4)
+  set password($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasPassword() => $_has(2);
+  @$pb.TagNumber(4)
+  void clearPassword() => clearField(4);
 }
 
 class Account extends $pb.GeneratedMessage {
@@ -408,8 +387,8 @@ class Account extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
-    ..aOM<$8.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
-    ..aOM<$8.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$3.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $3.Timestamp.create)
+    ..aOM<$3.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $3.Timestamp.create)
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'avatarUrl')
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'idCardUrl')
     ..aOS(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'vaccineCardUrl')
@@ -423,8 +402,8 @@ class Account extends $pb.GeneratedMessage {
     $core.String? phoneNumber,
     $core.String? displayName,
     $core.String? languageId,
-    $8.Timestamp? createdAt,
-    $8.Timestamp? updatedAt,
+    $3.Timestamp? createdAt,
+    $3.Timestamp? updatedAt,
     $core.String? avatarUrl,
     $core.String? idCardUrl,
     $core.String? vaccineCardUrl,
@@ -521,26 +500,26 @@ class Account extends $pb.GeneratedMessage {
   void clearLanguageId() => clearField(4);
 
   @$pb.TagNumber(5)
-  $8.Timestamp get createdAt => $_getN(4);
+  $3.Timestamp get createdAt => $_getN(4);
   @$pb.TagNumber(5)
-  set createdAt($8.Timestamp v) { setField(5, v); }
+  set createdAt($3.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasCreatedAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearCreatedAt() => clearField(5);
   @$pb.TagNumber(5)
-  $8.Timestamp ensureCreatedAt() => $_ensure(4);
+  $3.Timestamp ensureCreatedAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  $8.Timestamp get updatedAt => $_getN(5);
+  $3.Timestamp get updatedAt => $_getN(5);
   @$pb.TagNumber(6)
-  set updatedAt($8.Timestamp v) { setField(6, v); }
+  set updatedAt($3.Timestamp v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasUpdatedAt() => $_has(5);
   @$pb.TagNumber(6)
   void clearUpdatedAt() => clearField(6);
   @$pb.TagNumber(6)
-  $8.Timestamp ensureUpdatedAt() => $_ensure(5);
+  $3.Timestamp ensureUpdatedAt() => $_ensure(5);
 
   @$pb.TagNumber(7)
   $core.String get avatarUrl => $_getSZ(6);
@@ -579,154 +558,64 @@ class Account extends $pb.GeneratedMessage {
   void clearReferralCode() => clearField(10);
 }
 
-class Session extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Session', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accessToken')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountId')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
-    ..aOM<$8.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
-    ..aOM<$8.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accessTokenExpiresAt', subBuilder: $8.Timestamp.create)
-    ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'refreshToken')
-    ..aOM<$8.Timestamp>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'refreshTokenExpiresAt', subBuilder: $8.Timestamp.create)
+class AccessTokenStore extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AccessTokenStore', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accessToken')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'refreshToken')
     ..hasRequiredFields = false
   ;
 
-  Session._() : super();
-  factory Session({
-    $core.String? id,
+  AccessTokenStore._() : super();
+  factory AccessTokenStore({
     $core.String? accessToken,
-    $core.String? accountId,
-    $core.String? languageId,
-    $8.Timestamp? createdAt,
-    $8.Timestamp? accessTokenExpiresAt,
     $core.String? refreshToken,
-    $8.Timestamp? refreshTokenExpiresAt,
   }) {
     final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
     if (accessToken != null) {
       _result.accessToken = accessToken;
-    }
-    if (accountId != null) {
-      _result.accountId = accountId;
-    }
-    if (languageId != null) {
-      _result.languageId = languageId;
-    }
-    if (createdAt != null) {
-      _result.createdAt = createdAt;
-    }
-    if (accessTokenExpiresAt != null) {
-      _result.accessTokenExpiresAt = accessTokenExpiresAt;
     }
     if (refreshToken != null) {
       _result.refreshToken = refreshToken;
     }
-    if (refreshTokenExpiresAt != null) {
-      _result.refreshTokenExpiresAt = refreshTokenExpiresAt;
-    }
     return _result;
   }
-  factory Session.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Session.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory AccessTokenStore.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AccessTokenStore.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  Session clone() => Session()..mergeFromMessage(this);
+  AccessTokenStore clone() => AccessTokenStore()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Session copyWith(void Function(Session) updates) => super.copyWith((message) => updates(message as Session)) as Session; // ignore: deprecated_member_use
+  AccessTokenStore copyWith(void Function(AccessTokenStore) updates) => super.copyWith((message) => updates(message as AccessTokenStore)) as AccessTokenStore; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static Session create() => Session._();
-  Session createEmptyInstance() => create();
-  static $pb.PbList<Session> createRepeated() => $pb.PbList<Session>();
+  static AccessTokenStore create() => AccessTokenStore._();
+  AccessTokenStore createEmptyInstance() => create();
+  static $pb.PbList<AccessTokenStore> createRepeated() => $pb.PbList<AccessTokenStore>();
   @$core.pragma('dart2js:noInline')
-  static Session getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Session>(create);
-  static Session? _defaultInstance;
+  static AccessTokenStore getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AccessTokenStore>(create);
+  static AccessTokenStore? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get accessToken => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set accessToken($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasAccessToken() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get accessToken => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set accessToken($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasAccessToken() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearAccessToken() => clearField(2);
+  void clearAccessToken() => clearField(1);
 
   @$pb.TagNumber(3)
-  $core.String get accountId => $_getSZ(2);
+  $core.String get refreshToken => $_getSZ(1);
   @$pb.TagNumber(3)
-  set accountId($core.String v) { $_setString(2, v); }
+  set refreshToken($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(3)
-  $core.bool hasAccountId() => $_has(2);
+  $core.bool hasRefreshToken() => $_has(1);
   @$pb.TagNumber(3)
-  void clearAccountId() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.String get languageId => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set languageId($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasLanguageId() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearLanguageId() => clearField(4);
-
-  @$pb.TagNumber(5)
-  $8.Timestamp get createdAt => $_getN(4);
-  @$pb.TagNumber(5)
-  set createdAt($8.Timestamp v) { setField(5, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasCreatedAt() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearCreatedAt() => clearField(5);
-  @$pb.TagNumber(5)
-  $8.Timestamp ensureCreatedAt() => $_ensure(4);
-
-  @$pb.TagNumber(6)
-  $8.Timestamp get accessTokenExpiresAt => $_getN(5);
-  @$pb.TagNumber(6)
-  set accessTokenExpiresAt($8.Timestamp v) { setField(6, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasAccessTokenExpiresAt() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearAccessTokenExpiresAt() => clearField(6);
-  @$pb.TagNumber(6)
-  $8.Timestamp ensureAccessTokenExpiresAt() => $_ensure(5);
-
-  @$pb.TagNumber(7)
-  $core.String get refreshToken => $_getSZ(6);
-  @$pb.TagNumber(7)
-  set refreshToken($core.String v) { $_setString(6, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasRefreshToken() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearRefreshToken() => clearField(7);
-
-  @$pb.TagNumber(8)
-  $8.Timestamp get refreshTokenExpiresAt => $_getN(7);
-  @$pb.TagNumber(8)
-  set refreshTokenExpiresAt($8.Timestamp v) { setField(8, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasRefreshTokenExpiresAt() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearRefreshTokenExpiresAt() => clearField(8);
-  @$pb.TagNumber(8)
-  $8.Timestamp ensureRefreshTokenExpiresAt() => $_ensure(7);
+  void clearRefreshToken() => clearField(3);
 }
 
