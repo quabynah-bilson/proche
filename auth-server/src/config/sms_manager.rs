@@ -108,18 +108,3 @@ impl TwilioVerifyService {
         }
     }
 }
-
-/*
--- send code
-curl 'https://verify.twilio.com/v2/Services/VA1008b4c9f5bac08d8bf280a351dcdbff/Verifications' -X POST \
---data-urlencode 'To=+233554635701' \
---data-urlencode 'Channel=sms' \
--u AC5de243c74c8cf8e7ccb7c41d60ab6f64:[AuthToken]
-
--- verify code
-curl 'https://verify.twilio.com/v2/Services/VA1008b4c9f5bac08d8bf280a351dcdbff/VerificationCheck' -X POST \
---data-urlencode 'Code=378965' \
---data-urlencode 'To=+233554635701' \
--u AC5de243c74c8cf8e7ccb7c41d60ab6f64:[AuthToken]
-
- */
