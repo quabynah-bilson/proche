@@ -9,4 +9,4 @@
 - Added a new README.md file
 - Added a new CHANGELOG.md file
 - Added localization support for the auth microservice in French and English using `rust-i18n` & `once_cell`
-- 
+- Added Twilio verification support for the auth microservice (OTP verification)
