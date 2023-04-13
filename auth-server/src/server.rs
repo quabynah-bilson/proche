@@ -583,6 +583,7 @@ impl AuthService for AuthServiceImpl {
         }
     }
 
+    // done
     async fn send_phone_verification_code(&self, request: Request<String>) -> Result<Response<()>, Status> {
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
@@ -605,7 +606,7 @@ impl AuthService for AuthServiceImpl {
         let phone_number = request.into_inner();
 
         // send verification code to phone number
-        match config::sms_manager::send_sms(&phone_number, &language_id).await {
+        match config::sms_manager::TwilioVerifyService::send_sms(&phone_number, &language_id).await {
             Ok(_) => Ok(Response::new(())),
             Err(e) => {
                 log::error!("{}: {:?}", t!("sms_send_failed"), e);
@@ -614,8 +615,38 @@ impl AuthService for AuthServiceImpl {
         }
     }
 
+    // done
     async fn verify_phone_verification_code(&self, request: Request<VerifyPhoneRequest>) -> Result<Response<()>, Status> {
-        todo!()
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate public access token
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+            Ok(_) => (),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get phone number from request
+        let req = request.into_inner();
+        let phone_number = &req.phone_number;
+        let verification_code = &req.verification_code;
+
+        // verify verification code
+        match config::sms_manager::TwilioVerifyService::verify_sms(&phone_number, &verification_code, &language_id).await {
+            Ok(_) => Ok(Response::new(())),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("sms_verification_failed"), e);
+                return Err(Status::internal(t!("sms_verification_failed")));
+            }
+        }
     }
 
     // done
@@ -656,7 +687,7 @@ impl AuthService for AuthServiceImpl {
         }
     }
 
-    //
+    // done
     async fn get_referral_code_by_phone_number(&self, request: Request<String>) -> Result<Response<String>, Status> {
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {

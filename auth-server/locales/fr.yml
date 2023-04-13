@@ -21,6 +21,9 @@ access_denied: Accès refusé
 # misc
 invalid_language_code: Code de langue non pris en charge
 sms_send_failed: Nous n'avons pas pu envoyer le SMS pour une raison quelconque. Veuillez réessayer plus tard.
+sms_send_success: Code de vérification envoyé avec succès
+sms_verification_failed: Nous n'avons pas pu vérifier le SMS pour une raison quelconque. Veuillez réessayer plus tard.
+sms_verification_success: Numéro de téléphone vérifié avec succès
 
 # access token
 refresh_token_not_found: Token de rafraîchissement non trouvé

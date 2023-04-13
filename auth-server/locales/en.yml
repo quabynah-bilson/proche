@@ -21,6 +21,9 @@ access_denied: Access denied
 # misc
 invalid_language_code: Unsupported language code
 sms_send_failed: We were unable to send the SMS for some reason. Please try again later.
+sms_send_success: Verification code sent successfully
+sms_verification_failed: We were unable to verify the SMS for some reason. Please try again later.
+sms_verification_success: Phone number verified successfully
 
 # access token
 refresh_token_not_found: Refresh token not found
