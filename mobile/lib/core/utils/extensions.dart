@@ -374,14 +374,13 @@ extension BuildContextX on BuildContext {
                             formKey.currentState?.save();
                             var phoneNumber = phoneNumberController.text.trim(),
                                 password = passwordController.text.trim();
-                            // TODO sign in
                             read<AuthBloc>().add(SignInEvent(
                                 phoneNumber: phoneNumber, password: password));
                           }
                         },
                       ),
                       TextButton(
-                        // todo
+                        // todo -> show hosted terms of service
                         onPressed: () =>
                             showMessageDialog(localizer.underMaintenanceHeader),
                         child: Text.rich(
