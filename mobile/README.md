@@ -1,7 +1,3 @@
-# Proche
-
-###### (means Nearby in French)
-
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Behance](https://img.shields.io/badge/Behance-1769ff?style=for-the-badge&logo=behance&logoColor=white)](https://www.behance.net/gallery/137262233/Google-Nearme-Case-Study)
 
@@ -61,7 +57,10 @@ To run this app on your device, follow these steps:
 
 - `Flutter`: A cross-platform framework for building high-performance, high-fidelity mobile apps for iOS and Android.
 
-- `Firebase Messaging`: A cloud messaging platform that allows developers to send notifications and messages to users across multiple platforms, including Android, iOS, and web. It provides a simple and reliable way to deliver messages and engage with users in real-time. With Firebase Messaging, developers can send targeted messages to specific users or groups, track message delivery and engagement, and customize the look and feel of notifications.
+- `Firebase Messaging`: A cloud messaging platform that allows developers to send notifications and messages to users
+  across multiple platforms, including Android, iOS, and web. It provides a simple and reliable way to deliver messages
+  and engage with users in real-time. With Firebase Messaging, developers can send targeted messages to specific users
+  or groups, track message delivery and engagement, and customize the look and feel of notifications.
 
 - `Google Maps API`: A set of tools and services for building interactive, location-based applications.
 - `gRPC`: A high-performance, open-source framework for building distributed systems and microservices.
@@ -74,6 +73,47 @@ To run this app on your device, follow these steps:
 
 - `Lottie`: A library for Android, iOS, and React Native that renders After Effects animations in real-time. Lottie
   makes it easy to add high-quality animations to your Flutter app, without the need for complex animations code.
+
+### Flutter Clean Architecture
+
+`Flutter Clean Architecture` is a software design pattern that provides a way to structure code in a modular, reusable,
+and maintainable way. It is based on the principles of Separation of Concerns and Dependency Injection. By separating
+the concerns of the application into layers, it helps developers to write testable, scalable, and maintainable code.
+
+#### Layers of Flutter Clean Architecture
+
+Flutter Clean Architecture has four main layers:
+
+- `Presentation Layer`: This layer contains UI-related code and is responsible for rendering the views. It communicates
+  with
+  the business logic layer through an interface (or contract) that defines what data the UI needs and what actions the
+  user can perform. In Flutter, this layer can be implemented using Widgets.
+
+- `Business Logic Layer`: This layer contains the core of the application's business logic. It communicates with the
+  data
+  layer through an interface (or contract) that defines what data it needs and what operations it can perform. This
+  layer
+  is independent of the UI layer and can be easily tested. In Flutter, this layer can be implemented using BLoCs,
+  Cubits,
+  or plain Dart classes.
+
+- `Data Layer`: This layer contains code that interacts with external data sources such as APIs or databases. It
+  implements
+  the contracts defined in the business logic layer and provides the required data to the business logic layer. In
+  Flutter, this layer can be implemented using Repositories, DataSources, or plain Dart classes.
+
+- `Domain Layer`: This layer contains the domain models and business rules of the application. It is independent of any
+  specific technology or framework and defines the entities, value objects, and aggregates of the application.
+
+##### Relevant Links
+
+- The Clean Architecture by Uncle Bob (Robert C. Martin)
+- Flutter Clean Architecture with Provider and BLoC by Reso Coder
+- Flutter TDD Clean Architecture Course by Paulo Dichone
+- Clean Architecture with Flutter and GraphQL by Radoslav Vitanov
+- Clean Architecture with Flutter and Redux by Piyush Khandelwal
+  These resources can help you get started with Flutter Clean Architecture and provide a solid foundation for building
+  scalable and maintainable applications.
 
 ### Contributing
 

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/theme.dart';
-import 'package:mobile/features/shared/presentation/manager/auth/auth_bloc.dart';
+import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.dart';
 import 'package:shared_utils/shared_utils.dart';
 

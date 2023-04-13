@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/validator.dart';
-import 'package:mobile/features/shared/presentation/manager/auth/auth_bloc.dart';
+import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:pinput/pinput.dart';
 import 'package:shared_utils/shared_utils.dart';

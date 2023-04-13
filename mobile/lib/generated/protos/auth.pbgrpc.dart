@@ -6,14 +6,13 @@
 // ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:async' as $async;
+
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
+import 'auth.pb.dart' as $0;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
 import 'package:protobuf_google/protobuf_google.dart' as $2;
-
-import 'auth.pb.dart' as $0;
-
 export 'auth.pb.dart';
 
 class AuthServiceClient extends $grpc.Client {
@@ -35,6 +34,17 @@ class AuthServiceClient extends $grpc.Client {
       '/auth.AuthService/logout',
       ($2.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+  static final _$request_public_access_token =
+      $grpc.ClientMethod<$2.Empty, $1.StringValue>(
+          '/auth.AuthService/request_public_access_token',
+          ($2.Empty value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value));
+  static final _$validate_access_token =
+      $grpc.ClientMethod<$2.Empty, $0.ValidateAccessTokenResponse>(
+          '/auth.AuthService/validate_access_token',
+          ($2.Empty value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.ValidateAccessTokenResponse.fromBuffer(value));
   static final _$get_account = $grpc.ClientMethod<$2.Empty, $0.Account>(
       '/auth.AuthService/get_account',
       ($2.Empty value) => value.writeToBuffer(),
@@ -52,16 +62,6 @@ class AuthServiceClient extends $grpc.Client {
       '/auth.AuthService/delete_account',
       ($2.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
-  static final _$get_referral_code =
-      $grpc.ClientMethod<$2.Empty, $1.StringValue>(
-          '/auth.AuthService/get_referral_code',
-          ($2.Empty value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value));
-  static final _$get_referral_code_by_phone_number =
-      $grpc.ClientMethod<$1.StringValue, $1.StringValue>(
-          '/auth.AuthService/get_referral_code_by_phone_number',
-          ($1.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value));
   static final _$send_phone_verification_code =
       $grpc.ClientMethod<$1.StringValue, $2.Empty>(
           '/auth.AuthService/send_phone_verification_code',
@@ -72,6 +72,16 @@ class AuthServiceClient extends $grpc.Client {
           '/auth.AuthService/verify_phone_verification_code',
           ($0.VerifyPhoneRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+  static final _$get_referral_code =
+      $grpc.ClientMethod<$2.Empty, $1.StringValue>(
+          '/auth.AuthService/get_referral_code',
+          ($2.Empty value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value));
+  static final _$get_referral_code_by_phone_number =
+      $grpc.ClientMethod<$1.StringValue, $1.StringValue>(
+          '/auth.AuthService/get_referral_code_by_phone_number',
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value));
 
   AuthServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -99,6 +109,19 @@ class AuthServiceClient extends $grpc.Client {
     return $createUnaryCall(_$logout, request, options: options);
   }
 
+  $grpc.ResponseFuture<$1.StringValue> request_public_access_token(
+      $2.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$request_public_access_token, request,
+        options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ValidateAccessTokenResponse> validate_access_token(
+      $2.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$validate_access_token, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.Account> get_account($2.Empty request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$get_account, request, options: options);
@@ -121,18 +144,6 @@ class AuthServiceClient extends $grpc.Client {
     return $createUnaryCall(_$delete_account, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.StringValue> get_referral_code($2.Empty request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$get_referral_code, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$1.StringValue> get_referral_code_by_phone_number(
-      $1.StringValue request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$get_referral_code_by_phone_number, request,
-        options: options);
-  }
-
   $grpc.ResponseFuture<$2.Empty> send_phone_verification_code(
       $1.StringValue request,
       {$grpc.CallOptions? options}) {
@@ -144,6 +155,18 @@ class AuthServiceClient extends $grpc.Client {
       $0.VerifyPhoneRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$verify_phone_verification_code, request,
+        options: options);
+  }
+
+  $grpc.ResponseFuture<$1.StringValue> get_referral_code($2.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$get_referral_code, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.StringValue> get_referral_code_by_phone_number(
+      $1.StringValue request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$get_referral_code_by_phone_number, request,
         options: options);
   }
 }
@@ -181,6 +204,20 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
         ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.Empty, $1.StringValue>(
+        'request_public_access_token',
+        request_public_access_token_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
+        ($1.StringValue value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.Empty, $0.ValidateAccessTokenResponse>(
+        'validate_access_token',
+        validate_access_token_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
+        ($0.ValidateAccessTokenResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$2.Empty, $0.Account>(
         'get_account',
         get_account_Pre,
@@ -209,20 +246,6 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
         ($2.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.Empty, $1.StringValue>(
-        'get_referral_code',
-        get_referral_code_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
-        ($1.StringValue value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.StringValue, $1.StringValue>(
-        'get_referral_code_by_phone_number',
-        get_referral_code_by_phone_number_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
-        ($1.StringValue value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
         'send_phone_verification_code',
         send_phone_verification_code_Pre,
@@ -238,6 +261,20 @@ abstract class AuthServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.VerifyPhoneRequest.fromBuffer(value),
         ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.Empty, $1.StringValue>(
+        'get_referral_code',
+        get_referral_code_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
+        ($1.StringValue value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $1.StringValue>(
+        'get_referral_code_by_phone_number',
+        get_referral_code_by_phone_number_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($1.StringValue value) => value.writeToBuffer()));
   }
 
   $async.Future<$1.StringValue> login_Pre(
@@ -260,6 +297,16 @@ abstract class AuthServiceBase extends $grpc.Service {
     return logout(call, await request);
   }
 
+  $async.Future<$1.StringValue> request_public_access_token_Pre(
+      $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
+    return request_public_access_token(call, await request);
+  }
+
+  $async.Future<$0.ValidateAccessTokenResponse> validate_access_token_Pre(
+      $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
+    return validate_access_token(call, await request);
+  }
+
   $async.Future<$0.Account> get_account_Pre(
       $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
     return get_account(call, await request);
@@ -280,16 +327,6 @@ abstract class AuthServiceBase extends $grpc.Service {
     return delete_account(call, await request);
   }
 
-  $async.Future<$1.StringValue> get_referral_code_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
-    return get_referral_code(call, await request);
-  }
-
-  $async.Future<$1.StringValue> get_referral_code_by_phone_number_Pre(
-      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
-    return get_referral_code_by_phone_number(call, await request);
-  }
-
   $async.Future<$2.Empty> send_phone_verification_code_Pre(
       $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return send_phone_verification_code(call, await request);
@@ -301,38 +338,41 @@ abstract class AuthServiceBase extends $grpc.Service {
     return verify_phone_verification_code(call, await request);
   }
 
+  $async.Future<$1.StringValue> get_referral_code_Pre(
+      $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
+    return get_referral_code(call, await request);
+  }
+
+  $async.Future<$1.StringValue> get_referral_code_by_phone_number_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
+    return get_referral_code_by_phone_number(call, await request);
+  }
+
   $async.Future<$1.StringValue> login(
       $grpc.ServiceCall call, $0.LoginRequest request);
-
   $async.Future<$1.StringValue> register(
       $grpc.ServiceCall call, $0.RegisterRequest request);
-
   $async.Future<$1.StringValue> reset_password(
       $grpc.ServiceCall call, $0.ResetPasswordRequest request);
-
   $async.Future<$2.Empty> logout($grpc.ServiceCall call, $2.Empty request);
-
+  $async.Future<$1.StringValue> request_public_access_token(
+      $grpc.ServiceCall call, $2.Empty request);
+  $async.Future<$0.ValidateAccessTokenResponse> validate_access_token(
+      $grpc.ServiceCall call, $2.Empty request);
   $async.Future<$0.Account> get_account(
       $grpc.ServiceCall call, $2.Empty request);
-
   $async.Future<$0.Account> get_account_by_phone_number(
       $grpc.ServiceCall call, $1.StringValue request);
-
   $async.Future<$0.Account> update_account(
       $grpc.ServiceCall call, $0.Account request);
-
   $async.Future<$2.Empty> delete_account(
       $grpc.ServiceCall call, $2.Empty request);
-
-  $async.Future<$1.StringValue> get_referral_code(
-      $grpc.ServiceCall call, $2.Empty request);
-
-  $async.Future<$1.StringValue> get_referral_code_by_phone_number(
-      $grpc.ServiceCall call, $1.StringValue request);
-
   $async.Future<$2.Empty> send_phone_verification_code(
       $grpc.ServiceCall call, $1.StringValue request);
-
   $async.Future<$2.Empty> verify_phone_verification_code(
       $grpc.ServiceCall call, $0.VerifyPhoneRequest request);
+  $async.Future<$1.StringValue> get_referral_code(
+      $grpc.ServiceCall call, $2.Empty request);
+  $async.Future<$1.StringValue> get_referral_code_by_phone_number(
+      $grpc.ServiceCall call, $1.StringValue request);
 }

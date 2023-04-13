@@ -739,7 +739,10 @@ fn _validate_language_id_from_request(md: &MetadataMap) -> Result<String, Status
     };
     // validate language id from request
     match locale::validate_language_id(&language_id) {
-        Ok(_) => Ok(language_id),
+        Ok(_) => {
+            rust_i18n::set_locale(&language_id);
+            Ok(language_id)
+        },
         Err(_) => {
             return Err(Status::invalid_argument(t!("invalid_language_code")));
         }
