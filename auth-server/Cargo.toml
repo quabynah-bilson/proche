@@ -32,8 +32,9 @@ rust-i18n = "1"
 log = "0.4.17"
 paseto = "2.0.0+1.0.3"
 bcrypt = "0.14.0"
-ring = { version = "^0.16", features = ["std"] }
-reqwest = { version = "0.11.16", features = ["json"] }
+ring = { version = "^0.16", features = ["std", "default"] }
+openapi = { path = "./twilio-rust" }
+rand = "0.8.5"
 
 [build-dependencies]
 tonic-build = "0.9.1"
