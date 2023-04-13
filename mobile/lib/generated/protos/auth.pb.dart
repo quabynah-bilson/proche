@@ -11,11 +11,85 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'package:protobuf_google/protobuf_google.dart' as $3;
 
+class ValidateAccessTokenResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ValidateAccessTokenResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountId')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName')
+    ..hasRequiredFields = false
+  ;
+
+  ValidateAccessTokenResponse._() : super();
+  factory ValidateAccessTokenResponse({
+    $core.String? accountId,
+    $core.String? phoneNumber,
+    $core.String? displayName,
+  }) {
+    final _result = create();
+    if (accountId != null) {
+      _result.accountId = accountId;
+    }
+    if (phoneNumber != null) {
+      _result.phoneNumber = phoneNumber;
+    }
+    if (displayName != null) {
+      _result.displayName = displayName;
+    }
+    return _result;
+  }
+  factory ValidateAccessTokenResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ValidateAccessTokenResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ValidateAccessTokenResponse clone() => ValidateAccessTokenResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ValidateAccessTokenResponse copyWith(void Function(ValidateAccessTokenResponse) updates) => super.copyWith((message) => updates(message as ValidateAccessTokenResponse)) as ValidateAccessTokenResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ValidateAccessTokenResponse create() => ValidateAccessTokenResponse._();
+  ValidateAccessTokenResponse createEmptyInstance() => create();
+  static $pb.PbList<ValidateAccessTokenResponse> createRepeated() => $pb.PbList<ValidateAccessTokenResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ValidateAccessTokenResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ValidateAccessTokenResponse>(create);
+  static ValidateAccessTokenResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get accountId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set accountId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAccountId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccountId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get phoneNumber => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set phoneNumber($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPhoneNumber() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPhoneNumber() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get displayName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set displayName($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDisplayName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDisplayName() => clearField(3);
+}
+
 class VerifyPhoneRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'VerifyPhoneRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'verificationCode')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
     ..hasRequiredFields = false
   ;
 
@@ -23,7 +97,6 @@ class VerifyPhoneRequest extends $pb.GeneratedMessage {
   factory VerifyPhoneRequest({
     $core.String? phoneNumber,
     $core.String? verificationCode,
-    $core.String? languageId,
   }) {
     final _result = create();
     if (phoneNumber != null) {
@@ -31,9 +104,6 @@ class VerifyPhoneRequest extends $pb.GeneratedMessage {
     }
     if (verificationCode != null) {
       _result.verificationCode = verificationCode;
-    }
-    if (languageId != null) {
-      _result.languageId = languageId;
     }
     return _result;
   }
@@ -75,22 +145,12 @@ class VerifyPhoneRequest extends $pb.GeneratedMessage {
   $core.bool hasVerificationCode() => $_has(1);
   @$pb.TagNumber(2)
   void clearVerificationCode() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get languageId => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set languageId($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasLanguageId() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearLanguageId() => clearField(3);
 }
 
 class LoginRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LoginRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'password')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
     ..hasRequiredFields = false
   ;
 
@@ -98,7 +158,6 @@ class LoginRequest extends $pb.GeneratedMessage {
   factory LoginRequest({
     $core.String? phoneNumber,
     $core.String? password,
-    $core.String? languageId,
   }) {
     final _result = create();
     if (phoneNumber != null) {
@@ -106,9 +165,6 @@ class LoginRequest extends $pb.GeneratedMessage {
     }
     if (password != null) {
       _result.password = password;
-    }
-    if (languageId != null) {
-      _result.languageId = languageId;
     }
     return _result;
   }
@@ -150,22 +206,12 @@ class LoginRequest extends $pb.GeneratedMessage {
   $core.bool hasPassword() => $_has(1);
   @$pb.TagNumber(2)
   void clearPassword() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get languageId => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set languageId($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasLanguageId() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearLanguageId() => clearField(3);
 }
 
 class RegisterRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RegisterRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'password')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName')
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'avatarUrl')
     ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'referralCode')
@@ -178,7 +224,6 @@ class RegisterRequest extends $pb.GeneratedMessage {
   factory RegisterRequest({
     $core.String? phoneNumber,
     $core.String? password,
-    $core.String? languageId,
     $core.String? displayName,
     $core.String? avatarUrl,
     $core.String? referralCode,
@@ -191,9 +236,6 @@ class RegisterRequest extends $pb.GeneratedMessage {
     }
     if (password != null) {
       _result.password = password;
-    }
-    if (languageId != null) {
-      _result.languageId = languageId;
     }
     if (displayName != null) {
       _result.displayName = displayName;
@@ -251,57 +293,48 @@ class RegisterRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearPassword() => clearField(2);
 
-  @$pb.TagNumber(3)
-  $core.String get languageId => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set languageId($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasLanguageId() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearLanguageId() => clearField(3);
-
   @$pb.TagNumber(4)
-  $core.String get displayName => $_getSZ(3);
+  $core.String get displayName => $_getSZ(2);
   @$pb.TagNumber(4)
-  set displayName($core.String v) { $_setString(3, v); }
+  set displayName($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(4)
-  $core.bool hasDisplayName() => $_has(3);
+  $core.bool hasDisplayName() => $_has(2);
   @$pb.TagNumber(4)
   void clearDisplayName() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get avatarUrl => $_getSZ(4);
+  $core.String get avatarUrl => $_getSZ(3);
   @$pb.TagNumber(5)
-  set avatarUrl($core.String v) { $_setString(4, v); }
+  set avatarUrl($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(5)
-  $core.bool hasAvatarUrl() => $_has(4);
+  $core.bool hasAvatarUrl() => $_has(3);
   @$pb.TagNumber(5)
   void clearAvatarUrl() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get referralCode => $_getSZ(5);
+  $core.String get referralCode => $_getSZ(4);
   @$pb.TagNumber(6)
-  set referralCode($core.String v) { $_setString(5, v); }
+  set referralCode($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasReferralCode() => $_has(5);
+  $core.bool hasReferralCode() => $_has(4);
   @$pb.TagNumber(6)
   void clearReferralCode() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get idCardUrl => $_getSZ(6);
+  $core.String get idCardUrl => $_getSZ(5);
   @$pb.TagNumber(7)
-  set idCardUrl($core.String v) { $_setString(6, v); }
+  set idCardUrl($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(7)
-  $core.bool hasIdCardUrl() => $_has(6);
+  $core.bool hasIdCardUrl() => $_has(5);
   @$pb.TagNumber(7)
   void clearIdCardUrl() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get vaccineCardUrl => $_getSZ(7);
+  $core.String get vaccineCardUrl => $_getSZ(6);
   @$pb.TagNumber(8)
-  set vaccineCardUrl($core.String v) { $_setString(7, v); }
+  set vaccineCardUrl($core.String v) { $_setString(6, v); }
   @$pb.TagNumber(8)
-  $core.bool hasVaccineCardUrl() => $_has(7);
+  $core.bool hasVaccineCardUrl() => $_has(6);
   @$pb.TagNumber(8)
   void clearVaccineCardUrl() => clearField(8);
 }
@@ -309,7 +342,6 @@ class RegisterRequest extends $pb.GeneratedMessage {
 class ResetPasswordRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ResetPasswordRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'password')
     ..hasRequiredFields = false
   ;
@@ -317,15 +349,11 @@ class ResetPasswordRequest extends $pb.GeneratedMessage {
   ResetPasswordRequest._() : super();
   factory ResetPasswordRequest({
     $core.String? phoneNumber,
-    $core.String? languageId,
     $core.String? password,
   }) {
     final _result = create();
     if (phoneNumber != null) {
       _result.phoneNumber = phoneNumber;
-    }
-    if (languageId != null) {
-      _result.languageId = languageId;
     }
     if (password != null) {
       _result.password = password;
@@ -362,21 +390,12 @@ class ResetPasswordRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearPhoneNumber() => clearField(1);
 
-  @$pb.TagNumber(3)
-  $core.String get languageId => $_getSZ(1);
-  @$pb.TagNumber(3)
-  set languageId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasLanguageId() => $_has(1);
-  @$pb.TagNumber(3)
-  void clearLanguageId() => clearField(3);
-
   @$pb.TagNumber(4)
-  $core.String get password => $_getSZ(2);
+  $core.String get password => $_getSZ(1);
   @$pb.TagNumber(4)
-  set password($core.String v) { $_setString(2, v); }
+  set password($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(4)
-  $core.bool hasPassword() => $_has(2);
+  $core.bool hasPassword() => $_has(1);
   @$pb.TagNumber(4)
   void clearPassword() => clearField(4);
 }

@@ -21,4 +21,5 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       // todo: handle implementation
     });
   }
+
 }
