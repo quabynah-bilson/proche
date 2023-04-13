@@ -18,6 +18,7 @@ i18n!("locales");
 
 mod server;
 mod config;
+mod utils;
 
 mod proto {
     tonic::include_proto!("auth");
@@ -61,15 +62,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mongo_db = std::env::var("DATABASE_NAME").expect("DATABASE_NAME must be set");
     let token_collection_name = std::env::var("TOKEN_COLLECTION").expect("TOKEN_COLLECTION must be set");
     let account_collection_name = std::env::var("ACCOUNT_COLLECTION").expect("ACCOUNT_COLLECTION must be set");
+    let country_collection_name = std::env::var("COUNTRY_COLLECTION").expect("ACCOUNT_COLLECTION must be set");
     let mongo_client = mongodb::Client::with_uri_str(&mongo_url).await?;
     let mongo_db = mongo_client.database(&mongo_db);
 
     // create collections based on proto
     let account_collection = mongo_db.collection/*::<proto::Account>*/(&account_collection_name);
     let token_collection = mongo_db.collection/*::<proto::AccessTokenStore>*/(&token_collection_name);
+    let country_collection = mongo_db.collection/*::<proto::AccessTokenStore>*/(&country_collection_name);
 
     // create grpc services
-    let auth_service = AuthServiceImpl::new(account_collection.clone(), token_collection.clone());
+    let auth_service = AuthServiceImpl::new(account_collection.clone(), token_collection.clone(), country_collection.clone());
 
     // reflection service
     let service = tonic_reflection::server::Builder::configure()

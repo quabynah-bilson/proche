@@ -61,8 +61,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   }
 
   @override
-  Future<Either<void, String>> sendVerificationCode(
-      {required String phoneNumber}) async {
+  Future<Either<void, String>> sendVerificationCode(String phoneNumber) async {
     // TODO: implement sendVerificationCode
     throw UnimplementedError();
   }
@@ -71,6 +70,18 @@ class ProcheAuthRepository extends BaseAuthRepository {
   Future<Either<void, String>> verifyPhoneNumber(
       {required String phoneNumber, required String code}) async {
     // TODO: implement verifyPhoneNumber
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Account, String>> getCurrentAccount() async {
+    // TODO: implement getCurrentAccount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<List<Country>, String>> getCountries() async {
+    // TODO: implement getCountries
     throw UnimplementedError();
   }
 }

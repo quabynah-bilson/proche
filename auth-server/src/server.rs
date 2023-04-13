@@ -1,12 +1,15 @@
 use chrono::{DateTime, Utc};
-use mongodb::bson::{Bson, bson, doc, Document};
+use futures::StreamExt;
+use mongodb::bson::{Bson, doc, Document};
+use mongodb::options::FindOptions;
+use regex::Regex;
 use rust_i18n::t;
 use tonic::{async_trait, Request, Response, Status};
 use tonic::metadata::MetadataMap;
 
-use crate::config;
+use crate::{config, utils};
 use crate::config::{locale, tokenizer};
-use crate::proto::{Account, LoginRequest, RegisterRequest, ResetPasswordRequest, ValidateAccessTokenResponse, VerifyPhoneRequest};
+use crate::proto::{Account, Country, GetCountriesResponse, LoginRequest, RegisterRequest, ResetPasswordRequest, ValidateAccessTokenResponse, VerifyPhoneRequest};
 use crate::proto::auth_service_server::AuthService;
 
 rust_i18n::i18n!("locales");
@@ -14,13 +17,15 @@ rust_i18n::i18n!("locales");
 pub struct AuthServiceImpl {
     pub account_col: mongodb::Collection<Document>,
     pub token_col: mongodb::Collection<Document>,
+    pub country_col: mongodb::Collection<Document>,
 }
 
 impl AuthServiceImpl {
-    pub fn new(account_col: mongodb::Collection<Document>, session_col: mongodb::Collection<Document>) -> Self {
+    pub fn new(account_col: mongodb::Collection<Document>, token_col: mongodb::Collection<Document>, country_col: mongodb::Collection<Document>) -> Self {
         Self {
             account_col,
-            token_col: session_col,
+            token_col,
+            country_col,
         }
     }
 }
@@ -76,6 +81,22 @@ impl AuthService for AuthServiceImpl {
                 };
                 if !is_valid_password {
                     log::error!("{}: {:?}", t!("invalid_credentials"), &req.password);
+                    return Err(Status::unauthenticated(t!("invalid_credentials")));
+                }
+
+                // compare country id
+                let is_valid_country = match account_doc.get_str("country_id") {
+                    Ok(country_id) => {
+                        if country_id == &req.country_id {
+                            true
+                        } else {
+                            false
+                        }
+                    }
+                    Err(_) => false
+                };
+                if !is_valid_country {
+                    log::error!("{}: {:?}", t!("invalid_credentials"), &req.country_id);
                     return Err(Status::unauthenticated(t!("invalid_credentials")));
                 }
 
@@ -145,8 +166,9 @@ impl AuthService for AuthServiceImpl {
             "vaccine_card_url" : &req.vaccine_card_url.unwrap_or("".to_string()),
             "referral_code" : &req.referral_code.unwrap_or("".to_string()),
             "password" : &hashed_password,
-            "created_at" : &Utc::now().to_rfc3339(),
-            "updated_at" : &Utc::now().to_rfc3339(),    // aka: last login
+            "country_id" : &req.country_id,
+            "created_at": _create_timestamp_field(),
+            "updated_at": _create_timestamp_field(),    // aka: last login
         };
 
         // save account to db
@@ -348,40 +370,15 @@ impl AuthService for AuthServiceImpl {
             }
         };
 
-        // parse `created_at` date
-        let created_at_parsed = match DateTime::parse_from_rfc3339(&account_doc.get("created_at").unwrap().as_str().unwrap().to_string()) {
-            Ok(result) => result,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("auth_failed"), e);
-                return Err(Status::internal(t!("auth_failed")));
-            }
-        };
-
-        // parse `updated_at` date
-        let updated_at_parsed = match DateTime::parse_from_rfc3339(&account_doc.get("created_at").unwrap().as_str().unwrap().to_string()) {
-            Ok(result) => result,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_updated_at"), e);
-                return Err(Status::internal(t!("invalid_updated_at")));
-            }
-        };
-
         // create account object from account doc
         let account = Account {
             id: account_doc.get_str("id").unwrap().to_string(),
             phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
+            country_id: account_doc.get_str("country_id").unwrap_or("en-proche-233").to_string(),
             referral_code: Some(account_doc.get_str("referral_code").unwrap().to_string()),
             language_id: language_id.to_string(),
-            created_at: Some(prost_types::Timestamp {
-                seconds: created_at_parsed.timestamp_millis(),
-                nanos: 0,
-            }),
-            updated_at: Some(
-                prost_types::Timestamp {
-                    seconds: updated_at_parsed.timestamp_millis(),
-                    nanos: 0,
-                }
-            ),
+            created_at: _parse_timestamp_field(account_doc.get("created_at").unwrap()),
+            updated_at: _parse_timestamp_field(account_doc.get("updated_at").unwrap()),
             avatar_url: Some(account_doc.get_str("avatar").unwrap_or("").to_string()),
             id_card_url: Some(account_doc.get_str("id_card").unwrap_or("").to_string()),
             display_name: account_doc.get_str("display_name").unwrap_or("").to_string(),
@@ -422,40 +419,15 @@ impl AuthService for AuthServiceImpl {
             }
         };
 
-        // parse `created_at` date
-        let created_at_parsed = match DateTime::parse_from_rfc3339(&account_doc.get("created_at").unwrap().as_str().unwrap().to_string()) {
-            Ok(result) => result,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("auth_failed"), e);
-                return Err(Status::internal(t!("auth_failed")));
-            }
-        };
-
-        // parse `updated_at` date
-        let updated_at_parsed = match DateTime::parse_from_rfc3339(&account_doc.get("created_at").unwrap().as_str().unwrap().to_string()) {
-            Ok(result) => result,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_updated_at"), e);
-                return Err(Status::internal(t!("invalid_updated_at")));
-            }
-        };
-
         // create account object from account doc
         let account = Account {
             id: account_doc.get_str("id").unwrap().to_string(),
+            country_id: account_doc.get_str("country_id").unwrap().to_string(),
             phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
             referral_code: Some(account_doc.get_str("referral_code").unwrap().to_string()),
             language_id: language_id.to_string(),
-            created_at: Some(prost_types::Timestamp {
-                seconds: created_at_parsed.timestamp_millis(),
-                nanos: 0,
-            }),
-            updated_at: Some(
-                prost_types::Timestamp {
-                    seconds: updated_at_parsed.timestamp_millis(),
-                    nanos: 0,
-                }
-            ),
+            created_at: _parse_timestamp_field(account_doc.get("created_at").unwrap()),
+            updated_at: _parse_timestamp_field(account_doc.get("updated_at").unwrap()),
             avatar_url: Some(account_doc.get_str("avatar").unwrap_or("").to_string()),
             id_card_url: Some(account_doc.get_str("id_card").unwrap_or("").to_string()),
             display_name: account_doc.get_str("display_name").unwrap_or("").to_string(),
@@ -493,7 +465,8 @@ impl AuthService for AuthServiceImpl {
             "avatar": &account.avatar_url.unwrap(),
             "id_card": &account.id_card_url.unwrap(),
             "vaccine_card": &account.vaccine_card_url.unwrap(),
-            "updated_at": Utc::now().to_rfc3339(),
+            "updated_at": _create_timestamp_field(),
+            "country_id" : &account.country_id,
         }}, None).await.unwrap() {
             Some(acct_doc) => acct_doc,
             None => {
@@ -511,38 +484,13 @@ impl AuthService for AuthServiceImpl {
             }
         };
 
-        // parse created_at and updated_at fields
-        let created_at_parsed = match DateTime::parse_from_rfc3339(account_doc.get_str("created_at").unwrap()) {
-            Ok(created_at) => created_at,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_created_at"), e);
-                return Err(Status::internal(t!("invalid_created_at")));
-            }
-        };
-        let updated_at_parsed = match DateTime::parse_from_rfc3339(account_doc.get_str("updated_at").unwrap()) {
-            Ok(updated_at) => updated_at,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_updated_at"), e);
-                return Err(Status::internal(t!("invalid_updated_at")));
-            }
-        };
-
         // create account object to return
         let account = Account {
             id: account_doc.get_str("id").unwrap().to_string(),
+            country_id: account_doc.get_str("country_id").unwrap().to_string(),
             phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
-            created_at: Some(
-                prost_types::Timestamp {
-                    seconds: created_at_parsed.timestamp(),
-                    nanos: 0,
-                }
-            ),
-            updated_at: Some(
-                prost_types::Timestamp {
-                    seconds: updated_at_parsed.timestamp(),
-                    nanos: 0,
-                }
-            ),
+            created_at: _parse_timestamp_field(account_doc.get("created_at").unwrap()),
+            updated_at: _parse_timestamp_field(account_doc.get("updated_at").unwrap()),
             avatar_url: Some(account_doc.get_str("avatar").unwrap_or("").to_string()),
             id_card_url: Some(account_doc.get_str("id_card").unwrap_or("").to_string()),
             display_name: account_doc.get_str("display_name").unwrap_or("").to_string(),
@@ -720,13 +668,246 @@ impl AuthService for AuthServiceImpl {
 
         Ok(Response::new(referral_code))
     }
+
+    // done
+    async fn get_countries(&self, request: Request<()>) -> Result<Response<GetCountriesResponse>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get countries from database
+        let opts = FindOptions::builder()
+            .sort(doc! {"name": 1})
+            .build();
+        let mut cursor = match self.country_col.find(None, opts).await {
+            Ok(countries) => countries,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("countries_not_found"), e);
+                return Err(Status::not_found(t!("countries_not_found")));
+            }
+        };
+
+        // create countries vector
+        let mut countries = vec![];
+
+        // iterate through cursor
+        while let Some(result) = cursor.next().await {
+            match result {
+                Ok(document) => {
+                    let country = Country {
+                        id: document.get_str("id").unwrap().to_string(),
+                        name: document.get_str("name").unwrap().to_string(),
+                        code: document.get_str("code").unwrap().to_string(),
+                        dial_code: document.get_str("dial_code").unwrap().to_string(),
+                        currency: document.get_str("currency").unwrap().to_string(),
+                        currency_symbol: document.get_str("currency_symbol").unwrap().to_string(),
+                        flag_url: document.get_str("flag_url").unwrap().to_string(),
+                        language_id: document.get_str("language_id").unwrap().to_string(),
+                    };
+                    countries.push(country);
+                }
+                Err(_) => return Err(Status::internal(t!("countries_not_found"))),
+            }
+        }
+
+
+        // create response
+        let response = GetCountriesResponse {
+            countries,
+        };
+
+        Ok(Response::new(response))
+    }
+
+    // done
+    async fn get_country_by_id(&self, request: Request<String>) -> Result<Response<Country>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get country id from request
+        let country_id = request.into_inner();
+
+        // get country from database
+        let country_doc = match self.country_col.find_one(doc! {"id": &country_id}, None).await.unwrap() {
+            Some(country_doc) => country_doc,
+            None => {
+                log::error!("{}: {:?}", t!("country_not_found"), &country_id);
+                return Err(Status::not_found(t!("country_not_found")));
+            }
+        };
+
+        // create country
+        let country = Country {
+            id: country_doc.get_str("id").unwrap().to_string(),
+            name: country_doc.get_str("name").unwrap().to_string(),
+            code: country_doc.get_str("code").unwrap().to_string(),
+            dial_code: country_doc.get_str("dial_code").unwrap().to_string(),
+            currency: country_doc.get_str("currency").unwrap().to_string(),
+            currency_symbol: country_doc.get_str("currency_symbol").unwrap().to_string(),
+            flag_url: country_doc.get_str("flag_url").unwrap().to_string(),
+            language_id: country_doc.get_str("language_id").unwrap().to_string(),
+        };
+
+        Ok(Response::new(country))
+    }
+
+    // done
+    async fn add_country(&self, request: Request<Country>) -> Result<Response<Country>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get country from request
+        let mut country = request.into_inner();
+
+        // check if country already exists
+        match self.country_col.find_one(doc! {"code": &country.code}, None).await.unwrap() {
+            Some(_) => {
+                log::error!("{}: {:?}", t!("country_already_exists"), &country.code);
+                return Err(Status::already_exists(t!("country_already_exists")));
+            }
+            None => (),
+        };
+
+        // create country document
+        let re = Regex::new(r"[^a-zA-Z0-9\s]+").unwrap();
+        let id_builder = re.replace_all(&country.dial_code, "").to_string();
+        country.id = format!("{}-{}-{}", &country.code.to_lowercase(), utils::generators::generate_random_string(17), id_builder).to_string();
+        let country_doc = doc! {
+            "id": &country.id,
+            "name": &country.name,
+            "code": &country.code,
+            "dial_code": &country.dial_code,
+            "currency": &country.currency,
+            "currency_symbol": &country.currency_symbol,
+            "flag_url": &country.flag_url,
+            "language_id": &country.language_id,
+        };
+
+        // insert country into database
+        match self.country_col.insert_one(country_doc, None).await {
+            Ok(_) => {
+                // get country from database
+                let country_doc = match self.country_col.find_one(doc! {"id": &country.id}, None).await.unwrap() {
+                    Some(country_doc) => country_doc,
+                    None => {
+                        log::error!("{}: {:?}", t!("country_not_found"), &country.id);
+                        return Err(Status::not_found(t!("country_not_found")));
+                    }
+                };
+
+                // create country
+                country = Country {
+                    id: country_doc.get_str("id").unwrap().to_string(),
+                    name: country_doc.get_str("name").unwrap().to_string(),
+                    code: country_doc.get_str("code").unwrap().to_string(),
+                    dial_code: country_doc.get_str("dial_code").unwrap().to_string(),
+                    currency: country_doc.get_str("currency").unwrap().to_string(),
+                    currency_symbol: country_doc.get_str("currency_symbol").unwrap().to_string(),
+                    flag_url: country_doc.get_str("flag_url").unwrap().to_string(),
+                    language_id: country_doc.get_str("language_id").unwrap().to_string(),
+                };
+
+                Ok(Response::new(country.to_owned()))
+            }
+            Err(e) => {
+                log::error!("{}: {:?}", t!("country_not_added"), e);
+                Err(Status::internal(t!("country_not_added")))
+            }
+        }
+    }
+
+    // done
+    async fn delete_country(&self, request: Request<String>) -> Result<Response<()>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+            Ok(token) => token,
+            Err(e) => {
+                log::error!("{}: {:?}", t!("invalid_token"), e);
+                return Err(Status::unauthenticated(t!("invalid_token")));
+            }
+        };
+
+        // get country id from request
+        let country_id = request.into_inner();
+
+        // delete country from database
+        match self.country_col.delete_one(doc! {"id": &country_id}, None).await {
+            Ok(_) => Ok(Response::new(())),
+            Err(e) => {
+                log::error!("{}: {:?}", t!("country_not_deleted"), e);
+                Err(Status::internal(t!("country_not_deleted")))
+            }
+        }
+    }
 }
 
 // create timestamp field
-fn _create_timestamp_field() -> Bson {
-    let current_time = Utc::now();
-    let timestamp = DateTime::<Utc>::from(current_time).timestamp();
-    bson!({ "$timestamp": { "t": timestamp as i32, "i": 0 } })
+#[inline]
+fn _create_timestamp_field() -> String {
+    Utc::now().to_rfc3339()
+}
+
+// parse timestamp field
+fn _parse_timestamp_field(timestamp: &Bson) -> Option<prost_types::Timestamp> {
+    let parsed = match DateTime::parse_from_rfc3339(timestamp.as_str().unwrap()) {
+        Ok(result) => result,
+        Err(_) => {
+            return None;
+        }
+    };
+    Some(prost_types::Timestamp {
+        seconds: parsed.timestamp_millis(),
+        nanos: 0,
+    })
 }
 
 // validate language id
@@ -742,7 +923,7 @@ fn _validate_language_id_from_request(md: &MetadataMap) -> Result<String, Status
         Ok(_) => {
             rust_i18n::set_locale(&language_id);
             Ok(language_id)
-        },
+        }
         Err(_) => {
             return Err(Status::invalid_argument(t!("invalid_language_code")));
         }

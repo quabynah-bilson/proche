@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile/core/routing/router.dart';
+import 'package:mobile/core/utils/actions.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
@@ -64,7 +65,7 @@ extension BuildContextX on BuildContext {
           SafeArea(
             top: false,
             child: AppRoundedButton(
-                text: localizer.gotIt, onTap: context.navigator.pop)
+                    text: localizer.gotIt, onTap: context.navigator.pop)
                 .top(40),
           ),
         ],
@@ -303,6 +304,10 @@ extension BuildContextX on BuildContext {
             showMessageDialog(state.failure, title: localizer.authFailed);
           }
 
+          if (state is SuccessState<void>) {
+            read<AuthBloc>().add(GetCurrentAccountAuthEvent());
+          }
+
           if (state is SuccessState<Account>) {
             showMessageDialog(
               localizer.signedInAs(state.data.displayName),
@@ -374,15 +379,13 @@ extension BuildContextX on BuildContext {
                             formKey.currentState?.save();
                             var phoneNumber = phoneNumberController.text.trim(),
                                 password = passwordController.text.trim();
-                            read<AuthBloc>().add(SignInEvent(
+                            read<AuthBloc>().add(LoginAuthEvent(
                                 phoneNumber: phoneNumber, password: password));
                           }
                         },
                       ),
                       TextButton(
-                        // todo -> show hosted terms of service
-                        onPressed: () =>
-                            showMessageDialog(localizer.underMaintenanceHeader),
+                        onPressed: openTermsOfService,
                         child: Text.rich(
                           TextSpan(
                             style: theme.textTheme.labelSmall?.copyWith(

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:mobile/core/di/injection.dart';
 import 'package:mobile/features/shared/domain/repositories/auth.dart';
+import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 part 'auth_event.dart';
@@ -9,17 +10,111 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
   final _repo = getIt<BaseAuthRepository>();
 
   AuthBloc() : super(BlocState.initialState()) {
-    on<SignInEvent>((event, emit) async {
+    on<LoginAuthEvent>((event, emit) async {
       emit(BlocState.loadingState());
-      await Future.delayed(const Duration(seconds: 2));
-      emit(BlocState<String>.errorState(failure: 'error'));
-      // todo: handle implementation
+      var either = await _repo.login(
+        phoneNumber: event.phoneNumber,
+        password: event.password,
+      );
+      either.fold(
+        (l) => emit(BlocState<void>.successState(data: null)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
     });
 
-    on<AuthEvent>((event, emit) async {
+    on<LogoutAuthEvent>((event, emit) async {
       emit(BlocState.loadingState());
-      // todo: handle implementation
+      var either = await _repo.logout();
+      either.fold(
+        (l) => emit(BlocState<void>.successState(data: null)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<RegisterAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.register(
+        phoneNumber: event.phoneNumber,
+        password: event.password,
+        displayName: event.displayName,
+        avatar: event.avatar,
+      );
+      either.fold(
+        (l) => emit(BlocState<void>.successState(data: null)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<GetAccountByPhoneNumberAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.getAccountByPhoneNumber(event.phoneNumber);
+      either.fold(
+        (l) => emit(BlocState<String>.successState(data: l.displayName)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<ResetPasswordAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      await _repo.resetPassword(
+        phoneNumber: event.phoneNumber,
+        password: event.password,
+      );
+    });
+
+    on<SendVerificationCodeAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.sendVerificationCode(event.phoneNumber);
+      either.fold(
+        (l) => emit(BlocState<void>.successState(data: null)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<VerifyPhoneNumberAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.verifyPhoneNumber(
+          phoneNumber: event.phoneNumber, code: event.code);
+      either.fold(
+        (l) => emit(BlocState<void>.successState(data: null)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<GetPublicAccessTokenAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.getPublicAccessToken();
+      either.fold(
+        (l) => emit(BlocState<void>.successState(data: null)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<GetReferralCodeAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.getReferralCode();
+      either.fold(
+        (l) => emit(BlocState<String>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<GetCurrentAccountAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.getCurrentAccount();
+      either.fold(
+        (l) => emit(BlocState<Account>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<GetCountriesAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.getCountries();
+      either.fold(
+            (l) => emit(BlocState<List<Country>>.successState(data: l)),
+            (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
     });
   }
-
 }

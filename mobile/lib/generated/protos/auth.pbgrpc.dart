@@ -11,8 +11,8 @@ import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
 import 'auth.pb.dart' as $0;
-import 'package:protobuf_google/protobuf_google.dart' as $1;
-import 'package:protobuf_google/protobuf_google.dart' as $2;
+import 'google/protobuf/wrappers.pb.dart' as $1;
+import 'google/protobuf/empty.pb.dart' as $2;
 export 'auth.pb.dart';
 
 class AuthServiceClient extends $grpc.Client {
@@ -82,6 +82,25 @@ class AuthServiceClient extends $grpc.Client {
           '/auth.AuthService/get_referral_code_by_phone_number',
           ($1.StringValue value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value));
+  static final _$get_countries =
+      $grpc.ClientMethod<$2.Empty, $0.GetCountriesResponse>(
+          '/auth.AuthService/get_countries',
+          ($2.Empty value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.GetCountriesResponse.fromBuffer(value));
+  static final _$get_country_by_id =
+      $grpc.ClientMethod<$1.StringValue, $0.Country>(
+          '/auth.AuthService/get_country_by_id',
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $0.Country.fromBuffer(value));
+  static final _$add_country = $grpc.ClientMethod<$0.Country, $0.Country>(
+      '/auth.AuthService/add_country',
+      ($0.Country value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Country.fromBuffer(value));
+  static final _$delete_country = $grpc.ClientMethod<$1.StringValue, $2.Empty>(
+      '/auth.AuthService/delete_country',
+      ($1.StringValue value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
 
   AuthServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -168,6 +187,26 @@ class AuthServiceClient extends $grpc.Client {
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$get_referral_code_by_phone_number, request,
         options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetCountriesResponse> get_countries($2.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$get_countries, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Country> get_country_by_id($1.StringValue request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$get_country_by_id, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Country> add_country($0.Country request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$add_country, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$2.Empty> delete_country($1.StringValue request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$delete_country, request, options: options);
   }
 }
 
@@ -275,6 +314,34 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
         ($1.StringValue value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.Empty, $0.GetCountriesResponse>(
+        'get_countries',
+        get_countries_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
+        ($0.GetCountriesResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $0.Country>(
+        'get_country_by_id',
+        get_country_by_id_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($0.Country value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Country, $0.Country>(
+        'add_country',
+        add_country_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Country.fromBuffer(value),
+        ($0.Country value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
+        'delete_country',
+        delete_country_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
   }
 
   $async.Future<$1.StringValue> login_Pre(
@@ -348,6 +415,26 @@ abstract class AuthServiceBase extends $grpc.Service {
     return get_referral_code_by_phone_number(call, await request);
   }
 
+  $async.Future<$0.GetCountriesResponse> get_countries_Pre(
+      $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
+    return get_countries(call, await request);
+  }
+
+  $async.Future<$0.Country> get_country_by_id_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
+    return get_country_by_id(call, await request);
+  }
+
+  $async.Future<$0.Country> add_country_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Country> request) async {
+    return add_country(call, await request);
+  }
+
+  $async.Future<$2.Empty> delete_country_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
+    return delete_country(call, await request);
+  }
+
   $async.Future<$1.StringValue> login(
       $grpc.ServiceCall call, $0.LoginRequest request);
   $async.Future<$1.StringValue> register(
@@ -374,5 +461,13 @@ abstract class AuthServiceBase extends $grpc.Service {
   $async.Future<$1.StringValue> get_referral_code(
       $grpc.ServiceCall call, $2.Empty request);
   $async.Future<$1.StringValue> get_referral_code_by_phone_number(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$0.GetCountriesResponse> get_countries(
+      $grpc.ServiceCall call, $2.Empty request);
+  $async.Future<$0.Country> get_country_by_id(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$0.Country> add_country(
+      $grpc.ServiceCall call, $0.Country request);
+  $async.Future<$2.Empty> delete_country(
       $grpc.ServiceCall call, $1.StringValue request);
 }
