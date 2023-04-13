@@ -15,6 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       var either = await _repo.login(
         phoneNumber: event.phoneNumber,
         password: event.password,
+        countryId: event.countryId,
       );
       either.fold(
         (l) => emit(BlocState<void>.successState(data: null)),
@@ -38,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
         password: event.password,
         displayName: event.displayName,
         avatar: event.avatar,
+        countryId: event.countryId,
       );
       either.fold(
         (l) => emit(BlocState<void>.successState(data: null)),
@@ -49,16 +51,20 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       emit(BlocState.loadingState());
       var either = await _repo.getAccountByPhoneNumber(event.phoneNumber);
       either.fold(
-        (l) => emit(BlocState<String>.successState(data: l.displayName)),
+        (l) => emit(BlocState<Account>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
 
     on<ResetPasswordAuthEvent>((event, emit) async {
       emit(BlocState.loadingState());
-      await _repo.resetPassword(
+      var either = await _repo.resetPassword(
         phoneNumber: event.phoneNumber,
         password: event.password,
+      );
+      either.fold(
+            (l) => emit(BlocState<void>.successState(data: null)),
+            (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
 
@@ -113,6 +119,15 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       var either = await _repo.getCountries();
       either.fold(
             (l) => emit(BlocState<List<Country>>.successState(data: l)),
+            (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<GetCountryByIdAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.getCountryById(event.id);
+      either.fold(
+            (l) => emit(BlocState<Country>.successState(data: l)),
             (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });

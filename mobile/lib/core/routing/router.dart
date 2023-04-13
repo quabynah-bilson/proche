@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/features/onboarding/presentation/pages/phone.verification.dart';
 import 'package:mobile/features/onboarding/presentation/pages/welcome.dart';
+import 'package:mobile/features/shared/presentation/pages/dashboard.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -14,6 +15,9 @@ class AppRouterConfig {
         return MaterialWithModalsPageRoute(
             builder: (_) => const PhoneNumberVerificationPage(),
             settings: settings);
+      case AppRouter.dashboardRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => const DashboardPage(), settings: settings);
     }
 
     return MaterialPageRoute(
@@ -33,6 +37,8 @@ class AppRouterConfig {
 
 class AppRouter {
   static const welcomeRoute = '/';
-  static const dashboardRoute = '/dashboard'; // todo
+  static const dashboardRoute = '/dashboard';
+  static const registerNewAccountRoute = '/account/new';
+  static const resetPasswordRoute = '/account/reset-password';
   static const phoneVerificationRoute = '/phone-verification';
 }

@@ -1,10 +1,16 @@
 import 'dart:async';
 
 import 'package:grpc/grpc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_utils/shared_utils.dart';
 
+@injectable
 class TokenGrpcInterceptor implements ClientInterceptor {
-  // final _localStorage = getIt<BaseLocalStorageRepository>();
+  final String accessTokenForDevice;
+  final String locale;
+
+  TokenGrpcInterceptor(@Named('access_token') this.accessTokenForDevice,
+      @Named('locale') this.locale);
 
   @override
   ResponseStream<R> interceptStreaming<Q, R>(
@@ -12,12 +18,11 @@ class TokenGrpcInterceptor implements ClientInterceptor {
       Stream<Q> requests,
       CallOptions options,
       ClientStreamingInvoker<Q, R> invoker) {
-    // todo -> get token from session
     var newOpts = options.mergedWith(
       CallOptions(
         metadata: {
-          // TODO: add authorization token
-          'Authorization': 'Bearer <PUT-TOKEN-HERE>'
+          'Authorization': 'Bearer $accessTokenForDevice',
+          'x-language-id': 'en',
         },
       ),
     );
@@ -34,8 +39,8 @@ class TokenGrpcInterceptor implements ClientInterceptor {
     var newOpts = options.mergedWith(
       CallOptions(
         metadata: {
-          // TODO: add authorization token
-          'Authorization': 'Bearer <PUT-TOKEN-HERE>'
+          'Authorization': 'Bearer $accessTokenForDevice',
+          'x-language-id': 'en',
         },
       ),
     );

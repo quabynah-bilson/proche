@@ -26,3 +26,6 @@ generate-language-auth:
 
 generate-language-mobile:
 	cd mobile && flutter gen-l10n
+
+gen-signing-key-for-android:
+	keytool -genkey -v -keystore mobile/android/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload

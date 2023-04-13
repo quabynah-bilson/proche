@@ -743,7 +743,7 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);

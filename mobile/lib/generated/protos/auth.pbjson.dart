@@ -47,11 +47,12 @@ const LoginRequest$json = const {
   '2': const [
     const {'1': 'phone_number', '3': 1, '4': 1, '5': 9, '10': 'phoneNumber'},
     const {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
+    const {'1': 'country_id', '3': 3, '4': 1, '5': 9, '10': 'countryId'},
   ],
 };
 
 /// Descriptor for `LoginRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List loginRequestDescriptor = $convert.base64Decode('CgxMb2dpblJlcXVlc3QSIQoMcGhvbmVfbnVtYmVyGAEgASgJUgtwaG9uZU51bWJlchIaCghwYXNzd29yZBgCIAEoCVIIcGFzc3dvcmQ=');
+final $typed_data.Uint8List loginRequestDescriptor = $convert.base64Decode('CgxMb2dpblJlcXVlc3QSIQoMcGhvbmVfbnVtYmVyGAEgASgJUgtwaG9uZU51bWJlchIaCghwYXNzd29yZBgCIAEoCVIIcGFzc3dvcmQSHQoKY291bnRyeV9pZBgDIAEoCVIJY291bnRyeUlk');
 @$core.Deprecated('Use registerRequestDescriptor instead')
 const RegisterRequest$json = const {
   '1': 'RegisterRequest',

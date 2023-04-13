@@ -7,8 +7,13 @@ abstract class AuthEvent {
 class LoginAuthEvent extends AuthEvent {
   final String phoneNumber;
   final String password;
+  final String countryId;
 
-  const LoginAuthEvent({required this.phoneNumber, required this.password});
+  const LoginAuthEvent({
+    required this.phoneNumber,
+    required this.password,
+    required this.countryId,
+  });
 }
 
 class LogoutAuthEvent extends AuthEvent {}
@@ -17,12 +22,14 @@ class RegisterAuthEvent extends AuthEvent {
   final String phoneNumber;
   final String password;
   final String displayName;
+  final String countryId;
   String? avatar;
 
   RegisterAuthEvent({
     required this.phoneNumber,
     required this.password,
     required this.displayName,
+    required this.countryId,
     this.avatar,
   });
 }
@@ -60,3 +67,9 @@ class GetReferralCodeAuthEvent extends AuthEvent {}
 class GetCurrentAccountAuthEvent extends AuthEvent {}
 
 class GetCountriesAuthEvent extends AuthEvent {}
+
+class GetCountryByIdAuthEvent extends AuthEvent {
+  final String id;
+
+  GetCountryByIdAuthEvent(this.id);
+}

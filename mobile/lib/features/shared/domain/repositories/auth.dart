@@ -2,8 +2,11 @@ import 'package:dartz/dartz.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 
 abstract class BaseAuthRepository {
-  Future<Either<void, String>> login(
-      {required String phoneNumber, required String password});
+  Future<Either<void, String>> login({
+    required String phoneNumber,
+    required String password,
+    required String countryId,
+  });
 
   Future<Either<void, String>> logout();
 
@@ -11,6 +14,7 @@ abstract class BaseAuthRepository {
     required String phoneNumber,
     required String password,
     required String displayName,
+    required String countryId,
     String? avatar,
   });
 
@@ -31,4 +35,6 @@ abstract class BaseAuthRepository {
   Future<Either<String, String>> getReferralCode();
 
   Future<Either<List<Country>, String>> getCountries();
+
+  Future<Either<Country, String>> getCountryById(String id);
 }

@@ -27,7 +27,7 @@ ColorScheme useColorScheme([ThemeMode mode = ThemeMode.light]) =>
             primary: Color(0xffFF6600),
             secondary: Color(0xff2B2921),
             onSecondary: Color(0xffFFE7AB),
-            surface: Color(0xffFFFFFF),
+            surface: Color(0xffF8F8F9),
             onSurface: Color(0xff2B2723),
             error: Colors.deepOrangeAccent,
             onError: Colors.white,
@@ -37,7 +37,7 @@ ColorScheme useColorScheme([ThemeMode mode = ThemeMode.light]) =>
           );
 
 /// setup font
-const _primaryFont = GoogleFonts.dmMono,
+const _primaryFont = GoogleFonts.dmSans,
     _secondaryFont = GoogleFonts.dmSans;
 
 TextTheme _textTheme([Color textColor = Colors.black]) => TextTheme(

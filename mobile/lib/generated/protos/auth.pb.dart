@@ -9,7 +9,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'google/protobuf/timestamp.pb.dart' as $3;
+import 'package:protobuf_google/protobuf_google.dart' as $3;
 
 class GetCountriesResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetCountriesResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
@@ -192,6 +192,7 @@ class LoginRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LoginRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'password')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'countryId')
     ..hasRequiredFields = false
   ;
 
@@ -199,6 +200,7 @@ class LoginRequest extends $pb.GeneratedMessage {
   factory LoginRequest({
     $core.String? phoneNumber,
     $core.String? password,
+    $core.String? countryId,
   }) {
     final _result = create();
     if (phoneNumber != null) {
@@ -206,6 +208,9 @@ class LoginRequest extends $pb.GeneratedMessage {
     }
     if (password != null) {
       _result.password = password;
+    }
+    if (countryId != null) {
+      _result.countryId = countryId;
     }
     return _result;
   }
@@ -247,6 +252,15 @@ class LoginRequest extends $pb.GeneratedMessage {
   $core.bool hasPassword() => $_has(1);
   @$pb.TagNumber(2)
   void clearPassword() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get countryId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set countryId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCountryId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCountryId() => clearField(3);
 }
 
 class RegisterRequest extends $pb.GeneratedMessage {

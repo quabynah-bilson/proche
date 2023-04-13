@@ -134,7 +134,6 @@ class _PhoneNumberVerificationPageState
               child: LoadingIndicator(
                 lottieAnimResource: Assets.animLoading,
                 isLoading: _loading,
-                package: 'mobile',
                 loadingAnimIsAsset: true,
                 child: Material(
                   color: context.colorScheme.surface,

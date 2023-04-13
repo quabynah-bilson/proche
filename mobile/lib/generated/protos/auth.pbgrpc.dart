@@ -11,8 +11,8 @@ import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
 import 'auth.pb.dart' as $0;
-import 'google/protobuf/wrappers.pb.dart' as $1;
-import 'google/protobuf/empty.pb.dart' as $2;
+import 'package:protobuf_google/protobuf_google.dart' as $1;
+import 'package:protobuf_google/protobuf_google.dart' as $2;
 export 'auth.pb.dart';
 
 class AuthServiceClient extends $grpc.Client {
