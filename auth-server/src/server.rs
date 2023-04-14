@@ -300,39 +300,58 @@ impl AuthService for AuthServiceImpl {
 
     // done
     async fn validate_access_token(&self, request: Request<()>) -> Result<Response<ValidateAccessTokenResponse>, Status> {
-        let language_id = match _validate_language_id_from_request(request.metadata()) {
+        let language_id = match _validate_language_id_from_request(&request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
                 return Err(e);
             }
         };
 
-        // verify access token using tokenizer
-        let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
-            Ok(token) => token,
+        // get auth type from request
+        let use_private_token = match _get_authentication_type_from_metadata(&request.metadata()) {
+            Ok(use_private_token) => use_private_token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
-        // get account by id
-        let account_doc = match self.account_col.find_one(doc! {"id": &token.0}, None).await.unwrap() {
-            Some(acct_doc) => {
-                log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
-                acct_doc
-            }
-            None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &token.0);
-                return Err(Status::not_found(t!("account_not_found")));
-            }
-        };
+        if use_private_token {
+            // verify access token
+            let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+                Ok(token) => token,
+                Err(e) => {
+                    return Err(e);
+                }
+            };
 
-        Ok(Response::new(ValidateAccessTokenResponse {
-            account_id: account_doc.get_str("id").unwrap().to_string(),
-            phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
-            display_name: account_doc.get_str("display_name").unwrap().to_string(),
-        }))
+            // get account by id
+            let account_doc = match self.account_col.find_one(doc! {"id": &token.0}, None).await.unwrap() {
+                Some(acct_doc) => {
+                    log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
+                    acct_doc
+                }
+                None => {
+                    log::error!("{}: {:?}", t!("account_not_found"), &token.0);
+                    return Err(Status::not_found(t!("account_not_found")));
+                }
+            };
+
+            Ok(Response::new(ValidateAccessTokenResponse {
+                account_id: Some(account_doc.get_str("id").unwrap().to_string()),
+                phone_number: Some(account_doc.get_str("phone_number").unwrap().to_string()),
+                display_name: Some(account_doc.get_str("display_name").unwrap().to_string()),
+            }))
+        } else {
+            // verify public token
+            match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+                Ok(_) => Ok(Response::new(ValidateAccessTokenResponse {
+                    account_id: None,
+                    phone_number: None,
+                    display_name: None,
+                })),
+                Err(e) => Err(e),
+            }
+        }
     }
 
     // done
@@ -928,4 +947,15 @@ fn _validate_language_id_from_request(md: &MetadataMap) -> Result<String, Status
             return Err(Status::invalid_argument(t!("invalid_language_code")));
         }
     }
+}
+
+// get authentication type from metadata
+fn _get_authentication_type_from_metadata(md: &MetadataMap) -> Result<bool, Status> {
+    let authentication_type = match md.get("x-authenticated") {
+        Some(result) => result.to_str().unwrap().to_string(),
+        None => {
+            return Err(Status::invalid_argument(t!("invalid_authentication_type")));
+        }
+    };
+    Ok(authentication_type == "true")
 }

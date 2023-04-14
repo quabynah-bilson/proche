@@ -19,9 +19,9 @@ mkdir -p "$MOBILE_DIR/lib/generated/protos"
 mkdir -p "$CORE_SERVER_DIR/gen"
 
 # generate for core-server
-#protoc --proto_path=$CORE_PROTO_PATH --go_out=$CORE_SERVER_DIR/gen --go_opt=paths=source_relative \
-#  --go-grpc_out=$CORE_SERVER_DIR/gen --go-grpc_opt=paths=source_relative \
-#  $(find $CORE_PROTO_PATH -iname "*.proto")
+protoc -I=$CORE_PROTO_PATH -I=$AUTH_PROTO_PATH  --go_out=$CORE_SERVER_DIR/gen --go_opt=paths=source_relative \
+  --go-grpc_out=$CORE_SERVER_DIR/gen --go-grpc_opt=paths=source_relative \
+  $(find $CORE_PROTO_PATH -iname "*.proto") $(find $AUTH_PROTO_PATH -iname "*.proto")
 
 # generate for shared-server using python
 #python3 -m grpc_tools.protoc --proto_path=$SHARED_PROTO_PATH --python_out=$SHARED_SERVER_DIR \
@@ -32,8 +32,8 @@ mkdir -p "$CORE_SERVER_DIR/gen"
 cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
 
 # generate for flutter using dart
-protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH \
-  --dart_out=grpc:$MOBILE_OUT_DIR \
-  $(find $AUTH_PROTO_PATH -iname "*.proto")
+#protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH \
+#  --dart_out=grpc:$MOBILE_OUT_DIR \
+#  $(find $AUTH_PROTO_PATH -iname "*.proto")
 #  $(find $AUTH_PROTO_PATH -iname "*.proto") $(find $SHARED_PROTO_PATH -iname "*.proto") $(find $CORE_PROTO_PATH -iname "*.proto")
 

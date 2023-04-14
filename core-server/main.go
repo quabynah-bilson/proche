@@ -7,6 +7,7 @@ import (
 	"github.com/quabynah-bilson/core-server/config"
 	pb "github.com/quabynah-bilson/core-server/gen"
 	svc "github.com/quabynah-bilson/core-server/services"
+	"github.com/quabynah-bilson/core-server/util"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -43,8 +44,11 @@ func main() {
 		taskEventsCollection := db.Collection(os.Getenv("TASK_EVENTS_COLLECTION"))
 		giveAwayCollection := db.Collection(os.Getenv("GIVEAWAYS_COLLECTION"))
 
-		// setup grpc server
-		s := grpc.NewServer()
+		// setup grpc server with interceptors
+		s := grpc.NewServer(
+			grpc.UnaryInterceptor(util.AuthUnaryInterceptor),
+			grpc.StreamInterceptor(util.AuthStreamInterceptor),
+		)
 		pb.RegisterEventServiceServer(s, svc.NewProcheEventServerInstance(eventsCollection))
 		pb.RegisterTripServiceServer(s, svc.NewProcheTripServerInstance(tripsCollection, tripEventsCollection))
 		pb.RegisterTaskServiceServer(s, svc.NewProcheTaskServerInstance(tasksCollection, taskEventsCollection))
@@ -52,7 +56,7 @@ func main() {
 		reflection.Register(s)
 
 		// run server
-		if lis, err := net.Listen("tcp", ":2000"); err == nil {
+		if lis, err := net.Listen("tcp", "0.0.0.0:2000"); err == nil {
 			log.Printf("started core grpc server on: %+v\n", lis.Addr())
 			if err := s.Serve(lis); err != nil {
 				log.Fatalf("unable to start grpc server: %+v\n", err)
