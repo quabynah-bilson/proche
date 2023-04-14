@@ -68,11 +68,16 @@ class _WelcomePageState extends State<WelcomePage>
                                                 CrossAxisAlignment.end,
                                             animateType: AnimateType.slideLeft,
                                             children: [
-                                              Image.memory(
-                                                  state.data.avatarUrl
-                                                      .decodeBase64ImageToBytes(),
-                                                  width: context.width * 0.4,
-                                                  height: context.width * 0.4),
+                                              state.data.avatarUrl
+                                                      .isNullOrEmpty()
+                                                  ? const SizedBox.shrink()
+                                                  : Image.memory(
+                                                      state.data.avatarUrl
+                                                          .decodeBase64ImageToBytes(),
+                                                      width:
+                                                          context.width * 0.4,
+                                                      height:
+                                                          context.width * 0.4),
                                               context.localizer.welcomeBack
                                                   .subtitle2(context,
                                                       emphasis:
@@ -110,8 +115,7 @@ class _WelcomePageState extends State<WelcomePage>
                                 top: false,
                                 child: AppRoundedButton(
                                   text: context.localizer.getStarted,
-                                  backgroundColor:
-                                      context.colorScheme.primary,
+                                  backgroundColor: context.colorScheme.primary,
                                   textColor: context.colorScheme.onPrimary,
                                   onTap: () => context.navigator
                                       .pushNamedAndRemoveUntil(

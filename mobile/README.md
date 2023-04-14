@@ -29,6 +29,7 @@ all from the convenience of their mobile device.
 <img src="docs/welcome_page.webp" alt="welcome page" width="250">
 <img src="docs/login_page.webp" alt="login page" width="250">
 <img src="docs/auth_success.gif" alt="login page" width="250">
+<img src="docs/signed_in_user_welcome.webp" alt="login page" width="250">
 </div>
 
 [//]: # (<img src="docs/welcome_page.web" alt="My Image" width="500" height="300">)

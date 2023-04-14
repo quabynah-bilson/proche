@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,9 @@ import 'package:shared_utils/shared_utils.dart';
 /// phone number verification flow
 class PhoneNumberVerificationPage extends StatefulWidget {
   final String phoneNumber;
-  const PhoneNumberVerificationPage({Key? key, required this.phoneNumber}) : super(key: key);
+
+  const PhoneNumberVerificationPage({Key? key, required this.phoneNumber})
+      : super(key: key);
 
   @override
   State<PhoneNumberVerificationPage> createState() =>
@@ -24,7 +25,6 @@ class _PhoneNumberVerificationPageState
     extends State<PhoneNumberVerificationPage> {
   late final _authBloc = AuthBloc(),
       _formKey = GlobalKey<FormState>(),
-      _phoneNumberController = TextEditingController(),
       _pinCodeController = TextEditingController();
 
   var _loading = false;
@@ -60,6 +60,7 @@ class _PhoneNumberVerificationPageState
           submittedPinTheme: submittedPinTheme,
           enabled: !_loading,
           autofocus: true,
+          controller: _pinCodeController,
           closeKeyboardWhenCompleted: true,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
@@ -68,9 +69,7 @@ class _PhoneNumberVerificationPageState
           androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
           pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
           showCursor: true,
-          onCompleted: (pin) {
-            // TODO - send verification code to server
-          },
+          onCompleted: (_) => _validateVerificationAuthCode(),
         ).top(24),
         AppRoundedButton(
           text: 'Verify auth code',
@@ -83,52 +82,47 @@ class _PhoneNumberVerificationPageState
   }
 
   @override
-  Widget build(BuildContext context) => CupertinoPageScaffold(
-        child: BlocConsumer(
-          bloc: _authBloc,
-          listener: (_, state) {
-            if (!mounted) return;
+  Widget build(BuildContext context) => BlocConsumer(
+        bloc: _authBloc,
+        listener: (_, state) {
+          if (!mounted) return;
 
-            setState(() => _loading = state is LoadingState);
+          setState(() => _loading = state is LoadingState);
 
-            if (state is ErrorState<String>) {
-              context.showMessageDialog(state.failure);
-            }
+          if (state is ErrorState<String>) {
+            context.showMessageDialog(state.failure);
+          }
 
-            // todo: handle success state
-          },
-          builder: (_, state) => Scaffold(
-            // navigationBar: CupertinoNavigationBar(
-            //   middle: 'Phone Verification'.subtitle1(context,
-            //       weight: FontWeight.bold, color: context.colorScheme.primary),
-            // ),
-            appBar: AppBar(backgroundColor: context.colorScheme.background),
-            body: SafeArea(
-              bottom: false,
-              child: LoadingIndicator(
-                lottieAnimResource: Assets.animLoading,
-                isLoading: _loading,
-                loadingAnimIsAsset: true,
-                child: Form(
-                  key: _formKey,
-                  child: AnimatedListView(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    animateType: AnimateType.slideDown,
-                    children: [
-                      Lottie.asset(Assets.animPhoneVerification,
-                              repeat: false, height: context.height * 0.15)
-                          .bottom(20),
-                      'Verify your phone number'
-                          .h6(context, weight: FontWeight.bold),
-
-                      'A verification code was sent to your device'
-                          .subtitle2(context)
-                          .vertical(12),
-
-                      /// todo show when code is sent
-                      _buildPinInputUI,
-                    ],
-                  ),
+          if (state is SuccessState<void>) {
+            context.navigator.pop(true);
+          }
+        },
+        builder: (_, state) => Scaffold(
+          appBar: AppBar(backgroundColor: context.colorScheme.background),
+          body: SafeArea(
+            bottom: false,
+            child: LoadingIndicator(
+              lottieAnimResource: Assets.animLoading,
+              isLoading: _loading,
+              loadingAnimIsAsset: true,
+              child: Form(
+                key: _formKey,
+                child: AnimatedListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  animateType: AnimateType.slideDown,
+                  children: [
+                    Lottie.asset(Assets.animPhoneVerification,
+                            repeat: false, height: context.height * 0.15)
+                        .bottom(20),
+                    'Verify your phone number'
+                        .h6(context, weight: FontWeight.bold)
+                        .centered(),
+                    'A verification code was sent to your device'
+                        .subtitle2(context)
+                        .vertical(12)
+                        .centered(),
+                    _buildPinInputUI,
+                  ],
                 ),
               ),
             ),
@@ -136,22 +130,12 @@ class _PhoneNumberVerificationPageState
         ),
       );
 
-  void _validatePhoneNumberForVerification() {
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-      _formKey.currentState?.save();
-
-      var phoneNumber = _phoneNumberController.text.trim();
-      // todo: send phone number to server for verification
-    }
-  }
-
   void _validateVerificationAuthCode() {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       _formKey.currentState?.save();
-
-      var phoneNumber = _phoneNumberController.text.trim(),
-          code = int.tryParse(_pinCodeController.text.trim()) ?? 0;
-      // todo: send phone number and code to server for verification
+      _authBloc.add(VerifyPhoneNumberAuthEvent(
+          phoneNumber: widget.phoneNumber,
+          code: _pinCodeController.text.trim()));
     }
   }
 }

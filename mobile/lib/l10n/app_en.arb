@@ -46,5 +46,8 @@
   "confirm" : "Confirm",
   "or" : "or",
   "accountAlreadyTaken" : "This account is already taken. Check your credentials and try again or login instead",
-  "selectCountry" : "Select a country"
+  "selectCountry" : "Select a country",
+  "displayName" : "Your public username",
+  "profileEditHeader" : "Complete your profile setup to get started",
+  "almostThere" : "One more step..."
 }

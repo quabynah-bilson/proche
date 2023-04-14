@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mobile/core/utils/image.utils.dart';
 import 'package:mobile/features/shared/domain/repositories/auth.dart';
 import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:protobuf_google/protobuf_google.dart';
+import 'package:shared_utils/shared_utils.dart';
 
 @Injectable(as: BaseAuthRepository)
 class ProcheAuthRepository extends BaseAuthRepository {
@@ -92,6 +94,11 @@ class ProcheAuthRepository extends BaseAuthRepository {
     String? avatar,
   }) async {
     try {
+      // convert avatar to base64 string
+      if (!avatar.isNullOrEmpty()) {
+        avatar = await assetToBase64(avatar!);
+      }
+
       final request = RegisterRequest(
         phoneNumber: phoneNumber,
         password: password,

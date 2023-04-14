@@ -142,12 +142,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                     onTap: () =>
                                         _signOutBloc.add(LogoutAuthEvent()),
                                   ),
-                                  child: Image.memory(
-                                    _account!.avatarUrl
-                                        .decodeBase64ImageToBytes(),
-                                    height: 40,
-                                    width: 40,
-                                  ),
+                                  child: _account!.avatarUrl.isNullOrEmpty()
+                                      ? const SizedBox.shrink()
+                                      : Image.memory(
+                                          _account!.avatarUrl
+                                              .decodeBase64ImageToBytes(),
+                                          height: 40,
+                                          width: 40,
+                                        ),
                                 ),
                         ),
                       ),

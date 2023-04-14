@@ -46,5 +46,8 @@
   "confirm" : "Confirmer",
   "or" : "ou",
   "accountAlreadyTaken" : "Ce compte est déjà pris. Vérifiez vos informations d'identification et réessayez ou connectez-vous à la place",
-  "selectCountry" : "Choisissez un pays"
+  "selectCountry" : "Choisissez un pays",
+  "displayName" : "Votre nom d'utilisateur public",
+  "profileEditHeader" : "Terminez la configuration de votre profil pour commencer",
+  "almostThere" : "Un pas de plus..."
 }

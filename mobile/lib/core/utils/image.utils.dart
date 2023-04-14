@@ -8,7 +8,5 @@ Future<String> assetToBase64(String assetPath) async {
   List<int> assetBytes = assetByteData.buffer.asUint8List();
 
   // Convert bytes to base64
-  String base64Image = base64Encode(assetBytes);
-
-  return base64Image;
+  return base64Encode(assetBytes);
 }
