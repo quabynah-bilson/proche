@@ -3,6 +3,7 @@ package util
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	pb "github.com/quabynah-bilson/core-server/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -15,8 +16,7 @@ import (
 )
 
 const (
-	authKey      = "x-authenticated"
-	accountIdKey = "x-account-id"
+	AccountIdKey = "x-account-id"
 )
 
 // createAuthClient => creates a new auth client
@@ -37,7 +37,7 @@ func AuthUnaryInterceptor(parentCtx context.Context, req interface{}, _ *grpc.Un
 	// create a new auth client
 	client := createAuthClient()
 
-	// get context from the stream
+	// get context from the stream and set a deadline of 15 seconds
 	deadlineCtx, cancel := context.WithDeadline(parentCtx, time.Now().Add(time.Second*15))
 	defer cancel()
 
@@ -45,13 +45,15 @@ func AuthUnaryInterceptor(parentCtx context.Context, req interface{}, _ *grpc.Un
 		ctx := metadata.NewOutgoingContext(deadlineCtx, md)
 		// validate the access token
 		if token, err := client.ValidateAccessToken(ctx, &empty.Empty{}, grpc.WaitForReady(true)); err == nil {
-			md.Set(accountIdKey, token.GetAccountId())
+			md.Set(AccountIdKey, token.GetAccountId())
 			ctx = metadata.NewOutgoingContext(deadlineCtx, md)
 			return handler(ctx, req)
+		} else {
+			return nil, convertErrToStatus(err)
 		}
 	}
 
-	return handler(parentCtx, req)
+	return nil, status.Errorf(codes.Internal, "no metadata found in context")
 }
 
 // AuthStreamInterceptor => intercepts all incoming requests and checks if the user is authenticated and authorized to access the resource
@@ -59,7 +61,7 @@ func AuthStreamInterceptor(srv interface{}, ss grpc.ServerStream, _ *grpc.Stream
 	// create a new auth client
 	client := createAuthClient()
 
-	// get context from the stream
+	// get context from the stream and set a deadline of 15 seconds
 	parentCtx := ss.Context()
 	deadlineCtx, cancel := context.WithDeadline(parentCtx, time.Now().Add(time.Second*15))
 	defer cancel()
@@ -68,10 +70,26 @@ func AuthStreamInterceptor(srv interface{}, ss grpc.ServerStream, _ *grpc.Stream
 		ctx := metadata.NewOutgoingContext(deadlineCtx, md)
 		// validate the access token
 		if token, err := client.ValidateAccessToken(ctx, &empty.Empty{}, grpc.WaitForReady(true)); err == nil {
-			ss.SetTrailer(metadata.Pairs(accountIdKey, token.GetAccountId()))
+			ss.SetTrailer(metadata.Pairs(AccountIdKey, token.GetAccountId()))
 			return handler(srv, ss)
+		} else {
+			return convertErrToStatus(err)
 		}
 	}
 
-	return status.Errorf(codes.Unauthenticated, "no metadata found in context")
+	localizationUsingJson, _ := ProcheLocalizer.Localize(&i18n.LocalizeConfig{
+		MessageID: "no_metadata_found",
+	})
+	return status.Errorf(codes.Internal, localizationUsingJson)
+}
+
+// convertErrToStatus => converts an error to a gRPC status
+func convertErrToStatus(err error) error {
+	// check if the error is a gRPC status
+	if s, ok := status.FromError(err); ok {
+		return status.Errorf(s.Code(), s.Message())
+	}
+
+	// return an internal server error
+	return status.Errorf(codes.Internal, err.Error())
 }

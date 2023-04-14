@@ -954,7 +954,7 @@ fn _get_authentication_type_from_metadata(md: &MetadataMap) -> Result<bool, Stat
     let authentication_type = match md.get("x-authenticated") {
         Some(result) => result.to_str().unwrap().to_string(),
         None => {
-            return Err(Status::invalid_argument(t!("invalid_authentication_type")));
+            return Err(Status::invalid_argument(t!("invalid_token")));
         }
     };
     Ok(authentication_type == "true")

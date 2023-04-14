@@ -67,6 +67,8 @@ func (s *ProcheTaskServer) CreateTask(ctx context.Context, req *pb.CreateTaskReq
 	}
 }
 
+// GetTask gets a task by id
+// done
 func (s *ProcheTaskServer) GetTask(req *wrapperspb.StringValue, stream pb.TaskService_GetTaskServer) error {
 	metadata.FromIncomingContext(stream.Context())
 
@@ -128,7 +130,8 @@ func (s *ProcheTaskServer) GetTasks(_ *emptypb.Empty, stream pb.TaskService_GetT
 	ctx := stream.Context()
 
 	// get all tasks
-	if cursor, err := s.taskCol.Find(ctx, bson.D{}, util.PaginateFilter(1, 10)); err != nil {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if cursor, err := s.taskCol.Find(ctx, bson.D{}, util.PaginateFilter(md)); err != nil {
 		return status.Errorf(codes.Internal, "failed to get tasks: %v", err)
 	} else {
 		// create a `TaskList` object
@@ -194,8 +197,18 @@ func (s *ProcheTaskServer) GetTasks(_ *emptypb.Empty, stream pb.TaskService_GetT
 	return nil
 }
 
+// DeleteTask deletes a task by id
+// done
 func (s *ProcheTaskServer) DeleteTask(ctx context.Context, req *wrapperspb.StringValue) (*emptypb.Empty, error) {
-	panic("implement me")
+	// get task id
+	taskId := req.GetValue()
+
+	// delete task from database
+	if err := s.taskCol.FindOneAndDelete(ctx, bson.M{"id": taskId}).Decode(&bson.M{}); err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to delete task: %v", err)
+	}
+
+	return &emptypb.Empty{}, nil
 }
 
 func (s *ProcheTaskServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.Task, error) {

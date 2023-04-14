@@ -1,23 +1,41 @@
 package util
 
-import "go.mongodb.org/mongo-driver/mongo/options"
+import (
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"google.golang.org/grpc/metadata"
+	"strconv"
+)
+
+const (
+	// PageKey is the key for the page number
+	pageKey = "x-page"
+
+	// PerPageKey is the key for the number of items per page
+	perPageKey = "x-per-page"
+)
 
 // PaginateFilter returns a FindOptions with the skip and limit set
-func PaginateFilter(page int, perPage int) *options.FindOptions {
-	// If page is 0 or less, set it to 1
-	if page <= 0 {
-		page = 1
+func PaginateFilter(meta metadata.MD) *options.FindOptions {
+	// get page from metadata
+	page := 1
+	if pageStr := meta.Get(pageKey); len(pageStr) > 0 {
+		// convert page string to int
+		page, _ = strconv.Atoi(pageStr[0])
 	}
 
-	// If perPage is 0 or less, set it to 10
-	if perPage <= 0 {
-		perPage = 10
+	// get perPage from metadata
+	perPage := 10
+	if perPageStr := meta.Get(perPageKey); len(perPageStr) > 0 {
+		// convert perPage to int
+		perPage, _ = strconv.Atoi(perPageStr[0])
 	}
 
 	// Return the FindOptions with the skip and limit set
+	skip := int64(page*perPage - perPage) // e.g. page 2, perPage 10 => 10 * 2 - 10 = 10
+	limit := int64(perPage)
 	return &options.FindOptions{
-		Skip:  &[]int64{int64(page*perPage - perPage)}[0],
-		Limit: &[]int64{int64(perPage)}[0],
+		Skip:  &skip,
+		Limit: &limit,
 	}
 }
 
