@@ -46,7 +46,7 @@ impl TwilioVerifyService {
 
         match res {
             Ok(response) => {
-                let created = response.status() == StatusCode::ACCEPTED;
+                let created =  response.status() == StatusCode::from_u16(201).unwrap();
                 if created {
                     log::info!("{}", t!("sms_send_success", locale=&language_id));
                     Ok(())
@@ -59,8 +59,8 @@ impl TwilioVerifyService {
     }
 
     // verify sms code
-    pub async fn verify_sms(phone_number: &str, mut code: &String, language_id: &str) -> Result<(), Box<dyn Error>> {
-        log::info!("Verifying sms code: {}", code);
+    pub async fn verify_sms(phone_number: &str, code: &String, language_id: &str) -> Result<(), Box<dyn Error>> {
+        log::info!("Verifying sms from phone number: {} -> {}", phone_number, code);
         let account_sid = env::var("TWILIO_ACCOUNT_SID").expect("Error reading Twilio Account SID");
         let auth_token = env::var("TWILIO_AUTHTOKEN").expect("Error reading Twilio Auth Token");
         let service_id = env::var("TWILIO_SERVICES_ID").expect("Error reading Twilio Services ID");
@@ -96,7 +96,7 @@ impl TwilioVerifyService {
 
         match res {
             Ok(response) => {
-                let created = response.status() == StatusCode::OK;
+                let created =  response.status() == StatusCode::from_u16(200).unwrap();
                 if created {
                     log::info!("{}", t!("sms_verification_success", locale=&language_id));
                     Ok(())

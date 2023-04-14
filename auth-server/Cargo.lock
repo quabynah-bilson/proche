@@ -109,6 +109,7 @@ dependencies = [
  "prost",
  "prost-types",
  "rand 0.8.5",
+ "regex",
  "reqwest",
  "ring",
  "rust-i18n",

@@ -18,6 +18,14 @@ auth_started: Authentification en cours
 auth_success: Authentification réussie
 access_denied: Accès refusé
 
+# country messages
+countries_not_found: Pays non trouvés
+countries_found: Pays trouvés
+country_not_found: Pays non trouvé
+country_not_added: Pays non ajouté
+country_not_deleted: Pays non supprimé
+country_already_exists: Pays déjà existant
+
 # misc
 invalid_language_code: Code de langue non pris en charge
 sms_send_failed: Nous n'avons pas pu envoyer le SMS pour une raison quelconque. Veuillez réessayer plus tard.

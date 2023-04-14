@@ -11,6 +11,47 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'package:protobuf_google/protobuf_google.dart' as $3;
 
+class GetCountriesResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetCountriesResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
+    ..pc<Country>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'countries', $pb.PbFieldType.PM, subBuilder: Country.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetCountriesResponse._() : super();
+  factory GetCountriesResponse({
+    $core.Iterable<Country>? countries,
+  }) {
+    final _result = create();
+    if (countries != null) {
+      _result.countries.addAll(countries);
+    }
+    return _result;
+  }
+  factory GetCountriesResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetCountriesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetCountriesResponse clone() => GetCountriesResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetCountriesResponse copyWith(void Function(GetCountriesResponse) updates) => super.copyWith((message) => updates(message as GetCountriesResponse)) as GetCountriesResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetCountriesResponse create() => GetCountriesResponse._();
+  GetCountriesResponse createEmptyInstance() => create();
+  static $pb.PbList<GetCountriesResponse> createRepeated() => $pb.PbList<GetCountriesResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetCountriesResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetCountriesResponse>(create);
+  static GetCountriesResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<Country> get countries => $_getList(0);
+}
+
 class ValidateAccessTokenResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ValidateAccessTokenResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountId')
@@ -151,6 +192,7 @@ class LoginRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LoginRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'password')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'countryId')
     ..hasRequiredFields = false
   ;
 
@@ -158,6 +200,7 @@ class LoginRequest extends $pb.GeneratedMessage {
   factory LoginRequest({
     $core.String? phoneNumber,
     $core.String? password,
+    $core.String? countryId,
   }) {
     final _result = create();
     if (phoneNumber != null) {
@@ -165,6 +208,9 @@ class LoginRequest extends $pb.GeneratedMessage {
     }
     if (password != null) {
       _result.password = password;
+    }
+    if (countryId != null) {
+      _result.countryId = countryId;
     }
     return _result;
   }
@@ -206,6 +252,15 @@ class LoginRequest extends $pb.GeneratedMessage {
   $core.bool hasPassword() => $_has(1);
   @$pb.TagNumber(2)
   void clearPassword() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get countryId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set countryId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCountryId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCountryId() => clearField(3);
 }
 
 class RegisterRequest extends $pb.GeneratedMessage {
@@ -217,6 +272,7 @@ class RegisterRequest extends $pb.GeneratedMessage {
     ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'referralCode')
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'idCardUrl')
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'vaccineCardUrl')
+    ..aOS(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'countryId')
     ..hasRequiredFields = false
   ;
 
@@ -229,6 +285,7 @@ class RegisterRequest extends $pb.GeneratedMessage {
     $core.String? referralCode,
     $core.String? idCardUrl,
     $core.String? vaccineCardUrl,
+    $core.String? countryId,
   }) {
     final _result = create();
     if (phoneNumber != null) {
@@ -251,6 +308,9 @@ class RegisterRequest extends $pb.GeneratedMessage {
     }
     if (vaccineCardUrl != null) {
       _result.vaccineCardUrl = vaccineCardUrl;
+    }
+    if (countryId != null) {
+      _result.countryId = countryId;
     }
     return _result;
   }
@@ -337,6 +397,15 @@ class RegisterRequest extends $pb.GeneratedMessage {
   $core.bool hasVaccineCardUrl() => $_has(6);
   @$pb.TagNumber(8)
   void clearVaccineCardUrl() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get countryId => $_getSZ(7);
+  @$pb.TagNumber(9)
+  set countryId($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasCountryId() => $_has(7);
+  @$pb.TagNumber(9)
+  void clearCountryId() => clearField(9);
 }
 
 class ResetPasswordRequest extends $pb.GeneratedMessage {
@@ -412,6 +481,7 @@ class Account extends $pb.GeneratedMessage {
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'idCardUrl')
     ..aOS(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'vaccineCardUrl')
     ..aOS(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'referralCode')
+    ..aOS(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'countryId')
     ..hasRequiredFields = false
   ;
 
@@ -427,6 +497,7 @@ class Account extends $pb.GeneratedMessage {
     $core.String? idCardUrl,
     $core.String? vaccineCardUrl,
     $core.String? referralCode,
+    $core.String? countryId,
   }) {
     final _result = create();
     if (id != null) {
@@ -458,6 +529,9 @@ class Account extends $pb.GeneratedMessage {
     }
     if (referralCode != null) {
       _result.referralCode = referralCode;
+    }
+    if (countryId != null) {
+      _result.countryId = countryId;
     }
     return _result;
   }
@@ -575,6 +649,15 @@ class Account extends $pb.GeneratedMessage {
   $core.bool hasReferralCode() => $_has(9);
   @$pb.TagNumber(10)
   void clearReferralCode() => clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.String get countryId => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set countryId($core.String v) { $_setString(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasCountryId() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearCountryId() => clearField(11);
 }
 
 class AccessTokenStore extends $pb.GeneratedMessage {
@@ -636,5 +719,150 @@ class AccessTokenStore extends $pb.GeneratedMessage {
   $core.bool hasRefreshToken() => $_has(1);
   @$pb.TagNumber(3)
   void clearRefreshToken() => clearField(3);
+}
+
+class Country extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Country', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'code')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dialCode')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'currency')
+    ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'currencySymbol')
+    ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'flagUrl')
+    ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
+    ..hasRequiredFields = false
+  ;
+
+  Country._() : super();
+  factory Country({
+    $core.String? id,
+    $core.String? name,
+    $core.String? code,
+    $core.String? dialCode,
+    $core.String? currency,
+    $core.String? currencySymbol,
+    $core.String? flagUrl,
+    $core.String? languageId,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    if (name != null) {
+      _result.name = name;
+    }
+    if (code != null) {
+      _result.code = code;
+    }
+    if (dialCode != null) {
+      _result.dialCode = dialCode;
+    }
+    if (currency != null) {
+      _result.currency = currency;
+    }
+    if (currencySymbol != null) {
+      _result.currencySymbol = currencySymbol;
+    }
+    if (flagUrl != null) {
+      _result.flagUrl = flagUrl;
+    }
+    if (languageId != null) {
+      _result.languageId = languageId;
+    }
+    return _result;
+  }
+  factory Country.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Country.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Country clone() => Country()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Country copyWith(void Function(Country) updates) => super.copyWith((message) => updates(message as Country)) as Country; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Country create() => Country._();
+  Country createEmptyInstance() => create();
+  static $pb.PbList<Country> createRepeated() => $pb.PbList<Country>();
+  @$core.pragma('dart2js:noInline')
+  static Country getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Country>(create);
+  static Country? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get code => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set code($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCode() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCode() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get dialCode => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set dialCode($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasDialCode() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDialCode() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get currency => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set currency($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasCurrency() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCurrency() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get currencySymbol => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set currencySymbol($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasCurrencySymbol() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearCurrencySymbol() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get flagUrl => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set flagUrl($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasFlagUrl() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearFlagUrl() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get languageId => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set languageId($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasLanguageId() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearLanguageId() => clearField(8);
 }
 

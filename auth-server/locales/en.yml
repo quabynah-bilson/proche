@@ -25,6 +25,14 @@ sms_send_success: Verification code sent successfully
 sms_verification_failed: We were unable to verify the SMS for some reason. Please try again later.
 sms_verification_success: Phone number verified successfully
 
+# country messages
+countries_not_found: Countries not found
+countries_found: Countries found
+country_not_found: Country not found
+country_not_added: Country not added
+country_not_deleted: Country not deleted
+country_already_exists: Country already exists
+
 # access token
 refresh_token_not_found: Refresh token not found
 invalid_token: Invalid token

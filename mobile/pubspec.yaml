@@ -38,6 +38,8 @@ dependencies:
   intl: any
   local_auth: ^2.1.6
   flutter_dotenv: ^5.0.2
+  url_launcher: ^6.1.10
+  animated_bottom_navigation_bar: ^1.2.0
 
 
 dev_dependencies:

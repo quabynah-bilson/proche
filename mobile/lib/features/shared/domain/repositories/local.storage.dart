@@ -1,5 +1,7 @@
 /// handles local storage of session data
 abstract class BaseLocalStorageRepository {
+  const BaseLocalStorageRepository();
+
   Future<void> saveAccessToken(String token);
 
   Future<void> clearAccessToken();

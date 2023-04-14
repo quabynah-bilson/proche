@@ -12,3 +12,4 @@
 - Added authentication and authorization support for the auth microservice using `paseto` & `bcrypt`
 - Added session management with `paseto` tokens for the auth microservice
 - Added Twilio verification support for the auth microservice (OTP verification)
+- Added support for multinational accounts for the auth microservice
