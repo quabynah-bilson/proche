@@ -305,6 +305,7 @@ extension BuildContextX on BuildContext {
     final formKey = GlobalKey<FormState>(),
         phoneNumberController = TextEditingController(),
         passwordController = TextEditingController(),
+        authBloc = AuthBloc(),
         currentAccountBloc = AuthBloc(),
         countriesBloc = AuthBloc();
     var loading = false;
@@ -324,7 +325,7 @@ extension BuildContextX on BuildContext {
           listeners: [
             // global auth bloc listener
             BlocListener(
-              bloc: read<AuthBloc>(),
+              bloc: authBloc,
               listener: (context, state) {
                 setState(() => loading = state is LoadingState);
 
@@ -416,7 +417,7 @@ extension BuildContextX on BuildContext {
                                     ? state.data
                                     : <Country>[];
                             return AppDropdownField(
-                              label: 'Select a country',
+                              label: context.localizer.selectCountry,
                               values: countries.map((e) => e.name).toList(),
                               onSelected: (name) {
                                 selectedCountry = countries.firstWhere(
@@ -481,7 +482,7 @@ extension BuildContextX on BuildContext {
                               var phoneNumber =
                                       phoneNumberController.text.trim(),
                                   password = passwordController.text.trim();
-                              read<AuthBloc>().add(
+                              authBloc.add(
                                 LoginAuthEvent(
                                   phoneNumber: phoneNumber,
                                   password: password,

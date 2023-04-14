@@ -28,7 +28,7 @@
   "okay": "Okay",
   "joinUs": "Join us now",
   "signUp": "Sign up",
-  "signInLater": "Sign in later",
+  "signInLater": "Skip for now",
   "unsupportedLocale": "Unsupported language",
   "english": "English",
   "french": "French",
@@ -44,5 +44,7 @@
   "trips" : "Trips",
   "signOutPrompt" : "Do you wish to sign out?",
   "confirm" : "Confirm",
-  "or" : "or"
+  "or" : "or",
+  "accountAlreadyTaken" : "This account is already taken. Check your credentials and try again or login instead",
+  "selectCountry" : "Select a country"
 }

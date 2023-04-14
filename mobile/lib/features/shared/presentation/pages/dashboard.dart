@@ -56,8 +56,9 @@ class _DashboardPageState extends State<DashboardPage> {
             }
 
             if (state is SuccessState<void>) {
-              context.navigator.pushNamedAndRemoveUntil(
-                  AppRouter.welcomeRoute, (route) => false);
+              logger.i('here now');
+              // context.navigator.pushNamedAndRemoveUntil(
+              //     AppRouter.welcomeRoute, (route) => false);
             }
 
             if (state is SuccessState<Account>) {

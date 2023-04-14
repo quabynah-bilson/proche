@@ -144,7 +144,7 @@ class _WelcomePageState extends State<WelcomePage>
                               ],
                             ),
                             AppRoundedButton(
-                              text: context.localizer.signUp,
+                              text: context.localizer.signIn,
                               icon: TablerIcons.shield_check,
                               onTap: context.showLoginSheet,
                             ),

@@ -46,7 +46,7 @@ impl TwilioVerifyService {
 
         match res {
             Ok(response) => {
-                let created = response.status() == StatusCode::ACCEPTED;
+                let created = response.status() == StatusCode::OK;
                 if created {
                     log::info!("{}", t!("sms_send_success", locale=&language_id));
                     Ok(())
@@ -96,7 +96,7 @@ impl TwilioVerifyService {
 
         match res {
             Ok(response) => {
-                let created = response.status() == StatusCode::OK;
+                let created = response.status() == StatusCode::from_u16(200).unwrap();
                 if created {
                     log::info!("{}", t!("sms_verification_success", locale=&language_id));
                     Ok(())

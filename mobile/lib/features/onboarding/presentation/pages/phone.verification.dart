@@ -12,7 +12,8 @@ import 'package:shared_utils/shared_utils.dart';
 
 /// phone number verification flow
 class PhoneNumberVerificationPage extends StatefulWidget {
-  const PhoneNumberVerificationPage({Key? key}) : super(key: key);
+  final String phoneNumber;
+  const PhoneNumberVerificationPage({Key? key, required this.phoneNumber}) : super(key: key);
 
   @override
   State<PhoneNumberVerificationPage> createState() =>
@@ -53,9 +54,6 @@ class _PhoneNumberVerificationPageState
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        'A verification code was sent to your device'
-            .subtitle2(context)
-            .bottom(12),
         Pinput(
           defaultPinTheme: defaultPinTheme,
           focusedPinTheme: focusedPinTheme,
@@ -73,40 +71,16 @@ class _PhoneNumberVerificationPageState
           onCompleted: (pin) {
             // TODO - send verification code to server
           },
-        ),
+        ).top(24),
         AppRoundedButton(
           text: 'Verify auth code',
           icon: TablerIcons.shield_check,
           enabled: !_loading,
           onTap: _validateVerificationAuthCode,
-        ).fillMaxWidth(context),
+        ).top(40),
       ],
     );
   }
-
-  // UI for phone number entry and verification
-  Widget get _buildPhoneNumberEntryUI => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppTextField(
-            'Your phone number',
-            autofocus: true,
-            controller: _phoneNumberController,
-            textFieldType: AppTextFieldType.phone,
-            allowSpecialCharacters: false,
-            validator: Validators.validatePhone,
-            enabled: !_loading,
-            maxLength: 10,
-            prefixIcon: const Icon(TablerIcons.phone),
-          ),
-          AppRoundedButton(
-            text: 'Get verification code',
-            icon: TablerIcons.message_2,
-            enabled: !_loading,
-            onTap: _validatePhoneNumberForVerification,
-          ).fillMaxWidth(context),
-        ],
-      );
 
   @override
   Widget build(BuildContext context) => CupertinoPageScaffold(
@@ -123,45 +97,37 @@ class _PhoneNumberVerificationPageState
 
             // todo: handle success state
           },
-          builder: (_, state) => CupertinoPageScaffold(
-            backgroundColor: context.colorScheme.surface,
-            navigationBar: CupertinoNavigationBar(
-              middle: 'Phone Verification'.subtitle1(context,
-                  weight: FontWeight.bold, color: context.colorScheme.primary),
-            ),
-            child: SafeArea(
+          builder: (_, state) => Scaffold(
+            // navigationBar: CupertinoNavigationBar(
+            //   middle: 'Phone Verification'.subtitle1(context,
+            //       weight: FontWeight.bold, color: context.colorScheme.primary),
+            // ),
+            appBar: AppBar(backgroundColor: context.colorScheme.background),
+            body: SafeArea(
               bottom: false,
               child: LoadingIndicator(
                 lottieAnimResource: Assets.animLoading,
                 isLoading: _loading,
                 loadingAnimIsAsset: true,
-                child: Material(
-                  color: context.colorScheme.surface,
-                  child: Form(
-                    key: _formKey,
-                    child: AnimatedListView(
-                      animateType: AnimateType.slideDown,
-                      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                      children: [
-                        Lottie.asset(Assets.animPhoneVerification,
-                                repeat: false, height: context.height * 0.2)
-                            .bottom(20),
-                        'For additional security...'
-                            .subtitle1(context, weight: FontWeight.bold)
-                            .centered(),
-                        'we require that you verify your phone number to complete the account setup.'
-                            .bodyText2(context,
-                                alignment: TextAlign.center,
-                                emphasis: kEmphasisMedium)
-                            .bottom(24),
+                child: Form(
+                  key: _formKey,
+                  child: AnimatedListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    animateType: AnimateType.slideDown,
+                    children: [
+                      Lottie.asset(Assets.animPhoneVerification,
+                              repeat: false, height: context.height * 0.15)
+                          .bottom(20),
+                      'Verify your phone number'
+                          .h6(context, weight: FontWeight.bold),
 
-                        /// todo show this when code is not sent
-                        _buildPhoneNumberEntryUI,
+                      'A verification code was sent to your device'
+                          .subtitle2(context)
+                          .vertical(12),
 
-                        /// todo show when code is sent
-                        _buildPinInputUI,
-                      ],
-                    ),
+                      /// todo show when code is sent
+                      _buildPinInputUI,
+                    ],
                   ),
                 ),
               ),

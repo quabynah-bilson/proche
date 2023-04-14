@@ -28,7 +28,7 @@
   "okay" : "D'accord",
   "joinUs" : "Rejoignez nous maintenant",
   "signUp" : "S'inscrire",
-  "signInLater" : "Connectez-vous plus tard",
+  "signInLater" : "Ignorer pour l'instant",
   "unsupportedLocale" : "Langue non prise en charge",
   "english" : "Anglais",
   "french" : "Français",
@@ -44,5 +44,7 @@
   "trips" : "Voyages",
   "signOutPrompt" : "Souhaitez-vous vous déconnecter ?",
   "confirm" : "Confirmer",
-  "or" : "ou"
+  "or" : "ou",
+  "accountAlreadyTaken" : "Ce compte est déjà pris. Vérifiez vos informations d'identification et réessayez ou connectez-vous à la place",
+  "selectCountry" : "Choisissez un pays"
 }

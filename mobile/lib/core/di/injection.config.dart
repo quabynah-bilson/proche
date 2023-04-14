@@ -66,10 +66,8 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.factory<_i8.TaskServiceClient>(
         () => networkConfigModule.taskServiceClient);
-    gh.factory<_i9.TokenGrpcInterceptor>(() => _i9.TokenGrpcInterceptor(
-          gh<String>(instanceName: 'access_token'),
-          gh<String>(instanceName: 'locale'),
-        ));
+    gh.factory<_i9.TokenGrpcInterceptor>(
+        () => _i9.TokenGrpcInterceptor(gh<String>(instanceName: 'locale')));
     gh.factory<_i10.TripServiceClient>(
         () => networkConfigModule.tripServiceClient);
     gh.factory<_i11.BaseEventRepository>(

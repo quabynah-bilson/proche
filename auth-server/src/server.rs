@@ -269,7 +269,7 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify public token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
             Ok(_) => (),
             Err(e) => {
                 return Err(e);
