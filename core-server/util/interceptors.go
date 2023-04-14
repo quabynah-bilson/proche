@@ -33,9 +33,7 @@ func createAuthClient() pb.AuthServiceClient {
 }
 
 // AuthUnaryInterceptor => intercepts all incoming requests and checks if the user is authenticated and authorized to access the resource
-func AuthUnaryInterceptor(parentCtx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	log.Printf("AuthUnaryInterceptor: %v", info.FullMethod)
-
+func AuthUnaryInterceptor(parentCtx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	// create a new auth client
 	client := createAuthClient()
 
@@ -57,9 +55,7 @@ func AuthUnaryInterceptor(parentCtx context.Context, req interface{}, info *grpc
 }
 
 // AuthStreamInterceptor => intercepts all incoming requests and checks if the user is authenticated and authorized to access the resource
-func AuthStreamInterceptor(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
-	log.Printf("AuthStreamInterceptor: %v", info.FullMethod)
-
+func AuthStreamInterceptor(srv interface{}, ss grpc.ServerStream, _ *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 	// create a new auth client
 	client := createAuthClient()
 
