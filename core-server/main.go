@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/quabynah-bilson/core-server/config"
 	pb "github.com/quabynah-bilson/core-server/gen"
 	svc "github.com/quabynah-bilson/core-server/services"
@@ -13,6 +15,12 @@ import (
 )
 
 func main() {
+	localizeConfigWelcome := i18n.LocalizeConfig{
+		MessageID: "appName", //1
+	}
+	localizationUsingJson, _ := localizer.Localize(&localizeConfigWelcome) //2
+	fmt.Println(localizationUsingJson)
+
 	// This line loads the environment variables from the ".env" file.
 	err := godotenv.Load()
 	if err != nil {
