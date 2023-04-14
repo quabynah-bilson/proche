@@ -50,15 +50,16 @@ android {
 
     defaultConfig {
         applicationId "com.qcodelabsllc.proche.mobile"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 23
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
-        manifestPlaceholders = [mapsApiKey: mapsApiKey]
+        buildConfigField("String", "MAPS_API_KEY", "\"${keystoreProperties['googleMapsKey']}\"")
+        manifestPlaceholders = [
+                googleMapsKey: "\"${keystoreProperties['googleMapsKey']}\"",
+                launcherName: "Proche",
+        ]
     }
 
     signingConfigs {

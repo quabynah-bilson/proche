@@ -15,10 +15,10 @@ import (
 )
 
 func main() {
-	localizeConfigWelcome := i18n.LocalizeConfig{
-		MessageID: "appName", //1
-	}
-	localizationUsingJson, _ := localizer.Localize(&localizeConfigWelcome) //2
+	// TODO -> remove this line (only for debugging)
+	localizationUsingJson, _ := localizer.Localize(&i18n.LocalizeConfig{
+		MessageID: "appName",
+	})
 	fmt.Println(localizationUsingJson)
 
 	// This line loads the environment variables from the ".env" file.

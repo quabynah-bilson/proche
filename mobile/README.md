@@ -10,6 +10,7 @@ all from the convenience of their mobile device.
 <img src="assets/img/app_logo_animated.gif" alt="welcome page" width="250">
 
 [//]: # (https://dribbble.com/shots/16905482-Bird-Eye-View-aerial-photography-logo-design-pin-pointer-bird)
+
 ### Features
 
 - `Task Finder`: Easily find volunteer opportunities and other tasks in your area that match your interests and
@@ -30,6 +31,7 @@ all from the convenience of their mobile device.
 <img src="docs/login_page.webp" alt="login page" width="250">
 <img src="docs/auth_success.gif" alt="login page" width="250">
 <img src="docs/signed_in_user_welcome.webp" alt="login page" width="250">
+<img src="docs/dashboard.webp" alt="login page" width="250">
 </div>
 
 [//]: # (<img src="docs/welcome_page.web" alt="My Image" width="500" height="300">)
@@ -52,6 +54,89 @@ To run this app on your device, follow these steps:
   CORE_SERVER_URL=0.0.0.0
   CORE_SERVER_PORT=2000
   ```
+    - For Google Maps configuration, setup iOS like this:
+        - Create a property list file called `secrets.plist` in the `ios/Runner` directory.
+      ```xml
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+            <dict>
+                  <key>googleMapsApiKey</key>
+                  <string>YOUR GOOGLE_MAPS_KEY</string>
+            </dict>
+          </plist>
+        ```
+        - Update your `AppDelegate.swift` file like this:
+          ```swift
+            import UIKit
+            import Flutter
+            import GoogleMaps
+      
+            @UIApplicationMain
+            @objc class AppDelegate: FlutterAppDelegate {
+            override func application(
+              _ application: UIApplication,
+              didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+            ) -> Bool {
+              if let path = Bundle.main.path(forResource: "secrets", ofType: "plist") {
+                  let plist = NSDictionary(contentsOfFile: path)
+                  let apiKey = plist?.value(forKey: "googleMapsApiKey") as? String
+                  // Use the apiKey value as needed
+                  GMSServices.provideAPIKey(apiKey ?? "provide_google_auth_key")
+                }
+      
+               GeneratedPluginRegistrant.register(with: self)
+               return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+              }
+            }
+          ```
+            - On Android, we also need to make a few adjustments:
+                - Create a `key.properties` file in the `mobile/android` directory.
+                    - Add the following line to the file:
+                      ```properties
+                        googleMapsKey=<YOUR_GOOGLE_MAPS_KEY>
+                       ```
+                        - Update your `app/build.gradle` file like this:
+                       ```groovy
+                          android {
+                          compileSdkVersion 33
+                          defaultConfig {
+                              applicationId "com.qcodelabsllc.proche.mobile"
+                              minSdkVersion 23
+                              targetSdkVersion flutter.targetSdkVersion
+                              versionCode flutterVersionCode.toInteger()
+                              versionName flutterVersionName
+                    
+                              // add this line
+                              buildConfigField("String", "MAPS_API_KEY", "\"${keystoreProperties['googleMapsKey']}\"")
+                      
+                              // add this line
+                              manifestPlaceholders = [
+                                    googleMapsKey: "\"${keystoreProperties['googleMapsKey']}\"",
+                                    launcherName: "Proche",
+                              ]
+                          }
+                             buildTypes {
+                                    release {
+                                    signingConfig signingConfigs.debug
+                                }
+                             }
+                          }
+                         ```
+                        - Finally, update your `AndroidManifest.xml` with this snippet within your application tag:
+                          ```xml
+                          <application
+                              android:name="io.flutter.embedding.android.FlutterActivity"
+                              android:icon="@mipmap/launcher_icon"
+                              android:label="${launcherName}"
+                              tools:ignore="Instantiatable">
+                                <!-- add this line -->
+                              <meta-data
+                              android:name="com.google.android.geo.API_KEY"
+                              android:value="${googleMapsKey}" />
+                                <!-- rest of code goes here -->
+                          <application/>
+                          ```
 
 - Connect your device to your computer and run the app using flutter run.
 

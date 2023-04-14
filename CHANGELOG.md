@@ -13,3 +13,4 @@
 - Added session management with `paseto` tokens for the auth microservice
 - Added Twilio verification support for the auth microservice (OTP verification)
 - Added support for multinational accounts for the auth microservice
+- Added Google Maps to mobile app
