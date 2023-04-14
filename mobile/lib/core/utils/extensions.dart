@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/actions.dart';
@@ -35,31 +36,6 @@ extension BuildContextX on BuildContext {
                   height: height * 0.25,
                   width: width * 0.7)
               .bottom(24),
-          EmptyContentPlaceholder(
-              title: localizer.underMaintenanceHeader,
-              subtitle: localizer.underMaintenanceSubhead),
-          SafeArea(
-            top: false,
-            child: AppRoundedButton(
-                    text: localizer.gotIt, onTap: context.navigator.pop)
-                .top(40),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// shows a dialog to confirm user's language preference
-  /// TODO add a checkbox to remember user's preference
-  void showLanguagePickerFieldSheet() async {
-    showCupertinoModalBottomSheet(
-      context: this,
-      backgroundColor: colorScheme.background,
-      useRootNavigator: true,
-      bounce: true,
-      builder: (context) => AnimatedColumn(
-        animateType: AnimateType.slideDown,
-        children: [
           EmptyContentPlaceholder(
               title: localizer.underMaintenanceHeader,
               subtitle: localizer.underMaintenanceSubhead),

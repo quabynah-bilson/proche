@@ -293,7 +293,8 @@ class _DashboardPageState extends State<DashboardPage> {
         ).fillMaxSize(context),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: FloatingActionButton(
-          onPressed: context.showFeatureUnderDevSheet,
+          onPressed: () =>
+              context.navigator.pushNamed(AppRouter.serviceFinderRoute),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
           child: const Icon(TablerIcons.map_pin),
