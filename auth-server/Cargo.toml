@@ -6,7 +6,7 @@ authors = ["qcodelabsllc@gmail.com"]
 license = "MIT"
 description = "Auth Server"
 repository = "https://github.com/quabynah-bilson/nearme/tree/dev/auth-server"
-keywords = ["nearme", "microservices", "grpc", "rust", "mongodb", "tonic"]
+keywords = ["proche", "microservices", "grpc", "rust", "mongodb", "tonic"]
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

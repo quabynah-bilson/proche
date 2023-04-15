@@ -8,7 +8,11 @@ require (
 )
 
 require (
+	github.com/cloudinary/cloudinary-go/v2 v2.2.0 // indirect
+	github.com/creasty/defaults v1.5.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/uuid v1.3.0 // indirect
+	github.com/gorilla/schema v1.2.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect

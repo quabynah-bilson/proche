@@ -38,8 +38,11 @@ protoc -I=$MEDIA_PROTO_PATH  --go_out=$MEDIA_SERVER_DIR/gen --go_opt=paths=sourc
 #  --grpc_python_out=$SHARED_SERVER_DIR \
 #  $(find $SHARED_PROTO_PATH -iname "*.proto")
 
+# copy the proto file from media-server to auth-server
+cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
+
 # generate for auth-server using rust
-#cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
+cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
 
 # generate for flutter using dart
 #protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH \

@@ -8,13 +8,13 @@ option go_package = "com.github/quabynah-bilson/proche;core";
 
 service MediaService {
   // upload media takes a base64 encoded string and returns a media url
-  rpc UploadMedia (UploadMediaRequest) returns (google.protobuf.StringValue);
+  rpc upload_media (UploadMediaRequest) returns (google.protobuf.StringValue);
 
   // get media takes a media url and returns a base64 encoded string
-  rpc GetMedia (google.protobuf.StringValue) returns (google.protobuf.StringValue);
+  rpc get_media (google.protobuf.StringValue) returns (google.protobuf.StringValue);
 
   // delete media takes a media url and deletes the media
-  rpc DeleteMedia (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc delete_media (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
 }
 

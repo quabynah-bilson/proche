@@ -1,3 +1,5 @@
+use std::error::Error;
+
 use chrono::{DateTime, Utc};
 use futures::StreamExt;
 use mongodb::bson::{Bson, doc, Document};
@@ -7,9 +9,9 @@ use rust_i18n::t;
 use tonic::{async_trait, Request, Response, Status};
 use tonic::metadata::MetadataMap;
 
-use crate::{config, utils};
+use crate::{client, config, utils};
 use crate::config::{locale, tokenizer};
-use crate::proto::{Account, Country, GetCountriesResponse, LoginRequest, RegisterRequest, ResetPasswordRequest, ValidateAccessTokenResponse, VerifyPhoneRequest};
+use crate::proto::{Account, Country, GetCountriesResponse, LoginRequest, MediaType, RegisterRequest, ResetPasswordRequest, UploadMediaRequest, ValidateAccessTokenResponse, VerifyPhoneRequest};
 use crate::proto::auth_service_server::AuthService;
 
 rust_i18n::i18n!("locales");
@@ -21,7 +23,11 @@ pub struct AuthServiceImpl {
 }
 
 impl AuthServiceImpl {
-    pub fn new(account_col: mongodb::Collection<Document>, token_col: mongodb::Collection<Document>, country_col: mongodb::Collection<Document>) -> Self {
+    pub fn new(
+        account_col: mongodb::Collection<Document>,
+        token_col: mongodb::Collection<Document>,
+        country_col: mongodb::Collection<Document>,
+    ) -> Self {
         Self {
             account_col,
             token_col,
@@ -47,7 +53,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify public token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(_) => (),
             Err(e) => {
                 return Err(e);
@@ -58,7 +66,11 @@ impl AuthService for AuthServiceImpl {
         let req = request.into_inner();
 
         // get account from db
-        let account = match self.account_col.find_one(doc! {"phone_number": &req.phone_number}, None).await {
+        let account = match self
+            .account_col
+            .find_one(doc! {"phone_number": &req.phone_number}, None)
+            .await
+        {
             Ok(account) => account,
             Err(e) => {
                 log::error!("{}: {:?}", t!("account_not_found"), e);
@@ -72,7 +84,10 @@ impl AuthService for AuthServiceImpl {
                 log::info!("{}: {:#?}", t!("account_found"), &account_doc);
 
                 // compare password
-                let is_valid_password = match tokenizer::compare_password(&req.password, &account_doc.get_str("password").unwrap().to_string()) {
+                let is_valid_password = match tokenizer::compare_password(
+                    &req.password,
+                    &account_doc.get_str("password").unwrap().to_string(),
+                ) {
                     Ok(is_valid) => is_valid,
                     Err(e) => {
                         log::error!("{}: {:?}", t!("invalid_credentials"), e);
@@ -93,7 +108,7 @@ impl AuthService for AuthServiceImpl {
                             false
                         }
                     }
-                    Err(_) => false
+                    Err(_) => false,
                 };
                 if !is_valid_country {
                     log::error!("{}: {:?}", t!("invalid_credentials"), &req.country_id);
@@ -101,7 +116,13 @@ impl AuthService for AuthServiceImpl {
                 }
 
                 // generate access token
-                let access_token = config::session_manager::create_access_token(&account_doc.get_str("id").unwrap().to_string(), &language_id, &self.token_col).await.unwrap();
+                let access_token = config::session_manager::create_access_token(
+                    &account_doc.get_str("id").unwrap().to_string(),
+                    &language_id,
+                    &self.token_col,
+                )
+                    .await
+                    .unwrap();
                 Ok(Response::new(access_token))
             }
             None => {
@@ -112,7 +133,10 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn register(&self, request: Request<RegisterRequest>) -> Result<Response<String>, Status> {
+    async fn register(
+        &self,
+        request: Request<RegisterRequest>,
+    ) -> Result<Response<String>, Status> {
         // start login
         log::info!("{}", t!("auth_started"));
 
@@ -125,7 +149,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify public token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(_) => (),
             Err(e) => {
                 return Err(e);
@@ -136,12 +162,17 @@ impl AuthService for AuthServiceImpl {
         let req = request.into_inner();
 
         // get account from db
-        let has_existing_account = match self.account_col.find_one(doc! {"phone_number": &req.phone_number}, None).await.unwrap() {
+        let has_existing_account = match self
+            .account_col
+            .find_one(doc! {"phone_number": &req.phone_number}, None)
+            .await
+            .unwrap()
+        {
             Some(acct_doc) => {
                 log::info!("{}: {:#?}", t!("account_found"), &acct_doc);
                 true
             }
-            None => false
+            None => false,
         };
         if has_existing_account {
             return Err(Status::already_exists(t!("account_exists")));
@@ -156,12 +187,24 @@ impl AuthService for AuthServiceImpl {
             }
         };
 
+        // upload profile picture
+        let avatar = match req.avatar_url {
+            Some(avatar_url) => {
+                let avatar = match _upload_media(&avatar_url, &req.phone_number, "avatar").await {
+                    Ok(avatar) => avatar,
+                    Err(_) => "".to_string(),
+                };
+                avatar
+            }
+            None => "".to_string(),
+        };
+
         // create a new account
         let mut account_doc = doc! {
             "phone_number" : &req.phone_number,
             "display_name" : &req.display_name,
             "language_id" : &language_id,
-            "avatar_url" : &req.avatar_url.unwrap_or("".to_string()),
+            "avatar_url" : avatar,
             "id_card_url" : &req.id_card_url.unwrap_or("".to_string()),
             "vaccine_card_url" : &req.vaccine_card_url.unwrap_or("".to_string()),
             "referral_code" : &req.referral_code.unwrap_or("".to_string()),
@@ -172,13 +215,21 @@ impl AuthService for AuthServiceImpl {
         };
 
         // save account to db
-        match self.account_col.insert_one(&account_doc.clone(), None).await {
+        match self
+            .account_col
+            .insert_one(&account_doc.clone(), None)
+            .await
+        {
             Ok(result) => {
                 // update id field with result
                 account_doc.insert("id", &result.inserted_id.as_object_id().unwrap().to_hex());
 
                 // replace one in db with updated account doc
-                match self.account_col.replace_one(doc! {"phone_number": &req.phone_number}, &account_doc, None).await {
+                match self
+                    .account_col
+                    .replace_one(doc! {"phone_number": &req.phone_number}, &account_doc, None)
+                    .await
+                {
                     Ok(_) => {
                         log::info!("{}: {:?}", t!("auth_success"), &account_doc);
                     }
@@ -189,7 +240,13 @@ impl AuthService for AuthServiceImpl {
                 }
 
                 // create a new access token
-                let access_token = config::session_manager::create_access_token(&account_doc.get_str("id").unwrap().to_string(), &language_id, &self.token_col).await.unwrap();
+                let access_token = config::session_manager::create_access_token(
+                    &account_doc.get_str("id").unwrap().to_string(),
+                    &language_id,
+                    &self.token_col,
+                )
+                    .await
+                    .unwrap();
                 Ok(Response::new(access_token))
             }
             Err(e) => {
@@ -200,7 +257,10 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn reset_password(&self, request: Request<ResetPasswordRequest>) -> Result<Response<String>, Status> {
+    async fn reset_password(
+        &self,
+        request: Request<ResetPasswordRequest>,
+    ) -> Result<Response<String>, Status> {
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
@@ -209,7 +269,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify public token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(_) => (),
             Err(e) => {
                 return Err(e);
@@ -220,7 +282,12 @@ impl AuthService for AuthServiceImpl {
         let req = request.into_inner();
 
         // find account by phone number
-        let mut account_doc = match self.account_col.find_one(doc! {"phone_number": &req.phone_number}, None).await.unwrap() {
+        let mut account_doc = match self
+            .account_col
+            .find_one(doc! {"phone_number": &req.phone_number}, None)
+            .await
+            .unwrap()
+        {
             Some(acct_doc) => {
                 log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
                 acct_doc
@@ -244,12 +311,22 @@ impl AuthService for AuthServiceImpl {
         account_doc.insert("password", &hashed_password);
 
         // replace one in db with updated account doc
-        match self.account_col.replace_one(doc! {"phone_number": &req.phone_number}, &account_doc, None).await {
+        match self
+            .account_col
+            .replace_one(doc! {"phone_number": &req.phone_number}, &account_doc, None)
+            .await
+        {
             Ok(_) => {
                 log::info!("{}: {:?}", t!("password_reset_success"), &account_doc);
 
                 // create access token
-                let access_token = config::session_manager::create_access_token(&account_doc.get_str("id").unwrap().to_string(), &language_id, &self.token_col).await.unwrap();
+                let access_token = config::session_manager::create_access_token(
+                    &account_doc.get_str("id").unwrap().to_string(),
+                    &language_id,
+                    &self.token_col,
+                )
+                    .await
+                    .unwrap();
                 Ok(Response::new(access_token))
             }
             Err(e) => {
@@ -269,14 +346,22 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify public token
-        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+        match config::session_manager::verify_access_token(
+            &request.metadata(),
+            &language_id,
+            &self.token_col,
+        )
+            .await
+        {
             Ok(_) => (),
             Err(e) => {
                 return Err(e);
             }
         };
 
-        match config::session_manager::clear_access_token(&request.metadata(), &self.token_col).await {
+        match config::session_manager::clear_access_token(&request.metadata(), &self.token_col)
+            .await
+        {
             Ok(()) => Ok(Response::new(())),
             Err(e) => {
                 log::error!("{}: {:?}", t!("logout_failed"), e);
@@ -286,7 +371,10 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn request_public_access_token(&self, _: Request<()>) -> Result<Response<String>, Status> {
+    async fn request_public_access_token(
+        &self,
+        _: Request<()>,
+    ) -> Result<Response<String>, Status> {
         // generate a new public token from tokenizer
         match tokenizer::generate_public_token(&rust_i18n::locale()) {
             // return token if successful else return status internal
@@ -299,7 +387,10 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn validate_access_token(&self, request: Request<()>) -> Result<Response<ValidateAccessTokenResponse>, Status> {
+    async fn validate_access_token(
+        &self,
+        request: Request<()>,
+    ) -> Result<Response<ValidateAccessTokenResponse>, Status> {
         let language_id = match _validate_language_id_from_request(&request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
@@ -317,7 +408,13 @@ impl AuthService for AuthServiceImpl {
 
         if use_private_token {
             // verify access token
-            let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+            let token = match config::session_manager::verify_access_token(
+                &request.metadata(),
+                &language_id,
+                &self.token_col,
+            )
+                .await
+            {
                 Ok(token) => token,
                 Err(e) => {
                     return Err(e);
@@ -325,7 +422,12 @@ impl AuthService for AuthServiceImpl {
             };
 
             // get account by id
-            let account_doc = match self.account_col.find_one(doc! {"id": &token.0}, None).await.unwrap() {
+            let account_doc = match self
+                .account_col
+                .find_one(doc! {"id": &token.0}, None)
+                .await
+                .unwrap()
+            {
                 Some(acct_doc) => {
                     log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
                     acct_doc
@@ -343,7 +445,12 @@ impl AuthService for AuthServiceImpl {
             }))
         } else {
             // verify public token
-            match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+            match config::session_manager::verify_public_access_token(
+                &request.metadata(),
+                &language_id,
+            )
+                .await
+            {
                 Ok(_) => Ok(Response::new(ValidateAccessTokenResponse {
                     account_id: None,
                     phone_number: None,
@@ -365,7 +472,13 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify access token
-        let token_payload = match config::session_manager::verify_access_token(&request.metadata(), &rust_i18n::locale().as_str().to_string(), &self.token_col).await {
+        let token_payload = match config::session_manager::verify_access_token(
+            &request.metadata(),
+            &rust_i18n::locale().as_str().to_string(),
+            &self.token_col,
+        )
+            .await
+        {
             Ok(result) => (result.0, result.1),
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -378,7 +491,12 @@ impl AuthService for AuthServiceImpl {
         let language_id = token_payload.1;
 
         // find account by id
-        let account_doc = match self.account_col.find_one(doc! {"id": &account_id}, None).await.unwrap() {
+        let account_doc = match self
+            .account_col
+            .find_one(doc! {"id": &account_id}, None)
+            .await
+            .unwrap()
+        {
             Some(acct_doc) => {
                 log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
                 acct_doc
@@ -393,22 +511,36 @@ impl AuthService for AuthServiceImpl {
         let account = Account {
             id: account_doc.get_str("id").unwrap().to_string(),
             phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
-            country_id: account_doc.get_str("country_id").unwrap_or("en-proche-233").to_string(),
+            country_id: account_doc
+                .get_str("country_id")
+                .unwrap_or("en-proche-233")
+                .to_string(),
             referral_code: Some(account_doc.get_str("referral_code").unwrap().to_string()),
             language_id: language_id.to_string(),
             created_at: _parse_timestamp_field(account_doc.get("created_at").unwrap()),
             updated_at: _parse_timestamp_field(account_doc.get("updated_at").unwrap()),
-            avatar_url: Some(account_doc.get_str("avatar").unwrap_or("").to_string()),
+            avatar_url: Some(account_doc.get_str("avatar_url").unwrap_or("").to_string()),
             id_card_url: Some(account_doc.get_str("id_card").unwrap_or("").to_string()),
-            display_name: account_doc.get_str("display_name").unwrap_or("").to_string(),
-            vaccine_card_url: Some(account_doc.get_str("vaccine_card").unwrap_or("").to_string()),
+            display_name: account_doc
+                .get_str("display_name")
+                .unwrap_or("")
+                .to_string(),
+            vaccine_card_url: Some(
+                account_doc
+                    .get_str("vaccine_card")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
         };
 
         Ok(Response::new(account))
     }
 
     // done
-    async fn get_account_by_phone_number(&self, request: Request<String>) -> Result<Response<Account>, Status> {
+    async fn get_account_by_phone_number(
+        &self,
+        request: Request<String>,
+    ) -> Result<Response<Account>, Status> {
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
@@ -417,7 +549,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify public token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(_) => (),
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -427,7 +561,12 @@ impl AuthService for AuthServiceImpl {
 
         // find account by id
         let phone_number = request.into_inner();
-        let account_doc = match self.account_col.find_one(doc! {"phone_number": &phone_number}, None).await.unwrap() {
+        let account_doc = match self
+            .account_col
+            .find_one(doc! {"phone_number": &phone_number}, None)
+            .await
+            .unwrap()
+        {
             Some(acct_doc) => {
                 log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
                 acct_doc
@@ -447,10 +586,18 @@ impl AuthService for AuthServiceImpl {
             language_id: language_id.to_string(),
             created_at: _parse_timestamp_field(account_doc.get("created_at").unwrap()),
             updated_at: _parse_timestamp_field(account_doc.get("updated_at").unwrap()),
-            avatar_url: Some(account_doc.get_str("avatar").unwrap_or("").to_string()),
+            avatar_url: Some(account_doc.get_str("avatar_url").unwrap_or("").to_string()),
             id_card_url: Some(account_doc.get_str("id_card").unwrap_or("").to_string()),
-            display_name: account_doc.get_str("display_name").unwrap_or("").to_string(),
-            vaccine_card_url: Some(account_doc.get_str("vaccine_card").unwrap_or("").to_string()),
+            display_name: account_doc
+                .get_str("display_name")
+                .unwrap_or("")
+                .to_string(),
+            vaccine_card_url: Some(
+                account_doc
+                    .get_str("vaccine_card")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
         };
 
         Ok(Response::new(account))
@@ -467,7 +614,13 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify access token using tokenizer
-        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+        match config::session_manager::verify_access_token(
+            &request.metadata(),
+            &language_id,
+            &self.token_col,
+        )
+            .await
+        {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -479,14 +632,23 @@ impl AuthService for AuthServiceImpl {
         let account = request.into_inner();
 
         // perform account update with account object from request
-        match self.account_col.find_one_and_update(doc! {"id": &account.id}, doc! {"$set": {
-            "display_name": &account.display_name,
-            "avatar": &account.avatar_url.unwrap(),
-            "id_card": &account.id_card_url.unwrap(),
-            "vaccine_card": &account.vaccine_card_url.unwrap(),
-            "updated_at": _create_timestamp_field(),
-            "country_id" : &account.country_id,
-        }}, None).await.unwrap() {
+        match self
+            .account_col
+            .find_one_and_update(
+                doc! {"id": &account.id},
+                doc! {"$set": {
+                    "display_name": &account.display_name,
+                    "avatar_url": &account.avatar_url.unwrap(),
+                    "id_card": &account.id_card_url.unwrap(),
+                    "vaccine_card": &account.vaccine_card_url.unwrap(),
+                    "updated_at": _create_timestamp_field(),
+                    "country_id" : &account.country_id,
+                }},
+                None,
+            )
+            .await
+            .unwrap()
+        {
             Some(acct_doc) => acct_doc,
             None => {
                 log::error!("{}: {:?}", t!("account_not_found"), &account.id);
@@ -495,7 +657,12 @@ impl AuthService for AuthServiceImpl {
         };
 
         // get the updated account document
-        let account_doc = match self.account_col.find_one(doc! {"id": &account.id}, None).await.unwrap() {
+        let account_doc = match self
+            .account_col
+            .find_one(doc! {"id": &account.id}, None)
+            .await
+            .unwrap()
+        {
             Some(acct_doc) => acct_doc,
             None => {
                 log::error!("{}: {:?}", t!("account_not_found"), &account.id);
@@ -510,12 +677,25 @@ impl AuthService for AuthServiceImpl {
             phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
             created_at: _parse_timestamp_field(account_doc.get("created_at").unwrap()),
             updated_at: _parse_timestamp_field(account_doc.get("updated_at").unwrap()),
-            avatar_url: Some(account_doc.get_str("avatar").unwrap_or("").to_string()),
+            avatar_url: Some(account_doc.get_str("avatar_url").unwrap_or("").to_string()),
             id_card_url: Some(account_doc.get_str("id_card").unwrap_or("").to_string()),
-            display_name: account_doc.get_str("display_name").unwrap_or("").to_string(),
-            vaccine_card_url: Some(account_doc.get_str("vaccine_card").unwrap_or("").to_string()),
+            display_name: account_doc
+                .get_str("display_name")
+                .unwrap_or("")
+                .to_string(),
+            vaccine_card_url: Some(
+                account_doc
+                    .get_str("vaccine_card")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
             language_id,
-            referral_code: Some(account_doc.get_str("referral_code").unwrap_or("").to_string()),
+            referral_code: Some(
+                account_doc
+                    .get_str("referral_code")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
         };
 
         Ok(Response::new(account))
@@ -532,7 +712,13 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify access token using tokenizer
-        let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+        let token = match config::session_manager::verify_access_token(
+            &request.metadata(),
+            &language_id,
+            &self.token_col,
+        )
+            .await
+        {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -541,7 +727,11 @@ impl AuthService for AuthServiceImpl {
         };
 
         // delete account using account id from token payload
-        match self.account_col.delete_one(doc! {"id": &token.0}, None).await {
+        match self
+            .account_col
+            .delete_one(doc! {"id": &token.0}, None)
+            .await
+        {
             Ok(_) => Ok(Response::new(())),
             Err(e) => {
                 log::error!("{}: {:?}", t!("account_not_found"), e);
@@ -551,7 +741,10 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn send_phone_verification_code(&self, request: Request<String>) -> Result<Response<()>, Status> {
+    async fn send_phone_verification_code(
+        &self,
+        request: Request<String>,
+    ) -> Result<Response<()>, Status> {
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
@@ -561,7 +754,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate public access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(_) => (),
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -573,7 +768,8 @@ impl AuthService for AuthServiceImpl {
         let phone_number = request.into_inner();
 
         // send verification code to phone number
-        match config::sms_manager::TwilioVerifyService::send_sms(&phone_number, &language_id).await {
+        match config::sms_manager::TwilioVerifyService::send_sms(&phone_number, &language_id).await
+        {
             Ok(_) => Ok(Response::new(())),
             Err(e) => {
                 log::error!("{}: {:?}", t!("sms_send_failed"), e);
@@ -583,7 +779,10 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn verify_phone_verification_code(&self, request: Request<VerifyPhoneRequest>) -> Result<Response<()>, Status> {
+    async fn verify_phone_verification_code(
+        &self,
+        request: Request<VerifyPhoneRequest>,
+    ) -> Result<Response<()>, Status> {
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
@@ -593,7 +792,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate public access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(_) => (),
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -607,7 +808,13 @@ impl AuthService for AuthServiceImpl {
         let verification_code = &req.verification_code;
 
         // verify verification code
-        match config::sms_manager::TwilioVerifyService::verify_sms(&phone_number, &verification_code, &language_id).await {
+        match config::sms_manager::TwilioVerifyService::verify_sms(
+            &phone_number,
+            &verification_code,
+            &language_id,
+        )
+            .await
+        {
             Ok(_) => Ok(Response::new(())),
             Err(e) => {
                 log::error!("{}: {:?}", t!("sms_verification_failed"), e);
@@ -627,7 +834,13 @@ impl AuthService for AuthServiceImpl {
         };
 
         // verify access token using tokenizer
-        let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+        let token = match config::session_manager::verify_access_token(
+            &request.metadata(),
+            &language_id,
+            &self.token_col,
+        )
+            .await
+        {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -636,7 +849,12 @@ impl AuthService for AuthServiceImpl {
         };
 
         // get account using account id from token payload
-        let account_doc = match self.account_col.find_one(doc! {"id": &token.0}, None).await.unwrap() {
+        let account_doc = match self
+            .account_col
+            .find_one(doc! {"id": &token.0}, None)
+            .await
+            .unwrap()
+        {
             Some(acct_doc) => acct_doc,
             None => {
                 log::error!("{}: {:?}", t!("account_not_found"), &token.0);
@@ -655,7 +873,10 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn get_referral_code_by_phone_number(&self, request: Request<String>) -> Result<Response<String>, Status> {
+    async fn get_referral_code_by_phone_number(
+        &self,
+        request: Request<String>,
+    ) -> Result<Response<String>, Status> {
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
@@ -665,7 +886,13 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        let token = match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+        let token = match config::session_manager::verify_access_token(
+            &request.metadata(),
+            &language_id,
+            &self.token_col,
+        )
+            .await
+        {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -677,7 +904,12 @@ impl AuthService for AuthServiceImpl {
         let phone_number = request.into_inner();
 
         // get referral code using phone number from request
-        let referral_code = match self.account_col.find_one(doc! {"phone_number": &phone_number}, None).await.unwrap() {
+        let referral_code = match self
+            .account_col
+            .find_one(doc! {"phone_number": &phone_number}, None)
+            .await
+            .unwrap()
+        {
             Some(acct_doc) => acct_doc.get_str("referral_code").unwrap().to_string(),
             None => {
                 log::error!("{}: {:?}", t!("account_not_found"), &token.0);
@@ -689,7 +921,10 @@ impl AuthService for AuthServiceImpl {
     }
 
     // done
-    async fn get_countries(&self, request: Request<()>) -> Result<Response<GetCountriesResponse>, Status> {
+    async fn get_countries(
+        &self,
+        request: Request<()>,
+    ) -> Result<Response<GetCountriesResponse>, Status> {
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
@@ -699,7 +934,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -708,9 +945,7 @@ impl AuthService for AuthServiceImpl {
         };
 
         // get countries from database
-        let opts = FindOptions::builder()
-            .sort(doc! {"name": 1})
-            .build();
+        let opts = FindOptions::builder().sort(doc! {"name": 1}).build();
         let mut cursor = match self.country_col.find(None, opts).await {
             Ok(countries) => countries,
             Err(e) => {
@@ -742,17 +977,17 @@ impl AuthService for AuthServiceImpl {
             }
         }
 
-
         // create response
-        let response = GetCountriesResponse {
-            countries,
-        };
+        let response = GetCountriesResponse { countries };
 
         Ok(Response::new(response))
     }
 
     // done
-    async fn get_country_by_id(&self, request: Request<String>) -> Result<Response<Country>, Status> {
+    async fn get_country_by_id(
+        &self,
+        request: Request<String>,
+    ) -> Result<Response<Country>, Status> {
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
@@ -762,7 +997,13 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+        match config::session_manager::verify_access_token(
+            &request.metadata(),
+            &language_id,
+            &self.token_col,
+        )
+            .await
+        {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -774,7 +1015,12 @@ impl AuthService for AuthServiceImpl {
         let country_id = request.into_inner();
 
         // get country from database
-        let country_doc = match self.country_col.find_one(doc! {"id": &country_id}, None).await.unwrap() {
+        let country_doc = match self
+            .country_col
+            .find_one(doc! {"id": &country_id}, None)
+            .await
+            .unwrap()
+        {
             Some(country_doc) => country_doc,
             None => {
                 log::error!("{}: {:?}", t!("country_not_found"), &country_id);
@@ -808,7 +1054,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -820,7 +1068,12 @@ impl AuthService for AuthServiceImpl {
         let mut country = request.into_inner();
 
         // check if country already exists
-        match self.country_col.find_one(doc! {"code": &country.code}, None).await.unwrap() {
+        match self
+            .country_col
+            .find_one(doc! {"code": &country.code}, None)
+            .await
+            .unwrap()
+        {
             Some(_) => {
                 log::error!("{}: {:?}", t!("country_already_exists"), &country.code);
                 return Err(Status::already_exists(t!("country_already_exists")));
@@ -831,7 +1084,13 @@ impl AuthService for AuthServiceImpl {
         // create country document
         let re = Regex::new(r"[^a-zA-Z0-9\s]+").unwrap();
         let id_builder = re.replace_all(&country.dial_code, "").to_string();
-        country.id = format!("{}-{}-{}", &country.code.to_lowercase(), utils::generators::generate_random_string(17), id_builder).to_string();
+        country.id = format!(
+            "{}-{}-{}",
+            &country.code.to_lowercase(),
+            utils::generators::generate_random_string(17),
+            id_builder
+        )
+            .to_string();
         let country_doc = doc! {
             "id": &country.id,
             "name": &country.name,
@@ -847,7 +1106,12 @@ impl AuthService for AuthServiceImpl {
         match self.country_col.insert_one(country_doc, None).await {
             Ok(_) => {
                 // get country from database
-                let country_doc = match self.country_col.find_one(doc! {"id": &country.id}, None).await.unwrap() {
+                let country_doc = match self
+                    .country_col
+                    .find_one(doc! {"id": &country.id}, None)
+                    .await
+                    .unwrap()
+                {
                     Some(country_doc) => country_doc,
                     None => {
                         log::error!("{}: {:?}", t!("country_not_found"), &country.id);
@@ -887,7 +1151,9 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id).await {
+        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+            .await
+        {
             Ok(token) => token,
             Err(e) => {
                 log::error!("{}: {:?}", t!("invalid_token"), e);
@@ -899,7 +1165,11 @@ impl AuthService for AuthServiceImpl {
         let country_id = request.into_inner();
 
         // delete country from database
-        match self.country_col.delete_one(doc! {"id": &country_id}, None).await {
+        match self
+            .country_col
+            .delete_one(doc! {"id": &country_id}, None)
+            .await
+        {
             Ok(_) => Ok(Response::new(())),
             Err(e) => {
                 log::error!("{}: {:?}", t!("country_not_deleted"), e);
@@ -958,4 +1228,27 @@ fn _get_authentication_type_from_metadata(md: &MetadataMap) -> Result<bool, Stat
         }
     };
     Ok(authentication_type == "true")
+}
+
+// upload base64 avatar using media client
+async fn _upload_media(encoded_string: &str, phone_number: &str, name: &str) -> Result<String, Box<dyn Error>> {
+    // get client
+    let mut client = match client::get_media_client().await {
+        Ok(client) => client,
+        Err(e) => {
+            return Err(format!("{}: {:?}", t!("media_not_uploaded"), e).into());
+        }
+    };
+
+    // upload media
+    let request = UploadMediaRequest {
+        name: Some(name.to_string()),
+        base64: encoded_string.to_string(),
+        owner: Some(phone_number.to_string()),
+        r#type: MediaType::Image as i32,
+    };
+    match client.upload_media(request).await {
+        Ok(url) => Ok(url.into_inner()),
+        Err(e) => Err(format!("{}: {:?}", t!("media_not_uploaded"), e).into())
+    }
 }

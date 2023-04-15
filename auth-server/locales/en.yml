@@ -24,6 +24,7 @@ sms_send_failed: We were unable to send the SMS for some reason. Please try agai
 sms_send_success: Verification code sent successfully
 sms_verification_failed: We were unable to verify the SMS for some reason. Please try again later.
 sms_verification_success: Phone number verified successfully
+media_not_uploaded: Media not uploaded
 
 # country messages
 countries_not_found: Countries not found

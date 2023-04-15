@@ -1,7 +1,7 @@
-use std::{collections::HashMap, env};
 use std::error::Error;
+use std::{collections::HashMap, env};
 
-use reqwest::{Client, header, StatusCode};
+use reqwest::{header, Client, StatusCode};
 
 // reference -> https://dev.to/hackmamba/how-to-build-a-one-time-passwordotp-verification-api-with-rust-and-twilio-22il
 
@@ -46,21 +46,29 @@ impl TwilioVerifyService {
 
         match res {
             Ok(response) => {
-                let created =  response.status() == StatusCode::from_u16(201).unwrap();
+                let created = response.status() == StatusCode::from_u16(201).unwrap();
                 if created {
-                    log::info!("{}", t!("sms_send_success", locale=&language_id));
+                    log::info!("{}", t!("sms_send_success", locale = &language_id));
                     Ok(())
                 } else {
-                    Err(Box::try_from(t!("sms_send_failed", locale=&language_id)).unwrap())
+                    Err(Box::try_from(t!("sms_send_failed", locale = &language_id)).unwrap())
                 }
             }
-            Err(_) => Err(Box::try_from(t!("sms_send_failed", locale=&language_id)).unwrap()),
+            Err(_) => Err(Box::try_from(t!("sms_send_failed", locale = &language_id)).unwrap()),
         }
     }
 
     // verify sms code
-    pub async fn verify_sms(phone_number: &str, code: &String, language_id: &str) -> Result<(), Box<dyn Error>> {
-        log::info!("Verifying sms from phone number: {} -> {}", phone_number, code);
+    pub async fn verify_sms(
+        phone_number: &str,
+        code: &String,
+        language_id: &str,
+    ) -> Result<(), Box<dyn Error>> {
+        log::info!(
+            "Verifying sms from phone number: {} -> {}",
+            phone_number,
+            code
+        );
         let account_sid = env::var("TWILIO_ACCOUNT_SID").expect("Error reading Twilio Account SID");
         let auth_token = env::var("TWILIO_AUTHTOKEN").expect("Error reading Twilio Auth Token");
         let service_id = env::var("TWILIO_SERVICES_ID").expect("Error reading Twilio Services ID");
@@ -96,15 +104,20 @@ impl TwilioVerifyService {
 
         match res {
             Ok(response) => {
-                let created =  response.status() == StatusCode::from_u16(200).unwrap();
+                let created = response.status() == StatusCode::from_u16(200).unwrap();
                 if created {
-                    log::info!("{}", t!("sms_verification_success", locale=&language_id));
+                    log::info!("{}", t!("sms_verification_success", locale = &language_id));
                     Ok(())
                 } else {
-                    Err(Box::try_from(t!("sms_verification_failed", locale=&language_id)).unwrap())
+                    Err(
+                        Box::try_from(t!("sms_verification_failed", locale = &language_id))
+                            .unwrap(),
+                    )
                 }
             }
-            Err(_) => Err(Box::try_from(t!("sms_verification_failed", locale=&language_id)).unwrap()),
+            Err(_) => {
+                Err(Box::try_from(t!("sms_verification_failed", locale = &language_id)).unwrap())
+            }
         }
     }
 }
