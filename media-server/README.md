@@ -2,7 +2,7 @@
 
 [![GoDoc](https://godoc.org/github.com/quabynah-bilson/proche?status.svg)](https://godoc.org/github.com/quabynah-bilson/proche)
 
-Media Server is a gRPC microservice built using Rust programming language and Cloudinary API for uploading media files.
+Media Server is a gRPC microservice built using Go programming language and Cloudinary API for uploading media files.
 It allows the user to upload media files of type image or video and returns a URL to access the uploaded file.
 
 ## Installation
@@ -13,10 +13,9 @@ It allows the user to upload media files of type image or video and returns a UR
    cd media-server
    ```
 
-- Install Rust and Cargo
+- Install the dependencies
    ```terminal
-    curl https://sh.rustup.rs -sSf | sh
-    cargo install
+    go mod download
     ```
 
 - Create a `.env` file in the root directory and add your Cloudinary API credentials as follows:
@@ -30,7 +29,7 @@ It allows the user to upload media files of type image or video and returns a UR
 
 - Run the server using the following command:
     ```terminal
-    cargo run
+    go run main.go
     ```
 
 - Use the mobile application to upload media files and get the URL for the uploaded file. The client application can be
