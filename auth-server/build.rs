@@ -8,9 +8,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     tonic_build::configure()
         .build_server(true)
         .build_client(false)
-        // .type_attribute("Account", "#[derive(serde::Deserialize, serde::Serialize)]")
-        // .type_attribute("Session", "#[derive(serde::Deserialize, serde::Serialize)]")
         .file_descriptor_set_path(original_out_dir.join("auth_descriptor.bin"))
         .compile(&["proto/auth.proto"], &["proto"])?;
+
+    // generate proto files for client only using tonic-build
+    tonic_build::configure()
+        .build_server(false)
+        .build_client(true)
+        .file_descriptor_set_path(original_out_dir.join("media_descriptor.bin"))
+        .compile(&["proto/media.proto"], &["proto"])?;
+
     Ok(())
 }

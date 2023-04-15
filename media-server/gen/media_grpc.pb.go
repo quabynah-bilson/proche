@@ -42,7 +42,7 @@ func NewMediaServiceClient(cc grpc.ClientConnInterface) MediaServiceClient {
 
 func (c *mediaServiceClient) UploadMedia(ctx context.Context, in *UploadMediaRequest, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
 	out := new(wrapperspb.StringValue)
-	err := c.cc.Invoke(ctx, "/media.MediaService/UploadMedia", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/media.MediaService/upload_media", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *mediaServiceClient) UploadMedia(ctx context.Context, in *UploadMediaReq
 
 func (c *mediaServiceClient) GetMedia(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
 	out := new(wrapperspb.StringValue)
-	err := c.cc.Invoke(ctx, "/media.MediaService/GetMedia", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/media.MediaService/get_media", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (c *mediaServiceClient) GetMedia(ctx context.Context, in *wrapperspb.String
 
 func (c *mediaServiceClient) DeleteMedia(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/media.MediaService/DeleteMedia", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/media.MediaService/delete_media", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func _MediaService_UploadMedia_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/media.MediaService/UploadMedia",
+		FullMethod: "/media.MediaService/upload_media",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MediaServiceServer).UploadMedia(ctx, req.(*UploadMediaRequest))
@@ -134,7 +134,7 @@ func _MediaService_GetMedia_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/media.MediaService/GetMedia",
+		FullMethod: "/media.MediaService/get_media",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MediaServiceServer).GetMedia(ctx, req.(*wrapperspb.StringValue))
@@ -152,7 +152,7 @@ func _MediaService_DeleteMedia_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/media.MediaService/DeleteMedia",
+		FullMethod: "/media.MediaService/delete_media",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MediaServiceServer).DeleteMedia(ctx, req.(*wrapperspb.StringValue))
@@ -168,15 +168,15 @@ var MediaService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MediaServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UploadMedia",
+			MethodName: "upload_media",
 			Handler:    _MediaService_UploadMedia_Handler,
 		},
 		{
-			MethodName: "GetMedia",
+			MethodName: "get_media",
 			Handler:    _MediaService_GetMedia_Handler,
 		},
 		{
-			MethodName: "DeleteMedia",
+			MethodName: "delete_media",
 			Handler:    _MediaService_DeleteMedia_Handler,
 		},
 	},
