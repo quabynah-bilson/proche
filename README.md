@@ -1,4 +1,4 @@
-# Proche 🧭🗺️: GRPC Microservices with MongoDB and Flutter
+# Proche 🧭🗺️: gRPC Microservices with MongoDB and Flutter
 ###### (means Nearby in French)
 
 [//]: # ([![Coverage Status]&#40;https://coveralls.io/repos/github/quabynah-bilson/proche/badge.svg?branch=master&#41;]&#40;https://coveralls.io/github/quabynah-bilson/proche?branch=dev&#41;)
@@ -57,7 +57,7 @@ The following diagram shows the high-level architecture of the system:
 
 #### Architecture Diagram
 
-The three microservices are independent of each other and communicate using the GRPC protocol. The mobile application
+The three microservices are independent of each other and communicate using the gRPC protocol. The mobile application
 communicates with the microservices using the same protocol.
 
 All three microservices are integrated with MongoDB as their database. MongoDB is a NoSQL document-based database that
@@ -76,7 +76,7 @@ provides high performance and scalability.
 
 - Use the mobile application to interact with the system.
 
-- Use a GRPC client such as grpcurl or bloomrpc to directly interact with the microservices.
+- Use a gRPC client such as grpcurl or bloomrpc to directly interact with the microservices.
 
 ### Conclusion
 
@@ -84,4 +84,5 @@ This project provides an example of how to build a scalable and modular microser
 MongoDB. It also demonstrates how to integrate a Flutter mobile application with the microservices to provide a seamless
 user experience.
 
+[//]: # (https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)
 [//]: # (https://github.com/Ileriayo/markdown-badges#markdown-badges)
