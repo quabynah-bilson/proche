@@ -20,7 +20,7 @@ service MediaService {
 
 // UploadMediaRequest is the request for uploading media
 message UploadMediaRequest {
-  string base64 = 1;
+  bytes media = 1;
   MediaType type = 2;
   optional string name = 3;
   optional string owner = 4;

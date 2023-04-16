@@ -4,6 +4,7 @@ use chrono::{DateTime, Utc};
 use futures::StreamExt;
 use mongodb::bson::{Bson, doc, Document};
 use mongodb::options::FindOptions;
+use prost::Message;
 use regex::Regex;
 use rust_i18n::t;
 use tonic::{async_trait, Request, Response, Status};
@@ -1231,7 +1232,7 @@ fn _get_authentication_type_from_metadata(md: &MetadataMap) -> Result<bool, Stat
 }
 
 // upload base64 avatar using media client
-async fn _upload_media(encoded_string: &str, phone_number: &str, name: &str) -> Result<String, Box<dyn Error>> {
+async fn _upload_media(encoded_string: &Vec<u8>, phone_number: &str, name: &str) -> Result<String, Box<dyn Error>> {
     // get client
     let mut client = match client::get_media_client().await {
         Ok(client) => client,
@@ -1243,7 +1244,7 @@ async fn _upload_media(encoded_string: &str, phone_number: &str, name: &str) -> 
     // upload media
     let request = UploadMediaRequest {
         name: Some(name.to_string()),
-        base64: encoded_string.to_string(),
+        media: encoded_string.encode_to_vec(),
         owner: Some(phone_number.to_string()),
         r#type: MediaType::Image as i32,
     };

@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api"
@@ -29,8 +30,9 @@ func NewProcheMediaServerInstance(cld *cloudinary.Cloudinary) *ProcheMediaServer
 // UploadMedia uploads a media to cloudinary
 // done
 func (pms *ProcheMediaServer) UploadMedia(ctx context.Context, req *pb.UploadMediaRequest) (*wrapperspb.StringValue, error) {
-	// get base 64 string from request
-	encodedString := req.GetBase64()
+
+	// convert to base64 string
+	encodedString := base64.StdEncoding.EncodeToString(req.GetMedia())
 
 	// format name
 	var uploadName string

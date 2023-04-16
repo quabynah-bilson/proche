@@ -22,14 +22,19 @@ final $typed_data.Uint8List getCountriesResponseDescriptor = $convert.base64Deco
 const ValidateAccessTokenResponse$json = const {
   '1': 'ValidateAccessTokenResponse',
   '2': const [
-    const {'1': 'account_id', '3': 1, '4': 1, '5': 9, '10': 'accountId'},
-    const {'1': 'phone_number', '3': 2, '4': 1, '5': 9, '10': 'phoneNumber'},
-    const {'1': 'display_name', '3': 3, '4': 1, '5': 9, '10': 'displayName'},
+    const {'1': 'account_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'accountId', '17': true},
+    const {'1': 'phone_number', '3': 2, '4': 1, '5': 9, '9': 1, '10': 'phoneNumber', '17': true},
+    const {'1': 'display_name', '3': 3, '4': 1, '5': 9, '9': 2, '10': 'displayName', '17': true},
+  ],
+  '8': const [
+    const {'1': '_account_id'},
+    const {'1': '_phone_number'},
+    const {'1': '_display_name'},
   ],
 };
 
 /// Descriptor for `ValidateAccessTokenResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List validateAccessTokenResponseDescriptor = $convert.base64Decode('ChtWYWxpZGF0ZUFjY2Vzc1Rva2VuUmVzcG9uc2USHQoKYWNjb3VudF9pZBgBIAEoCVIJYWNjb3VudElkEiEKDHBob25lX251bWJlchgCIAEoCVILcGhvbmVOdW1iZXISIQoMZGlzcGxheV9uYW1lGAMgASgJUgtkaXNwbGF5TmFtZQ==');
+final $typed_data.Uint8List validateAccessTokenResponseDescriptor = $convert.base64Decode('ChtWYWxpZGF0ZUFjY2Vzc1Rva2VuUmVzcG9uc2USIgoKYWNjb3VudF9pZBgBIAEoCUgAUglhY2NvdW50SWSIAQESJgoMcGhvbmVfbnVtYmVyGAIgASgJSAFSC3Bob25lTnVtYmVyiAEBEiYKDGRpc3BsYXlfbmFtZRgDIAEoCUgCUgtkaXNwbGF5TmFtZYgBAUINCgtfYWNjb3VudF9pZEIPCg1fcGhvbmVfbnVtYmVyQg8KDV9kaXNwbGF5X25hbWU=');
 @$core.Deprecated('Use verifyPhoneRequestDescriptor instead')
 const VerifyPhoneRequest$json = const {
   '1': 'VerifyPhoneRequest',
@@ -60,7 +65,7 @@ const RegisterRequest$json = const {
     const {'1': 'phone_number', '3': 1, '4': 1, '5': 9, '10': 'phoneNumber'},
     const {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
     const {'1': 'display_name', '3': 4, '4': 1, '5': 9, '10': 'displayName'},
-    const {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
+    const {'1': 'avatar_url', '3': 5, '4': 1, '5': 12, '9': 0, '10': 'avatarUrl', '17': true},
     const {'1': 'referral_code', '3': 6, '4': 1, '5': 9, '9': 1, '10': 'referralCode', '17': true},
     const {'1': 'id_card_url', '3': 7, '4': 1, '5': 9, '9': 2, '10': 'idCardUrl', '17': true},
     const {'1': 'vaccine_card_url', '3': 8, '4': 1, '5': 9, '9': 3, '10': 'vaccineCardUrl', '17': true},
@@ -75,7 +80,7 @@ const RegisterRequest$json = const {
 };
 
 /// Descriptor for `RegisterRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List registerRequestDescriptor = $convert.base64Decode('Cg9SZWdpc3RlclJlcXVlc3QSIQoMcGhvbmVfbnVtYmVyGAEgASgJUgtwaG9uZU51bWJlchIaCghwYXNzd29yZBgCIAEoCVIIcGFzc3dvcmQSIQoMZGlzcGxheV9uYW1lGAQgASgJUgtkaXNwbGF5TmFtZRIiCgphdmF0YXJfdXJsGAUgASgJSABSCWF2YXRhclVybIgBARIoCg1yZWZlcnJhbF9jb2RlGAYgASgJSAFSDHJlZmVycmFsQ29kZYgBARIjCgtpZF9jYXJkX3VybBgHIAEoCUgCUglpZENhcmRVcmyIAQESLQoQdmFjY2luZV9jYXJkX3VybBgIIAEoCUgDUg52YWNjaW5lQ2FyZFVybIgBARIdCgpjb3VudHJ5X2lkGAkgASgJUgljb3VudHJ5SWRCDQoLX2F2YXRhcl91cmxCEAoOX3JlZmVycmFsX2NvZGVCDgoMX2lkX2NhcmRfdXJsQhMKEV92YWNjaW5lX2NhcmRfdXJs');
+final $typed_data.Uint8List registerRequestDescriptor = $convert.base64Decode('Cg9SZWdpc3RlclJlcXVlc3QSIQoMcGhvbmVfbnVtYmVyGAEgASgJUgtwaG9uZU51bWJlchIaCghwYXNzd29yZBgCIAEoCVIIcGFzc3dvcmQSIQoMZGlzcGxheV9uYW1lGAQgASgJUgtkaXNwbGF5TmFtZRIiCgphdmF0YXJfdXJsGAUgASgMSABSCWF2YXRhclVybIgBARIoCg1yZWZlcnJhbF9jb2RlGAYgASgJSAFSDHJlZmVycmFsQ29kZYgBARIjCgtpZF9jYXJkX3VybBgHIAEoCUgCUglpZENhcmRVcmyIAQESLQoQdmFjY2luZV9jYXJkX3VybBgIIAEoCUgDUg52YWNjaW5lQ2FyZFVybIgBARIdCgpjb3VudHJ5X2lkGAkgASgJUgljb3VudHJ5SWRCDQoLX2F2YXRhcl91cmxCEAoOX3JlZmVycmFsX2NvZGVCDgoMX2lkX2NhcmRfdXJsQhMKEV92YWNjaW5lX2NhcmRfdXJs');
 @$core.Deprecated('Use resetPasswordRequestDescriptor instead')
 const ResetPasswordRequest$json = const {
   '1': 'ResetPasswordRequest',
