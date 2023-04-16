@@ -72,7 +72,7 @@ message RegisterRequest {
   string phone_number = 1;
   string password = 2;
   string display_name = 4;
-  optional string avatar_url = 5;
+  optional bytes avatar_url = 5;
   optional string referral_code = 6;
   optional string id_card_url = 7;
   optional string vaccine_card_url = 8;
