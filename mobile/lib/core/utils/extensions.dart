@@ -339,6 +339,18 @@ extension BuildContextX on BuildContext {
                 }
               },
             ),
+
+            // current account bloc listener
+            BlocListener(
+              bloc: countriesBloc,
+              listener: (context, state) {
+                if (state is ErrorState<String>) {
+                  context
+                    ..navigator.pop()
+                    ..showMessageDialog(state.failure);
+                }
+              },
+            ),
           ],
           child: LoadingIndicator(
             lottieAnimResource: Assets.animLoading,
@@ -369,11 +381,13 @@ extension BuildContextX on BuildContext {
                               alignment: TextAlign.center),
                         } else ...{
                           ClipOval(
-                            child: Image.memory(
-                                account!.avatarUrl.decodeBase64ImageToBytes(),
-                                fit: BoxFit.contain,
-                                height: height * 0.15,
-                                width: width * 0.5),
+                            // child: Image.memory(
+                            //     account!.avatarUrl.decodeBase64ImageToBytes(),
+                            //     fit: BoxFit.contain,
+                            //     height: height * 0.15,
+                            //     width: width * 0.5),
+                            child: account!.avatarUrl
+                                .avatar(size: height * 0.15, circular: true),
                           ).centered(),
                           account!.displayName.h5(this,
                               weight: FontWeight.bold,

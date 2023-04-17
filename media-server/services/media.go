@@ -79,10 +79,12 @@ func (pms *ProcheMediaServer) UploadMedia(ctx context.Context, req *pb.UploadMed
 
 // GetMedia gets a media from cloudinary
 func (pms *ProcheMediaServer) GetMedia(context.Context, *wrapperspb.StringValue) (*wrapperspb.StringValue, error) {
+	// TODO -> implement this
 	return nil, nil
 }
 
 // DeleteMedia deletes a media from cloudinary
 func (pms *ProcheMediaServer) DeleteMedia(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
+	// TODO -> implement this
 	return nil, nil
 }

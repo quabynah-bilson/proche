@@ -19,6 +19,9 @@ func main() {
 		log.Fatalf("unable to load environment variables: %+v\n", err)
 	}
 
+	// Init crash reporter
+	config.InitCrashLogs()
+
 	// initialize database connection
 	if mongoClient, err := config.InitDatabaseConnection(); err != nil {
 		log.Fatalf("unable to initialize database connection: %+v\n", err)
@@ -47,7 +50,7 @@ func main() {
 		reflection.Register(s)
 
 		// run server
-		if lis, err := net.Listen("tcp", "0.0.0.0:2000"); err == nil {
+		if lis, err := net.Listen("tcp", "[::]:2000"); err == nil {
 			log.Printf("started core grpc server on: %+v\n", lis.Addr())
 			if err := s.Serve(lis); err != nil {
 				log.Fatalf("unable to start grpc server: %+v\n", err)
