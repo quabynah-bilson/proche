@@ -94,16 +94,11 @@ class ProcheAuthRepository extends BaseAuthRepository {
     String? avatar,
   }) async {
     try {
-      // convert avatar to base64 string
-      if (!avatar.isNullOrEmpty()) {
-        avatar = await assetToBase64(avatar!);
-      }
-
       final request = RegisterRequest(
         phoneNumber: phoneNumber,
         password: password,
         displayName: displayName,
-        avatarUrl: avatar ?? '',
+        avatarUrl: avatar.isNullOrEmpty() ? null : await assetToBytes(avatar!),
         countryId: countryId,
       );
       var token = await client.register(request);

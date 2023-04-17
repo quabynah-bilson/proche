@@ -14,22 +14,22 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:mobile/core/di/modules.dart' as _i17;
 import 'package:mobile/core/network/config.dart' as _i18;
-import 'package:mobile/core/network/token.interceptor.dart' as _i9;
+import 'package:mobile/core/network/token.interceptor.dart' as _i14;
 import 'package:mobile/features/shared/data/repositories/auth.dart' as _i16;
-import 'package:mobile/features/shared/data/repositories/customer.dart' as _i12;
+import 'package:mobile/features/shared/data/repositories/customer.dart' as _i11;
 import 'package:mobile/features/shared/data/repositories/local.storage.dart'
-    as _i14;
+    as _i13;
 import 'package:mobile/features/shared/domain/repositories/auth.dart' as _i15;
 import 'package:mobile/features/shared/domain/repositories/customer.dart'
-    as _i11;
+    as _i10;
 import 'package:mobile/features/shared/domain/repositories/local.storage.dart'
-    as _i13;
+    as _i12;
 import 'package:mobile/generated/protos/auth.pbgrpc.dart' as _i3;
 import 'package:mobile/generated/protos/event.pbgrpc.dart' as _i4;
 import 'package:mobile/generated/protos/giveaway.pbgrpc.dart' as _i6;
 import 'package:mobile/generated/protos/shared.pbgrpc.dart' as _i7;
 import 'package:mobile/generated/protos/task.pbgrpc.dart' as _i8;
-import 'package:mobile/generated/protos/trip.pbgrpc.dart' as _i10;
+import 'package:mobile/generated/protos/trip.pbgrpc.dart' as _i9;
 
 extension GetItInjectableX on _i1.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -66,17 +66,18 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.factory<_i8.TaskServiceClient>(
         () => networkConfigModule.taskServiceClient);
-    gh.factory<_i9.TokenGrpcInterceptor>(
-        () => _i9.TokenGrpcInterceptor(gh<String>(instanceName: 'locale')));
-    gh.factory<_i10.TripServiceClient>(
+    gh.factory<_i9.TripServiceClient>(
         () => networkConfigModule.tripServiceClient);
-    gh.factory<_i11.BaseEventRepository>(
-        () => _i12.ProcheEventRepository(gh<_i4.EventServiceClient>()));
-    gh.factory<_i13.BaseLocalStorageRepository>(() =>
-        _i14.ProcheLocalStorageRepository(gh<_i5.FlutterSecureStorage>()));
+    gh.factory<_i10.BaseEventRepository>(
+        () => _i11.ProcheEventRepository(gh<_i4.EventServiceClient>()));
+    gh.factory<_i12.BaseLocalStorageRepository>(() =>
+        _i13.ProcheLocalStorageRepository(gh<_i5.FlutterSecureStorage>()));
+    gh.factory<_i14.TokenGrpcInterceptor>(() =>
+        _i14.TokenGrpcInterceptor.create(
+            gh<_i12.BaseLocalStorageRepository>()));
     gh.factory<_i15.BaseAuthRepository>(() => _i16.ProcheAuthRepository(
           client: gh<_i3.AuthServiceClient>(),
-          storage: gh<_i13.BaseLocalStorageRepository>(),
+          storage: gh<_i12.BaseLocalStorageRepository>(),
         ));
     return this;
   }

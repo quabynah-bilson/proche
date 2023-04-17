@@ -71,13 +71,9 @@ class _WelcomePageState extends State<WelcomePage>
                                               state.data.avatarUrl
                                                       .isNullOrEmpty()
                                                   ? const SizedBox.shrink()
-                                                  : Image.memory(
-                                                      state.data.avatarUrl
-                                                          .decodeBase64ImageToBytes(),
-                                                      width:
-                                                          context.width * 0.4,
-                                                      height:
-                                                          context.width * 0.4),
+                                                  : state.data.avatarUrl.avatar(
+                                                      size: context.width * 0.4,
+                                                      circular: true),
                                               context.localizer.welcomeBack
                                                   .subtitle2(context,
                                                       emphasis:

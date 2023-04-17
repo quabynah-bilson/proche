@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["qcodelabsllc@gmail.com"]
 license = "MIT"
 description = "Auth Server"
-repository = "https://github.com/quabynah-bilson/nearme/tree/dev/auth-server"
+repository = "https://github.com/quabynah-bilson/proche/tree/dev/auth-server"
 keywords = ["proche", "microservices", "grpc", "rust", "mongodb", "tonic"]
 
 
