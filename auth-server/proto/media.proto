@@ -1,0 +1,34 @@
+syntax = "proto3";
+package media;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "com.github/quabynah-bilson/proche;core";
+
+service MediaService {
+  // upload media takes a base64 encoded string and returns a media url
+  rpc upload_media (UploadMediaRequest) returns (google.protobuf.StringValue);
+
+  // get media takes a media url and returns a base64 encoded string
+  rpc get_media (google.protobuf.StringValue) returns (google.protobuf.StringValue);
+
+  // delete media takes a media url and deletes the media
+  rpc delete_media (google.protobuf.StringValue) returns (google.protobuf.Empty);
+
+}
+
+// UploadMediaRequest is the request for uploading media
+message UploadMediaRequest {
+  bytes media = 1;
+  MediaType type = 2;
+  optional string name = 3;
+  optional string owner = 4;
+}
+
+// MediaType is the type of media
+enum MediaType {
+  IMAGE = 0;
+  VIDEO = 1;
+}
+

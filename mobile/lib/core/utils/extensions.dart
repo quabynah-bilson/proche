@@ -49,31 +49,6 @@ extension BuildContextX on BuildContext {
     );
   }
 
-  /// shows a dialog to confirm user's language preference
-  /// TODO add a checkbox to remember user's preference
-  void showLanguagePickerFieldSheet() async {
-    showCupertinoModalBottomSheet(
-      context: this,
-      backgroundColor: colorScheme.background,
-      useRootNavigator: true,
-      bounce: true,
-      builder: (context) => AnimatedColumn(
-        animateType: AnimateType.slideDown,
-        children: [
-          EmptyContentPlaceholder(
-              title: localizer.underMaintenanceHeader,
-              subtitle: localizer.underMaintenanceSubhead),
-          SafeArea(
-            top: false,
-            child: AppRoundedButton(
-                    text: localizer.gotIt, onTap: context.navigator.pop)
-                .top(40),
-          ),
-        ],
-      ),
-    );
-  }
-
   /// show a welcome dialog for new users
   void showWelcomeDialog() async {
     await Future.delayed(const Duration(milliseconds: 850));
@@ -364,6 +339,18 @@ extension BuildContextX on BuildContext {
                 }
               },
             ),
+
+            // current account bloc listener
+            BlocListener(
+              bloc: countriesBloc,
+              listener: (context, state) {
+                if (state is ErrorState<String>) {
+                  context
+                    ..navigator.pop()
+                    ..showMessageDialog(state.failure);
+                }
+              },
+            ),
           ],
           child: LoadingIndicator(
             lottieAnimResource: Assets.animLoading,
@@ -394,11 +381,13 @@ extension BuildContextX on BuildContext {
                               alignment: TextAlign.center),
                         } else ...{
                           ClipOval(
-                            child: Image.memory(
-                                account!.avatarUrl.decodeBase64ImageToBytes(),
-                                fit: BoxFit.contain,
-                                height: height * 0.15,
-                                width: width * 0.5),
+                            // child: Image.memory(
+                            //     account!.avatarUrl.decodeBase64ImageToBytes(),
+                            //     fit: BoxFit.contain,
+                            //     height: height * 0.15,
+                            //     width: width * 0.5),
+                            child: account!.avatarUrl
+                                .avatar(size: height * 0.15, circular: true),
                           ).centered(),
                           account!.displayName.h5(this,
                               weight: FontWeight.bold,

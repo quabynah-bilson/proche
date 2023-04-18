@@ -6,7 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
-option go_package = "com.github/quabynah-bilson/nearme;core";
+option go_package = "com.github/quabynah-bilson/proche;core";
 
 // TripService is the service that handles trip related operations
 service TripService {

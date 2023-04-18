@@ -40,7 +40,10 @@ dependencies:
   flutter_dotenv: ^5.0.2
   url_launcher: ^6.1.10
   animated_bottom_navigation_bar: ^1.2.0
-
+  google_maps_webservice: ^0.0.19
+  geolocator: ^9.0.2
+  rive: ^0.10.4
+  sentry_flutter: ^7.4.2
 
 dev_dependencies:
   flutter_test:

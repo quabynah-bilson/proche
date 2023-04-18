@@ -14,7 +14,7 @@ import 'package:mobile/generated/protos/trip.pbgrpc.dart';
 /// module for grpc client configuration
 @module
 abstract class NetworkConfigModule {
-  ClientInterceptor get _logInterceptor => LogGrpcInterceptor();
+  ClientInterceptor get _logInterceptor => getIt<LogGrpcInterceptor>();
 
   ClientInterceptor get _tokenInterceptor => getIt<TokenGrpcInterceptor>();
 

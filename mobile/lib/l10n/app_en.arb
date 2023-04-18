@@ -49,5 +49,9 @@
   "selectCountry" : "Select a country",
   "displayName" : "Your public username",
   "profileEditHeader" : "Complete your profile setup to get started",
-  "almostThere" : "One more step..."
+  "almostThere" : "One more step...",
+  "locationPermissionRequired" : "Location permission required",
+  "locationPermissionRequiredSubhead" : "Enable your location permission to help us get the best experience tailored for you",
+  "locationPermissionDenied" : "Location permission denied",
+  "findingLocation" : "Finding your location"
 }

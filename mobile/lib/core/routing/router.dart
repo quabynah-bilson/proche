@@ -3,6 +3,7 @@ import 'package:mobile/features/onboarding/presentation/pages/phone.verification
 import 'package:mobile/features/onboarding/presentation/pages/register.account.dart';
 import 'package:mobile/features/onboarding/presentation/pages/welcome.dart';
 import 'package:mobile/features/shared/presentation/pages/dashboard.dart';
+import 'package:mobile/features/shared/presentation/pages/finder.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -23,6 +24,9 @@ class AppRouterConfig {
       case AppRouter.dashboardRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => const DashboardPage(), settings: settings);
+      case AppRouter.serviceFinderRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => const ServiceFinderPage(), settings: settings);
     }
 
     return MaterialPageRoute(
@@ -43,6 +47,7 @@ class AppRouterConfig {
 class AppRouter {
   static const welcomeRoute = '/';
   static const dashboardRoute = '/dashboard';
+  static const serviceFinderRoute = '/dashboard/finder';
   static const registerNewAccountRoute = '/account/new';
   static const resetPasswordRoute = '/account/reset-password'; // todo
   static const phoneVerificationRoute = '/phone-verification';

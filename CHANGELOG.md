@@ -14,3 +14,4 @@
 - Added Twilio verification support for the auth microservice (OTP verification)
 - Added support for multinational accounts for the auth microservice
 - Added Google Maps to mobile app
+- Added interceptor for core server to authenticate requests coming in from clients

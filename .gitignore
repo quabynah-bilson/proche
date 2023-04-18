@@ -2,3 +2,4 @@
 **/.idea/
 
 /.run/**.xml
+**/*.last_build_id

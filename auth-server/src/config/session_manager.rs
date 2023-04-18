@@ -4,10 +4,12 @@ use tonic::Status;
 
 use crate::config::tokenizer;
 
-
-
 // create session for account and return it
-pub async fn create_access_token(account_id: &str, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<String, Status> {
+pub async fn create_access_token(
+    account_id: &str,
+    language_id: &str,
+    token_col: &mongodb::Collection<Document>,
+) -> Result<String, Status> {
     // get 10 minutes later timestamp for access token
     let access_token_expires_at = chrono::Utc::now().timestamp() + 600;
 
@@ -15,8 +17,10 @@ pub async fn create_access_token(account_id: &str, language_id: &str, token_col:
     let refresh_token_expires_at = chrono::Utc::now().timestamp() + 259200;
 
     // generate access token from account id & language id
-    let access_token = tokenizer::generate_token(&account_id, &language_id, access_token_expires_at).unwrap();
-    let refresh_token = tokenizer::generate_token(&account_id, &language_id, refresh_token_expires_at).unwrap();
+    let access_token =
+        tokenizer::generate_token(&account_id, &language_id, access_token_expires_at).unwrap();
+    let refresh_token =
+        tokenizer::generate_token(&account_id, &language_id, refresh_token_expires_at).unwrap();
 
     // create token store
     let doc = doc! {
@@ -35,7 +39,11 @@ pub async fn create_access_token(account_id: &str, language_id: &str, token_col:
 }
 
 // get access token from request header
-pub async fn verify_access_token(request: &MetadataMap, language_id: &str, token_col: &mongodb::Collection<Document>) -> Result<(String, String), Status> {
+pub async fn verify_access_token(
+    request: &MetadataMap,
+    language_id: &str,
+    token_col: &mongodb::Collection<Document>,
+) -> Result<(String, String), Status> {
     // extract token from authorization header
     let access_token = match request.get("Authorization") {
         Some(token) => {
@@ -49,7 +57,11 @@ pub async fn verify_access_token(request: &MetadataMap, language_id: &str, token
             return Err(Status::unauthenticated(t!("access_token_not_found")));
         }
     };
-    log::info!("{}: {:?}", t!("access_token_found_in_request"), &access_token);
+    log::info!(
+        "{}: {:?}",
+        t!("access_token_found_in_request"),
+        &access_token
+    );
 
     // validate token extracted and return it if it's valid or can be refreshed else return error
     match tokenizer::validate_token(&access_token, &language_id, &token_col).await {
@@ -71,7 +83,10 @@ pub async fn verify_access_token(request: &MetadataMap, language_id: &str, token
 }
 
 // get access token from request header
-pub async fn verify_public_access_token(request: &MetadataMap, language_id: &str) -> Result<(), Status> {
+pub async fn verify_public_access_token(
+    request: &MetadataMap,
+    language_id: &str,
+) -> Result<(), Status> {
     rust_i18n::set_locale(&language_id.to_string());
     // extract token from authorization header
     let access_token = match request.get("Authorization") {
@@ -86,24 +101,35 @@ pub async fn verify_public_access_token(request: &MetadataMap, language_id: &str
             return Err(Status::unauthenticated(t!("access_token_not_found")));
         }
     };
-    log::info!("{}: {:?}", t!("access_token_found_in_request"), &access_token);
+    log::info!(
+        "{}: {:?}",
+        t!("access_token_found_in_request"),
+        &access_token
+    );
 
     // validate token extracted and return it if it's valid or can be refreshed else return error
     match tokenizer::validate_public_token(&access_token, &language_id).await {
-        Ok(_) => {
-            Ok(())
-        }
+        Ok(_) => Ok(()),
         Err(e) => {
             log::error!("{}: {:?}", t!("token_expired"), e);
-            Err(Status::unauthenticated(t!("token_expired", locale=&language_id)))
+            Err(Status::unauthenticated(t!(
+                "token_expired",
+                locale = &language_id
+            )))
         }
     }
 }
 
 // clear access token from db when user logout
-pub async fn clear_access_token(metadata: &MetadataMap, token_col: &mongodb::Collection<Document>) -> Result<(), Status> {
+pub async fn clear_access_token(
+    metadata: &MetadataMap,
+    token_col: &mongodb::Collection<Document>,
+) -> Result<(), Status> {
     // get access token from request header
-    match metadata.get("Authorization").ok_or(Status::unauthenticated(t!("access_token_not_found"))) {
+    match metadata
+        .get("Authorization")
+        .ok_or(Status::unauthenticated(t!("access_token_not_found")))
+    {
         Ok(_) => {
             // remove `Bearer ` from token
             let access_token = metadata.get("Authorization").unwrap().to_str().unwrap();
@@ -111,7 +137,10 @@ pub async fn clear_access_token(metadata: &MetadataMap, token_col: &mongodb::Col
             log::info!("{}: {:#?}", t!("access_token_found"), &access_token);
 
             // delete session from db
-            match token_col.delete_one(doc! { "access_token": access_token }, None).await {
+            match token_col
+                .delete_one(doc! { "access_token": access_token }, None)
+                .await
+            {
                 Ok(_) => Ok(()),
                 Err(e) => {
                     log::error!("{}: {:?}", t!("auth_failed"), e);
@@ -119,6 +148,6 @@ pub async fn clear_access_token(metadata: &MetadataMap, token_col: &mongodb::Col
                 }
             }
         }
-        Err(e) => Err(e)
+        Err(e) => Err(e),
     }
 }

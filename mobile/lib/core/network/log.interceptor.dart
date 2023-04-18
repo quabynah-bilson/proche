@@ -1,6 +1,8 @@
 import 'package:grpc/grpc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_utils/shared_utils.dart';
 
+@injectable
 class LogGrpcInterceptor implements ClientInterceptor {
   @override
   ResponseStream<R> interceptStreaming<Q, R>(

@@ -1,4 +1,4 @@
-package main
+package util
 
 import (
 	"encoding/json"
@@ -6,13 +6,13 @@ import (
 	"golang.org/x/text/language"
 )
 
-var localizer *i18n.Localizer //1
-var bundle *i18n.Bundle       //2
+var ProcheLocalizer *i18n.Localizer //1
+var bundle *i18n.Bundle             //2
 
 func init() {
 	bundle = i18n.NewBundle(language.English)            //3
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal) //4
 	_, _ = bundle.LoadMessageFile("resources/en.json")   //6
 	_, _ = bundle.LoadMessageFile("resources/fr.json")   //7
-	localizer = i18n.NewLocalizer(bundle, language.English.String(), language.French.String())
+	ProcheLocalizer = i18n.NewLocalizer(bundle, language.English.String(), language.French.String())
 }

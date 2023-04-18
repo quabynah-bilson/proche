@@ -4,7 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   flutter_secure_storage_windows
+  geolocator_windows
   local_auth_windows
+  rive_common
+  sentry_flutter
   smart_auth
   url_launcher_windows
 )

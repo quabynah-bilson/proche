@@ -4,6 +4,8 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 
+option go_package = "com.github/quabynah-bilson/proche;core";
+
 // authentication service for user login, register, reset password, refresh token, logout and etc.
 service AuthService {
   // auth
@@ -46,9 +48,9 @@ message GetCountriesResponse {
 
 // validate access token response message
 message ValidateAccessTokenResponse {
-  string account_id = 1;
-  string phone_number = 2;
-  string display_name = 3;
+  optional string account_id = 1;
+  optional string phone_number = 2;
+  optional string display_name = 3;
 }
 
 // verify phone number request message
@@ -70,7 +72,7 @@ message RegisterRequest {
   string phone_number = 1;
   string password = 2;
   string display_name = 4;
-  optional string avatar_url = 5;
+  optional bytes avatar_url = 5;
   optional string referral_code = 6;
   optional string id_card_url = 7;
   optional string vaccine_card_url = 8;

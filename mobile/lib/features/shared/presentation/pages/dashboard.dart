@@ -144,12 +144,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ),
                                   child: _account!.avatarUrl.isNullOrEmpty()
                                       ? const SizedBox.shrink()
-                                      : Image.memory(
-                                          _account!.avatarUrl
-                                              .decodeBase64ImageToBytes(),
-                                          height: 40,
-                                          width: 40,
-                                        ),
+                                      : _account!.avatarUrl
+                                          .avatar(size: 40, circular: true),
                                 ),
                         ),
                       ),
@@ -293,7 +289,8 @@ class _DashboardPageState extends State<DashboardPage> {
         ).fillMaxSize(context),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: FloatingActionButton(
-          onPressed: context.showFeatureUnderDevSheet,
+          onPressed: () =>
+              context.navigator.pushNamed(AppRouter.serviceFinderRoute),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
           child: const Icon(TablerIcons.map_pin),
