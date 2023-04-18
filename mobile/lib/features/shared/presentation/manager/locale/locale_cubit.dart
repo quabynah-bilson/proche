@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/core/di/injection.dart';
 import 'package:mobile/core/utils/extensions.dart';
+import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -17,6 +18,7 @@ class LocaleCubit extends Cubit<BlocState> {
   Future<void> getCurrentLocale() async {
     emit(BlocState.loadingState());
     final locale = await _storage.defaultLocale;
+    UserSession.kLocale = locale;
     emit(BlocState<String>.successState(data: locale));
   }
 
@@ -27,6 +29,7 @@ class LocaleCubit extends Cubit<BlocState> {
     await _storage.setLocale(languageId);
     if (AppLocalizations.delegate.isSupported(locale)) {
       await AppLocalizations.delegate.load(locale);
+      UserSession.kLocale = languageId;
       emit(BlocState<String>.successState(data: languageId));
     } else {
       emit(BlocState<String>.errorState(

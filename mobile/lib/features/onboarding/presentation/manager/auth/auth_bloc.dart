@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:mobile/core/di/injection.dart';
+import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/features/shared/domain/repositories/auth.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
@@ -90,6 +91,7 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
     on<GetPublicAccessTokenAuthEvent>((event, emit) async {
       emit(BlocState.loadingState());
       var either = await _repo.getPublicAccessToken();
+      UserSession.kIsLoggedIn = false;
       either.fold(
         (l) => emit(BlocState<void>.successState(data: null)),
         (r) => emit(BlocState<String>.errorState(failure: r)),

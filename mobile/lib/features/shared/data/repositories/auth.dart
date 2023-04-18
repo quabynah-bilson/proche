@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/utils/image.utils.dart';
+import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/features/shared/domain/repositories/auth.dart';
 import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
@@ -33,7 +34,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var token = await client.request_public_access_token(Empty());
 
       // save token
-      await storage.saveAccessToken(token.value);
+      UserSession.kAccessToken = token.value;
+      UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
       return left(null);
     } on GrpcError catch (e) {
@@ -66,7 +68,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var token = await client.login(request);
 
       // save token
-      await storage.saveAccessToken(token.value);
+      UserSession.kAccessToken = token.value;
+      UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
       return left(null);
     } on GrpcError catch (e) {
@@ -78,7 +81,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
   Future<Either<void, String>> logout() async {
     try {
       await client.logout(Empty());
-      await storage.clearAccessToken();
+      UserSession.kAccessToken = null;
+      UserSession.kIsLoggedIn = false;
       return left(null);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -104,7 +108,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var token = await client.register(request);
 
       // save token
-      await storage.saveAccessToken(token.value);
+      UserSession.kAccessToken = token.value;
+      UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
       return left(null);
     } on GrpcError catch (e) {
@@ -121,7 +126,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var token = await client.reset_password(request);
 
       // save token
-      await storage.saveAccessToken(token.value);
+      UserSession.kAccessToken = token.value;
+      UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
       return left(null);
     } on GrpcError catch (e) {
