@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
+	"net/http"
 	"time"
 )
 
@@ -41,6 +42,12 @@ func (pms *ProcheMediaServer) UploadMedia(ctx context.Context, req *pb.UploadMed
 	} else {
 		uploadName = fmt.Sprintf("%s-%s", req.GetName(), req.GetOwner())
 	}
+
+	// get mime type from the media
+	mimeType := http.DetectContentType(req.GetMedia())
+
+	// prepend the mime type to the encoded string
+	encodedString = fmt.Sprintf("data:%s;base64,%s", mimeType, encodedString)
 
 	// upload to cloudinary
 	var result *uploader.UploadResult

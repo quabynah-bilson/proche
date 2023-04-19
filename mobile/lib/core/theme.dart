@@ -31,14 +31,15 @@ ColorScheme useColorScheme([ThemeMode mode = ThemeMode.light]) =>
             onSurface: Color(0xff2B2723),
             error: Colors.deepOrangeAccent,
             onError: Colors.white,
+            tertiary: Color(0xff16855D),
+            onTertiary: Color(0xff2B2723),
           )
         : const ColorScheme.dark(
             onBackground: Colors.white,
           );
 
 /// setup font
-const _primaryFont = GoogleFonts.dmSans,
-    _secondaryFont = GoogleFonts.dmSans;
+const _primaryFont = GoogleFonts.dmSans, _secondaryFont = GoogleFonts.dmSans;
 
 TextTheme _textTheme([Color textColor = Colors.black]) => TextTheme(
       displayLarge: _primaryFont(
