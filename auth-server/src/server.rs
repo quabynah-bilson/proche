@@ -4,7 +4,6 @@ use chrono::{DateTime, Utc};
 use futures::StreamExt;
 use mongodb::bson::{Bson, doc, Document};
 use mongodb::options::FindOptions;
-use prost::Message;
 use regex::Regex;
 use rust_i18n::t;
 use tonic::{async_trait, Request, Response, Status};
@@ -41,15 +40,11 @@ impl AuthServiceImpl {
 impl AuthService for AuthServiceImpl {
     // done
     async fn login(&self, request: Request<LoginRequest>) -> Result<Response<String>, Status> {
-        // start login
-        log::info!("{}", t!("auth_started"));
-
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
             Ok(language_id) => language_id,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_language_code"), e);
-                return Err(Status::invalid_argument(t!("invalid_language_code")));
+                return Err(e);
             }
         };
 
@@ -73,8 +68,7 @@ impl AuthService for AuthServiceImpl {
             .await
         {
             Ok(account) => account,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("account_not_found"), e);
+            Err(_) => {
                 return Err(Status::not_found(t!("account_not_found")));
             }
         };
@@ -82,21 +76,17 @@ impl AuthService for AuthServiceImpl {
         // create a new session for account
         match account {
             Some(account_doc) => {
-                log::info!("{}: {:#?}", t!("account_found"), &account_doc);
-
                 // compare password
                 let is_valid_password = match tokenizer::compare_password(
                     &req.password,
                     &account_doc.get_str("password").unwrap().to_string(),
                 ) {
                     Ok(is_valid) => is_valid,
-                    Err(e) => {
-                        log::error!("{}: {:?}", t!("invalid_credentials"), e);
+                    Err(_) => {
                         return Err(Status::unauthenticated(t!("invalid_credentials")));
                     }
                 };
                 if !is_valid_password {
-                    log::error!("{}: {:?}", t!("invalid_credentials"), &req.password);
                     return Err(Status::unauthenticated(t!("invalid_credentials")));
                 }
 
@@ -112,7 +102,6 @@ impl AuthService for AuthServiceImpl {
                     Err(_) => false,
                 };
                 if !is_valid_country {
-                    log::error!("{}: {:?}", t!("invalid_credentials"), &req.country_id);
                     return Err(Status::unauthenticated(t!("invalid_credentials")));
                 }
 
@@ -127,7 +116,6 @@ impl AuthService for AuthServiceImpl {
                 Ok(Response::new(access_token))
             }
             None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &account);
                 return Err(Status::not_found(t!("account_not_found")));
             }
         }
@@ -138,8 +126,6 @@ impl AuthService for AuthServiceImpl {
         &self,
         request: Request<RegisterRequest>,
     ) -> Result<Response<String>, Status> {
-        // start login
-        log::info!("{}", t!("auth_started"));
 
         // validate language id
         let language_id = match _validate_language_id_from_request(request.metadata()) {
@@ -169,8 +155,7 @@ impl AuthService for AuthServiceImpl {
             .await
             .unwrap()
         {
-            Some(acct_doc) => {
-                log::info!("{}: {:#?}", t!("account_found"), &acct_doc);
+            Some(_) => {
                 true
             }
             None => false,
@@ -182,8 +167,7 @@ impl AuthService for AuthServiceImpl {
         // encrypt password
         let hashed_password = match tokenizer::hash_password(&req.password) {
             Ok(hashed_password) => hashed_password,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("password_encryption_failed"), e);
+            Err(_) => {
                 return Err(Status::internal(t!("password_encryption_failed")));
             }
         };
@@ -231,11 +215,8 @@ impl AuthService for AuthServiceImpl {
                     .replace_one(doc! {"phone_number": &req.phone_number}, &account_doc, None)
                     .await
                 {
-                    Ok(_) => {
-                        log::info!("{}: {:?}", t!("auth_success"), &account_doc);
-                    }
-                    Err(e) => {
-                        log::error!("{}: {:?}", t!("auth_failed"), e);
+                    Ok(_) => (),
+                    Err(_) => {
                         return Err(Status::internal(t!("auth_failed")));
                     }
                 }
@@ -250,8 +231,7 @@ impl AuthService for AuthServiceImpl {
                     .unwrap();
                 Ok(Response::new(access_token))
             }
-            Err(e) => {
-                log::error!("{}: {:?}", t!("auth_failed"), e);
+            Err(_) => {
                 return Err(Status::internal(t!("auth_failed")));
             }
         }
@@ -289,12 +269,8 @@ impl AuthService for AuthServiceImpl {
             .await
             .unwrap()
         {
-            Some(acct_doc) => {
-                log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
-                acct_doc
-            }
+            Some(acct_doc) => acct_doc,
             None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &req.phone_number);
                 return Err(Status::not_found(t!("account_not_found")));
             }
         };
@@ -302,8 +278,7 @@ impl AuthService for AuthServiceImpl {
         // encrypt password
         let hashed_password = match tokenizer::hash_password(&req.password) {
             Ok(hashed_password) => hashed_password,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("password_encryption_failed"), e);
+            Err(_) => {
                 return Err(Status::internal(t!("password_encryption_failed")));
             }
         };
@@ -318,8 +293,6 @@ impl AuthService for AuthServiceImpl {
             .await
         {
             Ok(_) => {
-                log::info!("{}: {:?}", t!("password_reset_success"), &account_doc);
-
                 // create access token
                 let access_token = config::session_manager::create_access_token(
                     &account_doc.get_str("id").unwrap().to_string(),
@@ -330,8 +303,7 @@ impl AuthService for AuthServiceImpl {
                     .unwrap();
                 Ok(Response::new(access_token))
             }
-            Err(e) => {
-                log::error!("{}: {:?}", t!("password_reset_failed"), e);
+            Err(_) => {
                 return Err(Status::internal(t!("password_reset_failed")));
             }
         }
@@ -365,8 +337,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(()) => Ok(Response::new(())),
             Err(e) => {
-                log::error!("{}: {:?}", t!("logout_failed"), e);
-                return Err(Status::internal(t!("logout_failed")));
+                return Err(e);
             }
         }
     }
@@ -380,8 +351,7 @@ impl AuthService for AuthServiceImpl {
         match tokenizer::generate_public_token(&rust_i18n::locale()) {
             // return token if successful else return status internal
             Ok(token) => Ok(Response::new(token)),
-            Err(e) => {
-                log::error!("{}: {:?}", t!("access_denied"), e);
+            Err(_) => {
                 Err(Status::internal(t!("access_denied")))
             }
         }
@@ -429,12 +399,8 @@ impl AuthService for AuthServiceImpl {
                 .await
                 .unwrap()
             {
-                Some(acct_doc) => {
-                    log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
-                    acct_doc
-                }
+                Some(acct_doc) => acct_doc,
                 None => {
-                    log::error!("{}: {:?}", t!("account_not_found"), &token.0);
                     return Err(Status::not_found(t!("account_not_found")));
                 }
             };
@@ -482,8 +448,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(result) => (result.0, result.1),
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -498,12 +463,8 @@ impl AuthService for AuthServiceImpl {
             .await
             .unwrap()
         {
-            Some(acct_doc) => {
-                log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
-                acct_doc
-            }
+            Some(acct_doc) => acct_doc,
             None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &account_id);
                 return Err(Status::not_found(t!("account_not_found")));
             }
         };
@@ -555,7 +516,6 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(_) => (),
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
                 return Err(e);
             }
         };
@@ -568,12 +528,8 @@ impl AuthService for AuthServiceImpl {
             .await
             .unwrap()
         {
-            Some(acct_doc) => {
-                log::info!("{}: {:?}", t!("account_exists"), &acct_doc);
-                acct_doc
-            }
+            Some(acct_doc) => acct_doc,
             None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &phone_number);
                 return Err(Status::not_found(t!("account_not_found")));
             }
         };
@@ -624,8 +580,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(token) => token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -652,7 +607,6 @@ impl AuthService for AuthServiceImpl {
         {
             Some(acct_doc) => acct_doc,
             None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &account.id);
                 return Err(Status::not_found(t!("account_not_found")));
             }
         };
@@ -666,7 +620,6 @@ impl AuthService for AuthServiceImpl {
         {
             Some(acct_doc) => acct_doc,
             None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &account.id);
                 return Err(Status::not_found(t!("account_not_found")));
             }
         };
@@ -722,8 +675,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(token) => token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -734,8 +686,7 @@ impl AuthService for AuthServiceImpl {
             .await
         {
             Ok(_) => Ok(Response::new(())),
-            Err(e) => {
-                log::error!("{}: {:?}", t!("account_not_found"), e);
+            Err(_) => {
                 return Err(Status::not_found(t!("account_not_found")));
             }
         }
@@ -760,8 +711,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(_) => (),
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -772,8 +722,7 @@ impl AuthService for AuthServiceImpl {
         match config::sms_manager::TwilioVerifyService::send_sms(&phone_number, &language_id).await
         {
             Ok(_) => Ok(Response::new(())),
-            Err(e) => {
-                log::error!("{}: {:?}", t!("sms_send_failed"), e);
+            Err(_) => {
                 return Err(Status::internal(t!("sms_send_failed")));
             }
         }
@@ -798,8 +747,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(_) => (),
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -817,8 +765,7 @@ impl AuthService for AuthServiceImpl {
             .await
         {
             Ok(_) => Ok(Response::new(())),
-            Err(e) => {
-                log::error!("{}: {:?}", t!("sms_verification_failed"), e);
+            Err(_) => {
                 return Err(Status::internal(t!("sms_verification_failed")));
             }
         }
@@ -844,8 +791,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(token) => token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -858,7 +804,6 @@ impl AuthService for AuthServiceImpl {
         {
             Some(acct_doc) => acct_doc,
             None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &token.0);
                 return Err(Status::not_found(t!("account_not_found")));
             }
         };
@@ -866,8 +811,7 @@ impl AuthService for AuthServiceImpl {
         // get referral code from account document
         match account_doc.get_str("referral_code") {
             Ok(referral_code) => Ok(Response::new(referral_code.to_string())),
-            Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_referral_code"), e);
+            Err(_) => {
                 return Err(Status::internal(t!("invalid_referral_code")));
             }
         }
@@ -887,7 +831,7 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        let token = match config::session_manager::verify_access_token(
+        match config::session_manager::verify_access_token(
             &request.metadata(),
             &language_id,
             &self.token_col,
@@ -896,8 +840,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(token) => token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -913,7 +856,6 @@ impl AuthService for AuthServiceImpl {
         {
             Some(acct_doc) => acct_doc.get_str("referral_code").unwrap().to_string(),
             None => {
-                log::error!("{}: {:?}", t!("account_not_found"), &token.0);
                 return Err(Status::not_found(t!("account_not_found")));
             }
         };
@@ -940,8 +882,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(token) => token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -949,8 +890,7 @@ impl AuthService for AuthServiceImpl {
         let opts = FindOptions::builder().sort(doc! {"name": 1}).build();
         let mut cursor = match self.country_col.find(None, opts).await {
             Ok(countries) => countries,
-            Err(e) => {
-                log::error!("{}: {:?}", t!("countries_not_found"), e);
+            Err(_) => {
                 return Err(Status::not_found(t!("countries_not_found")));
             }
         };
@@ -1007,8 +947,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(token) => token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -1024,7 +963,6 @@ impl AuthService for AuthServiceImpl {
         {
             Some(country_doc) => country_doc,
             None => {
-                log::error!("{}: {:?}", t!("country_not_found"), &country_id);
                 return Err(Status::not_found(t!("country_not_found")));
             }
         };
@@ -1060,8 +998,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(token) => token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -1076,7 +1013,6 @@ impl AuthService for AuthServiceImpl {
             .unwrap()
         {
             Some(_) => {
-                log::error!("{}: {:?}", t!("country_already_exists"), &country.code);
                 return Err(Status::already_exists(t!("country_already_exists")));
             }
             None => (),
@@ -1115,7 +1051,6 @@ impl AuthService for AuthServiceImpl {
                 {
                     Some(country_doc) => country_doc,
                     None => {
-                        log::error!("{}: {:?}", t!("country_not_found"), &country.id);
                         return Err(Status::not_found(t!("country_not_found")));
                     }
                 };
@@ -1134,8 +1069,7 @@ impl AuthService for AuthServiceImpl {
 
                 Ok(Response::new(country.to_owned()))
             }
-            Err(e) => {
-                log::error!("{}: {:?}", t!("country_not_added"), e);
+            Err(_) => {
                 Err(Status::internal(t!("country_not_added")))
             }
         }
@@ -1157,8 +1091,7 @@ impl AuthService for AuthServiceImpl {
         {
             Ok(token) => token,
             Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token"), e);
-                return Err(Status::unauthenticated(t!("invalid_token")));
+                return Err(e);
             }
         };
 
@@ -1172,8 +1105,7 @@ impl AuthService for AuthServiceImpl {
             .await
         {
             Ok(_) => Ok(Response::new(())),
-            Err(e) => {
-                log::error!("{}: {:?}", t!("country_not_deleted"), e);
+            Err(_) => {
                 Err(Status::internal(t!("country_not_deleted")))
             }
         }
@@ -1244,7 +1176,7 @@ async fn _upload_media(encoded_string: &Vec<u8>, phone_number: &str, name: &str)
     // upload media
     let request = UploadMediaRequest {
         name: Some(name.to_string()),
-        media: encoded_string.encode_to_vec(),
+        media: encoded_string.to_vec(),
         owner: Some(phone_number.to_string()),
         r#type: MediaType::Image as i32,
     };

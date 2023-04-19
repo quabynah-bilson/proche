@@ -8,6 +8,9 @@ description = "Auth Server"
 repository = "https://github.com/quabynah-bilson/proche/tree/dev/auth-server"
 keywords = ["proche", "microservices", "grpc", "rust", "mongodb", "tonic"]
 
+[[bin]]
+name = "auth-server"
+path = "src/main.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

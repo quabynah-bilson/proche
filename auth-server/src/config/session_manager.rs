@@ -31,8 +31,7 @@ pub async fn create_access_token(
     // insert session to db
     match token_col.insert_one(&doc, None).await {
         Ok(_) => Ok(access_token),
-        Err(e) => {
-            log::error!("{}: {:?}", t!("auth_failed"), e);
+        Err(_) => {
             Err(Status::internal(t!("auth_failed")))
         }
     }
@@ -53,16 +52,9 @@ pub async fn verify_access_token(
             token
         }
         None => {
-            log::error!("{}: {:?}", t!("access_token_not_found"), request);
             return Err(Status::unauthenticated(t!("access_token_not_found")));
         }
     };
-    log::info!(
-        "{}: {:?}",
-        t!("access_token_found_in_request"),
-        &access_token
-    );
-
     // validate token extracted and return it if it's valid or can be refreshed else return error
     match tokenizer::validate_token(&access_token, &language_id, &token_col).await {
         Ok(updated_token) => {
@@ -75,8 +67,7 @@ pub async fn verify_access_token(
             };
             Ok((result.0, result.1))
         }
-        Err(e) => {
-            log::error!("{}: {:?}", t!("token_expired"), e);
+        Err(_) => {
             Err(Status::unauthenticated(t!("token_expired")))
         }
     }
@@ -97,21 +88,14 @@ pub async fn verify_public_access_token(
             token
         }
         None => {
-            log::error!("{}: {:?}", t!("access_token_not_found"), request);
             return Err(Status::unauthenticated(t!("access_token_not_found")));
         }
     };
-    log::info!(
-        "{}: {:?}",
-        t!("access_token_found_in_request"),
-        &access_token
-    );
 
     // validate token extracted and return it if it's valid or can be refreshed else return error
     match tokenizer::validate_public_token(&access_token, &language_id).await {
         Ok(_) => Ok(()),
-        Err(e) => {
-            log::error!("{}: {:?}", t!("token_expired"), e);
+        Err(_) => {
             Err(Status::unauthenticated(t!(
                 "token_expired",
                 locale = &language_id
@@ -134,7 +118,6 @@ pub async fn clear_access_token(
             // remove `Bearer ` from token
             let access_token = metadata.get("Authorization").unwrap().to_str().unwrap();
             let access_token = access_token.replace("Bearer ", "");
-            log::info!("{}: {:#?}", t!("access_token_found"), &access_token);
 
             // delete session from db
             match token_col
@@ -142,8 +125,7 @@ pub async fn clear_access_token(
                 .await
             {
                 Ok(_) => Ok(()),
-                Err(e) => {
-                    log::error!("{}: {:?}", t!("auth_failed"), e);
+                Err(_) => {
                     Err(Status::internal(t!("auth_failed")))
                 }
             }

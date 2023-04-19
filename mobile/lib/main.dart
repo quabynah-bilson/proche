@@ -23,7 +23,7 @@ void main() async {
       options.dsn = dotenv.env['SENTRY_DSN'];
       // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
       // We recommend adjusting this value in production.
-      options.tracesSampleRate = 1.0;
+      options.tracesSampleRate = 0.1;
     },
     // run the app
     appRunner: () => runZonedGuarded(

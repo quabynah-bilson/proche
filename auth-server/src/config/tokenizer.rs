@@ -38,11 +38,9 @@ pub fn generate_token(
         .build()
     {
         Ok(token) => {
-            log::info!("token: {:?}", token);
             Ok(token)
         }
-        Err(e) => {
-            log::error!("{}: {:?}", t!("unable_to_create_token"), e);
+        Err(_) => {
             Err(Box::new(std::io::Error::new(
                 ErrorKind::Other,
                 t!("unable_to_create_token"),
@@ -76,11 +74,9 @@ pub fn generate_public_token(language_id: &str) -> Result<String, Box<dyn Error>
         .build()
     {
         Ok(token) => {
-            log::info!("token: {:?}", token);
             Ok(token)
         }
-        Err(e) => {
-            log::error!("error: {:?}", e);
+        Err(_) => {
             Err(Box::new(std::io::Error::new(
                 ErrorKind::Other,
                 t!("invalid_token", locale = &language_id),
@@ -121,23 +117,13 @@ pub async fn validate_token(
             Ok(session) => match session {
                 Some(session) => session,
                 None => {
-                    log::error!(
-                        "{}: {:?}",
-                        t!("access_token_not_found", locale = &language_id),
-                        &token
-                    );
                     return Err(Box::new(std::io::Error::new(
                         ErrorKind::Other,
                         t!("access_token_not_found", locale = &language_id),
                     )));
                 }
             },
-            Err(e) => {
-                log::error!(
-                    "{}: {:?}",
-                    t!("access_token_not_found", locale = &language_id),
-                    e
-                );
+            Err(_) => {
                 return Err(Box::new(std::io::Error::new(
                     ErrorKind::Other,
                     t!("access_token_not_found", locale = &language_id),
@@ -149,11 +135,6 @@ pub async fn validate_token(
         let refresh_token = match token_store.get("refresh_token") {
             Some(token) => token.as_str().unwrap().to_string(),
             None => {
-                log::error!(
-                    "{}: {:?}",
-                    t!("refresh_token_not_found", locale = &language_id),
-                    &token
-                );
                 return Err(Box::new(std::io::Error::new(
                     ErrorKind::Other,
                     t!("refresh_token_not_found", locale = &language_id),
@@ -164,8 +145,7 @@ pub async fn validate_token(
         // check for refresh token expiration
         match _check_token_expiration(&refresh_token, &language_id).await {
             Ok(_) => (),
-            Err(e) => {
-                log::error!("{}: {:?}", t!("token_expired", locale = &language_id), e);
+            Err(_) => {
                 return Err(Box::new(std::io::Error::new(
                     ErrorKind::Other,
                     t!("access_denied", locale = &language_id),
@@ -174,19 +154,9 @@ pub async fn validate_token(
         };
 
         // generate new access token
-        log::info!(
-            "{}: {:?}",
-            t!("generating_new_access_token", locale = &language_id),
-            &token
-        );
         let account_id = match token_store.get("account_id") {
             Some(id) => id.as_str().unwrap().to_string(),
             None => {
-                log::error!(
-                    "{}: {:?}",
-                    t!("account_not_found", locale = &language_id),
-                    &token
-                );
                 return Err(Box::new(std::io::Error::new(
                     ErrorKind::Other,
                     t!("account_not_found", locale = &language_id),
@@ -198,8 +168,7 @@ pub async fn validate_token(
         let new_access_token =
             match generate_token(&account_id, &language_id, access_token_expires_at) {
                 Ok(token) => token,
-                Err(e) => {
-                    log::error!("{}: {:?}", t!("invalid_token", locale = &language_id), e);
+                Err(_) => {
                     return Err(Box::new(std::io::Error::new(
                         ErrorKind::Other,
                         t!("invalid_token", locale = &language_id),
@@ -217,8 +186,7 @@ pub async fn validate_token(
             .await
         {
             Ok(_) => Ok(new_access_token),
-            Err(e) => {
-                log::error!("{}: {:?}", t!("invalid_token", locale = &language_id), e);
+            Err(_) => {
                 Err(Box::new(std::io::Error::new(
                     ErrorKind::Other,
                     t!("invalid_token", locale = &language_id),
@@ -257,7 +225,7 @@ async fn _check_public_token_expiration(
 ) -> Result<(), Box<dyn Error>> {
     // decrypt token
     let auth_token = std::env::var("PUB_AUTH_TOKEN").expect("PUB_AUTH_TOKEN must be set");
-    let verified_token = match paseto::tokens::validate_local_token(
+    match paseto::tokens::validate_local_token(
         &token,
         Some(format!("key-id:{}", &auth_token).as_str()),
         &auth_token.into_bytes(),
@@ -271,11 +239,6 @@ async fn _check_public_token_expiration(
             )));
         }
     };
-    log::debug!(
-        "{}: {:?}",
-        t!("access_token_verified", locale = &language_id),
-        &verified_token
-    );
 
     Ok(())
 }
