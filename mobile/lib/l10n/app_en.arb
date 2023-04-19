@@ -1,8 +1,8 @@
 {
   "appName": "Proche",
-  "appDesc": "Our app is designed to make it easy for you to find and participate in activities that interest you.",
+  "appDesc": "Find and participate in activities that interest you",
   "appDev": "Built with Flutter by qcodelabsllc",
-  "appLongDesc": "Whether you're looking for volunteer opportunities, local events, or fun giveaways, our app has got you covered",
+  "appLongDesc": "Whether you're looking for volunteer opportunities, local events, or fun giveaways, we've got you covered",
   "appWelcomeText": "We're thrilled to have you on board and look forward to helping you discover all the exciting tasks, events, and giveaways happening in your area",
   "underMaintenanceHeader": "Under development",
   "underMaintenanceSubhead": "Check back again for updates",
@@ -18,6 +18,7 @@
   "phoneNumber": "Phone number",
   "password": "Password",
   "signIn": "Sign in",
+  "createProfile" : "Create a Profile",
   "forgotPassword": "Forgot password?",
   "tos1": "By continuing, you agree to",
   "termsOfService": "Terms of Service",

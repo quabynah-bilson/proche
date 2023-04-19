@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/features/onboarding/presentation/pages/phone.verification.dart';
 import 'package:mobile/features/onboarding/presentation/pages/register.account.dart';
+import 'package:mobile/features/onboarding/presentation/pages/tutorial.dart';
 import 'package:mobile/features/onboarding/presentation/pages/welcome.dart';
 import 'package:mobile/features/shared/presentation/pages/dashboard.dart';
 import 'package:mobile/features/shared/presentation/pages/finder.dart';
@@ -13,6 +14,9 @@ class AppRouterConfig {
       case AppRouter.welcomeRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => const WelcomePage(), settings: settings);
+      case AppRouter.tutorialRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => const TutorialPage(), settings: settings);
       case AppRouter.phoneVerificationRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => PhoneNumberVerificationPage(
@@ -46,6 +50,7 @@ class AppRouterConfig {
 
 class AppRouter {
   static const welcomeRoute = '/';
+  static const tutorialRoute = '/tutorial';
   static const dashboardRoute = '/dashboard';
   static const serviceFinderRoute = '/dashboard/finder';
   static const registerNewAccountRoute = '/account/new';

@@ -5,6 +5,8 @@ class Assets {
   static const String animError = 'assets/anim/error.json';
   static const String animLoading = 'assets/anim/loading.json';
   static const String animPhoneVerification = 'assets/anim/phone_verification.json';
+  static const String animRive = 'assets/anim/rive.riv';
+  static const String animSearchOnMap = 'assets/anim/search_on_map.json';
   static const String animSuccess = 'assets/anim/success.json';
   static const String animWelcomeNewUser = 'assets/anim/welcome_new_user.json';
   static const String animWorkInProgress = 'assets/anim/work_in_progress.json';
@@ -30,5 +32,6 @@ class Assets {
   static const String avatarsLorelei9 = 'assets/img/avatars/lorelei_9.png';
   static const String imgAppLogo = 'assets/img/app_logo.png';
   static const String imgAppLogoAnimated = 'assets/img/app_logo_animated.gif';
+  static const String mobile = '.env';
 
 }

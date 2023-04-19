@@ -34,6 +34,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var token = await client.request_public_access_token(Empty());
 
       // save token
+      await storage.saveAccessToken(token.value);
       UserSession.kAccessToken = token.value;
       UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
@@ -68,6 +69,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var token = await client.login(request);
 
       // save token
+      await storage.saveAccessToken(token.value);
       UserSession.kAccessToken = token.value;
       UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
@@ -81,6 +83,9 @@ class ProcheAuthRepository extends BaseAuthRepository {
   Future<Either<void, String>> logout() async {
     try {
       await client.logout(Empty());
+
+      // clear token
+      await storage.clearAccessToken();
       UserSession.kAccessToken = null;
       UserSession.kIsLoggedIn = false;
       return left(null);
@@ -108,6 +113,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var token = await client.register(request);
 
       // save token
+      await storage.saveAccessToken(token.value);
       UserSession.kAccessToken = token.value;
       UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
@@ -126,6 +132,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var token = await client.reset_password(request);
 
       // save token
+      await storage.saveAccessToken(token.value);
       UserSession.kAccessToken = token.value;
       UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
@@ -162,6 +169,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<Account, String>> getCurrentAccount() async {
     try {
+      UserSession.kAccessToken = await storage.accessToken;
+      UserSession.kIsLoggedIn = !UserSession.kAccessToken.isNullOrEmpty();
       var account = await client.get_account(Empty());
       return left(account);
     } on GrpcError catch (e) {
