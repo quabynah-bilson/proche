@@ -3,11 +3,14 @@ class Assets {
   Assets._();
 
   static const String animError = 'assets/anim/error.json';
+  static const String animEvent = 'assets/anim/event.json';
+  static const String animGiveaway = 'assets/anim/giveaway.json';
   static const String animLoading = 'assets/anim/loading.json';
   static const String animPhoneVerification = 'assets/anim/phone_verification.json';
   static const String animRive = 'assets/anim/rive.riv';
   static const String animSearchOnMap = 'assets/anim/search_on_map.json';
   static const String animSuccess = 'assets/anim/success.json';
+  static const String animTrip = 'assets/anim/trip.json';
   static const String animWelcomeNewUser = 'assets/anim/welcome_new_user.json';
   static const String animWorkInProgress = 'assets/anim/work_in_progress.json';
   static const String avatarsLorelei0 = 'assets/img/avatars/lorelei_0.png';

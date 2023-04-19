@@ -4,7 +4,6 @@ use chrono::{DateTime, Utc};
 use futures::StreamExt;
 use mongodb::bson::{Bson, doc, Document};
 use mongodb::options::FindOptions;
-use prost::Message;
 use regex::Regex;
 use rust_i18n::t;
 use tonic::{async_trait, Request, Response, Status};
@@ -1177,7 +1176,7 @@ async fn _upload_media(encoded_string: &Vec<u8>, phone_number: &str, name: &str)
     // upload media
     let request = UploadMediaRequest {
         name: Some(name.to_string()),
-        media: encoded_string.encode_to_vec(),
+        media: encoded_string.to_vec(),
         owner: Some(phone_number.to_string()),
         r#type: MediaType::Image as i32,
     };

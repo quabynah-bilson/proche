@@ -2,7 +2,7 @@
   "appName": "Proche",
   "appDesc": "Trouvez et participez aux activités qui vous intéressent",
   "appDev": "Construit avec Flutter par qcodelabsllc",
-  "appLongDesc": "Que vous recherchiez des opportunités de bénévolat, des événements locaux ou des cadeaux amusants, nous a ce qu'il vous faut.",
+  "appLongDesc": "Que vous recherchiez des opportunités de bénévolat, des événements locaux ou des cadeaux amusants, nous avons ce qu'il vous faut",
   "appWelcomeText": "Nous sommes ravis de vous avoir à bord et nous sommes impatients de vous aider à découvrir toutes les tâches, événements et cadeaux passionnants qui se déroulent dans votre région.",
   "underMaintenanceHeader": "En cours de développement",
   "underMaintenanceSubhead": "Revenez pour les mises à jour",
@@ -54,5 +54,9 @@
   "locationPermissionRequired": "Autorisation d'emplacement",
   "locationPermissionRequiredSubhead": "Activez votre autorisation de localisation pour nous aider à obtenir la meilleure expérience sur mesure pour vous",
   "locationPermissionDenied": "Autorisation de localisation refusée",
-  "findingLocation": "Recherche d'emplacement"
+  "findingLocation": "Recherche d'emplacement",
+  "quickHelpDesc": "Il ne vous faudra qu'une minute pour poster une demande et obtenir l'aide de vos voisins",
+  "freeGiveawayDesc": "Un moyen facile de partager et de recevoir des objets inutilisés avec vos voisins",
+  "eventsDesc": "Vous pouvez rejoindre ou créer des événements qui vous intéressent facilement",
+  "tripsDesc": "Vous pouvez rejoindre ou créer des voyages où vous pouvez rencontrer de nouvelles personnes et explorer de nouveaux endroits"
 }
