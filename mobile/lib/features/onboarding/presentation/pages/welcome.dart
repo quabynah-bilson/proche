@@ -62,7 +62,8 @@ class _WelcomePageState extends State<WelcomePage>
                       animateType: AnimateType.slideRight,
                       children: [
                         context.localizer.appDesc.h5(context,
-                            weight: FontWeight.bold, alignment: TextAlign.center),
+                            weight: FontWeight.bold,
+                            alignment: TextAlign.center),
                         context.localizer.appLongDesc
                             .bodyText1(context,
                                 alignment: TextAlign.center,
@@ -73,27 +74,42 @@ class _WelcomePageState extends State<WelcomePage>
                     const Spacer(),
 
                     // action buttons
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: AppRoundedButton(
-                            text: context.localizer.signIn,
-                            outlined: true,
-                            onTap: context.showLoginSheet,
+                    if (state is LoadingState)
+                      const CircularProgressIndicator.adaptive()
+                    else if (state is SuccessState<Account>) ...{
+                      AppRoundedButton(
+                        text: context.localizer.getStarted,
+                        onTap: () => context.navigator.pushNamedAndRemoveUntil(
+                            AppRouter.dashboardRoute, (_) => false),
+                      ),
+                      SafeArea(
+                        top: false,
+                        child: context.localizer.appDev
+                            .overline(context, emphasis: kEmphasisMedium)
+                            .top(16),
+                      ),
+                    } else
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: AppRoundedButton(
+                              text: context.localizer.signIn,
+                              outlined: true,
+                              onTap: context.showLoginSheet,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: AppRoundedButton(
-                            text: context.localizer.signUp,
-                            onTap: () => context.navigator
-                                .pushNamed(AppRouter.tutorialRoute),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: AppRoundedButton(
+                              text: context.localizer.signUp,
+                              onTap: () => context.navigator
+                                  .pushNamed(AppRouter.tutorialRoute),
+                            ),
                           ),
-                        ),
-                      ],
-                    ).bottom(40).horizontal(24),
+                        ],
+                      ).bottom(40).horizontal(24)
                   ],
                 ),
               ),
@@ -132,7 +148,9 @@ class _WelcomePageState extends State<WelcomePage>
             /// language picker
             Positioned(
               top: 12,
-              left: context.width * 0.1,
+              left: state is SuccessState<Account> ? null : context.width * 0.1,
+              right:
+                  state is SuccessState<Account> ? context.width * 0.1 : null,
               child: SafeArea(
                 bottom: false,
                 child: BlocBuilder(
@@ -155,6 +173,8 @@ class _WelcomePageState extends State<WelcomePage>
                                       weight: FontWeight.bold)
                                   .right(8),
                               PopupMenuButton<String>(
+                                enabled: state is! LoadingState,
+                                enableFeedback: true,
                                 color: context.colorScheme.background,
                                 icon: Icon(TablerIcons.chevron_down,
                                     color: context.colorScheme.onBackground),

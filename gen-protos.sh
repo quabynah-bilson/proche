@@ -27,6 +27,7 @@ mkdir -p "$MOBILE_DIR/lib/generated/protos"
 mkdir -p "$CORE_SERVER_DIR/gen"
 mkdir -p "$MEDIA_SERVER_DIR/gen"
 mkdir -p "$PAYMENT_SERVER_DIR/gen"
+mkdir -p "$SHARED_SERVER_DIR/gen"
 
 # remove the proto file media.proto from auth-server
 rm -f $AUTH_PROTO_PATH/media.proto
@@ -46,9 +47,9 @@ grpc_tools_ruby_protoc -I=$PAYMENT_PROTO_PATH --ruby_out=$PAYMENT_SERVER_DIR/gen
   $(find $PAYMENT_PROTO_PATH -iname "*.proto")
 
 # generate for shared-server using python
-#python3 -m grpc_tools.protoc --proto_path=$SHARED_PROTO_PATH --python_out=$SHARED_SERVER_DIR \
-#  --grpc_python_out=$SHARED_SERVER_DIR \
-#  $(find $SHARED_PROTO_PATH -iname "*.proto")
+protoc -I=$SHARED_PROTO_PATH --go_out=$SHARED_SERVER_DIR/gen --go_opt=paths=source_relative \
+  --go-grpc_out=$SHARED_SERVER_DIR/gen --go-grpc_opt=paths=source_relative \
+  $(find $SHARED_PROTO_PATH -iname "*.proto")
 
 # copy the proto file from media-server to auth-server
 cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
@@ -57,7 +58,7 @@ cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
 cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
 
 # generate for flutter using dart
-#protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH \
-#  --dart_out=grpc:$MOBILE_OUT_DIR \
-#  $(find $AUTH_PROTO_PATH -iname "*.proto")
+protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH \
+  --dart_out=grpc:$MOBILE_OUT_DIR \
+  $(find $SHARED_PROTO_PATH -iname "*.proto")
 #  $(find $AUTH_PROTO_PATH -iname "*.proto") $(find $SHARED_PROTO_PATH -iname "*.proto") $(find $CORE_PROTO_PATH -iname "*.proto")

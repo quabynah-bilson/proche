@@ -5,11 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile/core/utils/extensions.dart';
+import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:shared_utils/shared_utils.dart';
 
+/// find a service based on [type]
 class ServiceFinderPage extends StatefulWidget {
-  const ServiceFinderPage({Key? key}) : super(key: key);
+  final ProcheServiceType type;
+
+  const ServiceFinderPage({Key? key, required this.type}) : super(key: key);
 
   @override
   State<ServiceFinderPage> createState() => _ServiceFinderPageState();

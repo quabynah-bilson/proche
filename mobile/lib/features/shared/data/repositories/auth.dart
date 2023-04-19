@@ -170,6 +170,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   Future<Either<Account, String>> getCurrentAccount() async {
     try {
       UserSession.kAccessToken = await storage.accessToken;
+      UserSession.kLocale = await storage.defaultLocale;
       UserSession.kIsLoggedIn = !UserSession.kAccessToken.isNullOrEmpty();
       var account = await client.get_account(Empty());
       return left(account);

@@ -58,5 +58,9 @@
   "quickHelpDesc": "Il ne vous faudra qu'une minute pour poster une demande et obtenir l'aide de vos voisins",
   "freeGiveawayDesc": "Un moyen facile de partager et de recevoir des objets inutilisés avec vos voisins",
   "eventsDesc": "Vous pouvez rejoindre ou créer des événements qui vous intéressent facilement",
-  "tripsDesc": "Vous pouvez rejoindre ou créer des voyages où vous pouvez rencontrer de nouvelles personnes et explorer de nouveaux endroits"
+  "tripsDesc": "Vous pouvez rejoindre ou créer des voyages où vous pouvez rencontrer de nouvelles personnes et explorer de nouveaux endroits",
+  "findService" : "Trouver un service",
+  "selectServiceType" : "Sélectionnez le type de service",
+  "selectServiceTypeSubhead" : "Appuyez sur un type de service pour commencer",
+  "cancel" : "Annuler"
 }

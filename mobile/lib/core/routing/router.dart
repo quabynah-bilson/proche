@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/features/onboarding/presentation/pages/phone.verification.dart';
 import 'package:mobile/features/onboarding/presentation/pages/register.account.dart';
 import 'package:mobile/features/onboarding/presentation/pages/tutorial.dart';
@@ -30,7 +31,11 @@ class AppRouterConfig {
             builder: (_) => const DashboardPage(), settings: settings);
       case AppRouter.serviceFinderRoute:
         return MaterialWithModalsPageRoute(
-            builder: (_) => const ServiceFinderPage(), settings: settings);
+            builder: (_) => ServiceFinderPage(
+                type: settings.arguments is int
+                    ? ProcheServiceType.values[settings.arguments as int]
+                    : ProcheServiceType.task),
+            settings: settings);
     }
 
     return MaterialPageRoute(

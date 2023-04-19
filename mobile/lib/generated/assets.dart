@@ -6,6 +6,7 @@ class Assets {
   static const String animEvent = 'assets/anim/event.json';
   static const String animGiveaway = 'assets/anim/giveaway.json';
   static const String animLoading = 'assets/anim/loading.json';
+  static const String animLogout = 'assets/anim/logout.json';
   static const String animPhoneVerification = 'assets/anim/phone_verification.json';
   static const String animRive = 'assets/anim/rive.riv';
   static const String animSearchOnMap = 'assets/anim/search_on_map.json';
