@@ -232,7 +232,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                           enabled: _selectedCountry != null && !_loading,
                           controller: _phoneNumberController,
                           textFieldType: AppTextFieldType.phone,
-                          validator: Validators.validatePhone,
+                          validator: (input) => Validators.validatePassword(context, input),
                           maxLength: 10,
                           onChange: (input) {
                             if (input == null) return;
@@ -258,7 +258,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                               floatLabel: true,
                               textFieldType: AppTextFieldType.password,
                               prefixIcon: const Icon(Icons.password),
-                              validator: Validators.validatePassword,
+                              validator: (input) => Validators.validatePassword(context, input),
                             );
                           }
 

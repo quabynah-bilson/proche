@@ -28,5 +28,6 @@ void main() async {
     // run the app
     appRunner: () => runZonedGuarded(
         () => runApp(const ProcheApp()), (error, stack) => logger.e(error)),
+    // appRunner: () => runApp(const ProcheApp()),
   );
 }

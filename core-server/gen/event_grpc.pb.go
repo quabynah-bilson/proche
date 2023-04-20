@@ -27,7 +27,7 @@ type EventServiceClient interface {
 	CreateEvent(ctx context.Context, in *CreateEventRequest, opts ...grpc.CallOption) (*ProcheEvent, error)
 	GetEvent(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (EventService_GetEventClient, error)
 	GetEventByUser(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (EventService_GetEventByUserClient, error)
-	GetEventsByLocation(ctx context.Context, in *GetEventByLocationRequest, opts ...grpc.CallOption) (EventService_GetEventsByLocationClient, error)
+	GetEventsByLocation(ctx context.Context, in *CommonAddress, opts ...grpc.CallOption) (EventService_GetEventsByLocationClient, error)
 	ListEvents(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (EventService_ListEventsClient, error)
 	UpdateEvent(ctx context.Context, in *ProcheEvent, opts ...grpc.CallOption) (*ProcheEvent, error)
 	DeleteEvent(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -114,7 +114,7 @@ func (x *eventServiceGetEventByUserClient) Recv() (*ProcheEventList, error) {
 	return m, nil
 }
 
-func (c *eventServiceClient) GetEventsByLocation(ctx context.Context, in *GetEventByLocationRequest, opts ...grpc.CallOption) (EventService_GetEventsByLocationClient, error) {
+func (c *eventServiceClient) GetEventsByLocation(ctx context.Context, in *CommonAddress, opts ...grpc.CallOption) (EventService_GetEventsByLocationClient, error) {
 	stream, err := c.cc.NewStream(ctx, &EventService_ServiceDesc.Streams[2], "/event.EventService/get_events_by_location", opts...)
 	if err != nil {
 		return nil, err
@@ -203,7 +203,7 @@ type EventServiceServer interface {
 	CreateEvent(context.Context, *CreateEventRequest) (*ProcheEvent, error)
 	GetEvent(*wrapperspb.StringValue, EventService_GetEventServer) error
 	GetEventByUser(*wrapperspb.StringValue, EventService_GetEventByUserServer) error
-	GetEventsByLocation(*GetEventByLocationRequest, EventService_GetEventsByLocationServer) error
+	GetEventsByLocation(*CommonAddress, EventService_GetEventsByLocationServer) error
 	ListEvents(*emptypb.Empty, EventService_ListEventsServer) error
 	UpdateEvent(context.Context, *ProcheEvent) (*ProcheEvent, error)
 	DeleteEvent(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
@@ -223,7 +223,7 @@ func (UnimplementedEventServiceServer) GetEvent(*wrapperspb.StringValue, EventSe
 func (UnimplementedEventServiceServer) GetEventByUser(*wrapperspb.StringValue, EventService_GetEventByUserServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetEventByUser not implemented")
 }
-func (UnimplementedEventServiceServer) GetEventsByLocation(*GetEventByLocationRequest, EventService_GetEventsByLocationServer) error {
+func (UnimplementedEventServiceServer) GetEventsByLocation(*CommonAddress, EventService_GetEventsByLocationServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetEventsByLocation not implemented")
 }
 func (UnimplementedEventServiceServer) ListEvents(*emptypb.Empty, EventService_ListEventsServer) error {
@@ -309,7 +309,7 @@ func (x *eventServiceGetEventByUserServer) Send(m *ProcheEventList) error {
 }
 
 func _EventService_GetEventsByLocation_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(GetEventByLocationRequest)
+	m := new(CommonAddress)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}

@@ -34,6 +34,10 @@ class AuthServiceClient extends $grpc.Client {
       '/auth.AuthService/logout',
       ($2.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+  static final _$verify_password = $grpc.ClientMethod<$1.StringValue, $2.Empty>(
+      '/auth.AuthService/verify_password',
+      ($1.StringValue value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
   static final _$request_public_access_token =
       $grpc.ClientMethod<$2.Empty, $1.StringValue>(
           '/auth.AuthService/request_public_access_token',
@@ -126,6 +130,11 @@ class AuthServiceClient extends $grpc.Client {
   $grpc.ResponseFuture<$2.Empty> logout($2.Empty request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$logout, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$2.Empty> verify_password($1.StringValue request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$verify_password, request, options: options);
   }
 
   $grpc.ResponseFuture<$1.StringValue> request_public_access_token(
@@ -242,6 +251,13 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         false,
         ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
+        'verify_password',
+        verify_password_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
         ($2.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$2.Empty, $1.StringValue>(
         'request_public_access_token',
@@ -364,6 +380,11 @@ abstract class AuthServiceBase extends $grpc.Service {
     return logout(call, await request);
   }
 
+  $async.Future<$2.Empty> verify_password_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
+    return verify_password(call, await request);
+  }
+
   $async.Future<$1.StringValue> request_public_access_token_Pre(
       $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
     return request_public_access_token(call, await request);
@@ -442,6 +463,8 @@ abstract class AuthServiceBase extends $grpc.Service {
   $async.Future<$1.StringValue> reset_password(
       $grpc.ServiceCall call, $3.ResetPasswordRequest request);
   $async.Future<$2.Empty> logout($grpc.ServiceCall call, $2.Empty request);
+  $async.Future<$2.Empty> verify_password(
+      $grpc.ServiceCall call, $1.StringValue request);
   $async.Future<$1.StringValue> request_public_access_token(
       $grpc.ServiceCall call, $2.Empty request);
   $async.Future<$3.ValidateAccessTokenResponse> validate_access_token(

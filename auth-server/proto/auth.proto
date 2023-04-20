@@ -13,6 +13,7 @@ service AuthService {
   rpc register (RegisterRequest) returns (google.protobuf.StringValue);
   rpc reset_password (ResetPasswordRequest) returns (google.protobuf.StringValue);
   rpc logout (google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc verify_password (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
   // request public access token for unauthenticated calls
   rpc request_public_access_token (google.protobuf.Empty) returns (google.protobuf.StringValue);

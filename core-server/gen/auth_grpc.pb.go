@@ -29,6 +29,7 @@ type AuthServiceClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	Logout(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	VerifyPassword(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// request public access token for unauthenticated calls
 	RequestPublicAccessToken(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	// validate access token from microservices for authorization (only for internal calls)
@@ -89,6 +90,15 @@ func (c *authServiceClient) ResetPassword(ctx context.Context, in *ResetPassword
 func (c *authServiceClient) Logout(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/auth.AuthService/logout", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) VerifyPassword(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/verify_password", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -230,6 +240,7 @@ type AuthServiceServer interface {
 	Register(context.Context, *RegisterRequest) (*wrapperspb.StringValue, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*wrapperspb.StringValue, error)
 	Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	VerifyPassword(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	// request public access token for unauthenticated calls
 	RequestPublicAccessToken(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
 	// validate access token from microservices for authorization (only for internal calls)
@@ -268,6 +279,9 @@ func (UnimplementedAuthServiceServer) ResetPassword(context.Context, *ResetPassw
 }
 func (UnimplementedAuthServiceServer) Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedAuthServiceServer) VerifyPassword(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyPassword not implemented")
 }
 func (UnimplementedAuthServiceServer) RequestPublicAccessToken(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestPublicAccessToken not implemented")
@@ -392,6 +406,24 @@ func _AuthService_Logout_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).Logout(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_VerifyPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(wrapperspb.StringValue)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).VerifyPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/verify_password",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).VerifyPassword(ctx, req.(*wrapperspb.StringValue))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -670,6 +702,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "logout",
 			Handler:    _AuthService_Logout_Handler,
+		},
+		{
+			MethodName: "verify_password",
+			Handler:    _AuthService_VerifyPassword_Handler,
 		},
 		{
 			MethodName: "request_public_access_token",

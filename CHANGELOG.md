@@ -15,3 +15,5 @@
 - Added support for multinational accounts for the auth microservice
 - Added Google Maps to mobile app
 - Added interceptor for core server to authenticate requests coming in from clients
+- Added shared server to handle shared functionalities between microservices
+- Added geolocation & geocoder support for mobile app

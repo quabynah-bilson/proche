@@ -7,7 +7,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
+import 'package:mobile/features/shared/presentation/manager/device.dart';
 import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
+import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:mobile/generated/protos/shared.pb.dart';
@@ -81,26 +83,29 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: context.colorScheme.background,
-          foregroundColor: context.colorScheme.onBackground,
-          onPressed: () async {
-            var serviceTypeIndex = await context.showServiceTypePickerSheet();
-            if (serviceTypeIndex == null) return;
-            context.navigator.pushNamed(AppRouter.serviceFinderRoute,
-                arguments: serviceTypeIndex);
-          },
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-          label: Text(context.localizer.findService),
-          icon: ClipOval(
-            child: Assets.imgAppLogoAnimated.asAssetImage(
-              width: 40,
-              height: 40,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+        floatingActionButton: _bottomNavIndex == 3
+            ? null
+            : FloatingActionButton.extended(
+                backgroundColor: context.colorScheme.background,
+                foregroundColor: context.colorScheme.onBackground,
+                onPressed: () async {
+                  var serviceTypeIndex =
+                      await context.showServiceTypePickerSheet();
+                  if (serviceTypeIndex == null) return;
+                  context.navigator.pushNamed(AppRouter.serviceFinderRoute,
+                      arguments: serviceTypeIndex);
+                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40)),
+                label: Text(context.localizer.findService),
+                icon: ClipOval(
+                  child: Assets.imgAppLogoAnimated.asAssetImage(
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
         bottomNavigationBar: AnimatedBottomNavigationBar(
           icons: _iconList,
           activeIndex: _bottomNavIndex,

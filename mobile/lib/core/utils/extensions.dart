@@ -18,6 +18,124 @@ extension BuildContextX on BuildContext {
 
   AppLocalizations get localizer => AppLocalizations.of(this)!;
 
+  Future<void> showVerifyPasswordSheet(Account updatedAccount) async {
+    final passwordController = TextEditingController(),
+        authBloc = AuthBloc(),
+        focusNode = FocusNode();
+    var errorMessage = '';
+
+    return await showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      isDismissible: false,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => BlocConsumer(
+          bloc: authBloc,
+          listener: (context, state) {
+            if (state is ErrorState<String>) {
+              errorMessage = state.failure;
+              setState(() => passwordController.clear());
+            }
+
+            if (state is SuccessState<void>) {
+              context.navigator.pop();
+            }
+          },
+          builder: (context, state) => LoadingIndicator(
+            isLoading: state is LoadingState,
+            loadingAnimIsAsset: true,
+            lottieAnimResource: Assets.animLoading,
+            child: Material(
+              color: colorScheme.background,
+              child: AnimatedColumn(
+                animateType: AnimateType.slideUp,
+                children: [
+                  Assets.imgAppLogo
+                      .asAssetImage(height: height * 0.15, width: width * 0.5),
+                  localizer.verifyPassword.h6(context),
+                  localizer.verifyPasswordSubhead
+                      .subtitle2(context,
+                          alignment: TextAlign.center,
+                          emphasis: kEmphasisMedium)
+                      .bottom(24),
+                  if (errorMessage.isNotEmpty)
+                    errorMessage
+                        .bodyText2(context,
+                            color: colorScheme.error,
+                            alignment: TextAlign.center)
+                        .bottom(16),
+                  AppTextField(
+                    localizer.password,
+                    focusNode: focusNode,
+                    textFieldType: AppTextFieldType.password,
+                    validator: (input) =>
+                        Validators.validatePassword(context, input),
+                    controller: passwordController,
+                  ),
+                  AppRoundedButton(
+                    text: localizer.next,
+                    enabled: state is! LoadingState,
+                    onTap: () {
+                      if (Validators.validatePassword(
+                              context, passwordController.text) ==
+                          null) {
+                        focusNode.unfocus();
+                        if (errorMessage.isNotEmpty) {
+                          setState(() => errorMessage = '');
+                        }
+                        authBloc.add(
+                            VerifyPasswordAuthEvent(passwordController.text));
+                      }
+                    },
+                  ).top(20).bottom(8),
+                  SafeArea(
+                    top: false,
+                    child: AppRoundedButton(
+                      text: localizer.cancel,
+                      outlined: true,
+                      enabled: state is! LoadingState,
+                      onTap: navigator.pop,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ).fillMaxHeight(context, 0.6),
+        ).top(16).horizontal(24),
+      ),
+    );
+  }
+
+  void showFiltersSheet() async {
+    showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      builder: (context) => AnimatedColumn(
+        animateType: AnimateType.slideUp,
+        children: [
+          Lottie.asset(Assets.animWorkInProgress,
+                  frameRate: FrameRate(90),
+                  height: height * 0.25,
+                  width: width * 0.7)
+              .bottom(24),
+          EmptyContentPlaceholder(
+              title: localizer.underMaintenanceHeader,
+              subtitle: localizer.underMaintenanceSubhead),
+          SafeArea(
+            top: false,
+            child: AppRoundedButton(
+                    text: localizer.gotIt, onTap: context.navigator.pop)
+                .top(40),
+          ),
+        ],
+      ),
+    );
+  }
+
   void showFeatureUnderDevSheet() async {
     showBarModalBottomSheet(
       context: this,
@@ -110,7 +228,7 @@ extension BuildContextX on BuildContext {
                 .top(40),
           ),
         ],
-      ).top(20),
+      ).top(32),
     );
 
     await Future.delayed(kSidebarFooterDuration);
@@ -302,11 +420,6 @@ extension BuildContextX on BuildContext {
                               alignment: TextAlign.center),
                         } else ...{
                           ClipOval(
-                            // child: Image.memory(
-                            //     account!.avatarUrl.decodeBase64ImageToBytes(),
-                            //     fit: BoxFit.contain,
-                            //     height: height * 0.15,
-                            //     width: width * 0.5),
                             child: account!.avatarUrl
                                 .avatar(size: height * 0.15, circular: true),
                           ).centered(),
@@ -355,7 +468,7 @@ extension BuildContextX on BuildContext {
                             enabled: selectedCountry != null && !loading,
                             controller: phoneNumberController,
                             textFieldType: AppTextFieldType.phone,
-                            validator: Validators.validatePhone,
+                            validator: (input) => Validators.validatePhone(context, input),
                             maxLength: 10,
                             onChange: (input) {
                               if (input == null) return;
@@ -379,7 +492,7 @@ extension BuildContextX on BuildContext {
                             floatLabel: true,
                             textFieldType: AppTextFieldType.password,
                             prefixIcon: const Icon(Icons.password),
-                            validator: Validators.validatePassword,
+                            validator: (input) => Validators.validatePassword(context, input),
                           ),
                         },
                         AppRoundedButton(
@@ -401,6 +514,13 @@ extension BuildContextX on BuildContext {
                               );
                             }
                           },
+                        ),
+                        TextButton(
+                          onPressed: () => context.navigator.popAndPushNamed(
+                              AppRouter.resetPasswordRoute,
+                              arguments: true),
+                          child: localizer.forgotPasswordHeader
+                              .button(context, alignment: TextAlign.center),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

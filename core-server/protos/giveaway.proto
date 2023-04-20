@@ -6,6 +6,8 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
+import "core_shared.proto";
+
 option go_package = "com.github/quabynah-bilson/proche;core";
 
 
@@ -13,19 +15,12 @@ option go_package = "com.github/quabynah-bilson/proche;core";
 service GiveAwayService {
   rpc create_giveaway (CreateGiveAwayRequest) returns (google.protobuf.StringValue);
   rpc get_giveaway (google.protobuf.StringValue) returns (GiveAway);
-  rpc get_giveaways (google.protobuf.Empty) returns (stream GiveAwayList);
+  rpc get_giveaways (core.CommonAddress) returns (stream GiveAwayList);
   rpc get_giveaways_by_owner (google.protobuf.StringValue) returns (stream GiveAwayList);
-  rpc get_giveaways_by_coordinates (GiveAwayCoordinates) returns (stream GiveAwayList);
-  rpc get_giveaways_by_coordinates_and_radius (GiveAwayByCoordinatesAndRadiusRequest) returns (stream GiveAwayList);
   rpc update_giveaway (GiveAway) returns (google.protobuf.Empty);
   rpc delete_giveaway (google.protobuf.StringValue) returns (google.protobuf.Empty);
 }
 
-// GiveAwayByCoordinatesAndRadiusRequest is the request for getting GiveAway by coordinates and radius
-message GiveAwayByCoordinatesAndRadiusRequest {
-  GiveAwayCoordinates coordinates = 1;
-  float radius = 2;
-}
 
 // GiveAwayList is the list of GiveAways
 message GiveAwayList {
@@ -37,7 +32,7 @@ message CreateGiveAwayRequest {
   string name = 1;
   string description = 2;
   repeated string images = 3;
-  GiveAwayCoordinates coordinates = 4;
+  core.CommonAddress address = 4;
   GiveAwayDispatchType dispatch_type = 5;
   google.protobuf.Duration dispatch_duration = 6;
 }
@@ -51,14 +46,7 @@ message GiveAway {
   string owner = 5;
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp updated_at = 7;
-  GiveAwayCoordinates coordinates = 8;
-}
-
-// GiveAwayCoordinates is the coordinates of a GiveAway
-message GiveAwayCoordinates {
-  optional string name = 1;
-  float latitude = 3;
-  float longitude = 4;
+  core.CommonAddress address = 8;
 }
 
 // GiveAwayDispatchType is the type of dispatch for a GiveAway

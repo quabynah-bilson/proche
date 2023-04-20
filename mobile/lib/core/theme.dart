@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 extension ThemeBuilderX on BuildContext {
-  ThemeData get useLightTheme => ThemeData(
-      useMaterial3: true,
-      scaffoldBackgroundColor: const Color(0xffffffff),
-      disabledColor: const Color(0xffe0e0e0),
-      colorScheme: useColorScheme(),
-      platform: TargetPlatform.iOS,
-      textTheme: _textTheme());
+  ThemeData get useLightTheme {
+    const backgroundColor = Color(0xffffffff);
+    return ThemeData(
+        useMaterial3: true,
+        scaffoldBackgroundColor: backgroundColor,
+        disabledColor: const Color(0xffe0e0e0),
+        colorScheme: useColorScheme(),
+        platform: TargetPlatform.iOS,
+        appBarTheme:
+            const AppBarTheme(backgroundColor: backgroundColor, elevation: 0),
+        textTheme: _textTheme());
+  }
 
   ThemeData get useDarkTheme => ThemeData.dark().copyWith(
       useMaterial3: true,

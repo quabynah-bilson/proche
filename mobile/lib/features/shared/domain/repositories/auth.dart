@@ -8,6 +8,8 @@ abstract class BaseAuthRepository {
     required String countryId,
   });
 
+  Future<Either<void, String>> verifyPassword(String password);
+
   Future<Either<void, String>> logout();
 
   Future<Either<void, String>> register({
@@ -22,8 +24,13 @@ abstract class BaseAuthRepository {
 
   Future<Either<Account, String>> getCurrentAccount();
 
-  Future<Either<void, String>> resetPassword(
-      {required String phoneNumber, required String password});
+  Future<Either<Account, String>> updateAccount(Account account);
+
+  Future<Either<void, String>> resetPassword({
+    required String phoneNumber,
+    required String password,
+    bool isPublic,
+  });
 
   Future<Either<void, String>> sendVerificationCode(String phoneNumber);
 

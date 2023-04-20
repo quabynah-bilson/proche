@@ -11,48 +11,23 @@ class _HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<_HomeTab> {
   late final _authBloc = AuthBloc(),
-      _signOutBloc = AuthBloc(),
       _locationCubit = LocationCubit(context),
       _mapController = Completer<GoogleMapController>(),
-      _kBorderRadius = 8.0,
-      _iconList = <IconData>[
-        TablerIcons.home_2,
-        TablerIcons.search,
-        TablerIcons.bell_z,
-        TablerIcons.settings,
-      ];
+      _kBorderRadius = 8.0;
   var _currentLocation = const LatLng(37.42796133580664, -122.085749655962),
       _currentAddress = 'Loading...';
-  Account? _account;
+  late var _account = widget.account;
 
   @override
   void initState() {
     super.initState();
     _authBloc.add(GetCurrentAccountAuthEvent());
-    doAfterDelay(() {
-      setState(() => _account = widget.account);
-      _locationCubit.getCurrentLocation();
-    });
+    _locationCubit.getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) => MultiBlocListener(
         listeners: [
-          BlocListener(
-            bloc: _signOutBloc,
-            listener: (context, state) {
-              if (!mounted) return;
-
-              if (state is ErrorState<String>) {
-                context.showMessageDialog(state.failure);
-              }
-
-              if (state is SuccessState<void>) {
-                context.navigator.pushNamedAndRemoveUntil(
-                    AppRouter.welcomeRoute, (route) => false);
-              }
-            },
-          ),
           BlocListener(
             bloc: _authBloc,
             listener: (context, state) {
@@ -123,53 +98,68 @@ class _HomeTabState extends State<_HomeTab> {
                 },
                 child: CustomScrollView(
                   slivers: [
-                    SliverAppBar(
-                      pinned: true,
-                      floating: true,
-                      snap: true,
-                      elevation: 0,
-                      forceElevated: false,
-                      backgroundColor:
-                          context.colorScheme.background.withOpacity(0),
-                      foregroundColor: Colors.transparent,
-                      bottom: PreferredSize(
-                          preferredSize: Size.fromHeight(context.height * 0.07),
-                          child: const SizedBox.shrink()),
-
-                      /// user location section
-                      flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: true,
-                        collapseMode: CollapseMode.parallax,
-                        title: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: context.colorScheme.background,
-                            borderRadius: BorderRadius.circular(_kBorderRadius),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: AnimatedColumn(
-                                  animateType: AnimateType.slideRight,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    context.localizer.yourLocation.overline(
-                                        context,
-                                        emphasis: kEmphasisMedium),
-                                    _currentAddress.overline(context,
-                                        weight: FontWeight.bold),
-                                  ],
-                                ),
+                    /// user location section
+                    SliverSafeArea(
+                      bottom: false,
+                      sliver: SliverToBoxAdapter(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                  right: 16,
+                                  bottom: 8,
+                                  top: context.height * 0.015),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                color: context.colorScheme.background,
+                                borderRadius:
+                                    BorderRadius.circular(_kBorderRadius),
                               ),
-                              if (_account != null &&
-                                  !_account!.avatarUrl.isNullOrEmpty())
-                                _account!.avatarUrl
-                                    .avatar(size: 32, circular: true),
-                            ],
-                          ),
+                              child: TextButton.icon(
+                                onPressed: context.showFiltersSheet,
+                                icon: Icon(TablerIcons.filter,
+                                    color: context.colorScheme.secondary),
+                                label: context.localizer.filters.button(context,
+                                    color: context.colorScheme.secondary),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: context.colorScheme.background,
+                                borderRadius:
+                                    BorderRadius.circular(_kBorderRadius),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: AnimatedColumn(
+                                      animateType: AnimateType.slideRight,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        context.localizer.yourLocation.caption(
+                                            context,
+                                            emphasis: kEmphasisMedium),
+                                        _currentAddress.bodyText1(context,
+                                            weight: FontWeight.bold),
+                                      ],
+                                    ),
+                                  ),
+                                  if (_account != null &&
+                                      !_account!.avatarUrl.isNullOrEmpty())
+                                    _account!.avatarUrl
+                                        .avatar(size: 48, circular: true),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

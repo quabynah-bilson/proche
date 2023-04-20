@@ -45,6 +45,7 @@ extension GetItInjectableX on _i1.GetIt {
     );
     final networkConfigModule = _$NetworkConfigModule();
     final persistentStorageModule = _$PersistentStorageModule();
+    final sharedAppModule = _$SharedAppModule();
     gh.factory<_i3.AuthServiceClient>(
         () => networkConfigModule.authServiceClient);
     gh.factory<_i4.EventServiceClient>(
@@ -66,6 +67,11 @@ extension GetItInjectableX on _i1.GetIt {
       instanceName: 'locale',
       preResolve: true,
     );
+    await gh.factoryAsync<String>(
+      () => sharedAppModule.appVersion,
+      instanceName: 'app_version',
+      preResolve: true,
+    );
     gh.factory<_i9.TaskServiceClient>(
         () => networkConfigModule.taskServiceClient);
     gh.factory<_i10.TokenGrpcInterceptor>(() => _i10.TokenGrpcInterceptor());
@@ -84,5 +90,7 @@ extension GetItInjectableX on _i1.GetIt {
 }
 
 class _$PersistentStorageModule extends _i18.PersistentStorageModule {}
+
+class _$SharedAppModule extends _i18.SharedAppModule {}
 
 class _$NetworkConfigModule extends _i19.NetworkConfigModule {}

@@ -27,7 +27,7 @@ type TaskServiceClient interface {
 	// task related operations
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*Task, error)
 	GetTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetTaskClient, error)
-	GetTasks(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (TaskService_GetTasksClient, error)
+	GetTasks(ctx context.Context, in *CommonAddress, opts ...grpc.CallOption) (TaskService_GetTasksClient, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*Task, error)
 	DeleteTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// task event related operations
@@ -94,7 +94,7 @@ func (x *taskServiceGetTaskClient) Recv() (*Task, error) {
 	return m, nil
 }
 
-func (c *taskServiceClient) GetTasks(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (TaskService_GetTasksClient, error) {
+func (c *taskServiceClient) GetTasks(ctx context.Context, in *CommonAddress, opts ...grpc.CallOption) (TaskService_GetTasksClient, error) {
 	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[1], "/task.TaskService/get_tasks", opts...)
 	if err != nil {
 		return nil, err
@@ -374,7 +374,7 @@ type TaskServiceServer interface {
 	// task related operations
 	CreateTask(context.Context, *CreateTaskRequest) (*Task, error)
 	GetTask(*wrapperspb.StringValue, TaskService_GetTaskServer) error
-	GetTasks(*emptypb.Empty, TaskService_GetTasksServer) error
+	GetTasks(*CommonAddress, TaskService_GetTasksServer) error
 	UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error)
 	DeleteTask(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	// task event related operations
@@ -403,7 +403,7 @@ func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskReq
 func (UnimplementedTaskServiceServer) GetTask(*wrapperspb.StringValue, TaskService_GetTaskServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetTask not implemented")
 }
-func (UnimplementedTaskServiceServer) GetTasks(*emptypb.Empty, TaskService_GetTasksServer) error {
+func (UnimplementedTaskServiceServer) GetTasks(*CommonAddress, TaskService_GetTasksServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetTasks not implemented")
 }
 func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error) {
@@ -501,7 +501,7 @@ func (x *taskServiceGetTaskServer) Send(m *Task) error {
 }
 
 func _TaskService_GetTasks_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(emptypb.Empty)
+	m := new(CommonAddress)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}

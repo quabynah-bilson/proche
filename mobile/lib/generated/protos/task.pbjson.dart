@@ -70,11 +70,16 @@ const CreateTaskRequest$json = const {
     const {'1': 'description', '3': 2, '4': 1, '5': 9, '10': 'description'},
     const {'1': 'due_date', '3': 3, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'dueDate'},
     const {'1': 'duration', '3': 4, '4': 1, '5': 11, '6': '.google.protobuf.Duration', '10': 'duration'},
+    const {'1': 'user_id', '3': 5, '4': 1, '5': 9, '10': 'userId'},
+    const {'1': 'charge_per_hour', '3': 6, '4': 1, '5': 1, '9': 0, '10': 'chargePerHour', '17': true},
+  ],
+  '8': const [
+    const {'1': '_charge_per_hour'},
   ],
 };
 
 /// Descriptor for `CreateTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createTaskRequestDescriptor = $convert.base64Decode('ChFDcmVhdGVUYXNrUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAiABKAlSC2Rlc2NyaXB0aW9uEjUKCGR1ZV9kYXRlGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIHZHVlRGF0ZRI1CghkdXJhdGlvbhgEIAEoCzIZLmdvb2dsZS5wcm90b2J1Zi5EdXJhdGlvblIIZHVyYXRpb24=');
+final $typed_data.Uint8List createTaskRequestDescriptor = $convert.base64Decode('ChFDcmVhdGVUYXNrUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAiABKAlSC2Rlc2NyaXB0aW9uEjUKCGR1ZV9kYXRlGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIHZHVlRGF0ZRI1CghkdXJhdGlvbhgEIAEoCzIZLmdvb2dsZS5wcm90b2J1Zi5EdXJhdGlvblIIZHVyYXRpb24SFwoHdXNlcl9pZBgFIAEoCVIGdXNlcklkEisKD2NoYXJnZV9wZXJfaG91chgGIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBQhIKEF9jaGFyZ2VfcGVyX2hvdXI=');
 @$core.Deprecated('Use updateTaskRequestDescriptor instead')
 const UpdateTaskRequest$json = const {
   '1': 'UpdateTaskRequest',
@@ -114,6 +119,7 @@ const Task$json = const {
     const {'1': 'completed', '3': 8, '4': 1, '5': 8, '10': 'completed'},
     const {'1': 'charge_per_hour', '3': 9, '4': 1, '5': 1, '9': 0, '10': 'chargePerHour', '17': true},
     const {'1': 'user_id', '3': 10, '4': 1, '5': 9, '10': 'userId'},
+    const {'1': 'address', '3': 11, '4': 1, '5': 11, '6': '.core.CommonAddress', '10': 'address'},
   ],
   '8': const [
     const {'1': '_charge_per_hour'},
@@ -121,7 +127,7 @@ const Task$json = const {
 };
 
 /// Descriptor for `Task`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List taskDescriptor = $convert.base64Decode('CgRUYXNrEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEjkKCmNyZWF0ZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdBI1CghkdWVfZGF0ZRgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSB2R1ZURhdGUSNQoIZHVyYXRpb24YByABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb25SCGR1cmF0aW9uEhwKCWNvbXBsZXRlZBgIIAEoCFIJY29tcGxldGVkEisKD2NoYXJnZV9wZXJfaG91chgJIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBEhcKB3VzZXJfaWQYCiABKAlSBnVzZXJJZEISChBfY2hhcmdlX3Blcl9ob3Vy');
+final $typed_data.Uint8List taskDescriptor = $convert.base64Decode('CgRUYXNrEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEjkKCmNyZWF0ZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdBI1CghkdWVfZGF0ZRgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSB2R1ZURhdGUSNQoIZHVyYXRpb24YByABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb25SCGR1cmF0aW9uEhwKCWNvbXBsZXRlZBgIIAEoCFIJY29tcGxldGVkEisKD2NoYXJnZV9wZXJfaG91chgJIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBEhcKB3VzZXJfaWQYCiABKAlSBnVzZXJJZBItCgdhZGRyZXNzGAsgASgLMhMuY29yZS5Db21tb25BZGRyZXNzUgdhZGRyZXNzQhIKEF9jaGFyZ2VfcGVyX2hvdXI=');
 @$core.Deprecated('Use taskEventDescriptor instead')
 const TaskEvent$json = const {
   '1': 'TaskEvent',

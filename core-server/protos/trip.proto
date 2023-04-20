@@ -6,6 +6,8 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
+import "core_shared.proto";
+
 option go_package = "com.github/quabynah-bilson/proche;core";
 
 // TripService is the service that handles trip related operations
@@ -37,8 +39,8 @@ message TripEventList {
 // BookTripRequest is the request for booking a trip
 message BookTripRequest {
   string user_id = 1;
-  TripCoordinates origin = 2;
-  TripCoordinates destination = 3;
+  core.CommonAddress origin = 2;
+  core.CommonAddress destination = 3;
   google.protobuf.Timestamp departure_time = 4;
   google.protobuf.Duration duration = 5;
   optional string vaccine_card_url = 6;
@@ -48,8 +50,8 @@ message BookTripRequest {
 message Trip {
   string id = 1;
   string user_id = 2;
-  TripCoordinates origin = 3;
-  TripCoordinates destination = 4;
+  core.CommonAddress origin = 3;
+  core.CommonAddress destination = 4;
   google.protobuf.Timestamp departure_time = 5;
   google.protobuf.Duration duration = 6;
   google.protobuf.Timestamp created_at = 7;
@@ -61,8 +63,8 @@ message TripEvent {
   string id = 1;
   string trip_id = 2;
   string user_id = 3;
-  TripCoordinates origin = 4;
-  TripCoordinates destination = 5;
+  core.CommonAddress origin = 4;
+  core.CommonAddress destination = 5;
   google.protobuf.Timestamp departure_time = 6;
   google.protobuf.Duration duration = 7;
   google.protobuf.Timestamp created_at = 8;
@@ -75,8 +77,8 @@ message TripEvent {
 message TripEventRequest {
   string trip_id = 1;
   string user_id = 2;
-  TripCoordinates origin = 3;
-  TripCoordinates destination = 4;
+  core.CommonAddress origin = 3;
+  core.CommonAddress destination = 4;
   google.protobuf.Timestamp departure_time = 5;
   google.protobuf.Duration duration = 6;
   google.protobuf.Timestamp event_time = 7;
@@ -90,12 +92,5 @@ enum TripEventType {
   EVENT_CANCELLED = 2;
   EVENT_STARTED = 3;
   EVENT_COMPLETED = 4;
-}
-
-// TripCoordinates is the coordinates of a trip
-message TripCoordinates {
-  double latitude = 1;
-  double longitude = 2;
-  optional string name = 3;
 }
 

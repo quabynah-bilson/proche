@@ -124,17 +124,22 @@ class ProcheAuthRepository extends BaseAuthRepository {
   }
 
   @override
-  Future<Either<void, String>> resetPassword(
-      {required String phoneNumber, required String password}) async {
+  Future<Either<void, String>> resetPassword({
+    required String phoneNumber,
+    required String password,
+    bool isPublic = true,
+  }) async {
     try {
       final request =
           ResetPasswordRequest(phoneNumber: phoneNumber, password: password);
       var token = await client.reset_password(request);
 
       // save token
-      await storage.saveAccessToken(token.value);
-      UserSession.kAccessToken = token.value;
-      UserSession.kIsLoggedIn = token.value.isNotEmpty;
+      if (!isPublic) {
+        await storage.saveAccessToken(token.value);
+        UserSession.kAccessToken = token.value;
+        UserSession.kIsLoggedIn = token.value.isNotEmpty;
+      }
 
       return left(null);
     } on GrpcError catch (e) {
@@ -194,6 +199,26 @@ class ProcheAuthRepository extends BaseAuthRepository {
     try {
       var response = await client.get_country_by_id(StringValue(value: id));
       return left(response);
+    } on GrpcError catch (e) {
+      return right(e.message ?? e.codeName);
+    }
+  }
+
+  @override
+  Future<Either<void, String>> verifyPassword(String password) async {
+    try {
+      await client.verify_password(StringValue(value: password));
+      return left(null);
+    } on GrpcError catch (e) {
+      return right(e.message ?? e.codeName);
+    }
+  }
+
+  @override
+  Future<Either<Account, String>> updateAccount(Account account) async {
+    try {
+      var updatedAccount = await client.update_account(account);
+      return left(updatedAccount);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }

@@ -342,6 +342,57 @@ impl AuthService for AuthServiceImpl {
         }
     }
 
+    async fn verify_password(&self, request: Request<String>) -> Result<Response<()>, Status> {
+        // validate language id
+        match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // verify access token
+        let token_payload = match config::session_manager::verify_access_token(
+            &request.metadata(),
+            &rust_i18n::locale().as_str().to_string(),
+            &self.token_col,
+        )
+            .await
+        {
+            Ok(result) => (result.0, result.1),
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // get account id from token payload and language id
+        let account_id = token_payload.0;
+
+        // find account by id
+        let account_doc = match self
+            .account_col
+            .find_one(doc! {"id": &account_id}, None)
+            .await
+            .unwrap()
+        {
+            Some(acct_doc) => acct_doc,
+            None => {
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        // get password from request
+        let password = request.into_inner();
+
+        // verify password
+        match tokenizer::compare_password(&password, &account_doc.get_str("password").unwrap()) {
+            Ok(_) => Ok(Response::new(())),
+            Err(_) => {
+                return Err(Status::internal(t!("invalid_credentials")));
+            }
+        }
+    }
+
     // done
     async fn request_public_access_token(
         &self,

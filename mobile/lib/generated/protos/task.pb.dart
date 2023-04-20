@@ -12,6 +12,7 @@ import 'package:protobuf/protobuf.dart' as $pb;
 import 'package:protobuf_google/protobuf_google.dart' as $7;
 import 'package:protobuf_google/protobuf_google.dart' as $8;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
+import 'core_shared.pb.dart' as $2;
 
 class TaskEventRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TaskEventRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
@@ -303,6 +304,8 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'description')
     ..aOM<$7.Timestamp>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dueDate', subBuilder: $7.Timestamp.create)
     ..aOM<$8.Duration>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
+    ..a<$core.double>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chargePerHour', $pb.PbFieldType.OD)
     ..hasRequiredFields = false
   ;
 
@@ -312,6 +315,8 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     $core.String? description,
     $7.Timestamp? dueDate,
     $8.Duration? duration,
+    $core.String? userId,
+    $core.double? chargePerHour,
   }) {
     final _result = create();
     if (title != null) {
@@ -325,6 +330,12 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     }
     if (duration != null) {
       _result.duration = duration;
+    }
+    if (userId != null) {
+      _result.userId = userId;
+    }
+    if (chargePerHour != null) {
+      _result.chargePerHour = chargePerHour;
     }
     return _result;
   }
@@ -388,6 +399,24 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   void clearDuration() => clearField(4);
   @$pb.TagNumber(4)
   $8.Duration ensureDuration() => $_ensure(3);
+
+  @$pb.TagNumber(5)
+  $core.String get userId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set userId($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasUserId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUserId() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.double get chargePerHour => $_getN(5);
+  @$pb.TagNumber(6)
+  set chargePerHour($core.double v) { $_setDouble(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasChargePerHour() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearChargePerHour() => clearField(6);
 }
 
 class UpdateTaskRequest extends $pb.GeneratedMessage {
@@ -566,6 +595,7 @@ class Task extends $pb.GeneratedMessage {
     ..aOB(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'completed')
     ..a<$core.double>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chargePerHour', $pb.PbFieldType.OD)
     ..aOS(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
+    ..aOM<$2.CommonAddress>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address', subBuilder: $2.CommonAddress.create)
     ..hasRequiredFields = false
   ;
 
@@ -581,6 +611,7 @@ class Task extends $pb.GeneratedMessage {
     $core.bool? completed,
     $core.double? chargePerHour,
     $core.String? userId,
+    $2.CommonAddress? address,
   }) {
     final _result = create();
     if (id != null) {
@@ -612,6 +643,9 @@ class Task extends $pb.GeneratedMessage {
     }
     if (userId != null) {
       _result.userId = userId;
+    }
+    if (address != null) {
+      _result.address = address;
     }
     return _result;
   }
@@ -733,6 +767,17 @@ class Task extends $pb.GeneratedMessage {
   $core.bool hasUserId() => $_has(9);
   @$pb.TagNumber(10)
   void clearUserId() => clearField(10);
+
+  @$pb.TagNumber(11)
+  $2.CommonAddress get address => $_getN(10);
+  @$pb.TagNumber(11)
+  set address($2.CommonAddress v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasAddress() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearAddress() => clearField(11);
+  @$pb.TagNumber(11)
+  $2.CommonAddress ensureAddress() => $_ensure(10);
 }
 
 class TaskEvent extends $pb.GeneratedMessage {

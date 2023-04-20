@@ -9,6 +9,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'core_shared.pb.dart' as $2;
 import 'package:protobuf_google/protobuf_google.dart' as $7;
 import 'package:protobuf_google/protobuf_google.dart' as $8;
 
@@ -101,8 +102,8 @@ class TripEventList extends $pb.GeneratedMessage {
 class BookTripRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BookTripRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'trip'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOM<TripCoordinates>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: TripCoordinates.create)
-    ..aOM<TripCoordinates>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: TripCoordinates.create)
+    ..aOM<$2.CommonAddress>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: $2.CommonAddress.create)
+    ..aOM<$2.CommonAddress>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: $2.CommonAddress.create)
     ..aOM<$7.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $7.Timestamp.create)
     ..aOM<$8.Duration>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
     ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'vaccineCardUrl')
@@ -112,8 +113,8 @@ class BookTripRequest extends $pb.GeneratedMessage {
   BookTripRequest._() : super();
   factory BookTripRequest({
     $core.String? userId,
-    TripCoordinates? origin,
-    TripCoordinates? destination,
+    $2.CommonAddress? origin,
+    $2.CommonAddress? destination,
     $7.Timestamp? departureTime,
     $8.Duration? duration,
     $core.String? vaccineCardUrl,
@@ -170,26 +171,26 @@ class BookTripRequest extends $pb.GeneratedMessage {
   void clearUserId() => clearField(1);
 
   @$pb.TagNumber(2)
-  TripCoordinates get origin => $_getN(1);
+  $2.CommonAddress get origin => $_getN(1);
   @$pb.TagNumber(2)
-  set origin(TripCoordinates v) { setField(2, v); }
+  set origin($2.CommonAddress v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasOrigin() => $_has(1);
   @$pb.TagNumber(2)
   void clearOrigin() => clearField(2);
   @$pb.TagNumber(2)
-  TripCoordinates ensureOrigin() => $_ensure(1);
+  $2.CommonAddress ensureOrigin() => $_ensure(1);
 
   @$pb.TagNumber(3)
-  TripCoordinates get destination => $_getN(2);
+  $2.CommonAddress get destination => $_getN(2);
   @$pb.TagNumber(3)
-  set destination(TripCoordinates v) { setField(3, v); }
+  set destination($2.CommonAddress v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasDestination() => $_has(2);
   @$pb.TagNumber(3)
   void clearDestination() => clearField(3);
   @$pb.TagNumber(3)
-  TripCoordinates ensureDestination() => $_ensure(2);
+  $2.CommonAddress ensureDestination() => $_ensure(2);
 
   @$pb.TagNumber(4)
   $7.Timestamp get departureTime => $_getN(3);
@@ -227,8 +228,8 @@ class Trip extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Trip', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'trip'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOM<TripCoordinates>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: TripCoordinates.create)
-    ..aOM<TripCoordinates>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: TripCoordinates.create)
+    ..aOM<$2.CommonAddress>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: $2.CommonAddress.create)
+    ..aOM<$2.CommonAddress>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: $2.CommonAddress.create)
     ..aOM<$7.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $7.Timestamp.create)
     ..aOM<$8.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
     ..aOM<$7.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
@@ -240,8 +241,8 @@ class Trip extends $pb.GeneratedMessage {
   factory Trip({
     $core.String? id,
     $core.String? userId,
-    TripCoordinates? origin,
-    TripCoordinates? destination,
+    $2.CommonAddress? origin,
+    $2.CommonAddress? destination,
     $7.Timestamp? departureTime,
     $8.Duration? duration,
     $7.Timestamp? createdAt,
@@ -314,26 +315,26 @@ class Trip extends $pb.GeneratedMessage {
   void clearUserId() => clearField(2);
 
   @$pb.TagNumber(3)
-  TripCoordinates get origin => $_getN(2);
+  $2.CommonAddress get origin => $_getN(2);
   @$pb.TagNumber(3)
-  set origin(TripCoordinates v) { setField(3, v); }
+  set origin($2.CommonAddress v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasOrigin() => $_has(2);
   @$pb.TagNumber(3)
   void clearOrigin() => clearField(3);
   @$pb.TagNumber(3)
-  TripCoordinates ensureOrigin() => $_ensure(2);
+  $2.CommonAddress ensureOrigin() => $_ensure(2);
 
   @$pb.TagNumber(4)
-  TripCoordinates get destination => $_getN(3);
+  $2.CommonAddress get destination => $_getN(3);
   @$pb.TagNumber(4)
-  set destination(TripCoordinates v) { setField(4, v); }
+  set destination($2.CommonAddress v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasDestination() => $_has(3);
   @$pb.TagNumber(4)
   void clearDestination() => clearField(4);
   @$pb.TagNumber(4)
-  TripCoordinates ensureDestination() => $_ensure(3);
+  $2.CommonAddress ensureDestination() => $_ensure(3);
 
   @$pb.TagNumber(5)
   $7.Timestamp get departureTime => $_getN(4);
@@ -385,8 +386,8 @@ class TripEvent extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tripId')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOM<TripCoordinates>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: TripCoordinates.create)
-    ..aOM<TripCoordinates>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: TripCoordinates.create)
+    ..aOM<$2.CommonAddress>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: $2.CommonAddress.create)
+    ..aOM<$2.CommonAddress>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: $2.CommonAddress.create)
     ..aOM<$7.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $7.Timestamp.create)
     ..aOM<$8.Duration>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
     ..aOM<$7.Timestamp>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
@@ -401,8 +402,8 @@ class TripEvent extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? tripId,
     $core.String? userId,
-    TripCoordinates? origin,
-    TripCoordinates? destination,
+    $2.CommonAddress? origin,
+    $2.CommonAddress? destination,
     $7.Timestamp? departureTime,
     $8.Duration? duration,
     $7.Timestamp? createdAt,
@@ -495,26 +496,26 @@ class TripEvent extends $pb.GeneratedMessage {
   void clearUserId() => clearField(3);
 
   @$pb.TagNumber(4)
-  TripCoordinates get origin => $_getN(3);
+  $2.CommonAddress get origin => $_getN(3);
   @$pb.TagNumber(4)
-  set origin(TripCoordinates v) { setField(4, v); }
+  set origin($2.CommonAddress v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasOrigin() => $_has(3);
   @$pb.TagNumber(4)
   void clearOrigin() => clearField(4);
   @$pb.TagNumber(4)
-  TripCoordinates ensureOrigin() => $_ensure(3);
+  $2.CommonAddress ensureOrigin() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  TripCoordinates get destination => $_getN(4);
+  $2.CommonAddress get destination => $_getN(4);
   @$pb.TagNumber(5)
-  set destination(TripCoordinates v) { setField(5, v); }
+  set destination($2.CommonAddress v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasDestination() => $_has(4);
   @$pb.TagNumber(5)
   void clearDestination() => clearField(5);
   @$pb.TagNumber(5)
-  TripCoordinates ensureDestination() => $_ensure(4);
+  $2.CommonAddress ensureDestination() => $_ensure(4);
 
   @$pb.TagNumber(6)
   $7.Timestamp get departureTime => $_getN(5);
@@ -585,8 +586,8 @@ class TripEventRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TripEventRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'trip'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tripId')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOM<TripCoordinates>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: TripCoordinates.create)
-    ..aOM<TripCoordinates>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: TripCoordinates.create)
+    ..aOM<$2.CommonAddress>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'origin', subBuilder: $2.CommonAddress.create)
+    ..aOM<$2.CommonAddress>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'destination', subBuilder: $2.CommonAddress.create)
     ..aOM<$7.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departureTime', subBuilder: $7.Timestamp.create)
     ..aOM<$8.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $8.Duration.create)
     ..aOM<$7.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'eventTime', subBuilder: $7.Timestamp.create)
@@ -598,8 +599,8 @@ class TripEventRequest extends $pb.GeneratedMessage {
   factory TripEventRequest({
     $core.String? tripId,
     $core.String? userId,
-    TripCoordinates? origin,
-    TripCoordinates? destination,
+    $2.CommonAddress? origin,
+    $2.CommonAddress? destination,
     $7.Timestamp? departureTime,
     $8.Duration? duration,
     $7.Timestamp? eventTime,
@@ -672,26 +673,26 @@ class TripEventRequest extends $pb.GeneratedMessage {
   void clearUserId() => clearField(2);
 
   @$pb.TagNumber(3)
-  TripCoordinates get origin => $_getN(2);
+  $2.CommonAddress get origin => $_getN(2);
   @$pb.TagNumber(3)
-  set origin(TripCoordinates v) { setField(3, v); }
+  set origin($2.CommonAddress v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasOrigin() => $_has(2);
   @$pb.TagNumber(3)
   void clearOrigin() => clearField(3);
   @$pb.TagNumber(3)
-  TripCoordinates ensureOrigin() => $_ensure(2);
+  $2.CommonAddress ensureOrigin() => $_ensure(2);
 
   @$pb.TagNumber(4)
-  TripCoordinates get destination => $_getN(3);
+  $2.CommonAddress get destination => $_getN(3);
   @$pb.TagNumber(4)
-  set destination(TripCoordinates v) { setField(4, v); }
+  set destination($2.CommonAddress v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasDestination() => $_has(3);
   @$pb.TagNumber(4)
   void clearDestination() => clearField(4);
   @$pb.TagNumber(4)
-  TripCoordinates ensureDestination() => $_ensure(3);
+  $2.CommonAddress ensureDestination() => $_ensure(3);
 
   @$pb.TagNumber(5)
   $7.Timestamp get departureTime => $_getN(4);
@@ -734,80 +735,5 @@ class TripEventRequest extends $pb.GeneratedMessage {
   $core.bool hasEventType() => $_has(7);
   @$pb.TagNumber(8)
   void clearEventType() => clearField(8);
-}
-
-class TripCoordinates extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TripCoordinates', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'trip'), createEmptyInstance: create)
-    ..a<$core.double>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'latitude', $pb.PbFieldType.OD)
-    ..a<$core.double>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..hasRequiredFields = false
-  ;
-
-  TripCoordinates._() : super();
-  factory TripCoordinates({
-    $core.double? latitude,
-    $core.double? longitude,
-    $core.String? name,
-  }) {
-    final _result = create();
-    if (latitude != null) {
-      _result.latitude = latitude;
-    }
-    if (longitude != null) {
-      _result.longitude = longitude;
-    }
-    if (name != null) {
-      _result.name = name;
-    }
-    return _result;
-  }
-  factory TripCoordinates.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory TripCoordinates.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  TripCoordinates clone() => TripCoordinates()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  TripCoordinates copyWith(void Function(TripCoordinates) updates) => super.copyWith((message) => updates(message as TripCoordinates)) as TripCoordinates; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static TripCoordinates create() => TripCoordinates._();
-  TripCoordinates createEmptyInstance() => create();
-  static $pb.PbList<TripCoordinates> createRepeated() => $pb.PbList<TripCoordinates>();
-  @$core.pragma('dart2js:noInline')
-  static TripCoordinates getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TripCoordinates>(create);
-  static TripCoordinates? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.double get latitude => $_getN(0);
-  @$pb.TagNumber(1)
-  set latitude($core.double v) { $_setDouble(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasLatitude() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearLatitude() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.double get longitude => $_getN(1);
-  @$pb.TagNumber(2)
-  set longitude($core.double v) { $_setDouble(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasLongitude() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearLongitude() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get name => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set name($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasName() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearName() => clearField(3);
 }
 

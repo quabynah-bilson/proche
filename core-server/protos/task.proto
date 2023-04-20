@@ -6,6 +6,8 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
+import "core_shared.proto";
+
 option go_package = "com.github/quabynah-bilson/proche;core";
 
 // TaskService is the service that handles task related operations
@@ -13,7 +15,7 @@ service TaskService {
   // task related operations
   rpc create_task(CreateTaskRequest) returns (Task);
   rpc get_task(google.protobuf.StringValue) returns (stream Task);
-  rpc get_tasks(google.protobuf.Empty) returns (stream TaskList);
+  rpc get_tasks(core.CommonAddress) returns (stream TaskList);
   rpc update_task(UpdateTaskRequest) returns (Task);
   rpc delete_task(google.protobuf.StringValue) returns (google.protobuf.Empty);
 
@@ -96,6 +98,7 @@ message Task {
   bool completed = 8;
   optional double charge_per_hour = 9;
   string user_id = 10;
+  core.CommonAddress address = 11;
 }
 
 // TaskEvent is the task event object

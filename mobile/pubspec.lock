@@ -345,11 +345,43 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  fl_location:
+    dependency: transitive
+    description:
+      name: fl_location
+      sha256: ce9dd55eff2d8fea658301770b6a004326f255935a33bcf3fdd0599a1f6cbdf3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
+  fl_location_platform_interface:
+    dependency: transitive
+    description:
+      name: fl_location_platform_interface
+      sha256: "43f9d08db8a6accaabb03c2959e5daf64ba0c604c24c10d2136c7c99436d2c6e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  fl_location_web:
+    dependency: transitive
+    description:
+      name: fl_location_web
+      sha256: "9a99c2b2e17bb4539008914c5b69482e4f117b7e535348f1f0d82ef0168cd2dc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_activity_recognition:
+    dependency: transitive
+    description:
+      name: flutter_activity_recognition
+      sha256: c54e28c1fbd2b2d599d1189f2c9385aefa965dd898e1b5e19f31ce99e463a6e5
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -387,6 +419,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_foreground_task:
+    dependency: transitive
+    description:
+      name: flutter_foreground_task
+      sha256: "5eb81adfd98c77f4d4803ae80d7e0573fd35f706fce6aaa7376656a15ba2d1e0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.10.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -567,6 +607,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  geofence_service:
+    dependency: "direct main"
+    description:
+      name: geofence_service
+      sha256: "8411126fd76bfc13343224413aabbcdb67fbbab3af91ad56ac0c7e19fc8b1983"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.0"
   geolocator:
     dependency: "direct main"
     description:
@@ -958,7 +1006,7 @@ packages:
     source: hosted
     version: "2.1.0"
   package_info_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: package_info_plus
       sha256: cbff87676c352d97116af6dbea05aa28c4d65eb0f6d5677a520c11a69ca9a24d
@@ -1181,6 +1229,70 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.4.2"
+  shared_preferences:
+    dependency: transitive
+    description:
+      name: shared_preferences
+      sha256: "858aaa72d8f61637d64e776aca82e1c67e6d9ee07979123c5d17115031c1b13b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  shared_preferences_android:
+    dependency: transitive
+    description:
+      name: shared_preferences_android
+      sha256: "7fa90471a6875d26ad78c7e4a675874b2043874586891128dc5899662c97db46"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
+  shared_preferences_foundation:
+    dependency: transitive
+    description:
+      name: shared_preferences_foundation
+      sha256: "0c1c16c56c9708aa9c361541a6f0e5cc6fc12a3232d866a687a7b7db30032b07"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
+  shared_preferences_ios:
+    dependency: transitive
+    description:
+      name: shared_preferences_ios
+      sha256: "585a14cefec7da8c9c2fb8cd283a3bb726b4155c0952afe6a0caaa7b2272de34"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
+  shared_preferences_linux:
+    dependency: transitive
+    description:
+      name: shared_preferences_linux
+      sha256: "9d387433ca65717bbf1be88f4d5bb18f10508917a8fa2fb02e0fd0d7479a9afa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  shared_preferences_platform_interface:
+    dependency: transitive
+    description:
+      name: shared_preferences_platform_interface
+      sha256: fb5cf25c0235df2d0640ac1b1174f6466bd311f621574997ac59018a6664548d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  shared_preferences_web:
+    dependency: transitive
+    description:
+      name: shared_preferences_web
+      sha256: "74083203a8eae241e0de4a0d597dbedab3b8fef5563f33cf3c12d7e93c655ca5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  shared_preferences_windows:
+    dependency: transitive
+    description:
+      name: shared_preferences_windows
+      sha256: "5e588e2efef56916a3b229c3bfe81e6a525665a454519ca51dbcc4236a274173"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   shared_utils:
     dependency: "direct main"
     description:

@@ -12,7 +12,8 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'giveaway.pb.dart' as $4;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
-import 'package:protobuf_google/protobuf_google.dart' as $2;
+import 'core_shared.pb.dart' as $2;
+import 'package:protobuf_google/protobuf_google.dart' as $3;
 export 'giveaway.pb.dart';
 
 class GiveAwayServiceClient extends $grpc.Client {
@@ -25,33 +26,24 @@ class GiveAwayServiceClient extends $grpc.Client {
       '/event.GiveAwayService/get_giveaway',
       ($1.StringValue value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $4.GiveAway.fromBuffer(value));
-  static final _$get_giveaways = $grpc.ClientMethod<$2.Empty, $4.GiveAwayList>(
-      '/event.GiveAwayService/get_giveaways',
-      ($2.Empty value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $4.GiveAwayList.fromBuffer(value));
+  static final _$get_giveaways =
+      $grpc.ClientMethod<$2.CommonAddress, $4.GiveAwayList>(
+          '/event.GiveAwayService/get_giveaways',
+          ($2.CommonAddress value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $4.GiveAwayList.fromBuffer(value));
   static final _$get_giveaways_by_owner =
       $grpc.ClientMethod<$1.StringValue, $4.GiveAwayList>(
           '/event.GiveAwayService/get_giveaways_by_owner',
           ($1.StringValue value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $4.GiveAwayList.fromBuffer(value));
-  static final _$get_giveaways_by_coordinates =
-      $grpc.ClientMethod<$4.GiveAwayCoordinates, $4.GiveAwayList>(
-          '/event.GiveAwayService/get_giveaways_by_coordinates',
-          ($4.GiveAwayCoordinates value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $4.GiveAwayList.fromBuffer(value));
-  static final _$get_giveaways_by_coordinates_and_radius = $grpc.ClientMethod<
-          $4.GiveAwayByCoordinatesAndRadiusRequest, $4.GiveAwayList>(
-      '/event.GiveAwayService/get_giveaways_by_coordinates_and_radius',
-      ($4.GiveAwayByCoordinatesAndRadiusRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $4.GiveAwayList.fromBuffer(value));
-  static final _$update_giveaway = $grpc.ClientMethod<$4.GiveAway, $2.Empty>(
+  static final _$update_giveaway = $grpc.ClientMethod<$4.GiveAway, $3.Empty>(
       '/event.GiveAwayService/update_giveaway',
       ($4.GiveAway value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
-  static final _$delete_giveaway = $grpc.ClientMethod<$1.StringValue, $2.Empty>(
+      ($core.List<$core.int> value) => $3.Empty.fromBuffer(value));
+  static final _$delete_giveaway = $grpc.ClientMethod<$1.StringValue, $3.Empty>(
       '/event.GiveAwayService/delete_giveaway',
       ($1.StringValue value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+      ($core.List<$core.int> value) => $3.Empty.fromBuffer(value));
 
   GiveAwayServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -69,7 +61,7 @@ class GiveAwayServiceClient extends $grpc.Client {
     return $createUnaryCall(_$get_giveaway, request, options: options);
   }
 
-  $grpc.ResponseStream<$4.GiveAwayList> get_giveaways($2.Empty request,
+  $grpc.ResponseStream<$4.GiveAwayList> get_giveaways($2.CommonAddress request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_giveaways, $async.Stream.fromIterable([request]),
@@ -84,28 +76,12 @@ class GiveAwayServiceClient extends $grpc.Client {
         options: options);
   }
 
-  $grpc.ResponseStream<$4.GiveAwayList> get_giveaways_by_coordinates(
-      $4.GiveAwayCoordinates request,
-      {$grpc.CallOptions? options}) {
-    return $createStreamingCall(
-        _$get_giveaways_by_coordinates, $async.Stream.fromIterable([request]),
-        options: options);
-  }
-
-  $grpc.ResponseStream<$4.GiveAwayList> get_giveaways_by_coordinates_and_radius(
-      $4.GiveAwayByCoordinatesAndRadiusRequest request,
-      {$grpc.CallOptions? options}) {
-    return $createStreamingCall(_$get_giveaways_by_coordinates_and_radius,
-        $async.Stream.fromIterable([request]),
-        options: options);
-  }
-
-  $grpc.ResponseFuture<$2.Empty> update_giveaway($4.GiveAway request,
+  $grpc.ResponseFuture<$3.Empty> update_giveaway($4.GiveAway request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$update_giveaway, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.Empty> delete_giveaway($1.StringValue request,
+  $grpc.ResponseFuture<$3.Empty> delete_giveaway($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_giveaway, request, options: options);
   }
@@ -130,12 +106,12 @@ abstract class GiveAwayServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
         ($4.GiveAway value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.Empty, $4.GiveAwayList>(
+    $addMethod($grpc.ServiceMethod<$2.CommonAddress, $4.GiveAwayList>(
         'get_giveaways',
         get_giveaways_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
+        ($core.List<$core.int> value) => $2.CommonAddress.fromBuffer(value),
         ($4.GiveAwayList value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.StringValue, $4.GiveAwayList>(
         'get_giveaways_by_owner',
@@ -144,37 +120,20 @@ abstract class GiveAwayServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
         ($4.GiveAwayList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.GiveAwayCoordinates, $4.GiveAwayList>(
-        'get_giveaways_by_coordinates',
-        get_giveaways_by_coordinates_Pre,
-        false,
-        true,
-        ($core.List<$core.int> value) =>
-            $4.GiveAwayCoordinates.fromBuffer(value),
-        ($4.GiveAwayList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.GiveAwayByCoordinatesAndRadiusRequest,
-            $4.GiveAwayList>(
-        'get_giveaways_by_coordinates_and_radius',
-        get_giveaways_by_coordinates_and_radius_Pre,
-        false,
-        true,
-        ($core.List<$core.int> value) =>
-            $4.GiveAwayByCoordinatesAndRadiusRequest.fromBuffer(value),
-        ($4.GiveAwayList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.GiveAway, $2.Empty>(
+    $addMethod($grpc.ServiceMethod<$4.GiveAway, $3.Empty>(
         'update_giveaway',
         update_giveaway_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $4.GiveAway.fromBuffer(value),
-        ($2.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
+        ($3.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.Empty>(
         'delete_giveaway',
         delete_giveaway_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
-        ($2.Empty value) => value.writeToBuffer()));
+        ($3.Empty value) => value.writeToBuffer()));
   }
 
   $async.Future<$1.StringValue> create_giveaway_Pre($grpc.ServiceCall call,
@@ -188,7 +147,7 @@ abstract class GiveAwayServiceBase extends $grpc.Service {
   }
 
   $async.Stream<$4.GiveAwayList> get_giveaways_Pre(
-      $grpc.ServiceCall call, $async.Future<$2.Empty> request) async* {
+      $grpc.ServiceCall call, $async.Future<$2.CommonAddress> request) async* {
     yield* get_giveaways(call, await request);
   }
 
@@ -197,24 +156,12 @@ abstract class GiveAwayServiceBase extends $grpc.Service {
     yield* get_giveaways_by_owner(call, await request);
   }
 
-  $async.Stream<$4.GiveAwayList> get_giveaways_by_coordinates_Pre(
-      $grpc.ServiceCall call,
-      $async.Future<$4.GiveAwayCoordinates> request) async* {
-    yield* get_giveaways_by_coordinates(call, await request);
-  }
-
-  $async.Stream<$4.GiveAwayList> get_giveaways_by_coordinates_and_radius_Pre(
-      $grpc.ServiceCall call,
-      $async.Future<$4.GiveAwayByCoordinatesAndRadiusRequest> request) async* {
-    yield* get_giveaways_by_coordinates_and_radius(call, await request);
-  }
-
-  $async.Future<$2.Empty> update_giveaway_Pre(
+  $async.Future<$3.Empty> update_giveaway_Pre(
       $grpc.ServiceCall call, $async.Future<$4.GiveAway> request) async {
     return update_giveaway(call, await request);
   }
 
-  $async.Future<$2.Empty> delete_giveaway_Pre(
+  $async.Future<$3.Empty> delete_giveaway_Pre(
       $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return delete_giveaway(call, await request);
   }
@@ -224,15 +171,11 @@ abstract class GiveAwayServiceBase extends $grpc.Service {
   $async.Future<$4.GiveAway> get_giveaway(
       $grpc.ServiceCall call, $1.StringValue request);
   $async.Stream<$4.GiveAwayList> get_giveaways(
-      $grpc.ServiceCall call, $2.Empty request);
+      $grpc.ServiceCall call, $2.CommonAddress request);
   $async.Stream<$4.GiveAwayList> get_giveaways_by_owner(
       $grpc.ServiceCall call, $1.StringValue request);
-  $async.Stream<$4.GiveAwayList> get_giveaways_by_coordinates(
-      $grpc.ServiceCall call, $4.GiveAwayCoordinates request);
-  $async.Stream<$4.GiveAwayList> get_giveaways_by_coordinates_and_radius(
-      $grpc.ServiceCall call, $4.GiveAwayByCoordinatesAndRadiusRequest request);
-  $async.Future<$2.Empty> update_giveaway(
+  $async.Future<$3.Empty> update_giveaway(
       $grpc.ServiceCall call, $4.GiveAway request);
-  $async.Future<$2.Empty> delete_giveaway(
+  $async.Future<$3.Empty> delete_giveaway(
       $grpc.ServiceCall call, $1.StringValue request);
 }

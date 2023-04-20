@@ -8,6 +8,7 @@ class Assets {
   static const String animLoading = 'assets/anim/loading.json';
   static const String animLogout = 'assets/anim/logout.json';
   static const String animPhoneVerification = 'assets/anim/phone_verification.json';
+  static const String animRecoverPassword = 'assets/anim/recover_password.json';
   static const String animRive = 'assets/anim/rive.riv';
   static const String animSearchOnMap = 'assets/anim/search_on_map.json';
   static const String animSuccess = 'assets/anim/success.json';

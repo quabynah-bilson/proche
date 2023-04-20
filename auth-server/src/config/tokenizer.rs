@@ -210,8 +210,13 @@ pub fn hash_password(password: &str) -> Result<String, Box<dyn Error>> {
 
 // compare password using bcrypt
 pub fn compare_password(password: &str, hashed_password: &str) -> Result<bool, Box<dyn Error>> {
-    let is_valid = bcrypt::verify(password, hashed_password)?;
-    Ok(is_valid)
+    match bcrypt::verify(password, hashed_password)? {
+        true => Ok(true),
+        false => Err(Box::new(std::io::Error::new(
+            ErrorKind::Other,
+            "invalid password",
+        ))),
+    }
 }
 
 // endregion

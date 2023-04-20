@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/utils/storage.keys.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 @module
 abstract class PersistentStorageModule {
@@ -16,4 +17,12 @@ abstract class PersistentStorageModule {
   @Named('locale')
   Future<String> get locale async =>
       (await localStorage.read(key: kLocaleKey)) ?? 'en';
+}
+
+@module
+abstract class SharedAppModule {
+  @preResolve
+  @Named('app_version')
+  Future<String> get appVersion async =>
+      (await PackageInfo.fromPlatform()).version;
 }
