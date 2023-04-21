@@ -544,6 +544,24 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
+            device_id : Some(
+                account_doc
+                    .get_str("device_id")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_type : Some(
+                account_doc
+                    .get_str("device_type")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_token : Some(
+                account_doc
+                    .get_str("device_token")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
         };
 
         Ok(Response::new(account))
@@ -606,6 +624,24 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
+            device_id : Some(
+                account_doc
+                    .get_str("device_id")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_type : Some(
+                account_doc
+                    .get_str("device_type")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_token : Some(
+                account_doc
+                    .get_str("device_token")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
         };
 
         Ok(Response::new(account))
@@ -664,6 +700,24 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
+            device_id : Some(
+                account_doc
+                    .get_str("device_id")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_type : Some(
+                account_doc
+                    .get_str("device_type")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_token : Some(
+                account_doc
+                    .get_str("device_token")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
         };
 
         Ok(Response::new(account))
@@ -708,6 +762,9 @@ impl AuthService for AuthServiceImpl {
                     "vaccine_card": &account.vaccine_card_url.unwrap(),
                     "updated_at": _create_timestamp_field(),
                     "country_id" : &account.country_id,
+                    "device_id" : &account.device_id.unwrap(),
+                    "device_type" : &account.device_type.unwrap(),
+                    "device_token" : &account.device_token.unwrap(),
                 }},
                 None,
             )
@@ -756,6 +813,24 @@ impl AuthService for AuthServiceImpl {
             referral_code: Some(
                 account_doc
                     .get_str("referral_code")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_id : Some(
+                account_doc
+                    .get_str("device_id")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_type : Some(
+                account_doc
+                    .get_str("device_type")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+            device_token : Some(
+                account_doc
+                    .get_str("device_token")
                     .unwrap_or("")
                     .to_string(),
             ),

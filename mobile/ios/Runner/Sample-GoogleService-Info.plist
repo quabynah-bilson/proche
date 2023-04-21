@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1022367238361-ninugevc81676tra76fbllfl0o29viod.apps.googleusercontent.com</string>
+	<string>YOUR_CLIENT_ID</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1022367238361-ninugevc81676tra76fbllfl0o29viod</string>
+	<string>YOUR_REVERSED_CLIENT_ID</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDt_R1Yl4M7JT5yhZJc948qw8yYCx1h5rM</string>
+	<string>YOUR_API_KEY</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1022367238361</string>
+	<string>GCM_SENDER_ID</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>io.qcodelabs.proche.mobile</string>
 	<key>PROJECT_ID</key>
-	<string>proche-383620</string>
+	<string><PROJECT_ID></string>
 	<key>STORAGE_BUCKET</key>
-	<string>proche-383620.appspot.com</string>
+	<string><PROJECT_ID>.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1022367238361:ios:94253b1e1aef598a77d6c8</string>
+	<string>1:<PROJECT_ID>:ios:94253b1e1aef598a77d6c8</string>
 </dict>
 </plist>

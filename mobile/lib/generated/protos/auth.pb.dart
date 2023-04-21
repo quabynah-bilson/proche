@@ -482,6 +482,9 @@ class Account extends $pb.GeneratedMessage {
     ..aOS(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'vaccineCardUrl')
     ..aOS(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'referralCode')
     ..aOS(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'countryId')
+    ..aOS(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceId')
+    ..aOS(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceToken')
+    ..aOS(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceType')
     ..hasRequiredFields = false
   ;
 
@@ -498,6 +501,9 @@ class Account extends $pb.GeneratedMessage {
     $core.String? vaccineCardUrl,
     $core.String? referralCode,
     $core.String? countryId,
+    $core.String? deviceId,
+    $core.String? deviceToken,
+    $core.String? deviceType,
   }) {
     final _result = create();
     if (id != null) {
@@ -532,6 +538,15 @@ class Account extends $pb.GeneratedMessage {
     }
     if (countryId != null) {
       _result.countryId = countryId;
+    }
+    if (deviceId != null) {
+      _result.deviceId = deviceId;
+    }
+    if (deviceToken != null) {
+      _result.deviceToken = deviceToken;
+    }
+    if (deviceType != null) {
+      _result.deviceType = deviceType;
     }
     return _result;
   }
@@ -658,6 +673,33 @@ class Account extends $pb.GeneratedMessage {
   $core.bool hasCountryId() => $_has(10);
   @$pb.TagNumber(11)
   void clearCountryId() => clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.String get deviceId => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set deviceId($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasDeviceId() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearDeviceId() => clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.String get deviceToken => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set deviceToken($core.String v) { $_setString(12, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasDeviceToken() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearDeviceToken() => clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get deviceType => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set deviceType($core.String v) { $_setString(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasDeviceType() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearDeviceType() => clearField(14);
 }
 
 class AccessTokenStore extends $pb.GeneratedMessage {

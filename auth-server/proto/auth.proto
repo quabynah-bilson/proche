@@ -98,6 +98,9 @@ message Account {
   optional string vaccine_card_url = 9;
   optional string referral_code = 10;
   string country_id = 11;
+  optional string device_id = 12;
+  optional string device_token = 13;
+  optional string device_type = 14;
 }
 
 message AccessTokenStore {
