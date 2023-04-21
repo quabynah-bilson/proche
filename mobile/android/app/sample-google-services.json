@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "<project_number>",
+    "project_id": "<project_id>",
+    "storage_bucket": "<project_id>.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:<project_number>:android:e9210cd7443dfb7c77d6c8",
+        "android_client_info": {
+          "package_name": "com.qcodelabsllc.proche.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "<project_number>-stjsmsoabtr89raqkgalqdn90h2k44d4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "<api_key>"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "<project_number>-stjsmsoabtr89raqkgalqdn90h2k44d4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

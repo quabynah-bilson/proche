@@ -107,17 +107,23 @@ const Account$json = const {
     const {'1': 'vaccine_card_url', '3': 9, '4': 1, '5': 9, '9': 2, '10': 'vaccineCardUrl', '17': true},
     const {'1': 'referral_code', '3': 10, '4': 1, '5': 9, '9': 3, '10': 'referralCode', '17': true},
     const {'1': 'country_id', '3': 11, '4': 1, '5': 9, '10': 'countryId'},
+    const {'1': 'device_id', '3': 12, '4': 1, '5': 9, '9': 4, '10': 'deviceId', '17': true},
+    const {'1': 'device_token', '3': 13, '4': 1, '5': 9, '9': 5, '10': 'deviceToken', '17': true},
+    const {'1': 'device_type', '3': 14, '4': 1, '5': 9, '9': 6, '10': 'deviceType', '17': true},
   ],
   '8': const [
     const {'1': '_avatar_url'},
     const {'1': '_id_card_url'},
     const {'1': '_vaccine_card_url'},
     const {'1': '_referral_code'},
+    const {'1': '_device_id'},
+    const {'1': '_device_token'},
+    const {'1': '_device_type'},
   ],
 };
 
 /// Descriptor for `Account`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List accountDescriptor = $convert.base64Decode('CgdBY2NvdW50Eg4KAmlkGAEgASgJUgJpZBIhCgxwaG9uZV9udW1iZXIYAiABKAlSC3Bob25lTnVtYmVyEiEKDGRpc3BsYXlfbmFtZRgDIAEoCVILZGlzcGxheU5hbWUSHwoLbGFuZ3VhZ2VfaWQYBCABKAlSCmxhbmd1YWdlSWQSOQoKY3JlYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0EiIKCmF2YXRhcl91cmwYByABKAlIAFIJYXZhdGFyVXJsiAEBEiMKC2lkX2NhcmRfdXJsGAggASgJSAFSCWlkQ2FyZFVybIgBARItChB2YWNjaW5lX2NhcmRfdXJsGAkgASgJSAJSDnZhY2NpbmVDYXJkVXJsiAEBEigKDXJlZmVycmFsX2NvZGUYCiABKAlIA1IMcmVmZXJyYWxDb2RliAEBEh0KCmNvdW50cnlfaWQYCyABKAlSCWNvdW50cnlJZEINCgtfYXZhdGFyX3VybEIOCgxfaWRfY2FyZF91cmxCEwoRX3ZhY2NpbmVfY2FyZF91cmxCEAoOX3JlZmVycmFsX2NvZGU=');
+final $typed_data.Uint8List accountDescriptor = $convert.base64Decode('CgdBY2NvdW50Eg4KAmlkGAEgASgJUgJpZBIhCgxwaG9uZV9udW1iZXIYAiABKAlSC3Bob25lTnVtYmVyEiEKDGRpc3BsYXlfbmFtZRgDIAEoCVILZGlzcGxheU5hbWUSHwoLbGFuZ3VhZ2VfaWQYBCABKAlSCmxhbmd1YWdlSWQSOQoKY3JlYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0EiIKCmF2YXRhcl91cmwYByABKAlIAFIJYXZhdGFyVXJsiAEBEiMKC2lkX2NhcmRfdXJsGAggASgJSAFSCWlkQ2FyZFVybIgBARItChB2YWNjaW5lX2NhcmRfdXJsGAkgASgJSAJSDnZhY2NpbmVDYXJkVXJsiAEBEigKDXJlZmVycmFsX2NvZGUYCiABKAlIA1IMcmVmZXJyYWxDb2RliAEBEh0KCmNvdW50cnlfaWQYCyABKAlSCWNvdW50cnlJZBIgCglkZXZpY2VfaWQYDCABKAlIBFIIZGV2aWNlSWSIAQESJgoMZGV2aWNlX3Rva2VuGA0gASgJSAVSC2RldmljZVRva2VuiAEBEiQKC2RldmljZV90eXBlGA4gASgJSAZSCmRldmljZVR5cGWIAQFCDQoLX2F2YXRhcl91cmxCDgoMX2lkX2NhcmRfdXJsQhMKEV92YWNjaW5lX2NhcmRfdXJsQhAKDl9yZWZlcnJhbF9jb2RlQgwKCl9kZXZpY2VfaWRCDwoNX2RldmljZV90b2tlbkIOCgxfZGV2aWNlX3R5cGU=');
 @$core.Deprecated('Use accessTokenStoreDescriptor instead')
 const AccessTokenStore$json = const {
   '1': 'AccessTokenStore',

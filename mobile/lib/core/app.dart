@@ -40,7 +40,7 @@ class _ProcheAppState extends State<ProcheApp> {
                   context.localizer.appName,
               theme: context.useLightTheme,
               darkTheme: context.useDarkTheme,
-              themeMode: ThemeMode.system,
+              themeMode: ThemeMode.light, // todo -> add support for dark mode
               onGenerateRoute: AppRouterConfig.setupRoutes,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,

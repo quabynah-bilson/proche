@@ -1,0 +1,23 @@
+part of 'task_bloc.dart';
+
+abstract class TaskEvent {
+  const TaskEvent();
+}
+
+class GetAllTasksEvent extends TaskEvent {
+  final CommonAddress address;
+
+  const GetAllTasksEvent(this.address);
+}
+
+class CreateTaskEvent extends TaskEvent {
+  final CreateTaskRequest request;
+
+  const CreateTaskEvent(this.request);
+}
+
+class GetTaskEvent extends TaskEvent {
+  final String taskId;
+
+  const GetTaskEvent(this.taskId);
+}

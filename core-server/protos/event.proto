@@ -6,6 +6,8 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
+import "core_shared.proto";
+
 option go_package = "com.github/quabynah-bilson/proche;core";
 
 // event management service
@@ -13,16 +15,10 @@ service EventService {
   rpc create_event (CreateEventRequest) returns (ProcheEvent);
   rpc get_event (google.protobuf.StringValue) returns (stream ProcheEvent);
   rpc get_event_by_user (google.protobuf.StringValue) returns (stream ProcheEventList);
-  rpc get_events_by_location (GetEventByLocationRequest) returns (stream ProcheEventList);
+  rpc get_events_by_location (core.CommonAddress) returns (stream ProcheEventList);
   rpc list_events (google.protobuf.Empty) returns (stream ProcheEventList);
   rpc update_event (ProcheEvent) returns (ProcheEvent);
   rpc delete_event (google.protobuf.StringValue) returns (google.protobuf.Empty);
-}
-
-message GetEventByLocationRequest {
-  double latitude = 1;
-  double longitude = 2;
-  double radius = 3;
 }
 
 message CreateEventRequest {

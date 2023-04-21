@@ -8,47 +8,20 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
-@$core.Deprecated('Use appServiceCredentialDescriptor instead')
-const AppServiceCredential$json = const {
-  '1': 'AppServiceCredential',
+@$core.Deprecated('Use addressWithLatLngNameDescriptor instead')
+const AddressWithLatLngName$json = const {
+  '1': 'AddressWithLatLngName',
   '2': const [
-    const {'1': 'google_auth', '2': 0},
-    const {'1': 'google_maps', '2': 1},
+    const {'1': 'name', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
+    const {'1': 'address', '3': 2, '4': 1, '5': 9, '9': 1, '10': 'address', '17': true},
+    const {'1': 'latitude', '3': 3, '4': 1, '5': 1, '10': 'latitude'},
+    const {'1': 'longitude', '3': 4, '4': 1, '5': 1, '10': 'longitude'},
+  ],
+  '8': const [
+    const {'1': '_name'},
+    const {'1': '_address'},
   ],
 };
 
-/// Descriptor for `AppServiceCredential`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List appServiceCredentialDescriptor = $convert.base64Decode('ChRBcHBTZXJ2aWNlQ3JlZGVudGlhbBIPCgtnb29nbGVfYXV0aBAAEg8KC2dvb2dsZV9tYXBzEAE=');
-@$core.Deprecated('Use appServiceDescriptor instead')
-const AppService$json = const {
-  '1': 'AppService',
-  '2': const [
-    const {'1': 'credential', '3': 1, '4': 1, '5': 14, '6': '.shared.AppServiceCredential', '10': 'credential'},
-  ],
-};
-
-/// Descriptor for `AppService`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List appServiceDescriptor = $convert.base64Decode('CgpBcHBTZXJ2aWNlEjwKCmNyZWRlbnRpYWwYASABKA4yHC5zaGFyZWQuQXBwU2VydmljZUNyZWRlbnRpYWxSCmNyZWRlbnRpYWw=');
-@$core.Deprecated('Use appServiceResponseDescriptor instead')
-const AppServiceResponse$json = const {
-  '1': 'AppServiceResponse',
-  '2': const [
-    const {'1': 'encoded_key', '3': 1, '4': 1, '5': 9, '10': 'encodedKey'},
-    const {'1': 'encoded_secret', '3': 2, '4': 1, '5': 9, '10': 'encodedSecret'},
-    const {'1': 'credential', '3': 3, '4': 1, '5': 14, '6': '.shared.AppServiceCredential', '10': 'credential'},
-  ],
-};
-
-/// Descriptor for `AppServiceResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List appServiceResponseDescriptor = $convert.base64Decode('ChJBcHBTZXJ2aWNlUmVzcG9uc2USHwoLZW5jb2RlZF9rZXkYASABKAlSCmVuY29kZWRLZXkSJQoOZW5jb2RlZF9zZWNyZXQYAiABKAlSDWVuY29kZWRTZWNyZXQSPAoKY3JlZGVudGlhbBgDIAEoDjIcLnNoYXJlZC5BcHBTZXJ2aWNlQ3JlZGVudGlhbFIKY3JlZGVudGlhbA==');
-@$core.Deprecated('Use apiVersionResponseDescriptor instead')
-const ApiVersionResponse$json = const {
-  '1': 'ApiVersionResponse',
-  '2': const [
-    const {'1': 'version', '3': 1, '4': 1, '5': 9, '10': 'version'},
-    const {'1': 'should_upgrade', '3': 2, '4': 1, '5': 8, '10': 'shouldUpgrade'},
-  ],
-};
-
-/// Descriptor for `ApiVersionResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List apiVersionResponseDescriptor = $convert.base64Decode('ChJBcGlWZXJzaW9uUmVzcG9uc2USGAoHdmVyc2lvbhgBIAEoCVIHdmVyc2lvbhIlCg5zaG91bGRfdXBncmFkZRgCIAEoCFINc2hvdWxkVXBncmFkZQ==');
+/// Descriptor for `AddressWithLatLngName`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List addressWithLatLngNameDescriptor = $convert.base64Decode('ChVBZGRyZXNzV2l0aExhdExuZ05hbWUSFwoEbmFtZRgBIAEoCUgAUgRuYW1liAEBEh0KB2FkZHJlc3MYAiABKAlIAVIHYWRkcmVzc4gBARIaCghsYXRpdHVkZRgDIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAQgASgBUglsb25naXR1ZGVCBwoFX25hbWVCCgoIX2FkZHJlc3M=');

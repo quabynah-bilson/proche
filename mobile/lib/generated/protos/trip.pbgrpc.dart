@@ -12,7 +12,7 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'trip.pb.dart' as $6;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
-import 'package:protobuf_google/protobuf_google.dart' as $2;
+import 'package:protobuf_google/protobuf_google.dart' as $3;
 export 'trip.pb.dart';
 
 class TripServiceClient extends $grpc.Client {
@@ -29,25 +29,25 @@ class TripServiceClient extends $grpc.Client {
       '/trip.TripService/get_trips',
       ($1.StringValue value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $6.TripList.fromBuffer(value));
-  static final _$delete_trip = $grpc.ClientMethod<$1.StringValue, $2.Empty>(
+  static final _$delete_trip = $grpc.ClientMethod<$1.StringValue, $3.Empty>(
       '/trip.TripService/delete_trip',
       ($1.StringValue value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+      ($core.List<$core.int> value) => $3.Empty.fromBuffer(value));
   static final _$cancel_trip_event =
-      $grpc.ClientMethod<$1.StringValue, $2.Empty>(
+      $grpc.ClientMethod<$1.StringValue, $3.Empty>(
           '/trip.TripService/cancel_trip_event',
           ($1.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+          ($core.List<$core.int> value) => $3.Empty.fromBuffer(value));
   static final _$start_trip_event =
-      $grpc.ClientMethod<$1.StringValue, $2.Empty>(
+      $grpc.ClientMethod<$1.StringValue, $3.Empty>(
           '/trip.TripService/start_trip_event',
           ($1.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+          ($core.List<$core.int> value) => $3.Empty.fromBuffer(value));
   static final _$complete_trip_event =
-      $grpc.ClientMethod<$1.StringValue, $2.Empty>(
+      $grpc.ClientMethod<$1.StringValue, $3.Empty>(
           '/trip.TripService/complete_trip_event',
           ($1.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+          ($core.List<$core.int> value) => $3.Empty.fromBuffer(value));
   static final _$get_trip_events =
       $grpc.ClientMethod<$1.StringValue, $6.TripEventList>(
           '/trip.TripService/get_trip_events',
@@ -81,22 +81,22 @@ class TripServiceClient extends $grpc.Client {
         options: options);
   }
 
-  $grpc.ResponseFuture<$2.Empty> delete_trip($1.StringValue request,
+  $grpc.ResponseFuture<$3.Empty> delete_trip($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_trip, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.Empty> cancel_trip_event($1.StringValue request,
+  $grpc.ResponseFuture<$3.Empty> cancel_trip_event($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$cancel_trip_event, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.Empty> start_trip_event($1.StringValue request,
+  $grpc.ResponseFuture<$3.Empty> start_trip_event($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$start_trip_event, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.Empty> complete_trip_event($1.StringValue request,
+  $grpc.ResponseFuture<$3.Empty> complete_trip_event($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$complete_trip_event, request, options: options);
   }
@@ -141,34 +141,34 @@ abstract class TripServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
         ($6.TripList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.Empty>(
         'delete_trip',
         delete_trip_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
-        ($2.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
+        ($3.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.Empty>(
         'cancel_trip_event',
         cancel_trip_event_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
-        ($2.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
+        ($3.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.Empty>(
         'start_trip_event',
         start_trip_event_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
-        ($2.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
+        ($3.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $3.Empty>(
         'complete_trip_event',
         complete_trip_event_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
-        ($2.Empty value) => value.writeToBuffer()));
+        ($3.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.StringValue, $6.TripEventList>(
         'get_trip_events',
         get_trip_events_Pre,
@@ -200,22 +200,22 @@ abstract class TripServiceBase extends $grpc.Service {
     yield* get_trips(call, await request);
   }
 
-  $async.Future<$2.Empty> delete_trip_Pre(
+  $async.Future<$3.Empty> delete_trip_Pre(
       $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return delete_trip(call, await request);
   }
 
-  $async.Future<$2.Empty> cancel_trip_event_Pre(
+  $async.Future<$3.Empty> cancel_trip_event_Pre(
       $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return cancel_trip_event(call, await request);
   }
 
-  $async.Future<$2.Empty> start_trip_event_Pre(
+  $async.Future<$3.Empty> start_trip_event_Pre(
       $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return start_trip_event(call, await request);
   }
 
-  $async.Future<$2.Empty> complete_trip_event_Pre(
+  $async.Future<$3.Empty> complete_trip_event_Pre(
       $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
     return complete_trip_event(call, await request);
   }
@@ -236,13 +236,13 @@ abstract class TripServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $1.StringValue request);
   $async.Stream<$6.TripList> get_trips(
       $grpc.ServiceCall call, $1.StringValue request);
-  $async.Future<$2.Empty> delete_trip(
+  $async.Future<$3.Empty> delete_trip(
       $grpc.ServiceCall call, $1.StringValue request);
-  $async.Future<$2.Empty> cancel_trip_event(
+  $async.Future<$3.Empty> cancel_trip_event(
       $grpc.ServiceCall call, $1.StringValue request);
-  $async.Future<$2.Empty> start_trip_event(
+  $async.Future<$3.Empty> start_trip_event(
       $grpc.ServiceCall call, $1.StringValue request);
-  $async.Future<$2.Empty> complete_trip_event(
+  $async.Future<$3.Empty> complete_trip_event(
       $grpc.ServiceCall call, $1.StringValue request);
   $async.Stream<$6.TripEventList> get_trip_events(
       $grpc.ServiceCall call, $1.StringValue request);

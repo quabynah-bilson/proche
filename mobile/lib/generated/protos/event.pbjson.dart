@@ -20,18 +20,6 @@ const ProcheEventStatus$json = const {
 
 /// Descriptor for `ProcheEventStatus`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List procheEventStatusDescriptor = $convert.base64Decode('ChFQcm9jaGVFdmVudFN0YXR1cxIKCgZBQ1RJVkUQABINCglDQU5DRUxMRUQQARINCglDT01QTEVURUQQAg==');
-@$core.Deprecated('Use getEventByLocationRequestDescriptor instead')
-const GetEventByLocationRequest$json = const {
-  '1': 'GetEventByLocationRequest',
-  '2': const [
-    const {'1': 'latitude', '3': 1, '4': 1, '5': 1, '10': 'latitude'},
-    const {'1': 'longitude', '3': 2, '4': 1, '5': 1, '10': 'longitude'},
-    const {'1': 'radius', '3': 3, '4': 1, '5': 1, '10': 'radius'},
-  ],
-};
-
-/// Descriptor for `GetEventByLocationRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getEventByLocationRequestDescriptor = $convert.base64Decode('ChlHZXRFdmVudEJ5TG9jYXRpb25SZXF1ZXN0EhoKCGxhdGl0dWRlGAEgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYAiABKAFSCWxvbmdpdHVkZRIWCgZyYWRpdXMYAyABKAFSBnJhZGl1cw==');
 @$core.Deprecated('Use createEventRequestDescriptor instead')
 const CreateEventRequest$json = const {
   '1': 'CreateEventRequest',

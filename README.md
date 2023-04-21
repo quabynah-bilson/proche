@@ -1,4 +1,5 @@
 # Proche 🧭🗺️: gRPC Microservices with MongoDB and Flutter
+
 ###### (means Nearby in French)
 
 [//]: # ([![Coverage Status]&#40;https://coveralls.io/repos/github/quabynah-bilson/proche/badge.svg?branch=master&#41;]&#40;https://coveralls.io/github/quabynah-bilson/proche?branch=dev&#41;)
@@ -34,6 +35,7 @@ integrated with a Flutter mobile application.
 The project is composed of the following components:
 
 #### Core Microservice: (::2000)
+
 This microservice serves as the backbone of the application and contains the business logic of the
 system. It provides CRUD (Create, Read, Update, Delete) operations on data related to the system's core entities.
 
@@ -45,6 +47,10 @@ system. It includes functionalities such as file uploads, email notifications, a
 #### Auth Microservice: (::1800)
 
 This microservice is responsible for handling user authentication and authorization.
+
+#### Media Microservice: (::1800)
+
+This microservice is responsible for handling the upload and transformation of media files using `cloudinary`.
 
 #### Mobile Application:
 
@@ -85,4 +91,5 @@ MongoDB. It also demonstrates how to integrate a Flutter mobile application with
 user experience.
 
 [//]: # (https://medium.com/javarevisited/10-microservices-design-principles-every-developer-should-know-44f2f69e960f)
+
 [//]: # (https://github.com/Ileriayo/markdown-badges#markdown-badges)

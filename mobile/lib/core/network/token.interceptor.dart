@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/utils/session.dart';
-import 'package:shared_utils/shared_utils.dart';
 
 @injectable
 class TokenGrpcInterceptor implements ClientInterceptor {
@@ -18,12 +17,10 @@ class TokenGrpcInterceptor implements ClientInterceptor {
         metadata: {
           'Authorization': 'Bearer ${UserSession.kAccessToken}',
           'x-language-id': '${UserSession.kLocale}',
+          'x-authenticated': '${UserSession.kIsLoggedIn}',
         },
       ),
     );
-
-    logger.d(
-        'grpc streaming method: ${method.path} => metadata: ${newOpts.metadata}');
     // do nothing for now
     return invoker(method, requests, newOpts);
   }
@@ -36,12 +33,10 @@ class TokenGrpcInterceptor implements ClientInterceptor {
         metadata: {
           'Authorization': 'Bearer ${UserSession.kAccessToken}',
           'x-language-id': '${UserSession.kLocale}',
+          'x-authenticated': '${UserSession.kIsLoggedIn}',
         },
       ),
     );
-    logger.d(
-        'grpc unary method: ${method.path} => metadata: ${newOpts.metadata} => payload : $self');
-    return invoker(method, self, newOpts)
-      ..then((data) => logger.d('grpc unary response => $data'));
+    return invoker(method, self, newOpts);
   }
 }

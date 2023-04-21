@@ -33,12 +33,12 @@ func NewProcheTaskServerInstance(taskCol *mongo.Collection, taskEventCol *mongo.
 
 // CreateTask creates a new task
 // done
-func (s *ProcheTaskServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.Task, error) {
+func (s *ProcheTaskServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.ProcheTask, error) {
 	// get request charge per hour
 	chargePerHour := req.GetChargePerHour()
 
 	// create task
-	task := pb.Task{
+	task := pb.ProcheTask{
 		Title:         req.GetTitle(),
 		Description:   req.GetDescription(),
 		CreatedAt:     timestamppb.Now(),
@@ -48,6 +48,7 @@ func (s *ProcheTaskServer) CreateTask(ctx context.Context, req *pb.CreateTaskReq
 		Completed:     false,
 		ChargePerHour: &chargePerHour,
 		UserId:        req.GetUserId(),
+		Address:       req.GetAddress(),
 	}
 
 	// insert task into database
@@ -57,7 +58,7 @@ func (s *ProcheTaskServer) CreateTask(ctx context.Context, req *pb.CreateTaskReq
 		// update task id with insertResultId
 		task.Id = insertResultId.InsertedID.(primitive.ObjectID).Hex()
 
-		go func(task *pb.Task) {
+		go func(task *pb.ProcheTask) {
 			// save to database
 			if _, err := s.taskCol.ReplaceOne(context.Background(), bson.M{"title": task.GetTitle()}, &task); err != nil {
 				log.Fatalf("failed to update task: %v", err)
@@ -79,7 +80,7 @@ func (s *ProcheTaskServer) GetTask(req *wrapperspb.StringValue, stream pb.TaskSe
 	taskId := req.GetValue()
 
 	// get task from database
-	var task pb.Task
+	var task pb.ProcheTask
 	if err := s.taskCol.FindOne(ctx, bson.M{"id": taskId}).Decode(&task); err != nil {
 		return status.Errorf(codes.Internal, "failed to get task: %v", err)
 	} else {
@@ -102,7 +103,7 @@ func (s *ProcheTaskServer) GetTask(req *wrapperspb.StringValue, stream pb.TaskSe
 		// iterate over watch stream
 		for watchStream.Next(ctx) {
 			// create task
-			var task util.MongoDocToProto[*pb.Task]
+			var task util.MongoDocToProto[*pb.ProcheTask]
 			// decode task
 			if err := watchStream.Decode(&task); err != nil {
 				return status.Errorf(codes.Internal, "failed to decode task: %v", err)
@@ -125,7 +126,7 @@ func (s *ProcheTaskServer) GetTask(req *wrapperspb.StringValue, stream pb.TaskSe
 
 // GetTasks gets all tasks
 // done
-func (s *ProcheTaskServer) GetTasks(_ *emptypb.Empty, stream pb.TaskService_GetTasksServer) error {
+func (s *ProcheTaskServer) GetTasks(req *pb.CommonAddress, stream pb.TaskService_GetTasksServer) error {
 	// get context from stream
 	ctx := stream.Context()
 
@@ -140,7 +141,7 @@ func (s *ProcheTaskServer) GetTasks(_ *emptypb.Empty, stream pb.TaskService_GetT
 		// iterate over tasks
 		for cursor.Next(ctx) {
 			// create task
-			var task pb.Task
+			var task pb.ProcheTask
 			// decode task
 			if err := cursor.Decode(&task); err != nil {
 				return status.Errorf(codes.Internal, "failed to decode task: %v", err)
@@ -172,7 +173,7 @@ func (s *ProcheTaskServer) GetTasks(_ *emptypb.Empty, stream pb.TaskService_GetT
 		// iterate over watch stream
 		for watchStream.Next(ctx) {
 			// create task
-			var task util.MongoDocToProto[*pb.Task]
+			var task util.MongoDocToProto[*pb.ProcheTask]
 
 			// decode task
 			if err := watchStream.Decode(&task); err != nil {
@@ -211,7 +212,7 @@ func (s *ProcheTaskServer) DeleteTask(ctx context.Context, req *wrapperspb.Strin
 	return &emptypb.Empty{}, nil
 }
 
-func (s *ProcheTaskServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.Task, error) {
+func (s *ProcheTaskServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.ProcheTask, error) {
 	panic("implement me")
 }
 

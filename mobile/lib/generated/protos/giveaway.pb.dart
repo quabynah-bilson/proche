@@ -9,75 +9,13 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'core_shared.pb.dart' as $2;
 import 'package:protobuf_google/protobuf_google.dart' as $8;
 import 'package:protobuf_google/protobuf_google.dart' as $7;
 
 import 'giveaway.pbenum.dart';
 
 export 'giveaway.pbenum.dart';
-
-class GiveAwayByCoordinatesAndRadiusRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GiveAwayByCoordinatesAndRadiusRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'event'), createEmptyInstance: create)
-    ..aOM<GiveAwayCoordinates>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coordinates', subBuilder: GiveAwayCoordinates.create)
-    ..a<$core.double>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'radius', $pb.PbFieldType.OF)
-    ..hasRequiredFields = false
-  ;
-
-  GiveAwayByCoordinatesAndRadiusRequest._() : super();
-  factory GiveAwayByCoordinatesAndRadiusRequest({
-    GiveAwayCoordinates? coordinates,
-    $core.double? radius,
-  }) {
-    final _result = create();
-    if (coordinates != null) {
-      _result.coordinates = coordinates;
-    }
-    if (radius != null) {
-      _result.radius = radius;
-    }
-    return _result;
-  }
-  factory GiveAwayByCoordinatesAndRadiusRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GiveAwayByCoordinatesAndRadiusRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GiveAwayByCoordinatesAndRadiusRequest clone() => GiveAwayByCoordinatesAndRadiusRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GiveAwayByCoordinatesAndRadiusRequest copyWith(void Function(GiveAwayByCoordinatesAndRadiusRequest) updates) => super.copyWith((message) => updates(message as GiveAwayByCoordinatesAndRadiusRequest)) as GiveAwayByCoordinatesAndRadiusRequest; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static GiveAwayByCoordinatesAndRadiusRequest create() => GiveAwayByCoordinatesAndRadiusRequest._();
-  GiveAwayByCoordinatesAndRadiusRequest createEmptyInstance() => create();
-  static $pb.PbList<GiveAwayByCoordinatesAndRadiusRequest> createRepeated() => $pb.PbList<GiveAwayByCoordinatesAndRadiusRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GiveAwayByCoordinatesAndRadiusRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GiveAwayByCoordinatesAndRadiusRequest>(create);
-  static GiveAwayByCoordinatesAndRadiusRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  GiveAwayCoordinates get coordinates => $_getN(0);
-  @$pb.TagNumber(1)
-  set coordinates(GiveAwayCoordinates v) { setField(1, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasCoordinates() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearCoordinates() => clearField(1);
-  @$pb.TagNumber(1)
-  GiveAwayCoordinates ensureCoordinates() => $_ensure(0);
-
-  @$pb.TagNumber(2)
-  $core.double get radius => $_getN(1);
-  @$pb.TagNumber(2)
-  set radius($core.double v) { $_setFloat(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasRadius() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearRadius() => clearField(2);
-}
 
 class GiveAwayList extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GiveAwayList', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'event'), createEmptyInstance: create)
@@ -125,7 +63,7 @@ class CreateGiveAwayRequest extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'description')
     ..pPS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'images')
-    ..aOM<GiveAwayCoordinates>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coordinates', subBuilder: GiveAwayCoordinates.create)
+    ..aOM<$2.CommonAddress>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address', subBuilder: $2.CommonAddress.create)
     ..e<GiveAwayDispatchType>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dispatchType', $pb.PbFieldType.OE, defaultOrMaker: GiveAwayDispatchType.GIVEAWAY_PICKUP, valueOf: GiveAwayDispatchType.valueOf, enumValues: GiveAwayDispatchType.values)
     ..aOM<$8.Duration>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dispatchDuration', subBuilder: $8.Duration.create)
     ..hasRequiredFields = false
@@ -136,7 +74,7 @@ class CreateGiveAwayRequest extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $core.Iterable<$core.String>? images,
-    GiveAwayCoordinates? coordinates,
+    $2.CommonAddress? address,
     GiveAwayDispatchType? dispatchType,
     $8.Duration? dispatchDuration,
   }) {
@@ -150,8 +88,8 @@ class CreateGiveAwayRequest extends $pb.GeneratedMessage {
     if (images != null) {
       _result.images.addAll(images);
     }
-    if (coordinates != null) {
-      _result.coordinates = coordinates;
+    if (address != null) {
+      _result.address = address;
     }
     if (dispatchType != null) {
       _result.dispatchType = dispatchType;
@@ -204,15 +142,15 @@ class CreateGiveAwayRequest extends $pb.GeneratedMessage {
   $core.List<$core.String> get images => $_getList(2);
 
   @$pb.TagNumber(4)
-  GiveAwayCoordinates get coordinates => $_getN(3);
+  $2.CommonAddress get address => $_getN(3);
   @$pb.TagNumber(4)
-  set coordinates(GiveAwayCoordinates v) { setField(4, v); }
+  set address($2.CommonAddress v) { setField(4, v); }
   @$pb.TagNumber(4)
-  $core.bool hasCoordinates() => $_has(3);
+  $core.bool hasAddress() => $_has(3);
   @$pb.TagNumber(4)
-  void clearCoordinates() => clearField(4);
+  void clearAddress() => clearField(4);
   @$pb.TagNumber(4)
-  GiveAwayCoordinates ensureCoordinates() => $_ensure(3);
+  $2.CommonAddress ensureAddress() => $_ensure(3);
 
   @$pb.TagNumber(5)
   GiveAwayDispatchType get dispatchType => $_getN(4);
@@ -244,7 +182,7 @@ class GiveAway extends $pb.GeneratedMessage {
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'owner')
     ..aOM<$7.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
     ..aOM<$7.Timestamp>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
-    ..aOM<GiveAwayCoordinates>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coordinates', subBuilder: GiveAwayCoordinates.create)
+    ..aOM<$2.CommonAddress>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address', subBuilder: $2.CommonAddress.create)
     ..hasRequiredFields = false
   ;
 
@@ -257,7 +195,7 @@ class GiveAway extends $pb.GeneratedMessage {
     $core.String? owner,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
-    GiveAwayCoordinates? coordinates,
+    $2.CommonAddress? address,
   }) {
     final _result = create();
     if (id != null) {
@@ -281,8 +219,8 @@ class GiveAway extends $pb.GeneratedMessage {
     if (updatedAt != null) {
       _result.updatedAt = updatedAt;
     }
-    if (coordinates != null) {
-      _result.coordinates = coordinates;
+    if (address != null) {
+      _result.address = address;
     }
     return _result;
   }
@@ -369,89 +307,14 @@ class GiveAway extends $pb.GeneratedMessage {
   $7.Timestamp ensureUpdatedAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  GiveAwayCoordinates get coordinates => $_getN(7);
+  $2.CommonAddress get address => $_getN(7);
   @$pb.TagNumber(8)
-  set coordinates(GiveAwayCoordinates v) { setField(8, v); }
+  set address($2.CommonAddress v) { setField(8, v); }
   @$pb.TagNumber(8)
-  $core.bool hasCoordinates() => $_has(7);
+  $core.bool hasAddress() => $_has(7);
   @$pb.TagNumber(8)
-  void clearCoordinates() => clearField(8);
+  void clearAddress() => clearField(8);
   @$pb.TagNumber(8)
-  GiveAwayCoordinates ensureCoordinates() => $_ensure(7);
-}
-
-class GiveAwayCoordinates extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GiveAwayCoordinates', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'event'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..a<$core.double>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'latitude', $pb.PbFieldType.OF)
-    ..a<$core.double>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longitude', $pb.PbFieldType.OF)
-    ..hasRequiredFields = false
-  ;
-
-  GiveAwayCoordinates._() : super();
-  factory GiveAwayCoordinates({
-    $core.String? name,
-    $core.double? latitude,
-    $core.double? longitude,
-  }) {
-    final _result = create();
-    if (name != null) {
-      _result.name = name;
-    }
-    if (latitude != null) {
-      _result.latitude = latitude;
-    }
-    if (longitude != null) {
-      _result.longitude = longitude;
-    }
-    return _result;
-  }
-  factory GiveAwayCoordinates.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GiveAwayCoordinates.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GiveAwayCoordinates clone() => GiveAwayCoordinates()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GiveAwayCoordinates copyWith(void Function(GiveAwayCoordinates) updates) => super.copyWith((message) => updates(message as GiveAwayCoordinates)) as GiveAwayCoordinates; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static GiveAwayCoordinates create() => GiveAwayCoordinates._();
-  GiveAwayCoordinates createEmptyInstance() => create();
-  static $pb.PbList<GiveAwayCoordinates> createRepeated() => $pb.PbList<GiveAwayCoordinates>();
-  @$core.pragma('dart2js:noInline')
-  static GiveAwayCoordinates getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GiveAwayCoordinates>(create);
-  static GiveAwayCoordinates? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get name => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set name($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasName() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearName() => clearField(1);
-
-  @$pb.TagNumber(3)
-  $core.double get latitude => $_getN(1);
-  @$pb.TagNumber(3)
-  set latitude($core.double v) { $_setFloat(1, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasLatitude() => $_has(1);
-  @$pb.TagNumber(3)
-  void clearLatitude() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.double get longitude => $_getN(2);
-  @$pb.TagNumber(4)
-  set longitude($core.double v) { $_setFloat(2, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasLongitude() => $_has(2);
-  @$pb.TagNumber(4)
-  void clearLongitude() => clearField(4);
+  $2.CommonAddress ensureAddress() => $_ensure(7);
 }
 

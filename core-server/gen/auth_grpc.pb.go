@@ -29,6 +29,7 @@ type AuthServiceClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	Logout(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	VerifyPassword(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// request public access token for unauthenticated calls
 	RequestPublicAccessToken(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	// validate access token from microservices for authorization (only for internal calls)
@@ -36,6 +37,7 @@ type AuthServiceClient interface {
 	// account
 	GetAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Account, error)
 	GetAccountByPhoneNumber(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error)
+	GetAccountById(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error)
 	UpdateAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error)
 	DeleteAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// phone verification
@@ -95,6 +97,15 @@ func (c *authServiceClient) Logout(ctx context.Context, in *emptypb.Empty, opts 
 	return out, nil
 }
 
+func (c *authServiceClient) VerifyPassword(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/verify_password", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authServiceClient) RequestPublicAccessToken(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
 	out := new(wrapperspb.StringValue)
 	err := c.cc.Invoke(ctx, "/auth.AuthService/request_public_access_token", in, out, opts...)
@@ -125,6 +136,15 @@ func (c *authServiceClient) GetAccount(ctx context.Context, in *emptypb.Empty, o
 func (c *authServiceClient) GetAccountByPhoneNumber(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error) {
 	out := new(Account)
 	err := c.cc.Invoke(ctx, "/auth.AuthService/get_account_by_phone_number", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) GetAccountById(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error) {
+	out := new(Account)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/get_account_by_id", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -230,6 +250,7 @@ type AuthServiceServer interface {
 	Register(context.Context, *RegisterRequest) (*wrapperspb.StringValue, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*wrapperspb.StringValue, error)
 	Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	VerifyPassword(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	// request public access token for unauthenticated calls
 	RequestPublicAccessToken(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
 	// validate access token from microservices for authorization (only for internal calls)
@@ -237,6 +258,7 @@ type AuthServiceServer interface {
 	// account
 	GetAccount(context.Context, *emptypb.Empty) (*Account, error)
 	GetAccountByPhoneNumber(context.Context, *wrapperspb.StringValue) (*Account, error)
+	GetAccountById(context.Context, *wrapperspb.StringValue) (*Account, error)
 	UpdateAccount(context.Context, *Account) (*Account, error)
 	DeleteAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	// phone verification
@@ -269,6 +291,9 @@ func (UnimplementedAuthServiceServer) ResetPassword(context.Context, *ResetPassw
 func (UnimplementedAuthServiceServer) Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
 }
+func (UnimplementedAuthServiceServer) VerifyPassword(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyPassword not implemented")
+}
 func (UnimplementedAuthServiceServer) RequestPublicAccessToken(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestPublicAccessToken not implemented")
 }
@@ -280,6 +305,9 @@ func (UnimplementedAuthServiceServer) GetAccount(context.Context, *emptypb.Empty
 }
 func (UnimplementedAuthServiceServer) GetAccountByPhoneNumber(context.Context, *wrapperspb.StringValue) (*Account, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAccountByPhoneNumber not implemented")
+}
+func (UnimplementedAuthServiceServer) GetAccountById(context.Context, *wrapperspb.StringValue) (*Account, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAccountById not implemented")
 }
 func (UnimplementedAuthServiceServer) UpdateAccount(context.Context, *Account) (*Account, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAccount not implemented")
@@ -396,6 +424,24 @@ func _AuthService_Logout_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_VerifyPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(wrapperspb.StringValue)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).VerifyPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/verify_password",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).VerifyPassword(ctx, req.(*wrapperspb.StringValue))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthService_RequestPublicAccessToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -464,6 +510,24 @@ func _AuthService_GetAccountByPhoneNumber_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).GetAccountByPhoneNumber(ctx, req.(*wrapperspb.StringValue))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_GetAccountById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(wrapperspb.StringValue)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetAccountById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/get_account_by_id",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetAccountById(ctx, req.(*wrapperspb.StringValue))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -672,6 +736,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_Logout_Handler,
 		},
 		{
+			MethodName: "verify_password",
+			Handler:    _AuthService_VerifyPassword_Handler,
+		},
+		{
 			MethodName: "request_public_access_token",
 			Handler:    _AuthService_RequestPublicAccessToken_Handler,
 		},
@@ -686,6 +754,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "get_account_by_phone_number",
 			Handler:    _AuthService_GetAccountByPhoneNumber_Handler,
+		},
+		{
+			MethodName: "get_account_by_id",
+			Handler:    _AuthService_GetAccountById_Handler,
 		},
 		{
 			MethodName: "update_account",

@@ -32,10 +32,6 @@ func (s *ProcheEventServer) GetEventByUser(*wrapperspb.StringValue, pb.EventServ
 	panic("implement me")
 }
 
-func (s *ProcheEventServer) GetEventsByLocation(*pb.GetEventByLocationRequest, pb.EventService_GetEventsByLocationServer) error {
-	panic("implement me")
-}
-
 func (s *ProcheEventServer) ListEvents(*emptypb.Empty, pb.EventService_ListEventsServer) error {
 	panic("implement me")
 }

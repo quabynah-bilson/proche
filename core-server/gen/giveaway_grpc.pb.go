@@ -26,10 +26,8 @@ const _ = grpc.SupportPackageIsVersion7
 type GiveAwayServiceClient interface {
 	CreateGiveaway(ctx context.Context, in *CreateGiveAwayRequest, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	GetGiveaway(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*GiveAway, error)
-	GetGiveaways(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysClient, error)
+	GetGiveaways(ctx context.Context, in *CommonAddress, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysClient, error)
 	GetGiveawaysByOwner(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysByOwnerClient, error)
-	GetGiveawaysByCoordinates(ctx context.Context, in *GiveAwayCoordinates, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysByCoordinatesClient, error)
-	GetGiveawaysByCoordinatesAndRadius(ctx context.Context, in *GiveAwayByCoordinatesAndRadiusRequest, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysByCoordinatesAndRadiusClient, error)
 	UpdateGiveaway(ctx context.Context, in *GiveAway, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteGiveaway(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -60,7 +58,7 @@ func (c *giveAwayServiceClient) GetGiveaway(ctx context.Context, in *wrapperspb.
 	return out, nil
 }
 
-func (c *giveAwayServiceClient) GetGiveaways(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysClient, error) {
+func (c *giveAwayServiceClient) GetGiveaways(ctx context.Context, in *CommonAddress, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysClient, error) {
 	stream, err := c.cc.NewStream(ctx, &GiveAwayService_ServiceDesc.Streams[0], "/event.GiveAwayService/get_giveaways", opts...)
 	if err != nil {
 		return nil, err
@@ -124,70 +122,6 @@ func (x *giveAwayServiceGetGiveawaysByOwnerClient) Recv() (*GiveAwayList, error)
 	return m, nil
 }
 
-func (c *giveAwayServiceClient) GetGiveawaysByCoordinates(ctx context.Context, in *GiveAwayCoordinates, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysByCoordinatesClient, error) {
-	stream, err := c.cc.NewStream(ctx, &GiveAwayService_ServiceDesc.Streams[2], "/event.GiveAwayService/get_giveaways_by_coordinates", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &giveAwayServiceGetGiveawaysByCoordinatesClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type GiveAwayService_GetGiveawaysByCoordinatesClient interface {
-	Recv() (*GiveAwayList, error)
-	grpc.ClientStream
-}
-
-type giveAwayServiceGetGiveawaysByCoordinatesClient struct {
-	grpc.ClientStream
-}
-
-func (x *giveAwayServiceGetGiveawaysByCoordinatesClient) Recv() (*GiveAwayList, error) {
-	m := new(GiveAwayList)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *giveAwayServiceClient) GetGiveawaysByCoordinatesAndRadius(ctx context.Context, in *GiveAwayByCoordinatesAndRadiusRequest, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysByCoordinatesAndRadiusClient, error) {
-	stream, err := c.cc.NewStream(ctx, &GiveAwayService_ServiceDesc.Streams[3], "/event.GiveAwayService/get_giveaways_by_coordinates_and_radius", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &giveAwayServiceGetGiveawaysByCoordinatesAndRadiusClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type GiveAwayService_GetGiveawaysByCoordinatesAndRadiusClient interface {
-	Recv() (*GiveAwayList, error)
-	grpc.ClientStream
-}
-
-type giveAwayServiceGetGiveawaysByCoordinatesAndRadiusClient struct {
-	grpc.ClientStream
-}
-
-func (x *giveAwayServiceGetGiveawaysByCoordinatesAndRadiusClient) Recv() (*GiveAwayList, error) {
-	m := new(GiveAwayList)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
 func (c *giveAwayServiceClient) UpdateGiveaway(ctx context.Context, in *GiveAway, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/event.GiveAwayService/update_giveaway", in, out, opts...)
@@ -212,10 +146,8 @@ func (c *giveAwayServiceClient) DeleteGiveaway(ctx context.Context, in *wrappers
 type GiveAwayServiceServer interface {
 	CreateGiveaway(context.Context, *CreateGiveAwayRequest) (*wrapperspb.StringValue, error)
 	GetGiveaway(context.Context, *wrapperspb.StringValue) (*GiveAway, error)
-	GetGiveaways(*emptypb.Empty, GiveAwayService_GetGiveawaysServer) error
+	GetGiveaways(*CommonAddress, GiveAwayService_GetGiveawaysServer) error
 	GetGiveawaysByOwner(*wrapperspb.StringValue, GiveAwayService_GetGiveawaysByOwnerServer) error
-	GetGiveawaysByCoordinates(*GiveAwayCoordinates, GiveAwayService_GetGiveawaysByCoordinatesServer) error
-	GetGiveawaysByCoordinatesAndRadius(*GiveAwayByCoordinatesAndRadiusRequest, GiveAwayService_GetGiveawaysByCoordinatesAndRadiusServer) error
 	UpdateGiveaway(context.Context, *GiveAway) (*emptypb.Empty, error)
 	DeleteGiveaway(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	mustEmbedUnimplementedGiveAwayServiceServer()
@@ -231,17 +163,11 @@ func (UnimplementedGiveAwayServiceServer) CreateGiveaway(context.Context, *Creat
 func (UnimplementedGiveAwayServiceServer) GetGiveaway(context.Context, *wrapperspb.StringValue) (*GiveAway, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGiveaway not implemented")
 }
-func (UnimplementedGiveAwayServiceServer) GetGiveaways(*emptypb.Empty, GiveAwayService_GetGiveawaysServer) error {
+func (UnimplementedGiveAwayServiceServer) GetGiveaways(*CommonAddress, GiveAwayService_GetGiveawaysServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetGiveaways not implemented")
 }
 func (UnimplementedGiveAwayServiceServer) GetGiveawaysByOwner(*wrapperspb.StringValue, GiveAwayService_GetGiveawaysByOwnerServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetGiveawaysByOwner not implemented")
-}
-func (UnimplementedGiveAwayServiceServer) GetGiveawaysByCoordinates(*GiveAwayCoordinates, GiveAwayService_GetGiveawaysByCoordinatesServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetGiveawaysByCoordinates not implemented")
-}
-func (UnimplementedGiveAwayServiceServer) GetGiveawaysByCoordinatesAndRadius(*GiveAwayByCoordinatesAndRadiusRequest, GiveAwayService_GetGiveawaysByCoordinatesAndRadiusServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetGiveawaysByCoordinatesAndRadius not implemented")
 }
 func (UnimplementedGiveAwayServiceServer) UpdateGiveaway(context.Context, *GiveAway) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGiveaway not implemented")
@@ -299,7 +225,7 @@ func _GiveAwayService_GetGiveaway_Handler(srv interface{}, ctx context.Context, 
 }
 
 func _GiveAwayService_GetGiveaways_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(emptypb.Empty)
+	m := new(CommonAddress)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
@@ -337,48 +263,6 @@ type giveAwayServiceGetGiveawaysByOwnerServer struct {
 }
 
 func (x *giveAwayServiceGetGiveawaysByOwnerServer) Send(m *GiveAwayList) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _GiveAwayService_GetGiveawaysByCoordinates_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(GiveAwayCoordinates)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(GiveAwayServiceServer).GetGiveawaysByCoordinates(m, &giveAwayServiceGetGiveawaysByCoordinatesServer{stream})
-}
-
-type GiveAwayService_GetGiveawaysByCoordinatesServer interface {
-	Send(*GiveAwayList) error
-	grpc.ServerStream
-}
-
-type giveAwayServiceGetGiveawaysByCoordinatesServer struct {
-	grpc.ServerStream
-}
-
-func (x *giveAwayServiceGetGiveawaysByCoordinatesServer) Send(m *GiveAwayList) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _GiveAwayService_GetGiveawaysByCoordinatesAndRadius_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(GiveAwayByCoordinatesAndRadiusRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(GiveAwayServiceServer).GetGiveawaysByCoordinatesAndRadius(m, &giveAwayServiceGetGiveawaysByCoordinatesAndRadiusServer{stream})
-}
-
-type GiveAwayService_GetGiveawaysByCoordinatesAndRadiusServer interface {
-	Send(*GiveAwayList) error
-	grpc.ServerStream
-}
-
-type giveAwayServiceGetGiveawaysByCoordinatesAndRadiusServer struct {
-	grpc.ServerStream
-}
-
-func (x *giveAwayServiceGetGiveawaysByCoordinatesAndRadiusServer) Send(m *GiveAwayList) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -451,16 +335,6 @@ var GiveAwayService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "get_giveaways_by_owner",
 			Handler:       _GiveAwayService_GetGiveawaysByOwner_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "get_giveaways_by_coordinates",
-			Handler:       _GiveAwayService_GetGiveawaysByCoordinates_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "get_giveaways_by_coordinates_and_radius",
-			Handler:       _GiveAwayService_GetGiveawaysByCoordinatesAndRadius_Handler,
 			ServerStreams: true,
 		},
 	},

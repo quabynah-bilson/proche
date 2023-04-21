@@ -1,17 +1,14 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/actions.dart';
+import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:protobuf/protobuf.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 import 'validator.dart';
@@ -21,14 +18,104 @@ extension BuildContextX on BuildContext {
 
   AppLocalizations get localizer => AppLocalizations.of(this)!;
 
-  void showFeatureUnderDevSheet() async {
-    showCupertinoModalBottomSheet(
+  Future<void> showVerifyPasswordSheet(Account updatedAccount) async {
+    final passwordController = TextEditingController(),
+        authBloc = AuthBloc(),
+        focusNode = FocusNode();
+    var errorMessage = '';
+
+    return await showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      isDismissible: false,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => BlocConsumer(
+          bloc: authBloc,
+          listener: (context, state) {
+            if (state is ErrorState<String>) {
+              errorMessage = state.failure;
+              setState(() => passwordController.clear());
+            }
+
+            if (state is SuccessState<void>) {
+              context.navigator.pop();
+            }
+          },
+          builder: (context, state) => LoadingIndicator(
+            isLoading: state is LoadingState,
+            loadingAnimIsAsset: true,
+            lottieAnimResource: Assets.animLoading,
+            child: Material(
+              color: colorScheme.background,
+              child: AnimatedColumn(
+                animateType: AnimateType.slideUp,
+                children: [
+                  Assets.imgAppLogo
+                      .asAssetImage(height: height * 0.15, width: width * 0.5),
+                  localizer.verifyPassword.h6(context),
+                  localizer.verifyPasswordSubhead
+                      .subtitle2(context,
+                          alignment: TextAlign.center,
+                          emphasis: kEmphasisMedium)
+                      .bottom(24),
+                  if (errorMessage.isNotEmpty)
+                    errorMessage
+                        .bodyText2(context,
+                            color: colorScheme.error,
+                            alignment: TextAlign.center)
+                        .bottom(16),
+                  AppTextField(
+                    localizer.password,
+                    focusNode: focusNode,
+                    textFieldType: AppTextFieldType.password,
+                    validator: (input) =>
+                        Validators.validatePassword(context, input),
+                    controller: passwordController,
+                  ),
+                  AppRoundedButton(
+                    text: localizer.next,
+                    enabled: state is! LoadingState,
+                    onTap: () {
+                      if (Validators.validatePassword(
+                              context, passwordController.text) ==
+                          null) {
+                        focusNode.unfocus();
+                        if (errorMessage.isNotEmpty) {
+                          setState(() => errorMessage = '');
+                        }
+                        authBloc.add(
+                            VerifyPasswordAuthEvent(passwordController.text));
+                      }
+                    },
+                  ).top(20).bottom(8),
+                  SafeArea(
+                    top: false,
+                    child: AppRoundedButton(
+                      text: localizer.cancel,
+                      outlined: true,
+                      enabled: state is! LoadingState,
+                      onTap: navigator.pop,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ).fillMaxHeight(context, 0.6),
+        ).top(16).horizontal(24),
+      ),
+    );
+  }
+
+  void showFiltersSheet() async {
+    showBarModalBottomSheet(
       context: this,
       backgroundColor: colorScheme.background,
       useRootNavigator: true,
       bounce: true,
       builder: (context) => AnimatedColumn(
-        animateType: AnimateType.slideDown,
+        animateType: AnimateType.slideUp,
         children: [
           Lottie.asset(Assets.animWorkInProgress,
                   frameRate: FrameRate(90),
@@ -49,10 +136,109 @@ extension BuildContextX on BuildContext {
     );
   }
 
+  void showFeatureUnderDevSheet() async {
+    showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      builder: (context) => AnimatedColumn(
+        animateType: AnimateType.slideUp,
+        children: [
+          Lottie.asset(Assets.animWorkInProgress,
+                  frameRate: FrameRate(90),
+                  height: height * 0.25,
+                  width: width * 0.7)
+              .bottom(24),
+          EmptyContentPlaceholder(
+              title: localizer.underMaintenanceHeader,
+              subtitle: localizer.underMaintenanceSubhead),
+          SafeArea(
+            top: false,
+            child: AppRoundedButton(
+                    text: localizer.gotIt, onTap: context.navigator.pop)
+                .top(40),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<int?> showServiceTypePickerSheet() async {
+    final animations = [
+          Assets.animSearchOnMap,
+          Assets.animGiveaway,
+          Assets.animTrip,
+          Assets.animEvent,
+        ],
+        labels = [
+          localizer.quickHelp,
+          localizer.freeGiveaway,
+          localizer.trips,
+          localizer.events,
+        ];
+    int? selectedIndex = await showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      builder: (context) => AnimatedColumn(
+        animateType: AnimateType.slideUp,
+        children: [
+          localizer.selectServiceType.h6(context),
+          localizer.selectServiceTypeSubhead
+              .subtitle2(context, emphasis: kEmphasisMedium)
+              .bottom(24),
+          GridView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: ProcheServiceType.values.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 4 / 3),
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () => navigator.pop(index),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: theme.disabledColor),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(child: Lottie.asset(animations[index])),
+                    labels[index]
+                        .subtitle1(context, weight: FontWeight.w600)
+                        .top(8),
+                  ],
+                ),
+              ),
+            ),
+          ).fillMaxWidth(context),
+          SafeArea(
+            top: false,
+            child: AppRoundedButton(
+                    text: localizer.cancel,
+                    outlined: true,
+                    onTap: context.navigator.pop)
+                .top(40),
+          ),
+        ],
+      ).top(32),
+    );
+
+    await Future.delayed(kSidebarFooterDuration);
+    return selectedIndex;
+  }
+
   /// show a welcome dialog for new users
   void showWelcomeDialog() async {
     await Future.delayed(const Duration(milliseconds: 850));
-    showCupertinoModalBottomSheet(
+    showBarModalBottomSheet(
       context: this,
       backgroundColor: colorScheme.background,
       useRootNavigator: true,
@@ -87,153 +273,6 @@ extension BuildContextX on BuildContext {
     );
   }
 
-  // TODO: account setup sheet
-  void showAccountSetupSheet(Account account) async {
-    final authBloc = AuthBloc(),
-        formKey = GlobalKey<FormState>(),
-        usernameController = TextEditingController();
-    var loading = false;
-
-    showCupertinoModalBottomSheet(
-      context: this,
-      backgroundColor: colorScheme.background,
-      useRootNavigator: true,
-      bounce: true,
-      builder: (context) => StatefulBuilder(
-        builder: (_, setState) => BlocConsumer(
-          bloc: authBloc,
-          listener: (context, state) {
-            setState(() => loading = state is LoadingState);
-
-            // TODO: handle success state
-            if (state is SuccessState<Account>) {}
-
-            if (state is ErrorState<String>) {
-              showMessageDialog(state.failure);
-            }
-          },
-          builder: (context, state) => SafeArea(
-            bottom: false,
-            child: Material(
-              color: colorScheme.surface,
-              child: LoadingIndicator(
-                lottieAnimResource: Assets.animLoading,
-                isLoading: state is LoadingState,
-                loadingAnimIsAsset: true,
-                child: ListView(
-                  shrinkWrap: true,
-                  controller: ModalScrollController.of(context),
-                  children: [
-                    Lottie.asset(Assets.animWelcomeNewUser,
-                            frameRate: FrameRate(90), height: height * 0.15)
-                        .bottom(24),
-                    'You\'re almost there!'
-                        .h6(context, alignment: TextAlign.center),
-                    Text.rich(
-                      TextSpan(children: [
-                        const TextSpan(
-                            text: 'Complete your account setup for '),
-                        TextSpan(
-                          text: account.displayName,
-                          style: TextStyle(
-                              color: colorScheme.primary,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const TextSpan(
-                            text: ' to allow for a more seamless experience'),
-                      ]),
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color:
-                            colorScheme.onSurface.withOpacity(kEmphasisMedium),
-                      ),
-                    ).top(4),
-                    Form(
-                      key: formKey,
-                      child: Column(
-                        children: [
-                          AppTextField(
-                            localizer.username,
-                            controller: usernameController,
-                            capitalization: TextCapitalization.words,
-                            validator: Validators.validate,
-                            prefixIcon: const Icon(Icons.alternate_email),
-                            enabled: state is! LoadingState,
-                          ),
-                        ],
-                      ),
-                    ).horizontal(24).top(24),
-                    SafeArea(
-                      top: false,
-                      child: AppRoundedButton(
-                        text: 'Next', // todo
-                        enabled: state is! LoadingState,
-                        onTap: () async {
-                          if (formKey.currentState != null &&
-                              formKey.currentState!.validate()) {
-                            formKey.currentState?.save();
-
-                            /// perform phone verification
-                            var phoneNumber = await navigator
-                                .pushNamed(AppRouter.phoneVerificationRoute);
-
-                            if (phoneNumber is String) {
-                              var name = usernameController.text.trim();
-                              var updatedAccount = account.rebuild((acct) {
-                                acct.phoneNumber = phoneNumber;
-                                acct.displayName = name;
-                              });
-                              // TODO: update account
-                            }
-                          }
-                        },
-                      ).horizontal(20),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                              color: theme.disabledColor
-                                  .withOpacity(kEmphasisLowest),
-                              endIndent: 24),
-                        ),
-                        localizer.continueWith
-                            .bodyText2(context, emphasis: kEmphasisMedium),
-                        Expanded(
-                          child: Divider(
-                              color: theme.disabledColor
-                                  .withOpacity(kEmphasisLowest),
-                              indent: 24),
-                        ),
-                      ],
-                    ).top(16),
-                    AppRoundedButton(
-                      text: localizer.continueWithApple,
-                      icon: TablerIcons.brand_apple,
-                      backgroundColor: colorScheme.onSurface,
-                      textColor: colorScheme.surface,
-                      layoutSize: LayoutSize.wrapContent,
-                      // TODO apple authentication
-                      onTap: showFeatureUnderDevSheet,
-                    ).horizontal(20).top(24),
-                    AppRoundedButton(
-                      text: localizer.continueWithGoogle,
-                      icon: TablerIcons.brand_google,
-                      backgroundColor: colorScheme.error,
-                      textColor: colorScheme.onError,
-                      // TODO google authentication
-                      onTap: showFeatureUnderDevSheet,
-                    ).horizontal(20).top(16),
-                  ],
-                ).horizontal(24).vertical(20),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   /// used for custom error messages / prompts
   void showMessageDialog(
     String message, {
@@ -243,7 +282,7 @@ extension BuildContextX on BuildContext {
     String? animationAsset,
     VoidCallback? onTap,
   }) async {
-    showCupertinoModalBottomSheet(
+    showBarModalBottomSheet(
       context: this,
       backgroundColor: colorScheme.background,
       useRootNavigator: true,
@@ -381,11 +420,6 @@ extension BuildContextX on BuildContext {
                               alignment: TextAlign.center),
                         } else ...{
                           ClipOval(
-                            // child: Image.memory(
-                            //     account!.avatarUrl.decodeBase64ImageToBytes(),
-                            //     fit: BoxFit.contain,
-                            //     height: height * 0.15,
-                            //     width: width * 0.5),
                             child: account!.avatarUrl
                                 .avatar(size: height * 0.15, circular: true),
                           ).centered(),
@@ -434,7 +468,7 @@ extension BuildContextX on BuildContext {
                             enabled: selectedCountry != null && !loading,
                             controller: phoneNumberController,
                             textFieldType: AppTextFieldType.phone,
-                            validator: Validators.validatePhone,
+                            validator: (input) => Validators.validatePhone(context, input),
                             maxLength: 10,
                             onChange: (input) {
                               if (input == null) return;
@@ -442,7 +476,7 @@ extension BuildContextX on BuildContext {
                                 account = null;
                                 currentAccountBloc.add(
                                     GetAccountByPhoneNumberAuthEvent(
-                                        phoneNumber:
+
                                             phoneNumberController.text.trim()));
                               }
                             },
@@ -458,7 +492,7 @@ extension BuildContextX on BuildContext {
                             floatLabel: true,
                             textFieldType: AppTextFieldType.password,
                             prefixIcon: const Icon(Icons.password),
-                            validator: Validators.validatePassword,
+                            validator: (input) => Validators.validatePassword(context, input),
                           ),
                         },
                         AppRoundedButton(
@@ -480,6 +514,13 @@ extension BuildContextX on BuildContext {
                               );
                             }
                           },
+                        ),
+                        TextButton(
+                          onPressed: () => context.navigator.popAndPushNamed(
+                              AppRouter.resetPasswordRoute,
+                              arguments: true),
+                          child: localizer.forgotPasswordHeader
+                              .button(context, alignment: TextAlign.center),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -543,12 +584,5 @@ extension BuildContextX on BuildContext {
         ),
       ),
     );
-  }
-}
-
-extension StringX on String {
-  Uint8List decodeBase64ImageToBytes() {
-    Uint8List bytes = base64Decode(split(',')[1]); // decode the base64 string
-    return bytes;
   }
 }

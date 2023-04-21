@@ -13,6 +13,7 @@ service AuthService {
   rpc register (RegisterRequest) returns (google.protobuf.StringValue);
   rpc reset_password (ResetPasswordRequest) returns (google.protobuf.StringValue);
   rpc logout (google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc verify_password (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
   // request public access token for unauthenticated calls
   rpc request_public_access_token (google.protobuf.Empty) returns (google.protobuf.StringValue);
@@ -23,6 +24,7 @@ service AuthService {
   // account
   rpc get_account (google.protobuf.Empty) returns (Account);
   rpc get_account_by_phone_number (google.protobuf.StringValue) returns (Account);
+  rpc get_account_by_id (google.protobuf.StringValue) returns (Account);
   rpc update_account (Account) returns (Account);
   rpc delete_account (google.protobuf.Empty) returns (google.protobuf.Empty);
 
@@ -96,6 +98,9 @@ message Account {
   optional string vaccine_card_url = 9;
   optional string referral_code = 10;
   string country_id = 11;
+  optional string device_id = 12;
+  optional string device_token = 13;
+  optional string device_type = 14;
 }
 
 message AccessTokenStore {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/features/onboarding/presentation/pages/phone.verification.dart';
 import 'package:mobile/features/onboarding/presentation/pages/register.account.dart';
+import 'package:mobile/features/onboarding/presentation/pages/reset.password.dart';
 import 'package:mobile/features/onboarding/presentation/pages/tutorial.dart';
 import 'package:mobile/features/onboarding/presentation/pages/welcome.dart';
 import 'package:mobile/features/shared/presentation/pages/dashboard.dart';
@@ -25,12 +27,22 @@ class AppRouterConfig {
       case AppRouter.registerNewAccountRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => const RegisterAccountPage(), settings: settings);
+      case AppRouter.resetPasswordRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => ResetPasswordPage(
+                isPublic: settings.arguments is bool &&
+                    settings.arguments as bool == true),
+            settings: settings);
       case AppRouter.dashboardRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => const DashboardPage(), settings: settings);
       case AppRouter.serviceFinderRoute:
         return MaterialWithModalsPageRoute(
-            builder: (_) => const ServiceFinderPage(), settings: settings);
+            builder: (_) => ServiceFinderPage(
+                type: settings.arguments is int
+                    ? ProcheServiceType.values[settings.arguments as int]
+                    : ProcheServiceType.task),
+            settings: settings);
     }
 
     return MaterialPageRoute(
@@ -56,4 +68,5 @@ class AppRouter {
   static const registerNewAccountRoute = '/account/new';
   static const resetPasswordRoute = '/account/reset-password'; // todo
   static const phoneVerificationRoute = '/phone-verification';
+  static const editProfileRoute = '/edit-profile'; // todo
 }

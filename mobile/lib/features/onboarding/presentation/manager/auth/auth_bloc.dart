@@ -24,6 +24,24 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       );
     });
 
+    on<UpdateAccountAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.updateAccount(event.account);
+      either.fold(
+        (l) => emit(BlocState<Account>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<VerifyPasswordAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.verifyPassword(event.password);
+      either.fold(
+        (l) => emit(BlocState<void>.successState(data: null)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
     on<LogoutAuthEvent>((event, emit) async {
       emit(BlocState.loadingState());
       var either = await _repo.logout();
@@ -56,16 +74,25 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
+    on<GetAccountByIdAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.getAccountById(event.id);
+      either.fold(
+        (l) => emit(BlocState<Account>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
 
     on<ResetPasswordAuthEvent>((event, emit) async {
       emit(BlocState.loadingState());
       var either = await _repo.resetPassword(
         phoneNumber: event.phoneNumber,
         password: event.password,
+        isPublic: event.isPublic,
       );
       either.fold(
-            (l) => emit(BlocState<void>.successState(data: null)),
-            (r) => emit(BlocState<String>.errorState(failure: r)),
+        (l) => emit(BlocState<void>.successState(data: null)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
 
@@ -120,8 +147,8 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       emit(BlocState.loadingState());
       var either = await _repo.getCountries();
       either.fold(
-            (l) => emit(BlocState<List<Country>>.successState(data: l)),
-            (r) => emit(BlocState<String>.errorState(failure: r)),
+        (l) => emit(BlocState<List<Country>>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
 
@@ -129,8 +156,8 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       emit(BlocState.loadingState());
       var either = await _repo.getCountryById(event.id);
       either.fold(
-            (l) => emit(BlocState<Country>.successState(data: l)),
-            (r) => emit(BlocState<String>.errorState(failure: r)),
+        (l) => emit(BlocState<Country>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
   }

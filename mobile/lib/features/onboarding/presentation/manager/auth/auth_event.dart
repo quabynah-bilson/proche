@@ -16,6 +16,18 @@ class LoginAuthEvent extends AuthEvent {
   });
 }
 
+class VerifyPasswordAuthEvent extends AuthEvent {
+  final String password;
+
+  VerifyPasswordAuthEvent(this.password);
+}
+
+class UpdateAccountAuthEvent extends AuthEvent {
+  final Account account;
+
+  UpdateAccountAuthEvent(this.account);
+}
+
 class LogoutAuthEvent extends AuthEvent {}
 
 class RegisterAuthEvent extends AuthEvent {
@@ -37,14 +49,27 @@ class RegisterAuthEvent extends AuthEvent {
 class GetAccountByPhoneNumberAuthEvent extends AuthEvent {
   final String phoneNumber;
 
-  GetAccountByPhoneNumberAuthEvent({required this.phoneNumber});
+  GetAccountByPhoneNumberAuthEvent(this.phoneNumber);
+}
+
+class GetAccountByIdAuthEvent extends AuthEvent {
+  final String id;
+
+  GetAccountByIdAuthEvent(this.id);
 }
 
 class ResetPasswordAuthEvent extends AuthEvent {
   final String phoneNumber;
   final String password;
 
-  ResetPasswordAuthEvent({required this.phoneNumber, required this.password});
+  // defines whether the token return from the reset should be saved in the local storage
+  final bool isPublic;
+
+  ResetPasswordAuthEvent({
+    required this.phoneNumber,
+    required this.password,
+    required this.isPublic,
+  });
 }
 
 class SendVerificationCodeAuthEvent extends AuthEvent {

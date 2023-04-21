@@ -65,7 +65,7 @@ class _PhoneNumberVerificationPageState
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
           length: 6,
-          validator: Validators.validateAuthCode,
+          validator: (input) => Validators.validateAuthCode(context, input),
           androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
           pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
           showCursor: true,
@@ -90,6 +90,7 @@ class _PhoneNumberVerificationPageState
           setState(() => _loading = state is LoadingState);
 
           if (state is ErrorState<String>) {
+            _pinCodeController.clear();
             context.showMessageDialog(state.failure);
           }
 
@@ -118,9 +119,9 @@ class _PhoneNumberVerificationPageState
                         .h6(context, weight: FontWeight.bold)
                         .centered(),
                     'A verification code was sent to your device'
-                        .subtitle2(context)
-                        .vertical(12)
-                        .centered(),
+                        .subtitle1(context)
+                        .centered()
+                        .bottom(12),
                     _buildPinInputUI,
                   ],
                 ),
