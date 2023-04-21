@@ -78,5 +78,10 @@
   "invalidPhoneNumber": "Numéro de téléphone invalide",
   "invalidEmail": "Email invalide",
   "invalidAuthCode": "Code d'authentification invalide",
-  "filters" : "Filtres"
+  "filters": "Filtres",
+  "updateAvailableHeader": "Mise à jour disponible (v-{version})",
+  "updateAvailableSubhead": "Veuillez mettre à jour vers la dernière version pour continuer",
+  "updateLater" : "Mise à jour plus tard",
+  "loading" : "Chargement",
+  "unableToLoadWebpage" : "Impossible de charger la page Web"
 }

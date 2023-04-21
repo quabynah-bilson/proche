@@ -78,5 +78,10 @@
   "invalidPhoneNumber" : "Invalid phone number",
   "invalidEmail" : "Invalid email",
   "invalidAuthCode" : "Invalid verification code",
-  "filters" : "Filters"
+  "filters" : "Filters",
+  "updateAvailableHeader" : "Update available (v-{version})",
+  "updateAvailableSubhead" : "Please update to the latest version to continue",
+  "updateLater" : "Update later",
+  "loading" : "Loading",
+  "unableToLoadWebpage" : "Unable to load webpage"
 }

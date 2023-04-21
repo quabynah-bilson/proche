@@ -6,6 +6,7 @@ import 'package:mobile/core/theme.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.dart';
+import 'package:mobile/features/shared/presentation/manager/shared/shared_cubit.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 /// root widget for application
@@ -30,17 +31,18 @@ class _ProcheAppState extends State<ProcheApp> {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => AuthBloc()),
+            BlocProvider(create: (context) => SharedCubit()),
             BlocProvider(create: (context) => _localeBloc),
           ],
           child: BlocBuilder(
             bloc: _localeBloc,
             builder: (context, state) => MaterialApp(
               debugShowCheckedModeBanner: false,
-              onGenerateTitle: (context) =>
-                  context.localizer.appName,
+              onGenerateTitle: (context) => context.localizer.appName,
               theme: context.useLightTheme,
               darkTheme: context.useDarkTheme,
-              themeMode: ThemeMode.light, // todo -> add support for dark mode
+              themeMode: ThemeMode.light,
+              // todo -> add support for dark mode
               onGenerateRoute: AppRouterConfig.setupRoutes,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,

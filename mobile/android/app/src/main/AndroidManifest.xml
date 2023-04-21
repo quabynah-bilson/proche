@@ -15,6 +15,7 @@
     <application
             android:icon="@mipmap/launcher_icon"
             android:label="${launcherName}"
+            android:usesCleartextTraffic="true">
             tools:ignore="Instantiatable">
         <service
                 android:name="com.pravera.flutter_foreground_task.service.ForegroundService"

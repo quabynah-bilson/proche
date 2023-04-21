@@ -5,6 +5,7 @@ import 'package:mobile/core/utils/image.utils.dart';
 import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/features/shared/domain/repositories/auth.dart';
 import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
+import 'package:mobile/features/shared/domain/repositories/messaging.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
@@ -13,8 +14,13 @@ import 'package:shared_utils/shared_utils.dart';
 class ProcheAuthRepository extends BaseAuthRepository {
   final AuthServiceClient client;
   final BaseLocalStorageRepository storage;
+  final BaseMessagingRepository messaging;
 
-  ProcheAuthRepository({required this.client, required this.storage});
+  ProcheAuthRepository({
+    required this.client,
+    required this.storage,
+    required this.messaging,
+  });
 
   @override
   Future<Either<Account, String>> getAccountByPhoneNumber(
@@ -73,6 +79,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
       UserSession.kAccessToken = token.value;
       UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
+      _getCurrentAccountAndUpdateMessagingToken();
+
       return left(null);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -88,6 +96,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
       await storage.clearAccessToken();
       UserSession.kAccessToken = null;
       UserSession.kIsLoggedIn = false;
+      messaging.clearToken();
+
       return left(null);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -116,6 +126,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
       await storage.saveAccessToken(token.value);
       UserSession.kAccessToken = token.value;
       UserSession.kIsLoggedIn = token.value.isNotEmpty;
+
+      _getCurrentAccountAndUpdateMessagingToken();
 
       return left(null);
     } on GrpcError catch (e) {
@@ -227,11 +239,38 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<Account, String>> getAccountById(String id) async {
     try {
-      var account = await client
-          .get_account_by_id(StringValue(value: id));
+      var account = await client.get_account_by_id(StringValue(value: id));
       return left(account);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
+    }
+  }
+
+  void _getCurrentAccountAndUpdateMessagingToken() async {
+    try {
+      var account = await client.get_account(Empty());
+
+      // get device token and update account
+      var either = await messaging.getDeviceToken();
+      var deviceToken = either.fold((l) => l, (r) => null);
+      account.deviceToken = deviceToken ?? '';
+
+      // get device id and update account
+      either = await messaging.getDeviceId();
+      var deviceId = either.fold((l) => l, (r) => null);
+      account.deviceId = deviceId ?? '';
+
+      // get device type and update account
+      either = await messaging.getDeviceType();
+      var deviceType = either.fold((l) => l, (r) => null);
+      account.deviceType = deviceType ?? '';
+
+      // save updated account
+      var updatedAccount = await client.update_account(account);
+      logger.i(
+          'account updated successfully -> ${updatedAccount.deviceType} : ${updatedAccount.deviceId} -> ${updatedAccount.deviceToken}');
+    } on GrpcError catch (e) {
+      logger.e(e);
     }
   }
 }

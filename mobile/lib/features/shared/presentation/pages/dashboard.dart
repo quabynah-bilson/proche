@@ -8,7 +8,7 @@ import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
-import 'package:mobile/features/shared/presentation/manager/device.dart';
+import 'package:mobile/features/shared/presentation/manager/device/device.dart';
 import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
 import 'package:mobile/features/shared/presentation/widgets/quick.help.tile.dart';

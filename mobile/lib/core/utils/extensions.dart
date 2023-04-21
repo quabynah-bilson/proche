@@ -1,15 +1,21 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mobile/core/di/injection.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/actions.dart';
 import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:mobile/generated/protos/shared.pb.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
+import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 import 'validator.dart';
 
@@ -233,6 +239,87 @@ extension BuildContextX on BuildContext {
 
     await Future.delayed(kSidebarFooterDuration);
     return selectedIndex;
+  }
+
+  /// show new update dialog
+  void showUpdateAppDialog(AppVersion appVersion) async {
+    if (appVersion.version == getIt<String>(instanceName: 'app_version')) {
+      return;
+    }
+    await showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      isDismissible: false,
+      builder: (context) => AnimatedColumn(
+        animateType: AnimateType.slideDown,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(child: Lottie.asset(Assets.animUpdateAvailable)),
+              Icon(Icons.arrow_right_alt,
+                  color: colorScheme.onSurface, size: 40),
+              Expanded(child: Assets.imgAppLogoAnimated.asAssetImage()),
+            ],
+          ).fillMaxHeight(context, 0.2).horizontal(40).bottom(24),
+          EmptyContentPlaceholder(
+              title: localizer.updateAvailableHeader(appVersion.version),
+              subtitle: localizer.updateAvailableSubhead),
+          AppRoundedButton(
+            text: localizer.okay,
+            onTap: () => _showInAppBrowser(
+                Platform.isAndroid ? appVersion.androidUrl : appVersion.iosUrl),
+          ).top(40),
+          SafeArea(
+            top: false,
+            child: TextButton(
+              onPressed: context.navigator.pop,
+              child: localizer.updateLater
+                  .button(context, alignment: TextAlign.center),
+            ).top(8),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showInAppBrowser(String url) async {
+    var loading = true, progress = 0.0, isUnableToLoad = false;
+
+    await showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      isDismissible: false,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => LoadingIndicator(
+          lottieAnimResource: progress >= 90.0
+              ? Assets.animSuccess
+              : isUnableToLoad
+                  ? Assets.animNoInternetConnection
+                  : Assets.animLoading,
+          loadingAnimIsAsset: true,
+          isLoading: loading || isUnableToLoad,
+          message: progress >= 0.9
+              ? localizer.success
+              : isUnableToLoad
+                  ? localizer.unableToLoadWebpage
+                  : localizer.loading,
+          child: WebViewPlus(
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (controller) => controller.loadUrl(url),
+            onPageStarted: (url) => setState(() => loading = true),
+            onPageFinished: (url) => setState(() => loading = false),
+            onProgress: (progress) => setState(() => progress = progress),
+            onWebResourceError: (_) => setState(() => isUnableToLoad = true),
+          ),
+        ),
+      ),
+    );
   }
 
   /// show a welcome dialog for new users
@@ -468,7 +555,8 @@ extension BuildContextX on BuildContext {
                             enabled: selectedCountry != null && !loading,
                             controller: phoneNumberController,
                             textFieldType: AppTextFieldType.phone,
-                            validator: (input) => Validators.validatePhone(context, input),
+                            validator: (input) =>
+                                Validators.validatePhone(context, input),
                             maxLength: 10,
                             onChange: (input) {
                               if (input == null) return;
@@ -476,8 +564,7 @@ extension BuildContextX on BuildContext {
                                 account = null;
                                 currentAccountBloc.add(
                                     GetAccountByPhoneNumberAuthEvent(
-
-                                            phoneNumberController.text.trim()));
+                                        phoneNumberController.text.trim()));
                               }
                             },
                             floatLabel: true,
@@ -492,7 +579,8 @@ extension BuildContextX on BuildContext {
                             floatLabel: true,
                             textFieldType: AppTextFieldType.password,
                             prefixIcon: const Icon(Icons.password),
-                            validator: (input) => Validators.validatePassword(context, input),
+                            validator: (input) =>
+                                Validators.validatePassword(context, input),
                           ),
                         },
                         AppRoundedButton(

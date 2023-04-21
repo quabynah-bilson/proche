@@ -34,8 +34,8 @@ abstract class NetworkConfigModule {
 
   @injectable
   SharedServiceClient get sharedServiceClient => SharedServiceClient(
-      _createChannel(int.parse(dotenv.env['SHARED_SERVER_URL'].toString()),
-          dotenv.env['SHARED_SERVER_PORT']),
+      _createChannel(int.parse(dotenv.env['SHARED_SERVER_PORT'].toString()),
+          dotenv.env['SHARED_SERVER_URL']),
       interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable

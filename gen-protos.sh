@@ -48,14 +48,14 @@ protoc -I=$SHARED_PROTO_PATH --go_out=$SHARED_SERVER_DIR/gen --go_opt=paths=sour
   $(find $SHARED_PROTO_PATH -iname "*.proto")
 
 # copy the proto file from media-server to auth-server
-cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
+#cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
 
 # generate for auth-server using rust
-cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
+#cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
 
 # generate for flutter using dart
 protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH \
   --dart_out=grpc:$MOBILE_OUT_DIR \
-  auth.proto
+  shared.proto
 #  $(find $CORE_PROTO_PATH -iname "*.proto")
 #  $(find $AUTH_PROTO_PATH -iname "*.proto") $(find $SHARED_PROTO_PATH -iname "*.proto") $(find $CORE_PROTO_PATH -iname "*.proto")

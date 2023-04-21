@@ -7,12 +7,14 @@ class Assets {
   static const String animGiveaway = 'assets/anim/giveaway.json';
   static const String animLoading = 'assets/anim/loading.json';
   static const String animLogout = 'assets/anim/logout.json';
+  static const String animNoInternetConnection = 'assets/anim/no_internet_connection.json';
   static const String animPhoneVerification = 'assets/anim/phone_verification.json';
   static const String animRecoverPassword = 'assets/anim/recover_password.json';
   static const String animRive = 'assets/anim/rive.riv';
   static const String animSearchOnMap = 'assets/anim/search_on_map.json';
   static const String animSuccess = 'assets/anim/success.json';
   static const String animTrip = 'assets/anim/trip.json';
+  static const String animUpdateAvailable = 'assets/anim/update_available.json';
   static const String animWelcomeNewUser = 'assets/anim/welcome_new_user.json';
   static const String animWorkInProgress = 'assets/anim/work_in_progress.json';
   static const String avatarsLorelei0 = 'assets/img/avatars/lorelei_0.png';
