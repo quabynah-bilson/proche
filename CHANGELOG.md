@@ -17,3 +17,5 @@
 - Added interceptor for core server to authenticate requests coming in from clients
 - Added shared server to handle shared functionalities between microservices
 - Added geolocation & geocoder support for mobile app
+- Added sms server to handle sms functionalities (OTP) for auth microservice
+- Added support for new sms server on mobile app
