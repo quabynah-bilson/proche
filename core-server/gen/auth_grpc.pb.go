@@ -40,9 +40,6 @@ type AuthServiceClient interface {
 	GetAccountById(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error)
 	UpdateAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error)
 	DeleteAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// phone verification
-	SendPhoneVerificationCode(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	VerifyPhoneVerificationCode(ctx context.Context, in *VerifyPhoneRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// referral code
 	GetReferralCode(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	GetReferralCodeByPhoneNumber(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
@@ -169,24 +166,6 @@ func (c *authServiceClient) DeleteAccount(ctx context.Context, in *emptypb.Empty
 	return out, nil
 }
 
-func (c *authServiceClient) SendPhoneVerificationCode(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/auth.AuthService/send_phone_verification_code", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authServiceClient) VerifyPhoneVerificationCode(ctx context.Context, in *VerifyPhoneRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/auth.AuthService/verify_phone_verification_code", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *authServiceClient) GetReferralCode(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
 	out := new(wrapperspb.StringValue)
 	err := c.cc.Invoke(ctx, "/auth.AuthService/get_referral_code", in, out, opts...)
@@ -261,9 +240,6 @@ type AuthServiceServer interface {
 	GetAccountById(context.Context, *wrapperspb.StringValue) (*Account, error)
 	UpdateAccount(context.Context, *Account) (*Account, error)
 	DeleteAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	// phone verification
-	SendPhoneVerificationCode(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
-	VerifyPhoneVerificationCode(context.Context, *VerifyPhoneRequest) (*emptypb.Empty, error)
 	// referral code
 	GetReferralCode(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
 	GetReferralCodeByPhoneNumber(context.Context, *wrapperspb.StringValue) (*wrapperspb.StringValue, error)
@@ -314,12 +290,6 @@ func (UnimplementedAuthServiceServer) UpdateAccount(context.Context, *Account) (
 }
 func (UnimplementedAuthServiceServer) DeleteAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccount not implemented")
-}
-func (UnimplementedAuthServiceServer) SendPhoneVerificationCode(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendPhoneVerificationCode not implemented")
-}
-func (UnimplementedAuthServiceServer) VerifyPhoneVerificationCode(context.Context, *VerifyPhoneRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VerifyPhoneVerificationCode not implemented")
 }
 func (UnimplementedAuthServiceServer) GetReferralCode(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReferralCode not implemented")
@@ -568,42 +538,6 @@ func _AuthService_DeleteAccount_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_SendPhoneVerificationCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(wrapperspb.StringValue)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).SendPhoneVerificationCode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/auth.AuthService/send_phone_verification_code",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).SendPhoneVerificationCode(ctx, req.(*wrapperspb.StringValue))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AuthService_VerifyPhoneVerificationCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(VerifyPhoneRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).VerifyPhoneVerificationCode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/auth.AuthService/verify_phone_verification_code",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).VerifyPhoneVerificationCode(ctx, req.(*VerifyPhoneRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _AuthService_GetReferralCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -766,14 +700,6 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "delete_account",
 			Handler:    _AuthService_DeleteAccount_Handler,
-		},
-		{
-			MethodName: "send_phone_verification_code",
-			Handler:    _AuthService_SendPhoneVerificationCode_Handler,
-		},
-		{
-			MethodName: "verify_phone_verification_code",
-			Handler:    _AuthService_VerifyPhoneVerificationCode_Handler,
 		},
 		{
 			MethodName: "get_referral_code",

@@ -8,6 +8,7 @@ import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:mobile/generated/protos/event.pbgrpc.dart';
 import 'package:mobile/generated/protos/giveaway.pbgrpc.dart';
 import 'package:mobile/generated/protos/shared.pbgrpc.dart';
+import 'package:mobile/generated/protos/sms.pbgrpc.dart';
 import 'package:mobile/generated/protos/task.pbgrpc.dart';
 import 'package:mobile/generated/protos/trip.pbgrpc.dart';
 
@@ -30,6 +31,12 @@ abstract class NetworkConfigModule {
   AuthServiceClient get authServiceClient => AuthServiceClient(
       _createChannel(int.parse(dotenv.env['AUTH_SERVER_PORT'].toString()),
           dotenv.env['AUTH_SERVER_URL']),
+      interceptors: [_tokenInterceptor, _logInterceptor]);
+
+  @injectable
+  SmsServiceClient get smsServiceClient => SmsServiceClient(
+      _createChannel(int.parse(dotenv.env['SMS_SERVER_PORT'].toString()),
+          dotenv.env['SMS_SERVER_URL']),
       interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable

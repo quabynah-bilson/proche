@@ -1,6 +1,5 @@
 syntax = "proto3";
 package sms;
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 

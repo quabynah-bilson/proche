@@ -3,7 +3,6 @@ use std::error::Error;
 use tonic::transport::Channel;
 
 use crate::proto::media_service_client::MediaServiceClient;
-use crate::proto::sms_service_client::SmsServiceClient;
 
 // creates a media service grpc client
 pub async fn get_media_client() -> Result<MediaServiceClient<Channel>, Box<dyn Error>> {

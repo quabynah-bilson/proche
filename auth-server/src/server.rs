@@ -11,7 +11,7 @@ use tonic::metadata::MetadataMap;
 
 use crate::{client, config, utils};
 use crate::config::{locale, tokenizer};
-use crate::proto::{Account, Country, GetCountriesResponse, LoginRequest, MediaType, RegisterRequest, ResetPasswordRequest, UploadMediaRequest, ValidateAccessTokenResponse, VerifyPhoneRequest};
+use crate::proto::{Account, Country, GetCountriesResponse, LoginRequest, MediaType, RegisterRequest, ResetPasswordRequest, UploadMediaRequest, ValidateAccessTokenResponse};
 use crate::proto::auth_service_server::AuthService;
 
 rust_i18n::i18n!("locales");

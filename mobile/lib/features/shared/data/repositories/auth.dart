@@ -7,17 +7,20 @@ import 'package:mobile/features/shared/domain/repositories/auth.dart';
 import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 import 'package:mobile/features/shared/domain/repositories/messaging.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
+import 'package:mobile/generated/protos/sms.pbgrpc.dart';
 import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 @Injectable(as: BaseAuthRepository)
 class ProcheAuthRepository extends BaseAuthRepository {
-  final AuthServiceClient client;
+  final AuthServiceClient authClient;
+  final SmsServiceClient smsClient;
   final BaseLocalStorageRepository storage;
   final BaseMessagingRepository messaging;
 
   ProcheAuthRepository({
-    required this.client,
+    required this.authClient,
+    required this.smsClient,
     required this.storage,
     required this.messaging,
   });
@@ -26,7 +29,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   Future<Either<Account, String>> getAccountByPhoneNumber(
       String phoneNumber) async {
     try {
-      var account = await client
+      var account = await authClient
           .get_account_by_phone_number(StringValue(value: phoneNumber));
       return left(account);
     } on GrpcError catch (e) {
@@ -37,7 +40,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<void, String>> getPublicAccessToken() async {
     try {
-      var token = await client.request_public_access_token(Empty());
+      var token = await authClient.request_public_access_token(Empty());
 
       // save token
       await storage.saveAccessToken(token.value);
@@ -53,7 +56,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<String, String>> getReferralCode() async {
     try {
-      var response = await client.get_referral_code(Empty());
+      var response = await authClient.get_referral_code(Empty());
       return left(response.value);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -72,7 +75,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
         password: password,
         countryId: countryId,
       );
-      var token = await client.login(request);
+      var token = await authClient.login(request);
 
       // save token
       await storage.saveAccessToken(token.value);
@@ -90,7 +93,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<void, String>> logout() async {
     try {
-      await client.logout(Empty());
+      await authClient.logout(Empty());
 
       // clear token
       await storage.clearAccessToken();
@@ -120,7 +123,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
         avatarUrl: avatar.isNullOrEmpty() ? null : await assetToBytes(avatar!),
         countryId: countryId,
       );
-      var token = await client.register(request);
+      var token = await authClient.register(request);
 
       // save token
       await storage.saveAccessToken(token.value);
@@ -144,7 +147,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
     try {
       final request =
           ResetPasswordRequest(phoneNumber: phoneNumber, password: password);
-      var token = await client.reset_password(request);
+      var token = await authClient.reset_password(request);
 
       // save token
       if (!isPublic) {
@@ -162,7 +165,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<void, String>> sendVerificationCode(String phoneNumber) async {
     try {
-      await client
+      await smsClient
           .send_phone_verification_code(StringValue(value: phoneNumber));
       return left(null);
     } on GrpcError catch (e) {
@@ -176,7 +179,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
     try {
       final request =
           VerifyPhoneRequest(phoneNumber: phoneNumber, verificationCode: code);
-      await client.verify_phone_verification_code(request);
+      await smsClient.verify_phone_verification_code(request);
       return left(null);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -189,7 +192,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       UserSession.kAccessToken = await storage.accessToken;
       UserSession.kLocale = await storage.defaultLocale;
       UserSession.kIsLoggedIn = !UserSession.kAccessToken.isNullOrEmpty();
-      var account = await client.get_account(Empty());
+      var account = await authClient.get_account(Empty());
       return left(account);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -199,7 +202,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<List<Country>, String>> getCountries() async {
     try {
-      var response = await client.get_countries(Empty());
+      var response = await authClient.get_countries(Empty());
       return left(response.countries);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -209,7 +212,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<Country, String>> getCountryById(String id) async {
     try {
-      var response = await client.get_country_by_id(StringValue(value: id));
+      var response = await authClient.get_country_by_id(StringValue(value: id));
       return left(response);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -219,7 +222,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<void, String>> verifyPassword(String password) async {
     try {
-      await client.verify_password(StringValue(value: password));
+      await authClient.verify_password(StringValue(value: password));
       return left(null);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -229,7 +232,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<Account, String>> updateAccount(Account account) async {
     try {
-      var updatedAccount = await client.update_account(account);
+      var updatedAccount = await authClient.update_account(account);
       return left(updatedAccount);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -239,7 +242,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<Account, String>> getAccountById(String id) async {
     try {
-      var account = await client.get_account_by_id(StringValue(value: id));
+      var account = await authClient.get_account_by_id(StringValue(value: id));
       return left(account);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -248,7 +251,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
 
   void _getCurrentAccountAndUpdateMessagingToken() async {
     try {
-      var account = await client.get_account(Empty());
+      var account = await authClient.get_account(Empty());
 
       // get device token and update account
       var either = await messaging.getDeviceToken();
@@ -266,7 +269,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       account.deviceType = deviceType ?? '';
 
       // save updated account
-      var updatedAccount = await client.update_account(account);
+      var updatedAccount = await authClient.update_account(account);
       logger.i(
           'account updated successfully -> ${updatedAccount.deviceType} : ${updatedAccount.deviceId} -> ${updatedAccount.deviceToken}');
     } on GrpcError catch (e) {

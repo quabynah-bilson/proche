@@ -20,7 +20,9 @@ void main() async {
   await configureDependencies();
 
   // initialize firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  var firebaseApp = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform);
+  logger.i('firebase initialized: ${firebaseApp.name}');
 
   // initialize Sentry
   await SentryFlutter.init(
