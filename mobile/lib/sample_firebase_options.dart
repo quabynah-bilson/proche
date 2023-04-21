@@ -44,40 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA9JLPp_Q68ATpX4yU12IrsZaSNqmRD7MU',
-    appId: '1:1022367238361:web:322a8846fc2db3f277d6c8',
-    messagingSenderId: '1022367238361',
-    projectId: 'proche-383620',
-    authDomain: 'proche-383620.firebaseapp.com',
-    storageBucket: 'proche-383620.appspot.com',
+    apiKey: '<api_key>',
+    appId: '1:<project_number>:web:322a8846fc2db3f277d6c8',
+    messagingSenderId: '<project_number>',
+    projectId: '<project_id>',
+    authDomain: '<project_id>.firebaseapp.com',
+    storageBucket: '<project_id>.appspot.com',
     measurementId: 'G-GVGTGPQ79B',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBe0nQq4LjEIQ-wljXcgV9DHy24vdZiULk',
-    appId: '1:1022367238361:android:e9210cd7443dfb7c77d6c8',
-    messagingSenderId: '1022367238361',
-    projectId: 'proche-383620',
-    storageBucket: 'proche-383620.appspot.com',
+    apiKey: '<api_key>',
+    appId: '1:<project_number>:android:e9210cd7443dfb7c77d6c8',
+    messagingSenderId: '<project_number>',
+    projectId: '<project_id>',
+    storageBucket: '<project_id>.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDt_R1Yl4M7JT5yhZJc948qw8yYCx1h5rM',
-    appId: '1:1022367238361:ios:94253b1e1aef598a77d6c8',
-    messagingSenderId: '1022367238361',
-    projectId: 'proche-383620',
-    storageBucket: 'proche-383620.appspot.com',
-    iosClientId: '1022367238361-ninugevc81676tra76fbllfl0o29viod.apps.googleusercontent.com',
+    apiKey: '<api_key>',
+    appId: '1:<project_number>:ios:94253b1e1aef598a77d6c8',
+    messagingSenderId: '<project_number>',
+    projectId: '<project_id>',
+    storageBucket: '<project_id>.appspot.com',
+    iosClientId: '<project_number>-ninugevc81676tra76fbllfl0o29viod.apps.googleusercontent.com',
     iosBundleId: 'io.qcodelabs.proche.mobile',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDt_R1Yl4M7JT5yhZJc948qw8yYCx1h5rM',
-    appId: '1:1022367238361:ios:e825fc5ab9f73baf77d6c8',
-    messagingSenderId: '1022367238361',
-    projectId: 'proche-383620',
-    storageBucket: 'proche-383620.appspot.com',
-    iosClientId: '1022367238361-7e0dmtvm7g81a25v8ng8316kkjg0rh7i.apps.googleusercontent.com',
+    apiKey: '<api_key>',
+    appId: '1:<project_number>:ios:e825fc5ab9f73baf77d6c8',
+    messagingSenderId: '<project_number>',
+    projectId: '<project_id>',
+    storageBucket: '<project_id>.appspot.com',
+    iosClientId: '<project_number>-7e0dmtvm7g81a25v8ng8316kkjg0rh7i.apps.googleusercontent.com',
     iosBundleId: 'io.qcodelabs.nearme.mobile',
   );
 }
