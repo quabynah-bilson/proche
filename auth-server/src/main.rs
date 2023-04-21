@@ -24,11 +24,14 @@ mod utils;
 mod proto {
     tonic::include_proto!("auth");
     tonic::include_proto!("media");
+    tonic::include_proto!("sms");
 
     pub(crate) const AUTH_FILE_DESCRIPTOR_SET: &[u8] =
         tonic::include_file_descriptor_set!("auth_descriptor");
     pub(crate) const MEDIA_FILE_DESCRIPTOR_SET: &[u8] =
         tonic::include_file_descriptor_set!("media_descriptor");
+    pub(crate) const SMS_FILE_DESCRIPTOR_SET: &[u8] =
+        tonic::include_file_descriptor_set!("sms_descriptor");
 }
 
 fn init_logger() {
@@ -94,6 +97,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let service = tonic_reflection::server::Builder::configure()
         .register_encoded_file_descriptor_set(proto::AUTH_FILE_DESCRIPTOR_SET)
         .register_encoded_file_descriptor_set(proto::MEDIA_FILE_DESCRIPTOR_SET)
+        .register_encoded_file_descriptor_set(proto::SMS_FILE_DESCRIPTOR_SET)
         .build()
         .unwrap();
 

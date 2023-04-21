@@ -1,0 +1,46 @@
+app_name: Proche
+
+# account messages
+invalid_credentials: Numéro de téléphone ou mot de passe invalide
+account_locked: Votre compte a été bloqué
+account_not_verified: Votre compte n'est pas vérifié
+account_not_found: Votre compte n'a pas été trouvé
+account_found: Votre compte a été trouvé
+account_exists: Le compte existe déjà
+invalid_otp: Code invalide
+invalid_phone_number: Numéro de téléphone invalide
+password_reset_failed: Échec de la réinitialisation du mot de passe
+invalid_referral_code: Code de référence invalide
+
+# auth messages
+auth_failed: Échec de l'authentification
+auth_started: Authentification en cours
+auth_success: Authentification réussie
+access_denied: Accès refusé
+
+# country messages
+countries_not_found: Pays non trouvés
+countries_found: Pays trouvés
+country_not_found: Pays non trouvé
+country_not_added: Pays non ajouté
+country_not_deleted: Pays non supprimé
+country_already_exists: Pays déjà existant
+
+# misc
+invalid_language_code: Code de langue non pris en charge
+sms_send_failed: Nous n'avons pas pu envoyer le SMS pour une raison quelconque. Veuillez réessayer plus tard.
+sms_send_success: Code de vérification envoyé avec succès
+sms_verification_failed: Nous n'avons pas pu vérifier le SMS pour une raison quelconque. Veuillez réessayer plus tard.
+sms_verification_success: Numéro de téléphone vérifié avec succès
+media_not_uploaded: Média non téléchargé
+
+# access token
+refresh_token_not_found: Token de rafraîchissement non trouvé
+invalid_token: Token invalide
+access_token_not_found: Token d'accès non trouvé
+access_token_found: Token d'accès trouvé
+access_token_found_in_request: Token d'accès trouvé dans la requête
+unable_to_create_token: Impossible de créer le token
+access_token_verified: Token d'accès vérifié
+token_expired: Votre compte a expiré
+generating_new_access_token: Génération d'un nouveau token d'accès

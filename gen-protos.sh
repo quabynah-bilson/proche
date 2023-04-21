@@ -17,7 +17,11 @@ SHARED_PROTO_PATH=$SHARED_SERVER_DIR/proto
 
 # define the path to the payment-server directory
 PAYMENT_SERVER_DIR=payment-server
-#PAYMENT_PROTO_PATH=$PAYMENT_SERVER_DIR/proto
+PAYMENT_PROTO_PATH=$PAYMENT_SERVER_DIR/proto
+
+# define the path to the payment-server directory
+SMS_SERVER_DIR=sms-server
+SMS_PROTO_PATH=$SMS_SERVER_DIR/proto
 
 # define the path to the mobile directory
 MOBILE_DIR=mobile
@@ -48,14 +52,12 @@ protoc -I=$SHARED_PROTO_PATH --go_out=$SHARED_SERVER_DIR/gen --go_opt=paths=sour
   $(find $SHARED_PROTO_PATH -iname "*.proto")
 
 # copy the proto file from media-server to auth-server
-#cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
+cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
 
 # generate for auth-server using rust
-#cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
+cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
 
 # generate for flutter using dart
-protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH \
-  --dart_out=grpc:$MOBILE_OUT_DIR \
-  shared.proto
-#  $(find $CORE_PROTO_PATH -iname "*.proto")
+#protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH \
+#  --dart_out=grpc:$MOBILE_OUT_DIR \
 #  $(find $AUTH_PROTO_PATH -iname "*.proto") $(find $SHARED_PROTO_PATH -iname "*.proto") $(find $CORE_PROTO_PATH -iname "*.proto")

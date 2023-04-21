@@ -544,19 +544,19 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_id : Some(
+            device_id: Some(
                 account_doc
                     .get_str("device_id")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_type : Some(
+            device_type: Some(
                 account_doc
                     .get_str("device_type")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_token : Some(
+            device_token: Some(
                 account_doc
                     .get_str("device_token")
                     .unwrap_or("")
@@ -624,19 +624,19 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_id : Some(
+            device_id: Some(
                 account_doc
                     .get_str("device_id")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_type : Some(
+            device_type: Some(
                 account_doc
                     .get_str("device_type")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_token : Some(
+            device_token: Some(
                 account_doc
                     .get_str("device_token")
                     .unwrap_or("")
@@ -700,19 +700,19 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_id : Some(
+            device_id: Some(
                 account_doc
                     .get_str("device_id")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_type : Some(
+            device_type: Some(
                 account_doc
                     .get_str("device_type")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_token : Some(
+            device_token: Some(
                 account_doc
                     .get_str("device_token")
                     .unwrap_or("")
@@ -816,19 +816,19 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_id : Some(
+            device_id: Some(
                 account_doc
                     .get_str("device_id")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_type : Some(
+            device_type: Some(
                 account_doc
                     .get_str("device_type")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_token : Some(
+            device_token: Some(
                 account_doc
                     .get_str("device_token")
                     .unwrap_or("")
@@ -872,85 +872,6 @@ impl AuthService for AuthServiceImpl {
             Ok(_) => Ok(Response::new(())),
             Err(_) => {
                 return Err(Status::not_found(t!("account_not_found")));
-            }
-        }
-    }
-
-    // done
-    async fn send_phone_verification_code(
-        &self,
-        request: Request<String>,
-    ) -> Result<Response<()>, Status> {
-        // validate language id
-        let language_id = match _validate_language_id_from_request(request.metadata()) {
-            Ok(language_id) => language_id,
-            Err(e) => {
-                return Err(e);
-            }
-        };
-
-        // validate public access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
-            .await
-        {
-            Ok(_) => (),
-            Err(e) => {
-                return Err(e);
-            }
-        };
-
-        // get phone number from request
-        let phone_number = request.into_inner();
-
-        // send verification code to phone number
-        match config::sms_manager::TwilioVerifyService::send_sms(&phone_number, &language_id).await
-        {
-            Ok(_) => Ok(Response::new(())),
-            Err(_) => {
-                return Err(Status::internal(t!("sms_send_failed")));
-            }
-        }
-    }
-
-    // done
-    async fn verify_phone_verification_code(
-        &self,
-        request: Request<VerifyPhoneRequest>,
-    ) -> Result<Response<()>, Status> {
-        // validate language id
-        let language_id = match _validate_language_id_from_request(request.metadata()) {
-            Ok(language_id) => language_id,
-            Err(e) => {
-                return Err(e);
-            }
-        };
-
-        // validate public access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
-            .await
-        {
-            Ok(_) => (),
-            Err(e) => {
-                return Err(e);
-            }
-        };
-
-        // get phone number from request
-        let req = request.into_inner();
-        let phone_number = &req.phone_number;
-        let verification_code = &req.verification_code;
-
-        // verify verification code
-        match config::sms_manager::TwilioVerifyService::verify_sms(
-            &phone_number,
-            &verification_code,
-            &language_id,
-        )
-            .await
-        {
-            Ok(_) => Ok(Response::new(())),
-            Err(_) => {
-                return Err(Status::internal(t!("sms_verification_failed")));
             }
         }
     }

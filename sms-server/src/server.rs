@@ -1,15 +1,35 @@
-use std::error::Error;
-use std::{collections::HashMap, env};
+use std::collections::HashMap;
+use std::env;
 
-use reqwest::{header, Client, StatusCode};
+use reqwest::{Client, header, StatusCode};
+use tonic::{Request, Response, Status};
+use tonic::metadata::MetadataMap;
 
-// reference -> https://dev.to/hackmamba/how-to-build-a-one-time-passwordotp-verification-api-with-rust-and-twilio-22il
+use crate::config::locale;
+use crate::proto::sms_service_server::SmsService;
+use crate::proto::VerifyPhoneRequest;
 
-pub(crate) struct TwilioVerifyService {}
+rust_i18n::i18n!("locales");
 
-impl TwilioVerifyService {
-    // send sms to user
-    pub async fn send_sms(phone_number: &str, language_id: &str) -> Result<(), Box<dyn Error>> {
+pub struct SmsServiceImpl {}
+
+impl SmsServiceImpl {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
+#[tonic::async_trait]
+impl SmsService for SmsServiceImpl {
+    async fn send_phone_verification_code(&self, request: Request<String>) -> Result<Response<()>, Status> {
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        let phone_number = request.into_inner();
         log::info!("Sending sms to: {}", phone_number);
         let account_sid = env::var("TWILIO_ACCOUNT_SID").expect("Error reading Twilio Account SID");
         let auth_token = env::var("TWILIO_AUTHTOKEN").expect("Error reading Twilio Auth Token");
@@ -49,25 +69,31 @@ impl TwilioVerifyService {
                 let created = response.status() == StatusCode::from_u16(201).unwrap();
                 if created {
                     log::info!("{}", t!("sms_send_success", locale = &language_id));
-                    Ok(())
+                    Ok(Response::new(()))
                 } else {
-                    Err(Box::try_from(t!("sms_send_failed", locale = &language_id)).unwrap())
+                    Err(Status::internal(t!("sms_send_failed", locale = &language_id)))
                 }
             }
-            Err(_) => Err(Box::try_from(t!("sms_send_failed", locale = &language_id)).unwrap()),
+            Err(_) => Err(Status::internal(t!("sms_send_failed", locale = &language_id))),
         }
     }
 
-    // verify sms code
-    pub async fn verify_sms(
-        phone_number: &str,
-        code: &String,
-        language_id: &str,
-    ) -> Result<(), Box<dyn Error>> {
+    async fn verify_phone_verification_code(&self, request: Request<VerifyPhoneRequest>) -> Result<Response<()>, Status> {
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        let req = request.into_inner();
+        let phone_number = req.phone_number;
+        let code = req.verification_code;
+
         log::info!(
             "Verifying sms from phone number: {} -> {}",
-            phone_number,
-            code
+            &phone_number,
+            &code
         );
         let account_sid = env::var("TWILIO_ACCOUNT_SID").expect("Error reading Twilio Account SID");
         let auth_token = env::var("TWILIO_AUTHTOKEN").expect("Error reading Twilio Auth Token");
@@ -107,17 +133,34 @@ impl TwilioVerifyService {
                 let created = response.status() == StatusCode::from_u16(200).unwrap();
                 if created {
                     log::info!("{}", t!("sms_verification_success", locale = &language_id));
-                    Ok(())
+                    Ok(Response::new(()))
                 } else {
-                    Err(
-                        Box::try_from(t!("sms_verification_failed", locale = &language_id))
-                            .unwrap(),
-                    )
+                    Err(Status::internal(t!("sms_verification_failed", locale = &language_id)))
                 }
             }
             Err(_) => {
-                Err(Box::try_from(t!("sms_verification_failed", locale = &language_id)).unwrap())
+                Err(Status::internal(t!("sms_verification_failed", locale = &language_id)))
             }
+        }
+    }
+}
+
+// validate language id
+fn _validate_language_id_from_request(md: &MetadataMap) -> Result<String, Status> {
+    let language_id = match md.get("x-language-id") {
+        Some(result) => result.to_str().unwrap().to_string(),
+        None => {
+            return Err(Status::invalid_argument(t!("invalid_language_code")));
+        }
+    };
+    // validate language id from request
+    match locale::validate_language_id(&language_id) {
+        Ok(_) => {
+            rust_i18n::set_locale(&language_id);
+            Ok(language_id)
+        }
+        Err(_) => {
+            return Err(Status::invalid_argument(t!("invalid_language_code")));
         }
     }
 }
