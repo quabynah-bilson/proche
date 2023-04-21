@@ -25,10 +25,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TaskServiceClient interface {
 	// task related operations
-	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*Task, error)
+	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*ProcheTask, error)
 	GetTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetTaskClient, error)
 	GetTasks(ctx context.Context, in *CommonAddress, opts ...grpc.CallOption) (TaskService_GetTasksClient, error)
-	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*Task, error)
+	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*ProcheTask, error)
 	DeleteTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// task event related operations
 	CreateTaskEvent(ctx context.Context, in *CreateTaskEventRequest, opts ...grpc.CallOption) (*TaskEvent, error)
@@ -53,8 +53,8 @@ func NewTaskServiceClient(cc grpc.ClientConnInterface) TaskServiceClient {
 	return &taskServiceClient{cc}
 }
 
-func (c *taskServiceClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*Task, error) {
-	out := new(Task)
+func (c *taskServiceClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*ProcheTask, error) {
+	out := new(ProcheTask)
 	err := c.cc.Invoke(ctx, "/task.TaskService/create_task", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -78,7 +78,7 @@ func (c *taskServiceClient) GetTask(ctx context.Context, in *wrapperspb.StringVa
 }
 
 type TaskService_GetTaskClient interface {
-	Recv() (*Task, error)
+	Recv() (*ProcheTask, error)
 	grpc.ClientStream
 }
 
@@ -86,8 +86,8 @@ type taskServiceGetTaskClient struct {
 	grpc.ClientStream
 }
 
-func (x *taskServiceGetTaskClient) Recv() (*Task, error) {
-	m := new(Task)
+func (x *taskServiceGetTaskClient) Recv() (*ProcheTask, error) {
+	m := new(ProcheTask)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -126,8 +126,8 @@ func (x *taskServiceGetTasksClient) Recv() (*TaskList, error) {
 	return m, nil
 }
 
-func (c *taskServiceClient) UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*Task, error) {
-	out := new(Task)
+func (c *taskServiceClient) UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*ProcheTask, error) {
+	out := new(ProcheTask)
 	err := c.cc.Invoke(ctx, "/task.TaskService/update_task", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -372,10 +372,10 @@ func (c *taskServiceClient) DeleteTaskEventsForUserAndTask(ctx context.Context, 
 // for forward compatibility
 type TaskServiceServer interface {
 	// task related operations
-	CreateTask(context.Context, *CreateTaskRequest) (*Task, error)
+	CreateTask(context.Context, *CreateTaskRequest) (*ProcheTask, error)
 	GetTask(*wrapperspb.StringValue, TaskService_GetTaskServer) error
 	GetTasks(*CommonAddress, TaskService_GetTasksServer) error
-	UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error)
+	UpdateTask(context.Context, *UpdateTaskRequest) (*ProcheTask, error)
 	DeleteTask(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	// task event related operations
 	CreateTaskEvent(context.Context, *CreateTaskEventRequest) (*TaskEvent, error)
@@ -397,7 +397,7 @@ type TaskServiceServer interface {
 type UnimplementedTaskServiceServer struct {
 }
 
-func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskRequest) (*Task, error) {
+func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskRequest) (*ProcheTask, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
 }
 func (UnimplementedTaskServiceServer) GetTask(*wrapperspb.StringValue, TaskService_GetTaskServer) error {
@@ -406,7 +406,7 @@ func (UnimplementedTaskServiceServer) GetTask(*wrapperspb.StringValue, TaskServi
 func (UnimplementedTaskServiceServer) GetTasks(*CommonAddress, TaskService_GetTasksServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetTasks not implemented")
 }
-func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error) {
+func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*ProcheTask, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
 }
 func (UnimplementedTaskServiceServer) DeleteTask(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
@@ -488,7 +488,7 @@ func _TaskService_GetTask_Handler(srv interface{}, stream grpc.ServerStream) err
 }
 
 type TaskService_GetTaskServer interface {
-	Send(*Task) error
+	Send(*ProcheTask) error
 	grpc.ServerStream
 }
 
@@ -496,7 +496,7 @@ type taskServiceGetTaskServer struct {
 	grpc.ServerStream
 }
 
-func (x *taskServiceGetTaskServer) Send(m *Task) error {
+func (x *taskServiceGetTaskServer) Send(m *ProcheTask) error {
 	return x.ServerStream.SendMsg(m)
 }
 

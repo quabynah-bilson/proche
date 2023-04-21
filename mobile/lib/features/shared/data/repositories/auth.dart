@@ -223,4 +223,15 @@ class ProcheAuthRepository extends BaseAuthRepository {
       return right(e.message ?? e.codeName);
     }
   }
+
+  @override
+  Future<Either<Account, String>> getAccountById(String id) async {
+    try {
+      var account = await client
+          .get_account_by_id(StringValue(value: id));
+      return left(account);
+    } on GrpcError catch (e) {
+      return right(e.message ?? e.codeName);
+    }
+  }
 }

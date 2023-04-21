@@ -476,7 +476,7 @@ extension BuildContextX on BuildContext {
                                 account = null;
                                 currentAccountBloc.add(
                                     GetAccountByPhoneNumberAuthEvent(
-                                        phoneNumber:
+
                                             phoneNumberController.text.trim()));
                               }
                             },

@@ -239,7 +239,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                             if (input.length >= 10) {
                               _currentAccountBloc.add(
                                   GetAccountByPhoneNumberAuthEvent(
-                                      phoneNumber:
+
                                           _phoneNumberController.text.trim()));
                             }
                           },

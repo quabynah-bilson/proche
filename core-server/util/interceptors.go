@@ -61,13 +61,11 @@ func AuthStreamInterceptor(srv interface{}, ss grpc.ServerStream, _ *grpc.Stream
 	// create a new auth client
 	client := createAuthClient()
 
-	// get context from the stream and set a deadline of 15 seconds
+	// get context from the stream
 	parentCtx := ss.Context()
-	deadlineCtx, cancel := context.WithDeadline(parentCtx, time.Now().Add(time.Second*15))
-	defer cancel()
 
 	if md, ok := metadata.FromIncomingContext(parentCtx); ok {
-		ctx := metadata.NewOutgoingContext(deadlineCtx, md)
+		ctx := metadata.NewOutgoingContext(parentCtx, md)
 		// validate the access token
 		if token, err := client.ValidateAccessToken(ctx, &empty.Empty{}, grpc.WaitForReady(true)); err == nil {
 			ss.SetTrailer(metadata.Pairs(AccountIdKey, token.GetAccountId()))

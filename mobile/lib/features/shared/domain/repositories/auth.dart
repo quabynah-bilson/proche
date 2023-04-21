@@ -22,6 +22,8 @@ abstract class BaseAuthRepository {
 
   Future<Either<Account, String>> getAccountByPhoneNumber(String phoneNumber);
 
+  Future<Either<Account, String>> getAccountById(String id);
+
   Future<Either<Account, String>> getCurrentAccount();
 
   Future<Either<Account, String>> updateAccount(Account account);

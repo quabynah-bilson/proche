@@ -24,6 +24,7 @@ service AuthService {
   // account
   rpc get_account (google.protobuf.Empty) returns (Account);
   rpc get_account_by_phone_number (google.protobuf.StringValue) returns (Account);
+  rpc get_account_by_id (google.protobuf.StringValue) returns (Account);
   rpc update_account (Account) returns (Account);
   rpc delete_account (google.protobuf.Empty) returns (google.protobuf.Empty);
 

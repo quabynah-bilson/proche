@@ -17,6 +17,7 @@ class TokenGrpcInterceptor implements ClientInterceptor {
         metadata: {
           'Authorization': 'Bearer ${UserSession.kAccessToken}',
           'x-language-id': '${UserSession.kLocale}',
+          'x-authenticated': '${UserSession.kIsLoggedIn}',
         },
       ),
     );
@@ -32,6 +33,7 @@ class TokenGrpcInterceptor implements ClientInterceptor {
         metadata: {
           'Authorization': 'Bearer ${UserSession.kAccessToken}',
           'x-language-id': '${UserSession.kLocale}',
+          'x-authenticated': '${UserSession.kIsLoggedIn}',
         },
       ),
     );

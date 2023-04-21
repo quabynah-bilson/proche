@@ -27,19 +27,11 @@ func (s *ProcheGiveAwayServer) GetGiveaway(context.Context, *wrapperspb.StringVa
 	panic("implement me")
 }
 
-func (s *ProcheGiveAwayServer) GetGiveaways(*emptypb.Empty, pb.GiveAwayService_GetGiveawaysServer) error {
+func (s *ProcheGiveAwayServer) GetGiveaways(*pb.CommonAddress, pb.GiveAwayService_GetGiveawaysServer) error {
 	panic("implement me")
 }
 
 func (s *ProcheGiveAwayServer) GetGiveawaysByOwner(*wrapperspb.StringValue, pb.GiveAwayService_GetGiveawaysByOwnerServer) error {
-	panic("implement me")
-}
-
-func (s *ProcheGiveAwayServer) GetGiveawaysByCoordinates(*pb.GiveAwayCoordinates, pb.GiveAwayService_GetGiveawaysByCoordinatesServer) error {
-	panic("implement me")
-}
-
-func (s *ProcheGiveAwayServer) GetGiveawaysByCoordinatesAndRadius(*pb.GiveAwayByCoordinatesAndRadiusRequest, pb.GiveAwayService_GetGiveawaysByCoordinatesAndRadiusServer) error {
 	panic("implement me")
 }
 

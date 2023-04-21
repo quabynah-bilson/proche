@@ -18,23 +18,23 @@ export 'task.pb.dart';
 
 class TaskServiceClient extends $grpc.Client {
   static final _$create_task =
-      $grpc.ClientMethod<$0.CreateTaskRequest, $0.Task>(
+      $grpc.ClientMethod<$0.CreateTaskRequest, $0.ProcheTask>(
           '/task.TaskService/create_task',
           ($0.CreateTaskRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $0.Task.fromBuffer(value));
-  static final _$get_task = $grpc.ClientMethod<$1.StringValue, $0.Task>(
+          ($core.List<$core.int> value) => $0.ProcheTask.fromBuffer(value));
+  static final _$get_task = $grpc.ClientMethod<$1.StringValue, $0.ProcheTask>(
       '/task.TaskService/get_task',
       ($1.StringValue value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.Task.fromBuffer(value));
+      ($core.List<$core.int> value) => $0.ProcheTask.fromBuffer(value));
   static final _$get_tasks = $grpc.ClientMethod<$2.CommonAddress, $0.TaskList>(
       '/task.TaskService/get_tasks',
       ($2.CommonAddress value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.TaskList.fromBuffer(value));
   static final _$update_task =
-      $grpc.ClientMethod<$0.UpdateTaskRequest, $0.Task>(
+      $grpc.ClientMethod<$0.UpdateTaskRequest, $0.ProcheTask>(
           '/task.TaskService/update_task',
           ($0.UpdateTaskRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $0.Task.fromBuffer(value));
+          ($core.List<$core.int> value) => $0.ProcheTask.fromBuffer(value));
   static final _$delete_task = $grpc.ClientMethod<$1.StringValue, $3.Empty>(
       '/task.TaskService/delete_task',
       ($1.StringValue value) => value.writeToBuffer(),
@@ -105,12 +105,12 @@ class TaskServiceClient extends $grpc.Client {
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
       : super(channel, options: options, interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.Task> create_task($0.CreateTaskRequest request,
+  $grpc.ResponseFuture<$0.ProcheTask> create_task($0.CreateTaskRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$create_task, request, options: options);
   }
 
-  $grpc.ResponseStream<$0.Task> get_task($1.StringValue request,
+  $grpc.ResponseStream<$0.ProcheTask> get_task($1.StringValue request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_task, $async.Stream.fromIterable([request]),
@@ -124,7 +124,7 @@ class TaskServiceClient extends $grpc.Client {
         options: options);
   }
 
-  $grpc.ResponseFuture<$0.Task> update_task($0.UpdateTaskRequest request,
+  $grpc.ResponseFuture<$0.ProcheTask> update_task($0.UpdateTaskRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$update_task, request, options: options);
   }
@@ -220,20 +220,20 @@ abstract class TaskServiceBase extends $grpc.Service {
   $core.String get $name => 'task.TaskService';
 
   TaskServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.CreateTaskRequest, $0.Task>(
+    $addMethod($grpc.ServiceMethod<$0.CreateTaskRequest, $0.ProcheTask>(
         'create_task',
         create_task_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.CreateTaskRequest.fromBuffer(value),
-        ($0.Task value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.StringValue, $0.Task>(
+        ($0.ProcheTask value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $0.ProcheTask>(
         'get_task',
         get_task_Pre,
         false,
         true,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
-        ($0.Task value) => value.writeToBuffer()));
+        ($0.ProcheTask value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$2.CommonAddress, $0.TaskList>(
         'get_tasks',
         get_tasks_Pre,
@@ -241,13 +241,13 @@ abstract class TaskServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $2.CommonAddress.fromBuffer(value),
         ($0.TaskList value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UpdateTaskRequest, $0.Task>(
+    $addMethod($grpc.ServiceMethod<$0.UpdateTaskRequest, $0.ProcheTask>(
         'update_task',
         update_task_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.UpdateTaskRequest.fromBuffer(value),
-        ($0.Task value) => value.writeToBuffer()));
+        ($0.ProcheTask value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.StringValue, $3.Empty>(
         'delete_task',
         delete_task_Pre,
@@ -343,12 +343,12 @@ abstract class TaskServiceBase extends $grpc.Service {
         ($3.Empty value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.Task> create_task_Pre($grpc.ServiceCall call,
+  $async.Future<$0.ProcheTask> create_task_Pre($grpc.ServiceCall call,
       $async.Future<$0.CreateTaskRequest> request) async {
     return create_task(call, await request);
   }
 
-  $async.Stream<$0.Task> get_task_Pre(
+  $async.Stream<$0.ProcheTask> get_task_Pre(
       $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async* {
     yield* get_task(call, await request);
   }
@@ -358,7 +358,7 @@ abstract class TaskServiceBase extends $grpc.Service {
     yield* get_tasks(call, await request);
   }
 
-  $async.Future<$0.Task> update_task_Pre($grpc.ServiceCall call,
+  $async.Future<$0.ProcheTask> update_task_Pre($grpc.ServiceCall call,
       $async.Future<$0.UpdateTaskRequest> request) async {
     return update_task(call, await request);
   }
@@ -430,13 +430,13 @@ abstract class TaskServiceBase extends $grpc.Service {
     return delete_task_events_for_user_and_task(call, await request);
   }
 
-  $async.Future<$0.Task> create_task(
+  $async.Future<$0.ProcheTask> create_task(
       $grpc.ServiceCall call, $0.CreateTaskRequest request);
-  $async.Stream<$0.Task> get_task(
+  $async.Stream<$0.ProcheTask> get_task(
       $grpc.ServiceCall call, $1.StringValue request);
   $async.Stream<$0.TaskList> get_tasks(
       $grpc.ServiceCall call, $2.CommonAddress request);
-  $async.Future<$0.Task> update_task(
+  $async.Future<$0.ProcheTask> update_task(
       $grpc.ServiceCall call, $0.UpdateTaskRequest request);
   $async.Future<$3.Empty> delete_task(
       $grpc.ServiceCall call, $1.StringValue request);

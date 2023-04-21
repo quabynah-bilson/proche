@@ -37,6 +37,7 @@ type AuthServiceClient interface {
 	// account
 	GetAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Account, error)
 	GetAccountByPhoneNumber(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error)
+	GetAccountById(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error)
 	UpdateAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error)
 	DeleteAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// phone verification
@@ -135,6 +136,15 @@ func (c *authServiceClient) GetAccount(ctx context.Context, in *emptypb.Empty, o
 func (c *authServiceClient) GetAccountByPhoneNumber(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error) {
 	out := new(Account)
 	err := c.cc.Invoke(ctx, "/auth.AuthService/get_account_by_phone_number", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) GetAccountById(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error) {
+	out := new(Account)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/get_account_by_id", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -248,6 +258,7 @@ type AuthServiceServer interface {
 	// account
 	GetAccount(context.Context, *emptypb.Empty) (*Account, error)
 	GetAccountByPhoneNumber(context.Context, *wrapperspb.StringValue) (*Account, error)
+	GetAccountById(context.Context, *wrapperspb.StringValue) (*Account, error)
 	UpdateAccount(context.Context, *Account) (*Account, error)
 	DeleteAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	// phone verification
@@ -294,6 +305,9 @@ func (UnimplementedAuthServiceServer) GetAccount(context.Context, *emptypb.Empty
 }
 func (UnimplementedAuthServiceServer) GetAccountByPhoneNumber(context.Context, *wrapperspb.StringValue) (*Account, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAccountByPhoneNumber not implemented")
+}
+func (UnimplementedAuthServiceServer) GetAccountById(context.Context, *wrapperspb.StringValue) (*Account, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAccountById not implemented")
 }
 func (UnimplementedAuthServiceServer) UpdateAccount(context.Context, *Account) (*Account, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAccount not implemented")
@@ -496,6 +510,24 @@ func _AuthService_GetAccountByPhoneNumber_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).GetAccountByPhoneNumber(ctx, req.(*wrapperspb.StringValue))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_GetAccountById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(wrapperspb.StringValue)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetAccountById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/get_account_by_id",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetAccountById(ctx, req.(*wrapperspb.StringValue))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -722,6 +754,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "get_account_by_phone_number",
 			Handler:    _AuthService_GetAccountByPhoneNumber_Handler,
+		},
+		{
+			MethodName: "get_account_by_id",
+			Handler:    _AuthService_GetAccountById_Handler,
 		},
 		{
 			MethodName: "update_account",

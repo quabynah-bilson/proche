@@ -571,11 +571,69 @@ impl AuthService for AuthServiceImpl {
             }
         };
 
-        // find account by id
+        // find account by phone number
         let phone_number = request.into_inner();
         let account_doc = match self
             .account_col
             .find_one(doc! {"phone_number": &phone_number}, None)
+            .await
+            .unwrap()
+        {
+            Some(acct_doc) => acct_doc,
+            None => {
+                return Err(Status::not_found(t!("account_not_found")));
+            }
+        };
+
+        // create account object from account doc
+        let account = Account {
+            id: account_doc.get_str("id").unwrap().to_string(),
+            country_id: account_doc.get_str("country_id").unwrap().to_string(),
+            phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
+            referral_code: Some(account_doc.get_str("referral_code").unwrap().to_string()),
+            language_id: language_id.to_string(),
+            created_at: _parse_timestamp_field(account_doc.get("created_at").unwrap()),
+            updated_at: _parse_timestamp_field(account_doc.get("updated_at").unwrap()),
+            avatar_url: Some(account_doc.get_str("avatar_url").unwrap_or("").to_string()),
+            id_card_url: Some(account_doc.get_str("id_card").unwrap_or("").to_string()),
+            display_name: account_doc
+                .get_str("display_name")
+                .unwrap_or("")
+                .to_string(),
+            vaccine_card_url: Some(
+                account_doc
+                    .get_str("vaccine_card")
+                    .unwrap_or("")
+                    .to_string(),
+            ),
+        };
+
+        Ok(Response::new(account))
+    }
+
+    async fn get_account_by_id(&self, request: Request<String>) -> Result<Response<Account>, Status> {
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // verify public token
+        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col)
+            .await
+        {
+            Ok(_) => (),
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // find account by id
+        let id = request.into_inner();
+        let account_doc = match self
+            .account_col
+            .find_one(doc! {"id": &id}, None)
             .await
             .unwrap()
         {

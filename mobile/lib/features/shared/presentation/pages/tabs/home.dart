@@ -11,6 +11,7 @@ class _HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<_HomeTab> {
   late final _authBloc = AuthBloc(),
+      _quickHelpBloc = TaskBloc(),
       _locationCubit = LocationCubit(context),
       _mapController = Completer<GoogleMapController>(),
       _kBorderRadius = 8.0;
@@ -53,9 +54,20 @@ class _HomeTabState extends State<_HomeTab> {
               }
 
               if (state is SuccessState<AddressWithLatLngName>) {
-                _currentLocation =
-                    LatLng(state.data.latitude, state.data.longitude);
-                setState(() => _currentAddress = state.data.name);
+                setState(() {
+                  _currentLocation =
+                      LatLng(state.data.latitude, state.data.longitude);
+                  UserSession.lat = state.data.latitude;
+                  UserSession.lng = state.data.longitude;
+                  _currentAddress = state.data.name;
+                });
+                _quickHelpBloc.add(
+                  GetAllTasksEvent(
+                    CommonAddress(
+                        latitude: state.data.latitude,
+                        longitude: state.data.longitude),
+                  ),
+                );
               }
             },
           ),
@@ -187,36 +199,82 @@ class _HomeTabState extends State<_HomeTab> {
                             ).horizontal(24).top(16),
 
                             /// quick help content
-                            // if (Random.secure().nextBool()) ...{
-                            // build a list
-                            // ListView.separated(
-                            //   shrinkWrap: true,
-                            //   physics: const NeverScrollableScrollPhysics(),
-                            //   padding:
-                            //       const EdgeInsets.fromLTRB(24, 16, 24, 20),
-                            //   itemBuilder: (context, index) =>
-                            //       _buildQuickHelpTile(),
-                            //   separatorBuilder: (_, __) =>
-                            //       const SizedBox(height: 12),
-                            //   itemCount: 2, // TODO : replace with data count
-                            // ),
-                            // } else ...{
-                            //   SafeArea(
-                            //     child: EmptyContentPlaceholder(
-                            //       icon: TablerIcons.package_off,
-                            //       title: context.localizer.nothingAvailableHeader,
-                            //       subtitle:
-                            //           context.localizer.nothingAvailableSubhead,
-                            //     ),
-                            //   ),
-                            // },
-                            SafeArea(
-                              child: EmptyContentPlaceholder(
-                                icon: TablerIcons.package_off,
-                                title: context.localizer.nothingAvailableHeader,
-                                subtitle:
-                                    context.localizer.nothingAvailableSubhead,
-                              ),
+                            BlocBuilder(
+                              bloc: _quickHelpBloc,
+                              builder: (context, state) {
+                                if (state is ErrorState<String>) {
+                                  return SafeArea(
+                                    child: EmptyContentPlaceholder(
+                                      icon: TablerIcons.package_off,
+                                      title: context
+                                          .localizer.nothingAvailableHeader,
+                                      subtitle: context
+                                          .localizer.nothingAvailableSubhead,
+                                    ),
+                                  );
+                                }
+
+                                if (state
+                                    is SuccessState<Stream<List<ProcheTask>>>) {
+                                  return StreamBuilder<List<ProcheTask>>(
+                                    stream: state.data,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) {
+                                        return SafeArea(
+                                          child: EmptyContentPlaceholder(
+                                            icon: TablerIcons.package_off,
+                                            title: context.localizer
+                                                .nothingAvailableHeader,
+                                            subtitle: context.localizer
+                                                .nothingAvailableSubhead,
+                                          ),
+                                        );
+                                      }
+
+                                      if (snapshot.hasData) {
+                                        final tasks = snapshot.data;
+                                        if (tasks!.isEmpty) {
+                                          return SafeArea(
+                                            child: EmptyContentPlaceholder(
+                                              icon: TablerIcons.package_off,
+                                              title: context.localizer
+                                                  .nothingAvailableHeader,
+                                              subtitle: context.localizer
+                                                  .nothingAvailableSubhead,
+                                            ),
+                                          );
+                                        }
+
+                                        return ListView.separated(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          padding: const EdgeInsets.fromLTRB(
+                                              24, 16, 24, 20),
+                                          itemBuilder: (context, index) =>
+                                              QuickHelpListTile(
+                                                  task: tasks[index]),
+                                          separatorBuilder: (_, __) =>
+                                              const SizedBox(height: 12),
+                                          itemCount: tasks.length,
+                                        );
+                                      }
+
+                                      return SafeArea(
+                                        child: const CircularProgressIndicator
+                                                .adaptive()
+                                            .centered(),
+                                      );
+                                    },
+                                  );
+                                }
+
+                                return SafeArea(
+                                  child:
+                                      const CircularProgressIndicator.adaptive()
+                                          .centered(),
+                                );
+                              },
                             ),
 
                             /// free giveaway header
@@ -303,76 +361,5 @@ class _HomeTabState extends State<_HomeTab> {
             ),
           ],
         ).fillMaxSize(context),
-      );
-
-  // TODO -> extract into its own widget
-  Widget _buildQuickHelpTile() => GestureDetector(
-        onTap: context.showFeatureUnderDevSheet,
-        child: Container(
-          decoration: BoxDecoration(
-            color: context.colorScheme.background,
-            border: Border.all(
-                color: context.theme.disabledColor.withOpacity(kEmphasisLow)),
-            borderRadius: BorderRadius.circular(_kBorderRadius),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // purpose
-              'I am looking for an expert house cleaner to maintain my home this weekend'
-                  .bodyText2(context,
-                      weight: FontWeight.w600,
-                      color: context.colorScheme.onSurface),
-              // metadata
-              Text.rich(
-                // TODO: replace with computed data
-                const TextSpan(
-                  children: [
-                    TextSpan(text: '⏱️Just now'),
-                    TextSpan(text: ' • '),
-                    TextSpan(text: '248m away'),
-                    TextSpan(text: ' • '),
-                    TextSpan(text: '\$40/hr'),
-                  ],
-                ),
-                style: context.textTheme.bodySmall?.copyWith(
-                  color: context.colorScheme.onSurface
-                      .withOpacity(kEmphasisMedium),
-                ),
-              ).top(8),
-
-              // sender
-              ListTile(
-                title: 'Theresah Webb'.subtitle2(context),
-                leading:
-                    'https://images.unsplash.com/photo-1597393922738-085ea04b5a07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhdXRpZnVsJTIwYmxhY2slMjB3b21hbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=40'
-                        .avatar(size: 40, circular: true),
-                trailing: GestureDetector(
-                  onTap: context.showFeatureUnderDevSheet,
-                  child: Icon(
-                    FeatherIcons.heart,
-                    color: context.colorScheme.onSurface
-                        .withOpacity(kEmphasisMedium),
-                  ),
-                ),
-                subtitle: Container(
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.primary
-                        .withOpacity(kEmphasisLowest),
-                    borderRadius: BorderRadius.circular(_kBorderRadius / 2),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  child: 'Verified'
-                      .caption(context, color: context.colorScheme.primary),
-                ).top(4).align(Alignment.centerLeft),
-                minLeadingWidth: 16,
-                contentPadding: EdgeInsets.zero,
-              ).top(12),
-            ],
-          ),
-        ),
       );
 }

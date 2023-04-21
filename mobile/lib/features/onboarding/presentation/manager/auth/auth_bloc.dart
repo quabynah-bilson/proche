@@ -74,6 +74,14 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
+    on<GetAccountByIdAuthEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repo.getAccountById(event.id);
+      either.fold(
+        (l) => emit(BlocState<Account>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
 
     on<ResetPasswordAuthEvent>((event, emit) async {
       emit(BlocState.loadingState());

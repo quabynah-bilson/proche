@@ -29,14 +29,12 @@ func main() {
 		log.Printf("initialized database connection with %d sessions in progress\n", mongoClient.NumberSessionsInProgress())
 
 		// setup collections
-		databaseName := os.Getenv("DATABASE_NAME")
-		db := mongoClient.Database(databaseName)
-		eventsCollection := db.Collection(os.Getenv("EVENTS_COLLECTION"))
-		tripsCollection := db.Collection(os.Getenv("TRIPS_COLLECTION"))
-		tripEventsCollection := db.Collection(os.Getenv("TRIP_EVENTS_COLLECTION"))
-		tasksCollection := db.Collection(os.Getenv("TASKS_COLLECTION"))
-		taskEventsCollection := db.Collection(os.Getenv("TASK_EVENTS_COLLECTION"))
-		giveAwayCollection := db.Collection(os.Getenv("GIVEAWAYS_COLLECTION"))
+		eventsCollection := mongoClient.Database(os.Getenv("EVENT_DATABASE_NAME")).Collection(os.Getenv("EVENTS_COLLECTION"))
+		tripsCollection := mongoClient.Database(os.Getenv("TRIP_DATABASE_NAME")).Collection(os.Getenv("TRIPS_COLLECTION"))
+		tripEventsCollection := mongoClient.Database(os.Getenv("TRIP_DATABASE_NAME")).Collection(os.Getenv("TRIP_EVENTS_COLLECTION"))
+		tasksCollection := mongoClient.Database(os.Getenv("TASK_DATABASE_NAME")).Collection(os.Getenv("TASKS_COLLECTION"))
+		taskEventsCollection := mongoClient.Database(os.Getenv("TASK_DATABASE_NAME")).Collection(os.Getenv("TASK_EVENTS_COLLECTION"))
+		giveAwayCollection := mongoClient.Database(os.Getenv("GIVEAWAY_DATABASE_NAME")).Collection(os.Getenv("GIVEAWAYS_COLLECTION"))
 
 		// setup grpc server with interceptors
 		s := grpc.NewServer(
@@ -50,7 +48,7 @@ func main() {
 		reflection.Register(s)
 
 		// run server
-		if lis, err := net.Listen("tcp", "[::]:2000"); err == nil {
+		if lis, err := net.Listen("tcp", "0.0.0.0:2000"); err == nil {
 			log.Printf("started core grpc server on: %+v\n", lis.Addr())
 			if err := s.Serve(lis); err != nil {
 				log.Fatalf("unable to start grpc server: %+v\n", err)
