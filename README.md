@@ -39,6 +39,11 @@ The project is composed of the following components:
 This microservice contains functionalities that aid in sending and verifying phone numbers using
 One-Time Password(OTP) This service is implemented using `Rust` & `Twilio`.
 
+#### Notification Microservice: (::1600)
+
+This microservice is responsible for handling push notification requirements of the system and is written
+in `Golang`.
+
 #### Media Microservice: (::1700)
 
 This microservice is responsible for handling the upload and transformation of media files using `cloudinary` & written

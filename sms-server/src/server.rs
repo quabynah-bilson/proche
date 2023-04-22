@@ -39,6 +39,8 @@ impl SmsService for SmsServiceImpl {
 
         // todo-> check database for existing phone number
 
+        // sqlx::query!("create_user", phone_number).await?;
+
         // let existing_phone_number = sqlx::query!(
         //     "SELECT phone_number FROM users WHERE phone_number = $1",
         //     &phone_number
