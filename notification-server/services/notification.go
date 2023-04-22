@@ -17,6 +17,14 @@ func NewNotificationServiceInstance() *NotificationServiceImpl {
 	}
 }
 
+func (n *NotificationServiceImpl) RegisterDevice(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, nil
+}
+
+func (n *NotificationServiceImpl) UnregisterDevice(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, nil
+}
+
 func (n *NotificationServiceImpl) SendNotification(ctx context.Context, req *pb.NotificationRequest) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil
 }

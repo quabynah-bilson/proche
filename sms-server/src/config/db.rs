@@ -15,16 +15,5 @@ pub async fn init_db() -> Result<sqlx::Pool<Postgres>, Box<dyn std::error::Error
     sqlx::query_file!("src/config/sql/get.user.sql").execute(&pool).await?;
     sqlx::query_file!("src/config/sql/insert.user.sql").execute(&pool).await?;
 
-    // Start a database transaction
-    let mut transaction = pool.begin().await?;
-    // Call the stored procedure using the `query` or `query_as` macro
-    sqlx::query("CALL is_user_created_at_older_than_10_minutes($1)")
-        .bind("0554635701")
-        .execute(&mut transaction)
-        .await?;
-
-    // Commit the transaction
-    transaction.commit().await?;
-
     Ok(pool)
 }

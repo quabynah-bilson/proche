@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::env;
 
 use reqwest::{Client, header, StatusCode};
-use sqlx::Postgres;
+use sqlx::{Postgres, Row};
 use tonic::{Request, Response, Status};
 use tonic::metadata::MetadataMap;
 
@@ -37,26 +37,49 @@ impl SmsService for SmsServiceImpl {
         let phone_number = request.into_inner();
         log::info!("Sending sms to: {}", phone_number);
 
-        // todo-> check database for existing phone number
+        let res = match sqlx::query("SELECT is_user_created_at_older_than_10_minutes($1)")
+            .bind(&phone_number)
+            .fetch_optional(&self.db)
+            .await {
+            Ok(res) => {
+                match res {
+                    Some(data) => {
+                        match data.try_get(0) {
+                            Ok(data) => data,
+                            Err(e) => {
+                                log::error!("Error getting data from database: {}", e);
+                                false
+                            }
+                        }
+                    }
+                    None => false
+                }
+            }
+            Err(e) => {
+                log::error!("Error checking for existing phone number: {}", e);
+                false
+            }
+        };
 
-        // sqlx::query!("create_user", phone_number).await?;
+        if res {
+            log::info!("Phone number already exists");
+            return Err(Status::already_exists(t!("verification_already_exists", locale = &language_id)));
+        }
 
-        // let existing_phone_number = sqlx::query!(
-        //     "SELECT phone_number FROM users WHERE phone_number = $1",
-        //     &phone_number
-        // );
-        // match existing_phone_number.fetch_one(&self.db).await {
-        //     Ok(_) => {
-        //         log::info!("Phone number already exists");
-        //         return Err(Status::already_exists(t!("phone_number_exists", locale = &language_id)));
-        //     }
-        //     Err(e) => {
-        //         if e.to_string() != "RowNotFound" {
-        //             log::error!("Error checking for existing phone number: {}", e);
-        //             return Err(Status::internal(t!("phone_number_exists", locale = &language_id)));
-        //         }
-        //     }
-        // }
+        let res = match sqlx::query("SELECT insert_user($1)")
+            .bind(&phone_number)
+            .execute(&self.db)
+            .await {
+            Ok(data) => {
+                data.rows_affected() == 1
+            }
+            Err(_) => false,
+        };
+
+        if !res {
+            log::error!("Error inserting phone number");
+            return Err(Status::internal(t!("sms_send_failed", locale = &language_id)));
+        }
 
         let account_sid = env::var("TWILIO_ACCOUNT_SID").expect("Error reading Twilio Account SID");
         let auth_token = env::var("TWILIO_AUTH_TOKEN").expect("Error reading Twilio Auth Token");
@@ -160,7 +183,20 @@ impl SmsService for SmsServiceImpl {
                 let created = response.status() == StatusCode::from_u16(200).unwrap();
                 if created {
                     log::info!("{}", t!("sms_verification_success", locale = &language_id));
-                    // todo -> delete phone number from database
+                    let res = match sqlx::query("SELECT delete_user_by_phone_number($1)")
+                        .bind(&phone_number)
+                        .execute(&self.db)
+                        .await {
+                        Ok(data) => {
+                            data.rows_affected() == 1
+                        }
+                        Err(_) => false,
+                    };
+
+                    if !res {
+                        log::error!("Error inserting phone number");
+                        return Err(Status::internal(t!("sms_send_failed", locale = &language_id)));
+                    }
                     Ok(Response::new(()))
                 } else {
                     Err(Status::internal(t!("sms_verification_failed", locale = &language_id)))

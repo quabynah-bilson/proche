@@ -9,6 +9,8 @@ option go_package = "com.github/quabynah-bilson/proche;core";
 
 // The service definition is pretty straightforward
 service NotificationService {
+  rpc registerDevice (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc unregisterDevice (google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc sendNotification (NotificationRequest) returns (google.protobuf.Empty);
   rpc sendNotificationToAll (NotificationRequest) returns (google.protobuf.Empty);
   rpc getNotifications (google.protobuf.StringValue) returns (stream NotificationResponse);
@@ -28,5 +30,6 @@ message NotificationRequest {
   string title = 2;
   string body = 3;
   optional string image_url = 4;
+  repeated string device_ids = 6;
 }
 
