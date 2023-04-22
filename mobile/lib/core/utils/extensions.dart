@@ -403,19 +403,16 @@ extension BuildContextX on BuildContext {
   /// sign in sheet for unauthenticated users
   void showLoginSheet() async {
     final formKey = GlobalKey<FormState>(),
+        countryController = TextEditingController(),
         phoneNumberController = TextEditingController(),
         passwordController = TextEditingController(),
         authBloc = AuthBloc(),
-        currentAccountBloc = AuthBloc(),
-        countriesBloc = AuthBloc();
+        currentAccountBloc = AuthBloc();
     var loading = false;
     Country? selectedCountry;
     Account? account;
 
-    // invoke get countries
-    countriesBloc.add(GetCountriesAuthEvent());
-
-    showCupertinoModalBottomSheet(
+    await showCupertinoModalBottomSheet(
       context: this,
       backgroundColor: colorScheme.background,
       useRootNavigator: true,
@@ -464,18 +461,6 @@ extension BuildContextX on BuildContext {
                 }
               },
             ),
-
-            // current account bloc listener
-            BlocListener(
-              bloc: countriesBloc,
-              listener: (context, state) {
-                if (state is ErrorState<String>) {
-                  context
-                    ..navigator.pop()
-                    ..showMessageDialog(state.failure);
-                }
-              },
-            ),
           ],
           child: LoadingIndicator(
             lottieAnimResource: Assets.animLoading,
@@ -518,34 +503,28 @@ extension BuildContextX on BuildContext {
                             .bodyText2(context, alignment: TextAlign.center)
                             .top(8)
                             .bottom(40),
-                        BlocBuilder(
-                          bloc: countriesBloc,
-                          builder: (context, state) {
-                            final countries =
-                                state is SuccessState<List<Country>>
-                                    ? state.data
-                                    : <Country>[];
-                            return AppDropdownField(
-                              label: context.localizer.selectCountry,
-                              values: countries.map((e) => e.name).toList(),
-                              onSelected: (name) {
-                                selectedCountry = countries.firstWhere(
-                                    (element) => element.name == name);
-                                setState(() {});
-                              },
-                              current: selectedCountry?.name,
-                              enabled: state is! LoadingState,
-                              prefixIcon: selectedCountry == null
-                                  ? null
-                                  : Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          12, 12, 8, 12),
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: const BoxDecoration(),
-                                      child: selectedCountry!.flagUrl
-                                          .asSvg(size: 16, fromAsset: false),
-                                    ),
-                            );
+                        AppTextField(
+                          context.localizer.selectCountry,
+                          controller: countryController,
+                          readOnly: true,
+                          enabled: !loading,
+                          validator: Validators.validate,
+                          prefixIcon: selectedCountry == null
+                              ? null
+                              : Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(12, 12, 8, 12),
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle),
+                                  child: selectedCountry?.flagUrl
+                                      .asSvg(size: 16, fromAsset: false),
+                                ),
+                          onTap: () async {
+                            selectedCountry = await showCountriesSheet();
+                            countryController.text =
+                                selectedCountry?.name ?? '';
+                            setState(() {});
                           },
                         ),
                         if (selectedCountry != null) ...{
@@ -669,6 +648,92 @@ extension BuildContextX on BuildContext {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// show a list of countries supported by the app
+  Future<Country?> showCountriesSheet() async {
+    final countriesBloc = AuthBloc(),
+        searchController = TextEditingController();
+    countriesBloc.add(GetCountriesAuthEvent());
+    var countries = List<Country>.empty(growable: true);
+
+    return await showBarModalBottomSheet(
+      context: this,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return BlocConsumer(
+            bloc: countriesBloc,
+            listener: (context, state) {
+              if (state is SuccessState<List<Country>>) {
+                setState(() => countries = state.data);
+              }
+            },
+            builder: (context, state) {
+              if (state is SuccessState<List<Country>>) {
+                return SafeArea(
+                  top: false,
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                    children: [
+                      localizer.selectCountry.subtitle1(context).bottom(16),
+                      AppTextField(
+                        localizer.search,
+                        controller: searchController,
+                        inputType: TextInputType.text,
+                        onChange: (input) {
+                          if (input == null) {
+                            setState(() => countries = state.data);
+                          } else {
+                            setState(() {
+                              countries = state.data
+                                  .where((e) => e.name
+                                      .toLowerCase()
+                                      .contains(input.toLowerCase()))
+                                  .toList();
+                            });
+                          }
+                        },
+                      ),
+                      ...countries
+                          .map(
+                            (e) => ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              onTap: () => context.navigator.pop(e),
+                              leading: Container(
+                                margin:
+                                    const EdgeInsets.fromLTRB(12, 12, 0, 12),
+                                clipBehavior: Clip.hardEdge,
+                                decoration:
+                                    const BoxDecoration(shape: BoxShape.circle),
+                                child:
+                                    e.flagUrl.asSvg(size: 28, fromAsset: false),
+                              ),
+                              title: Text(e.name),
+                              subtitle: e.dialCode.caption(context),
+                            ),
+                          )
+                          .toList(),
+                    ],
+                  ),
+                );
+              }
+
+              if (state is ErrorState<String>) {
+                return EmptyContentPlaceholder(
+                    icon: TablerIcons.globe_off,
+                    title: localizer.noCountriesFound,
+                    subtitle: localizer.underMaintenanceSubhead);
+              }
+
+              return const SafeArea(
+                  child: CircularProgressIndicator.adaptive());
+            },
+          );
+        },
       ),
     );
   }

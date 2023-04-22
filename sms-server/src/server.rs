@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::env;
 
 use reqwest::{Client, header, StatusCode};
+use sqlx::Postgres;
 use tonic::{Request, Response, Status};
 use tonic::metadata::MetadataMap;
 
@@ -11,11 +12,15 @@ use crate::proto::VerifyPhoneRequest;
 
 rust_i18n::i18n!("locales");
 
-pub struct SmsServiceImpl {}
+pub struct SmsServiceImpl {
+    db: sqlx::Pool<Postgres>,
+}
 
 impl SmsServiceImpl {
-    pub fn new() -> Self {
-        Self {}
+    pub fn new(db: sqlx::Pool<Postgres>) -> Self {
+        Self {
+            db,
+        }
     }
 }
 
@@ -31,8 +36,28 @@ impl SmsService for SmsServiceImpl {
 
         let phone_number = request.into_inner();
         log::info!("Sending sms to: {}", phone_number);
+
+        // todo-> check database for existing phone number
+
+        // let existing_phone_number = sqlx::query!(
+        //     "SELECT phone_number FROM users WHERE phone_number = $1",
+        //     &phone_number
+        // );
+        // match existing_phone_number.fetch_one(&self.db).await {
+        //     Ok(_) => {
+        //         log::info!("Phone number already exists");
+        //         return Err(Status::already_exists(t!("phone_number_exists", locale = &language_id)));
+        //     }
+        //     Err(e) => {
+        //         if e.to_string() != "RowNotFound" {
+        //             log::error!("Error checking for existing phone number: {}", e);
+        //             return Err(Status::internal(t!("phone_number_exists", locale = &language_id)));
+        //         }
+        //     }
+        // }
+
         let account_sid = env::var("TWILIO_ACCOUNT_SID").expect("Error reading Twilio Account SID");
-        let auth_token = env::var("TWILIO_AUTHTOKEN").expect("Error reading Twilio Auth Token");
+        let auth_token = env::var("TWILIO_AUTH_TOKEN").expect("Error reading Twilio Auth Token");
         let service_id = env::var("TWILIO_SERVICES_ID").expect("Error reading Twilio Services ID");
         // TODO: replace with user phone number in production
         let to = env::var("TO_NUMBER").expect("Error reading outbound phone number");
@@ -96,7 +121,7 @@ impl SmsService for SmsServiceImpl {
             &code
         );
         let account_sid = env::var("TWILIO_ACCOUNT_SID").expect("Error reading Twilio Account SID");
-        let auth_token = env::var("TWILIO_AUTHTOKEN").expect("Error reading Twilio Auth Token");
+        let auth_token = env::var("TWILIO_AUTH_TOKEN").expect("Error reading Twilio Auth Token");
         let service_id = env::var("TWILIO_SERVICES_ID").expect("Error reading Twilio Services ID");
         // TODO: replace with user phone number in production
         let to = env::var("TO_NUMBER").expect("Error reading outbound phone number");
@@ -133,6 +158,7 @@ impl SmsService for SmsServiceImpl {
                 let created = response.status() == StatusCode::from_u16(200).unwrap();
                 if created {
                     log::info!("{}", t!("sms_verification_success", locale = &language_id));
+                    // todo -> delete phone number from database
                     Ok(Response::new(()))
                 } else {
                     Err(Status::internal(t!("sms_verification_failed", locale = &language_id)))

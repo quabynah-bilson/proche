@@ -99,7 +99,8 @@ class ProcheAuthRepository extends BaseAuthRepository {
       await storage.clearAccessToken();
       UserSession.kAccessToken = null;
       UserSession.kIsLoggedIn = false;
-      messaging.clearToken();
+      await messaging.clearToken();
+      await messaging.unsubscribeFromNotifications();
 
       return left(null);
     } on GrpcError catch (e) {
@@ -270,8 +271,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
 
       // save updated account
       var updatedAccount = await authClient.update_account(account);
-      logger.i(
-          'account updated successfully -> ${updatedAccount.deviceType} : ${updatedAccount.deviceId} -> ${updatedAccount.deviceToken}');
+      await messaging.subscribeToNotifications();
     } on GrpcError catch (e) {
       logger.e(e);
     }

@@ -8,4 +8,8 @@ abstract class BaseMessagingRepository {
   Future<Either<String, String>> getDeviceType();
 
   Future<void> clearToken();
+
+  Future<void> subscribeToNotifications();
+
+  Future<void> unsubscribeFromNotifications();
 }

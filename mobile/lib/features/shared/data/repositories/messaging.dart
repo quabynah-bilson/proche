@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -12,6 +13,7 @@ import 'package:shared_utils/shared_utils.dart';
 class FirebaseMessagingRepository extends BaseMessagingRepository {
   final FirebaseMessaging messaging;
   final DeviceInfoPlugin deviceInfoPlugin;
+  StreamSubscription? _subscription;
 
   FirebaseMessagingRepository({
     required this.messaging,
@@ -79,4 +81,47 @@ class FirebaseMessagingRepository extends BaseMessagingRepository {
       logger.e(e);
     }
   }
+
+  @override
+  Future<void> subscribeToNotifications() async {
+    try {
+      var notificationSettings = await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+
+      if (notificationSettings.authorizationStatus ==
+          AuthorizationStatus.denied) {
+        logger.i('User declined or has not accepted permission');
+        return;
+      }
+
+      logger.i('User granted permission...subscribing to notifications');
+      // initial message (when app is closed)
+      var remoteMessage = await messaging.getInitialMessage();
+      logger.d('initial message -> ${remoteMessage?.notification?.body}');
+
+      // foreground
+      _subscription = FirebaseMessaging.onMessage.listen((payload) {
+        logger.i('firebase messaging body-> ${payload.notification?.body}');
+        logger.i('firebase messaging data -> ${payload.data}');
+      });
+      // background
+      FirebaseMessaging.onMessageOpenedApp.listen((payload) {
+        logger.i(
+            'firebase opened app messaging body-> ${payload.notification?.body}');
+        logger.i('firebase opened app messaging data -> ${payload.data}');
+      });
+    } on PlatformException catch (e) {
+      logger.e(e);
+    }
+  }
+
+  @override
+  Future<void> unsubscribeFromNotifications() async => _subscription?.cancel();
 }

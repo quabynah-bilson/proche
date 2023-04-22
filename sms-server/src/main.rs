@@ -54,8 +54,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Use `available_locales` method to get all available locales.
     log::info!("available locales -> {:?}\n", available_locales());
 
+    let db = config::db::init_db().await?;
+
     // create grpc service
-    let sms_service = SmsServiceImpl::new();
+    let sms_service = SmsServiceImpl::new(db);
 
     let service = tonic_reflection::server::Builder::configure()
         .register_encoded_file_descriptor_set(proto::SMS_FILE_DESCRIPTOR_SET)

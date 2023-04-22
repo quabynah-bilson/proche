@@ -83,5 +83,7 @@
   "updateAvailableSubhead" : "Please update to the latest version to continue",
   "updateLater" : "Update later",
   "loading" : "Loading",
-  "unableToLoadWebpage" : "Unable to load webpage"
+  "unableToLoadWebpage" : "Unable to load webpage",
+  "noCountriesFound" : "No countries found",
+  "search" : "Search"
 }

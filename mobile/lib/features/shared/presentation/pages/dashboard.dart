@@ -10,6 +10,7 @@ import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/manager/device/device.dart';
 import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
+import 'package:mobile/features/shared/presentation/manager/messaging/messaging_cubit.dart';
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
 import 'package:mobile/features/shared/presentation/widgets/quick.help.tile.dart';
 import 'package:mobile/features/task/presentation/manager/task_bloc.dart';
@@ -52,6 +53,8 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _authBloc.add(GetCurrentAccountAuthEvent());
+    doAfterDelay(
+        () => context.read<MessagingCubit>().subscribeToNotifications());
   }
 
   @override
