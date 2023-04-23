@@ -7,7 +7,10 @@ import 'package:mobile/core/network/token.interceptor.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:mobile/generated/protos/event.pbgrpc.dart';
 import 'package:mobile/generated/protos/giveaway.pbgrpc.dart';
+import 'package:mobile/generated/protos/media.pbgrpc.dart';
+import 'package:mobile/generated/protos/notification.pbgrpc.dart';
 import 'package:mobile/generated/protos/shared.pbgrpc.dart';
+import 'package:mobile/generated/protos/sms.pbgrpc.dart';
 import 'package:mobile/generated/protos/task.pbgrpc.dart';
 import 'package:mobile/generated/protos/trip.pbgrpc.dart';
 
@@ -33,9 +36,29 @@ abstract class NetworkConfigModule {
       interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable
+  SmsServiceClient get smsServiceClient => SmsServiceClient(
+      _createChannel(int.parse(dotenv.env['SMS_SERVER_PORT'].toString()),
+          dotenv.env['SMS_SERVER_URL']),
+      interceptors: [_tokenInterceptor, _logInterceptor]);
+
+  @injectable
+  NotificationServiceClient get notificationServiceClient =>
+      NotificationServiceClient(
+          _createChannel(
+              int.parse(dotenv.env['NOTIFICATION_SERVER_PORT'].toString()),
+              dotenv.env['NOTIFICATION_SERVER_URL']),
+          interceptors: [_tokenInterceptor, _logInterceptor]);
+
+  @injectable
+  MediaServiceClient get mediaServiceClient => MediaServiceClient(
+      _createChannel(int.parse(dotenv.env['MEDIA_SERVER_PORT'].toString()),
+          dotenv.env['MEDIA_SERVER_URL']),
+      interceptors: [_tokenInterceptor, _logInterceptor]);
+
+  @injectable
   SharedServiceClient get sharedServiceClient => SharedServiceClient(
-      _createChannel(int.parse(dotenv.env['SHARED_SERVER_URL'].toString()),
-          dotenv.env['SHARED_SERVER_PORT']),
+      _createChannel(int.parse(dotenv.env['SHARED_SERVER_PORT'].toString()),
+          dotenv.env['SHARED_SERVER_URL']),
       interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable

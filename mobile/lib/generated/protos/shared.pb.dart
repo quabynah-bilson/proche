@@ -9,6 +9,81 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class AppVersion extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AppVersion', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'shared'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'version')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'androidUrl', protoName: 'androidUrl')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iosUrl', protoName: 'iosUrl')
+    ..hasRequiredFields = false
+  ;
+
+  AppVersion._() : super();
+  factory AppVersion({
+    $core.String? version,
+    $core.String? androidUrl,
+    $core.String? iosUrl,
+  }) {
+    final _result = create();
+    if (version != null) {
+      _result.version = version;
+    }
+    if (androidUrl != null) {
+      _result.androidUrl = androidUrl;
+    }
+    if (iosUrl != null) {
+      _result.iosUrl = iosUrl;
+    }
+    return _result;
+  }
+  factory AppVersion.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AppVersion.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AppVersion clone() => AppVersion()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AppVersion copyWith(void Function(AppVersion) updates) => super.copyWith((message) => updates(message as AppVersion)) as AppVersion; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AppVersion create() => AppVersion._();
+  AppVersion createEmptyInstance() => create();
+  static $pb.PbList<AppVersion> createRepeated() => $pb.PbList<AppVersion>();
+  @$core.pragma('dart2js:noInline')
+  static AppVersion getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AppVersion>(create);
+  static AppVersion? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get version => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set version($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearVersion() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get androidUrl => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set androidUrl($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAndroidUrl() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAndroidUrl() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get iosUrl => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set iosUrl($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasIosUrl() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearIosUrl() => clearField(3);
+}
+
 class AddressWithLatLngName extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AddressWithLatLngName', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'shared'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')

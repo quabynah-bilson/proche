@@ -1,7 +1,7 @@
 app_name: Proche
 
 # account messages
-invalid_credentials: Invalid phone number or password
+invalid_credentials: Invalid phone number, country or password
 account_locked: Your account has been locked
 account_not_verified: Your account has not been verified
 account_not_found: Account not found

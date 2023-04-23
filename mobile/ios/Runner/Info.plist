@@ -75,5 +75,11 @@
         <string>fetch</string>
         <string>location</string>
     </array>
+    <key>NSAppTransportSecurity</key>
+      <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+      </dict>
+    <key>io.flutter.embedded_views_preview</key> <true/>
 </dict>
 </plist>

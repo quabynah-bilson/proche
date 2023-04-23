@@ -11,7 +11,7 @@ use tonic::metadata::MetadataMap;
 
 use crate::{client, config, utils};
 use crate::config::{locale, tokenizer};
-use crate::proto::{Account, Country, GetCountriesResponse, LoginRequest, MediaType, RegisterRequest, ResetPasswordRequest, UploadMediaRequest, ValidateAccessTokenResponse, VerifyPhoneRequest};
+use crate::proto::{Account, Country, GetCountriesResponse, LoginRequest, MediaType, RegisterRequest, ResetPasswordRequest, UploadMediaRequest, ValidateAccessTokenResponse};
 use crate::proto::auth_service_server::AuthService;
 
 rust_i18n::i18n!("locales");
@@ -195,6 +195,8 @@ impl AuthService for AuthServiceImpl {
             "referral_code" : &req.referral_code.unwrap_or("".to_string()),
             "password" : &hashed_password,
             "country_id" : &req.country_id,
+            "is_verified" : Some(false),
+            "is_public_account" : Some(true),
             "created_at": _create_timestamp_field(),
             "updated_at": _create_timestamp_field(),    // aka: last login
         };
@@ -544,24 +546,26 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_id : Some(
+            device_id: Some(
                 account_doc
                     .get_str("device_id")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_type : Some(
+            device_type: Some(
                 account_doc
                     .get_str("device_type")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_token : Some(
+            device_token: Some(
                 account_doc
                     .get_str("device_token")
                     .unwrap_or("")
                     .to_string(),
             ),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
+            is_public_account: Some(account_doc.get_bool("is_public_account").unwrap_or(true)),
         };
 
         Ok(Response::new(account))
@@ -624,24 +628,26 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_id : Some(
+            device_id: Some(
                 account_doc
                     .get_str("device_id")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_type : Some(
+            device_type: Some(
                 account_doc
                     .get_str("device_type")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_token : Some(
+            device_token: Some(
                 account_doc
                     .get_str("device_token")
                     .unwrap_or("")
                     .to_string(),
             ),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
+            is_public_account: Some(account_doc.get_bool("is_public_account").unwrap_or(true)),
         };
 
         Ok(Response::new(account))
@@ -700,24 +706,26 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_id : Some(
+            device_id: Some(
                 account_doc
                     .get_str("device_id")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_type : Some(
+            device_type: Some(
                 account_doc
                     .get_str("device_type")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_token : Some(
+            device_token: Some(
                 account_doc
                     .get_str("device_token")
                     .unwrap_or("")
                     .to_string(),
             ),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
+            is_public_account: Some(account_doc.get_bool("is_public_account").unwrap_or(true)),
         };
 
         Ok(Response::new(account))
@@ -765,6 +773,8 @@ impl AuthService for AuthServiceImpl {
                     "device_id" : &account.device_id.unwrap(),
                     "device_type" : &account.device_type.unwrap(),
                     "device_token" : &account.device_token.unwrap(),
+                    "is_verified" : &account.is_verified.unwrap(),
+                    "is_public_account" : &account.is_public_account.unwrap(),
                 }},
                 None,
             )
@@ -816,24 +826,26 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_id : Some(
+            device_id: Some(
                 account_doc
                     .get_str("device_id")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_type : Some(
+            device_type: Some(
                 account_doc
                     .get_str("device_type")
                     .unwrap_or("")
                     .to_string(),
             ),
-            device_token : Some(
+            device_token: Some(
                 account_doc
                     .get_str("device_token")
                     .unwrap_or("")
                     .to_string(),
             ),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
+            is_public_account: Some(account_doc.get_bool("is_public_account").unwrap_or(true)),
         };
 
         Ok(Response::new(account))
@@ -872,85 +884,6 @@ impl AuthService for AuthServiceImpl {
             Ok(_) => Ok(Response::new(())),
             Err(_) => {
                 return Err(Status::not_found(t!("account_not_found")));
-            }
-        }
-    }
-
-    // done
-    async fn send_phone_verification_code(
-        &self,
-        request: Request<String>,
-    ) -> Result<Response<()>, Status> {
-        // validate language id
-        let language_id = match _validate_language_id_from_request(request.metadata()) {
-            Ok(language_id) => language_id,
-            Err(e) => {
-                return Err(e);
-            }
-        };
-
-        // validate public access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
-            .await
-        {
-            Ok(_) => (),
-            Err(e) => {
-                return Err(e);
-            }
-        };
-
-        // get phone number from request
-        let phone_number = request.into_inner();
-
-        // send verification code to phone number
-        match config::sms_manager::TwilioVerifyService::send_sms(&phone_number, &language_id).await
-        {
-            Ok(_) => Ok(Response::new(())),
-            Err(_) => {
-                return Err(Status::internal(t!("sms_send_failed")));
-            }
-        }
-    }
-
-    // done
-    async fn verify_phone_verification_code(
-        &self,
-        request: Request<VerifyPhoneRequest>,
-    ) -> Result<Response<()>, Status> {
-        // validate language id
-        let language_id = match _validate_language_id_from_request(request.metadata()) {
-            Ok(language_id) => language_id,
-            Err(e) => {
-                return Err(e);
-            }
-        };
-
-        // validate public access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
-            .await
-        {
-            Ok(_) => (),
-            Err(e) => {
-                return Err(e);
-            }
-        };
-
-        // get phone number from request
-        let req = request.into_inner();
-        let phone_number = &req.phone_number;
-        let verification_code = &req.verification_code;
-
-        // verify verification code
-        match config::sms_manager::TwilioVerifyService::verify_sms(
-            &phone_number,
-            &verification_code,
-            &language_id,
-        )
-            .await
-        {
-            Ok(_) => Ok(Response::new(())),
-            Err(_) => {
-                return Err(Status::internal(t!("sms_verification_failed")));
             }
         }
     }
@@ -1061,14 +994,20 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+        let is_guest = match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
             .await
         {
-            Ok(token) => token,
-            Err(e) => {
-                return Err(e);
-            }
+            Ok(_) => true,
+            Err(_) => false,
         };
+        if !is_guest {
+            match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+                Ok(token) => token.0,
+                Err(e) => {
+                    return Err(e);
+                }
+            };
+        }
 
         // get countries from database
         let opts = FindOptions::builder().sort(doc! {"name": 1}).build();

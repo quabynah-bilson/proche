@@ -1,15 +1,14 @@
 package main
 
 import (
-	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/joho/godotenv"
+	"github.com/quabynah-bilson/media-server/config"
 	pb "github.com/quabynah-bilson/media-server/gen"
 	svc "github.com/quabynah-bilson/media-server/services"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
-	"os"
 )
 
 func main() {
@@ -25,13 +24,7 @@ func main() {
 	reflection.Register(s)
 
 	// create cloudinary instance
-	var cld *cloudinary.Cloudinary
-	if cldInstance, err := cloudinary.NewFromParams(os.Getenv("CLOUDINARY_CLOUD_NAME"), os.Getenv("CLOUDINARY_API_KEY"), os.Getenv("CLOUDINARY_API_SECRET")); err != nil {
-		log.Fatalf("unable to create cloudinary instance: %+v\n", err)
-	} else {
-		log.Println("created cloudinary instance")
-		cld = cldInstance
-	}
+	cld := config.InitCloudinary()
 
 	// register the server
 	pb.RegisterMediaServiceServer(s, svc.NewProcheMediaServerInstance(cld))

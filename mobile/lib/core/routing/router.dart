@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/core/utils/service.type.dart';
+import 'package:mobile/features/chat/presentation/pages/chat.dart';
 import 'package:mobile/features/onboarding/presentation/pages/phone.verification.dart';
 import 'package:mobile/features/onboarding/presentation/pages/register.account.dart';
 import 'package:mobile/features/onboarding/presentation/pages/reset.password.dart';
@@ -7,6 +8,9 @@ import 'package:mobile/features/onboarding/presentation/pages/tutorial.dart';
 import 'package:mobile/features/onboarding/presentation/pages/welcome.dart';
 import 'package:mobile/features/shared/presentation/pages/dashboard.dart';
 import 'package:mobile/features/shared/presentation/pages/finder.dart';
+import 'package:mobile/features/shared/presentation/pages/public.profile.dart';
+import 'package:mobile/features/shared/presentation/pages/user.favorites.dart';
+import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -33,9 +37,21 @@ class AppRouterConfig {
                 isPublic: settings.arguments is bool &&
                     settings.arguments as bool == true),
             settings: settings);
+      case AppRouter.publicProfileRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) =>
+                PublicUserProfilePage(account: settings.arguments as Account),
+            settings: settings);
+      case AppRouter.chatRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => ChatPage(account: settings.arguments as Account),
+            settings: settings);
       case AppRouter.dashboardRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => const DashboardPage(), settings: settings);
+      case AppRouter.userFavoritesRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => const UserFavoritesPage(), settings: settings);
       case AppRouter.serviceFinderRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => ServiceFinderPage(
@@ -69,4 +85,9 @@ class AppRouter {
   static const resetPasswordRoute = '/account/reset-password'; // todo
   static const phoneVerificationRoute = '/phone-verification';
   static const editProfileRoute = '/edit-profile'; // todo
+  static const userFavoritesRoute = '/favorites';
+  static const publicProfileRoute = '/public-profile'; // todo
+  static const notificationsRoute = '/notifications'; // todo
+  static const userActivitiesRoute = '/user-activities'; // todo
+  static const chatRoute = '/chat'; // todo
 }

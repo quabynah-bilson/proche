@@ -127,67 +127,6 @@ class ValidateAccessTokenResponse extends $pb.GeneratedMessage {
   void clearDisplayName() => clearField(3);
 }
 
-class VerifyPhoneRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'VerifyPhoneRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'verificationCode')
-    ..hasRequiredFields = false
-  ;
-
-  VerifyPhoneRequest._() : super();
-  factory VerifyPhoneRequest({
-    $core.String? phoneNumber,
-    $core.String? verificationCode,
-  }) {
-    final _result = create();
-    if (phoneNumber != null) {
-      _result.phoneNumber = phoneNumber;
-    }
-    if (verificationCode != null) {
-      _result.verificationCode = verificationCode;
-    }
-    return _result;
-  }
-  factory VerifyPhoneRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory VerifyPhoneRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  VerifyPhoneRequest clone() => VerifyPhoneRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  VerifyPhoneRequest copyWith(void Function(VerifyPhoneRequest) updates) => super.copyWith((message) => updates(message as VerifyPhoneRequest)) as VerifyPhoneRequest; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static VerifyPhoneRequest create() => VerifyPhoneRequest._();
-  VerifyPhoneRequest createEmptyInstance() => create();
-  static $pb.PbList<VerifyPhoneRequest> createRepeated() => $pb.PbList<VerifyPhoneRequest>();
-  @$core.pragma('dart2js:noInline')
-  static VerifyPhoneRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<VerifyPhoneRequest>(create);
-  static VerifyPhoneRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get phoneNumber => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set phoneNumber($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasPhoneNumber() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearPhoneNumber() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get verificationCode => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set verificationCode($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasVerificationCode() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearVerificationCode() => clearField(2);
-}
-
 class LoginRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LoginRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
@@ -485,6 +424,8 @@ class Account extends $pb.GeneratedMessage {
     ..aOS(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceId')
     ..aOS(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceToken')
     ..aOS(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceType')
+    ..aOB(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isVerified')
+    ..aOB(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isPublicAccount')
     ..hasRequiredFields = false
   ;
 
@@ -504,6 +445,8 @@ class Account extends $pb.GeneratedMessage {
     $core.String? deviceId,
     $core.String? deviceToken,
     $core.String? deviceType,
+    $core.bool? isVerified,
+    $core.bool? isPublicAccount,
   }) {
     final _result = create();
     if (id != null) {
@@ -547,6 +490,12 @@ class Account extends $pb.GeneratedMessage {
     }
     if (deviceType != null) {
       _result.deviceType = deviceType;
+    }
+    if (isVerified != null) {
+      _result.isVerified = isVerified;
+    }
+    if (isPublicAccount != null) {
+      _result.isPublicAccount = isPublicAccount;
     }
     return _result;
   }
@@ -700,6 +649,24 @@ class Account extends $pb.GeneratedMessage {
   $core.bool hasDeviceType() => $_has(13);
   @$pb.TagNumber(14)
   void clearDeviceType() => clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.bool get isVerified => $_getBF(14);
+  @$pb.TagNumber(15)
+  set isVerified($core.bool v) { $_setBool(14, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasIsVerified() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearIsVerified() => clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.bool get isPublicAccount => $_getBF(15);
+  @$pb.TagNumber(16)
+  set isPublicAccount($core.bool v) { $_setBool(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasIsPublicAccount() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearIsPublicAccount() => clearField(16);
 }
 
 class AccessTokenStore extends $pb.GeneratedMessage {

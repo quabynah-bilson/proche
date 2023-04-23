@@ -28,14 +28,9 @@ service AuthService {
   rpc update_account (Account) returns (Account);
   rpc delete_account (google.protobuf.Empty) returns (google.protobuf.Empty);
 
-  // phone verification
-  rpc send_phone_verification_code (google.protobuf.StringValue) returns (google.protobuf.Empty);
-  rpc verify_phone_verification_code (VerifyPhoneRequest) returns (google.protobuf.Empty);
-
   // referral code
   rpc get_referral_code (google.protobuf.Empty) returns (google.protobuf.StringValue);
   rpc get_referral_code_by_phone_number (google.protobuf.StringValue) returns (google.protobuf.StringValue);
-
 
   // country
   rpc get_countries (google.protobuf.Empty) returns (GetCountriesResponse);
@@ -53,12 +48,6 @@ message ValidateAccessTokenResponse {
   optional string account_id = 1;
   optional string phone_number = 2;
   optional string display_name = 3;
-}
-
-// verify phone number request message
-message VerifyPhoneRequest {
-  string phone_number = 1;
-  string verification_code = 2;
 }
 
 // login request message
@@ -101,6 +90,8 @@ message Account {
   optional string device_id = 12;
   optional string device_token = 13;
   optional string device_type = 14;
+  optional bool is_verified = 15;
+  optional bool is_public_account = 16;
 }
 
 message AccessTokenStore {

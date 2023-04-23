@@ -32,12 +32,15 @@ ColorScheme useColorScheme([ThemeMode mode = ThemeMode.light]) =>
             primary: Color(0xffFF6600),
             secondary: Color(0xff2B2921),
             onSecondary: Color(0xffFFE7AB),
-            surface: Color(0xffF8F8F9),
+            // surface: Color(0xffF8F8F9),
+            surface: Color(0xffFCFCFD),
             onSurface: Color(0xff2B2723),
             error: Colors.deepOrangeAccent,
             onError: Colors.white,
             tertiary: Color(0xff16855D),
             onTertiary: Color(0xff2B2723),
+            secondaryContainer: Color(0xffF6F6F6),
+            onSecondaryContainer: Color(0xffA1AFBB),
           )
         : const ColorScheme.dark(
             onBackground: Colors.white,

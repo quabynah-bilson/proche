@@ -1,0 +1,18 @@
+syntax = "proto3";
+package sms;
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "com.github/quabynah-bilson/proche;core";
+
+service SmsService {
+  // phone verification
+  rpc send_phone_verification_code (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc verify_phone_verification_code (VerifyPhoneRequest) returns (google.protobuf.Empty);
+}
+
+// verify phone number request message
+message VerifyPhoneRequest {
+  string phone_number = 1;
+  string verification_code = 2;
+}

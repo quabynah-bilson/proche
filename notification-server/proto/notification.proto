@@ -1,0 +1,35 @@
+syntax = "proto3";
+package notification;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "com.github/quabynah-bilson/proche;core";
+
+// The service definition is pretty straightforward
+service NotificationService {
+  rpc register_device (RegisterDeviceRequest) returns (google.protobuf.StringValue);
+  rpc unregister_device (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc send_notification (NotificationRequest) returns (google.protobuf.Empty);
+  rpc get_notifications (google.protobuf.StringValue) returns (stream NotificationResponse);
+}
+
+message RegisterDeviceRequest {
+  string device_type = 2;
+  string user_id = 3;
+}
+
+message NotificationResponse {
+  string title = 1;
+  string body = 2;
+  optional string image_url = 3;
+}
+
+message NotificationRequest {
+  repeated string tokens = 1;
+  string title = 2;
+  string body = 3;
+  string channel_id = 4;
+  optional string image_url = 5;
+}
+

@@ -1,15 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mobile/core/di/injection.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/actions.dart';
 import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:mobile/generated/protos/shared.pb.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
+import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 import 'validator.dart';
 
@@ -235,10 +240,12 @@ extension BuildContextX on BuildContext {
     return selectedIndex;
   }
 
-  /// show a welcome dialog for new users
-  void showWelcomeDialog() async {
-    await Future.delayed(const Duration(milliseconds: 850));
-    showBarModalBottomSheet(
+  /// show new update dialog
+  void showUpdateAppDialog(AppVersion appVersion) async {
+    if (appVersion.version == getIt<String>(instanceName: 'app_version')) {
+      return;
+    }
+    await showBarModalBottomSheet(
       context: this,
       backgroundColor: colorScheme.background,
       useRootNavigator: true,
@@ -247,29 +254,148 @@ extension BuildContextX on BuildContext {
       builder: (context) => AnimatedColumn(
         animateType: AnimateType.slideDown,
         children: [
-          Lottie.asset(Assets.animWelcomeNewUser,
-                  frameRate: FrameRate(90),
-                  height: height * 0.25,
-                  width: width * 0.7)
-              .bottom(24),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(child: Lottie.asset(Assets.animUpdateAvailable)),
+              Icon(Icons.arrow_right_alt,
+                  color: colorScheme.onSurface, size: 40),
+              Expanded(child: Assets.imgAppLogoAnimated.asAssetImage()),
+            ],
+          ).fillMaxHeight(context, 0.2).horizontal(40).bottom(24),
           EmptyContentPlaceholder(
-              title: localizer.thanksForExploring(localizer.appName),
-              subtitle: localizer.appWelcomeText),
-          AppRoundedButton(text: localizer.gotIt, onTap: context.navigator.pop)
-              .top(40),
+              title: localizer.updateAvailableHeader(appVersion.version),
+              subtitle: localizer.updateAvailableSubhead),
+          AppRoundedButton(
+            text: localizer.okay,
+            onTap: () => _showInAppBrowser(
+                Platform.isAndroid ? appVersion.androidUrl : appVersion.iosUrl),
+          ).top(40),
           SafeArea(
             top: false,
             child: TextButton(
-              onPressed: () {
-                context.navigator.pop();
-                doAfterDelay(showLoginSheet);
-              },
-              child:
-                  localizer.joinUs.button(context, alignment: TextAlign.center),
+              onPressed: context.navigator.pop,
+              child: localizer.updateLater
+                  .button(context, alignment: TextAlign.center),
             ).top(8),
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showInAppBrowser(String url) async {
+    var loading = true, progress = 0.0, isUnableToLoad = false;
+
+    await showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      isDismissible: false,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => LoadingIndicator(
+          lottieAnimResource: progress >= 90.0
+              ? Assets.animSuccess
+              : isUnableToLoad
+                  ? Assets.animNoInternetConnection
+                  : Assets.animLoading,
+          loadingAnimIsAsset: true,
+          isLoading: loading || isUnableToLoad,
+          message: progress >= 0.9
+              ? localizer.success
+              : isUnableToLoad
+                  ? localizer.unableToLoadWebpage
+                  : localizer.loading,
+          child: WebViewPlus(
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (controller) => controller.loadUrl(url),
+            onPageStarted: (url) => setState(() => loading = true),
+            onPageFinished: (url) => setState(() => loading = false),
+            onProgress: (progress) => setState(() => progress = progress),
+            onWebResourceError: (_) => setState(() => isUnableToLoad = true),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// show a welcome dialog for new users
+  void showWelcomeDialog() async => showBarModalBottomSheet(
+        context: this,
+        backgroundColor: colorScheme.background,
+        useRootNavigator: true,
+        bounce: true,
+        isDismissible: false,
+        builder: (context) => AnimatedColumn(
+          animateType: AnimateType.slideDown,
+          children: [
+            Lottie.asset(Assets.animWelcomeNewUser,
+                    frameRate: FrameRate(90),
+                    height: height * 0.25,
+                    width: width * 0.7)
+                .bottom(24),
+            EmptyContentPlaceholder(
+                title: localizer.thanksForExploring(localizer.appName),
+                subtitle: localizer.appWelcomeText),
+            AppRoundedButton(
+                    text: localizer.gotIt, onTap: context.navigator.pop)
+                .top(40),
+            SafeArea(
+              top: false,
+              child: TextButton(
+                onPressed: () {
+                  context.navigator.pop();
+                  doAfterDelay(showLoginSheet);
+                },
+                child: localizer.joinUs
+                    .button(context, alignment: TextAlign.center),
+              ).top(8),
+            ),
+          ],
+        ),
+      );
+
+  /// shows a sheet which allows users to sign out
+  void showLogoutDialog() async {
+    final logoutBloc = AuthBloc();
+    await showBarModalBottomSheet(
+      context: this,
+      backgroundColor: colorScheme.background,
+      useRootNavigator: true,
+      bounce: true,
+      builder: (context) => StatefulBuilder(
+          builder: (context, setState) => BlocConsumer(
+                bloc: logoutBloc,
+                listener: (context, state) {
+                  if (state is SuccessState<void>) {
+                    context.navigator.pushNamedAndRemoveUntil(
+                        AppRouter.welcomeRoute, (route) => false);
+                  }
+                },
+                builder: (context, state) => AnimatedColumn(
+                  animateType: AnimateType.slideUp,
+                  children: [
+                    Lottie.asset(Assets.animLogout,
+                            repeat: false,
+                            height: height * 0.15, width: width * 0.7)
+                        .bottom(24),
+                    EmptyContentPlaceholder(
+                            title: localizer.signOut,
+                            subtitle: localizer.signOutPrompt)
+                        .bottom(24),
+                    SafeArea(
+                      child: state is LoadingState
+                          ? const CircularProgressIndicator.adaptive()
+                          : AppRoundedButton(
+                              text: localizer.signOut,
+                              onTap: () => logoutBloc.add(LogoutAuthEvent()),
+                            ),
+                    ),
+                  ],
+                ),
+              )),
     );
   }
 
@@ -317,19 +443,16 @@ extension BuildContextX on BuildContext {
   /// sign in sheet for unauthenticated users
   void showLoginSheet() async {
     final formKey = GlobalKey<FormState>(),
+        countryController = TextEditingController(),
         phoneNumberController = TextEditingController(),
         passwordController = TextEditingController(),
         authBloc = AuthBloc(),
-        currentAccountBloc = AuthBloc(),
-        countriesBloc = AuthBloc();
+        currentAccountBloc = AuthBloc();
     var loading = false;
     Country? selectedCountry;
     Account? account;
 
-    // invoke get countries
-    countriesBloc.add(GetCountriesAuthEvent());
-
-    showCupertinoModalBottomSheet(
+    await showCupertinoModalBottomSheet(
       context: this,
       backgroundColor: colorScheme.background,
       useRootNavigator: true,
@@ -378,18 +501,6 @@ extension BuildContextX on BuildContext {
                 }
               },
             ),
-
-            // current account bloc listener
-            BlocListener(
-              bloc: countriesBloc,
-              listener: (context, state) {
-                if (state is ErrorState<String>) {
-                  context
-                    ..navigator.pop()
-                    ..showMessageDialog(state.failure);
-                }
-              },
-            ),
           ],
           child: LoadingIndicator(
             lottieAnimResource: Assets.animLoading,
@@ -432,34 +543,34 @@ extension BuildContextX on BuildContext {
                             .bodyText2(context, alignment: TextAlign.center)
                             .top(8)
                             .bottom(40),
-                        BlocBuilder(
-                          bloc: countriesBloc,
-                          builder: (context, state) {
-                            final countries =
-                                state is SuccessState<List<Country>>
-                                    ? state.data
-                                    : <Country>[];
-                            return AppDropdownField(
-                              label: context.localizer.selectCountry,
-                              values: countries.map((e) => e.name).toList(),
-                              onSelected: (name) {
-                                selectedCountry = countries.firstWhere(
-                                    (element) => element.name == name);
-                                setState(() {});
-                              },
-                              current: selectedCountry?.name,
-                              enabled: state is! LoadingState,
-                              prefixIcon: selectedCountry == null
-                                  ? null
-                                  : Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          12, 12, 8, 12),
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: const BoxDecoration(),
-                                      child: selectedCountry!.flagUrl
-                                          .asSvg(size: 16, fromAsset: false),
-                                    ),
-                            );
+                        AppTextField(
+                          context.localizer.selectCountry,
+                          controller: countryController,
+                          readOnly: true,
+                          enabled: !loading,
+                          validator: Validators.validate,
+                          prefixIcon: selectedCountry == null
+                              ? null
+                              : Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: const BoxDecoration(),
+                                  child: SizedBox(
+                                    width: 28,
+                                    height: 24,
+                                    child: selectedCountry?.flagUrl.asSvg(
+                                        height: 24,
+                                        width: 16,
+                                        fit: BoxFit.contain,
+                                        fromAsset: false),
+                                  ),
+                                ),
+                          onTap: () async {
+                            selectedCountry = await showCountriesSheet();
+                            countryController.text =
+                                selectedCountry?.name ?? '';
+                            setState(() {});
                           },
                         ),
                         if (selectedCountry != null) ...{
@@ -468,7 +579,8 @@ extension BuildContextX on BuildContext {
                             enabled: selectedCountry != null && !loading,
                             controller: phoneNumberController,
                             textFieldType: AppTextFieldType.phone,
-                            validator: (input) => Validators.validatePhone(context, input),
+                            validator: (input) =>
+                                Validators.validatePhone(context, input),
                             maxLength: 10,
                             onChange: (input) {
                               if (input == null) return;
@@ -476,8 +588,7 @@ extension BuildContextX on BuildContext {
                                 account = null;
                                 currentAccountBloc.add(
                                     GetAccountByPhoneNumberAuthEvent(
-
-                                            phoneNumberController.text.trim()));
+                                        phoneNumberController.text.trim()));
                               }
                             },
                             floatLabel: true,
@@ -492,7 +603,8 @@ extension BuildContextX on BuildContext {
                             floatLabel: true,
                             textFieldType: AppTextFieldType.password,
                             prefixIcon: const Icon(Icons.password),
-                            validator: (input) => Validators.validatePassword(context, input),
+                            validator: (input) =>
+                                Validators.validatePassword(context, input),
                           ),
                         },
                         AppRoundedButton(
@@ -580,6 +692,193 @@ extension BuildContextX on BuildContext {
                 ),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// show a list of countries supported by the app
+  Future<Country?> showCountriesSheet() async {
+    final countriesBloc = AuthBloc(),
+        searchController = TextEditingController();
+    countriesBloc.add(GetCountriesAuthEvent());
+    var countries = List<Country>.empty(growable: true);
+
+    return await showBarModalBottomSheet(
+      context: this,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return BlocConsumer(
+            bloc: countriesBloc,
+            listener: (context, state) {
+              if (state is SuccessState<List<Country>>) {
+                setState(() => countries = state.data);
+              }
+            },
+            builder: (context, state) {
+              if (state is SuccessState<List<Country>>) {
+                return SafeArea(
+                  top: false,
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                    children: [
+                      localizer.selectCountry.subtitle1(context).bottom(16),
+                      AppTextField(
+                        localizer.search,
+                        controller: searchController,
+                        inputType: TextInputType.text,
+                        onChange: (input) {
+                          if (input == null) {
+                            setState(() => countries = state.data);
+                          } else {
+                            setState(() {
+                              countries = state.data
+                                  .where((e) => e.name
+                                      .toLowerCase()
+                                      .contains(input.toLowerCase()))
+                                  .toList();
+                            });
+                          }
+                        },
+                      ),
+                      ...countries
+                          .map(
+                            (e) => ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              minLeadingWidth: 28,
+                              onTap: () => context.navigator.pop(e),
+                              leading: Container(
+                                margin:
+                                    const EdgeInsets.fromLTRB(12, 12, 0, 12),
+                                clipBehavior: Clip.hardEdge,
+                                decoration: const BoxDecoration(),
+                                child: SizedBox(
+                                  width: 28,
+                                  height: 24,
+                                  child: e.flagUrl.asSvg(
+                                      height: 24,
+                                      width: 16,
+                                      fit: BoxFit.contain,
+                                      fromAsset: false),
+                                ),
+                              ),
+                              title: Text('${e.name} (${e.dialCode})'),
+                            ),
+                          )
+                          .toList(),
+                    ],
+                  ),
+                );
+              }
+
+              if (state is ErrorState<String>) {
+                return EmptyContentPlaceholder(
+                    icon: TablerIcons.globe_off,
+                    title: localizer.noCountriesFound,
+                    subtitle: localizer.underMaintenanceSubhead);
+              }
+
+              return const SafeArea(
+                  child: CircularProgressIndicator.adaptive());
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  /// show a list of locales supported by the app
+  Future<String?> showLocalesSheet() async {
+    var locales = [localizer.english, localizer.french];
+    return await showBarModalBottomSheet(
+      context: this,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => SafeArea(
+          top: false,
+          child: ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+            children: [
+              localizer.changeLanguageHeader.subtitle1(context).bottom(16),
+              ...[localizer.english, localizer.french]
+                  .map(
+                    (e) => ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () => context.navigator
+                          .pop(e == locales.first ? 'en' : 'fr'),
+                      minLeadingWidth: 48,
+                      leading: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color:
+                              (context.colorScheme.secondary).withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          TablerIcons.language,
+                          color: context.colorScheme.secondary,
+                        ),
+                      ),
+                      title: Text(e),
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// show a list of theme supported by the app
+  Future<ThemeMode?> showThemePickerSheet() async {
+    var icons = const [
+      TablerIcons.id_badge,
+      TablerIcons.sun_high,
+      TablerIcons.moon,
+    ];
+    return await showBarModalBottomSheet(
+      context: this,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => SafeArea(
+          top: false,
+          child: ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+            children: [
+              localizer.themeBuilderSubhead.subtitle1(context).bottom(16),
+              ...ThemeMode.values
+                  .map(
+                    (e) => ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () => context.navigator.pop(ThemeMode.values
+                          .firstWhere((element) => element.name == e.name)),
+                      minLeadingWidth: 48,
+                      leading: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color:
+                              (context.colorScheme.secondary).withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          icons[ThemeMode.values.indexOf(e)],
+                          color: context.colorScheme.secondary,
+                        ),
+                      ),
+                      title: Text(
+                          e.name.replaceAll('ThemeMode.', '').capitalize()),
+                    ),
+                  )
+                  .toList(),
+            ],
           ),
         ),
       ),

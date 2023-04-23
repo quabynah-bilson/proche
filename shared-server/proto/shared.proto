@@ -2,8 +2,18 @@ syntax = "proto3";
 package shared;
 
 option go_package = "com.github/quabynah-bilson/proche;core";
+import "google/protobuf/wrappers.proto";
 
-service SharedService {}
+service SharedService {
+  // Get the current version of the app
+  rpc checkForUpdates(google.protobuf.StringValue) returns (AppVersion);
+}
+
+message AppVersion {
+  string version = 1;
+  string androidUrl = 2;
+  string iosUrl = 3;
+}
 
 message AddressWithLatLngName {
   optional string name = 1;

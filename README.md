@@ -34,23 +34,35 @@ integrated with a Flutter mobile application.
 
 The project is composed of the following components:
 
-#### Core Microservice: (::2000)
+#### SMS Microservice: (::1500)
 
-This microservice serves as the backbone of the application and contains the business logic of the
-system. It provides CRUD (Create, Read, Update, Delete) operations on data related to the system's core entities.
+This microservice contains functionalities that aid in sending and verifying phone numbers using
+One-Time Password(OTP) This service is implemented using `Rust` & `Twilio`.
+
+#### Notification Microservice: (::1600)
+
+This microservice is responsible for handling push notification requirements of the system and is written
+in `Golang`.
+
+#### Media Microservice: (::1700)
+
+This microservice is responsible for handling the upload and transformation of media files using `cloudinary` & written
+in `Golang`.
+
+#### Auth Microservice: (::1800)
+
+This microservice is responsible for handling user authentication and authorization (written in `Rust`).
 
 #### Shared Microservice: (::1900)
 
 This microservice contains common functionalities that are shared across different modules of the
-system. It includes functionalities such as file uploads, email notifications, and authentication.
+system. It includes functionalities such as file uploads, email notifications, and authentication (written in `Golang`).
 
-#### Auth Microservice: (::1800)
+#### Core Microservice: (::2000)
 
-This microservice is responsible for handling user authentication and authorization.
-
-#### Media Microservice: (::1800)
-
-This microservice is responsible for handling the upload and transformation of media files using `cloudinary`.
+This microservice serves as the backbone of the application and contains the business logic of the
+system. It provides CRUD (Create, Read, Update, Delete) operations on data related to the system's
+core entities (written in `Golang`).
 
 #### Mobile Application:
 

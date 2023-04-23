@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:mobile/features/shared/domain/repositories/customer.dart';
+import 'package:mobile/features/event/domain/repositories/event.dart';
 import 'package:mobile/generated/protos/event.pbgrpc.dart';
 
 // TODO -> implement methods

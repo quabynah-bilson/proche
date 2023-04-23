@@ -8,6 +8,18 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use appVersionDescriptor instead')
+const AppVersion$json = const {
+  '1': 'AppVersion',
+  '2': const [
+    const {'1': 'version', '3': 1, '4': 1, '5': 9, '10': 'version'},
+    const {'1': 'androidUrl', '3': 2, '4': 1, '5': 9, '10': 'androidUrl'},
+    const {'1': 'iosUrl', '3': 3, '4': 1, '5': 9, '10': 'iosUrl'},
+  ],
+};
+
+/// Descriptor for `AppVersion`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List appVersionDescriptor = $convert.base64Decode('CgpBcHBWZXJzaW9uEhgKB3ZlcnNpb24YASABKAlSB3ZlcnNpb24SHgoKYW5kcm9pZFVybBgCIAEoCVIKYW5kcm9pZFVybBIWCgZpb3NVcmwYAyABKAlSBmlvc1VybA==');
 @$core.Deprecated('Use addressWithLatLngNameDescriptor instead')
 const AddressWithLatLngName$json = const {
   '1': 'AddressWithLatLngName',

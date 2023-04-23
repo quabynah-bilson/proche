@@ -71,16 +71,6 @@ class AuthServiceClient extends $grpc.Client {
       '/auth.AuthService/delete_account',
       ($2.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
-  static final _$send_phone_verification_code =
-      $grpc.ClientMethod<$1.StringValue, $2.Empty>(
-          '/auth.AuthService/send_phone_verification_code',
-          ($1.StringValue value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
-  static final _$verify_phone_verification_code =
-      $grpc.ClientMethod<$0.VerifyPhoneRequest, $2.Empty>(
-          '/auth.AuthService/verify_phone_verification_code',
-          ($0.VerifyPhoneRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
   static final _$get_referral_code =
       $grpc.ClientMethod<$2.Empty, $1.StringValue>(
           '/auth.AuthService/get_referral_code',
@@ -180,20 +170,6 @@ class AuthServiceClient extends $grpc.Client {
   $grpc.ResponseFuture<$2.Empty> delete_account($2.Empty request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_account, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$2.Empty> send_phone_verification_code(
-      $1.StringValue request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$send_phone_verification_code, request,
-        options: options);
-  }
-
-  $grpc.ResponseFuture<$2.Empty> verify_phone_verification_code(
-      $0.VerifyPhoneRequest request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$verify_phone_verification_code, request,
-        options: options);
   }
 
   $grpc.ResponseFuture<$1.StringValue> get_referral_code($2.Empty request,
@@ -318,21 +294,6 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
         ($2.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
-        'send_phone_verification_code',
-        send_phone_verification_code_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
-        ($2.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.VerifyPhoneRequest, $2.Empty>(
-        'verify_phone_verification_code',
-        verify_phone_verification_code_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) =>
-            $0.VerifyPhoneRequest.fromBuffer(value),
-        ($2.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$2.Empty, $1.StringValue>(
         'get_referral_code',
         get_referral_code_Pre,
@@ -437,17 +398,6 @@ abstract class AuthServiceBase extends $grpc.Service {
     return delete_account(call, await request);
   }
 
-  $async.Future<$2.Empty> send_phone_verification_code_Pre(
-      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
-    return send_phone_verification_code(call, await request);
-  }
-
-  $async.Future<$2.Empty> verify_phone_verification_code_Pre(
-      $grpc.ServiceCall call,
-      $async.Future<$0.VerifyPhoneRequest> request) async {
-    return verify_phone_verification_code(call, await request);
-  }
-
   $async.Future<$1.StringValue> get_referral_code_Pre(
       $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
     return get_referral_code(call, await request);
@@ -501,10 +451,6 @@ abstract class AuthServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.Account request);
   $async.Future<$2.Empty> delete_account(
       $grpc.ServiceCall call, $2.Empty request);
-  $async.Future<$2.Empty> send_phone_verification_code(
-      $grpc.ServiceCall call, $1.StringValue request);
-  $async.Future<$2.Empty> verify_phone_verification_code(
-      $grpc.ServiceCall call, $0.VerifyPhoneRequest request);
   $async.Future<$1.StringValue> get_referral_code(
       $grpc.ServiceCall call, $2.Empty request);
   $async.Future<$1.StringValue> get_referral_code_by_phone_number(

@@ -1,0 +1,113 @@
+import 'package:flutter/material.dart';
+import 'package:mobile/core/utils/extensions.dart';
+import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
+import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:shared_utils/shared_utils.dart';
+
+// todo -> build UI
+class PublicUserProfilePage extends StatefulWidget {
+  final Account account;
+
+  const PublicUserProfilePage({Key? key, required this.account})
+      : super(key: key);
+
+  @override
+  State<PublicUserProfilePage> createState() => _PublicUserProfilePageState();
+}
+
+class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
+  var _loading = false;
+  late final _account = widget.account;
+
+  Widget get _buildProfileHeader => Container(
+        width: context.width,
+        height: context.height * 0.2,
+        margin: EdgeInsets.only(top: context.height * 0.05),
+        decoration: BoxDecoration(
+          color: context.colorScheme.background,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+              color: context.colorScheme.secondaryContainer, width: 2.5),
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              left: 16,
+              top: -context.height * 0.05,
+              child: Container(
+                width: context.width * 0.3,
+                height: context.width * 0.3,
+                decoration: BoxDecoration(
+                  color: context.colorScheme.background,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                      color: context.colorScheme.secondaryContainer,
+                      width: 2.5),
+                ),
+                child: _account.avatarUrl.avatar(
+                    size: context.width * 0.3,
+                    fit: BoxFit.contain,
+                    circular: true),
+              ),
+            ),
+            Positioned.fill(
+              right: 16,
+              top: 12,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  AnimatedColumn(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _account.displayName
+                          .subtitle1(context, weight: FontWeight.bold),
+                      '@${_account.displayName.toLowerCase().replaceAll(' ', '-')}'
+                          .subtitle2(context, emphasis: kEmphasisMedium),
+                    ],
+                  ),
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: AppRoundedButton(
+                            text: context.localizer.message,
+                            backgroundColor: context.colorScheme.onBackground,
+                            textColor: context.colorScheme.surface,
+                            onTap: () {},
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        RoundedIconButton(
+                          icon: TablerIcons.dots_vertical,
+                          color: context.colorScheme.onBackground,
+                          onTap: () {
+                            // todo -> show options popup menu
+                          },
+                        ),
+                      ],
+                    ).top(12).left(16),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        body: LoadingIndicator(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                _buildProfileHeader,
+                // todo -> build UI
+              ],
+            ),
+          ),
+        ),
+      );
+}
