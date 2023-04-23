@@ -90,6 +90,8 @@ message Account {
   optional string device_id = 12;
   optional string device_token = 13;
   optional string device_type = 14;
+  optional bool is_verified = 15;
+  optional bool is_public_account = 16;
 }
 
 message AccessTokenStore {

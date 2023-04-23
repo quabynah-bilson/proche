@@ -15,6 +15,7 @@ class Assets {
   static const String animSuccess = 'assets/anim/success.json';
   static const String animTrip = 'assets/anim/trip.json';
   static const String animUpdateAvailable = 'assets/anim/update_available.json';
+  static const String animUploadInProgress = 'assets/anim/upload_in_progress.json';
   static const String animWelcomeNewUser = 'assets/anim/welcome_new_user.json';
   static const String animWorkInProgress = 'assets/anim/work_in_progress.json';
   static const String avatarsLorelei0 = 'assets/img/avatars/lorelei_0.png';

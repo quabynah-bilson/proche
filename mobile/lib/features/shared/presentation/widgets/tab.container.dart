@@ -19,23 +19,35 @@ class PilledTabContainer extends StatelessWidget {
         height: 64,
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: context.colorScheme.surface,
+          color: context.colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
-          children: labels
-              .map(
-                (label) => Expanded(
-                  child: Container(
+          children: labels.map(
+            (label) {
+              var active = labels.indexOf(label) == selectedIndex;
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () => onTabSelected(labels.indexOf(label)),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
-                      color: context.colorScheme.background,
+                      color: active
+                          ? context.colorScheme.background
+                          : context.colorScheme.secondaryContainer,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: label.button(context, ).centered(),
+                    child: label
+                        .button(context,
+                            color: active
+                                ? context.colorScheme.onBackground
+                                : context.colorScheme.onSecondaryContainer)
+                        .centered(),
                   ),
                 ),
-              )
-              .toList(),
+              );
+            },
+          ).toList(),
         ),
       );
 }

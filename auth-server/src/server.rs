@@ -195,6 +195,8 @@ impl AuthService for AuthServiceImpl {
             "referral_code" : &req.referral_code.unwrap_or("".to_string()),
             "password" : &hashed_password,
             "country_id" : &req.country_id,
+            "is_verified" : Some(false),
+            "is_public_account" : Some(true),
             "created_at": _create_timestamp_field(),
             "updated_at": _create_timestamp_field(),    // aka: last login
         };
@@ -562,6 +564,8 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
+            is_public_account: Some(account_doc.get_bool("is_public_account").unwrap_or(true)),
         };
 
         Ok(Response::new(account))
@@ -642,6 +646,8 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
+            is_public_account: Some(account_doc.get_bool("is_public_account").unwrap_or(true)),
         };
 
         Ok(Response::new(account))
@@ -718,6 +724,8 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
+            is_public_account: Some(account_doc.get_bool("is_public_account").unwrap_or(true)),
         };
 
         Ok(Response::new(account))
@@ -765,6 +773,8 @@ impl AuthService for AuthServiceImpl {
                     "device_id" : &account.device_id.unwrap(),
                     "device_type" : &account.device_type.unwrap(),
                     "device_token" : &account.device_token.unwrap(),
+                    "is_verified" : &account.is_verified.unwrap(),
+                    "is_public_account" : &account.is_public_account.unwrap(),
                 }},
                 None,
             )
@@ -834,6 +844,8 @@ impl AuthService for AuthServiceImpl {
                     .unwrap_or("")
                     .to_string(),
             ),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
+            is_public_account: Some(account_doc.get_bool("is_public_account").unwrap_or(true)),
         };
 
         Ok(Response::new(account))
@@ -982,14 +994,20 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+        let is_guest = match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
             .await
         {
-            Ok(token) => token,
-            Err(e) => {
-                return Err(e);
-            }
+            Ok(_) => true,
+            Err(_) => false,
         };
+        if !is_guest {
+            match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+                Ok(token) => token.0,
+                Err(e) => {
+                    return Err(e);
+                }
+            };
+        }
 
         // get countries from database
         let opts = FindOptions::builder().sort(doc! {"name": 1}).build();

@@ -71,5 +71,5 @@ protoc -I=$NOTIFICATION_PROTO_PATH --go_out=$NOTIFICATION_SERVER_DIR/gen --go_op
 # generate for flutter using dart
 #protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH -I=$SMS_PROTO_PATH -I=$NOTIFICATION_PROTO_PATH \
 #  --dart_out=grpc:$MOBILE_OUT_DIR \
-#  notification.proto
+#  auth.proto
 #  $(find $AUTH_PROTO_PATH -iname "*.proto") $(find $SHARED_PROTO_PATH -iname "*.proto") $(find $CORE_PROTO_PATH -iname "*.proto") $(find $NOTIFICATION_PROTO_PATH -iname "*.proto")

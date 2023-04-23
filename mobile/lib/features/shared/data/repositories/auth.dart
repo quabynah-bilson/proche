@@ -7,6 +7,7 @@ import 'package:mobile/features/shared/domain/repositories/auth.dart';
 import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 import 'package:mobile/features/shared/domain/repositories/messaging.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
+import 'package:mobile/generated/protos/media.pbgrpc.dart';
 import 'package:mobile/generated/protos/sms.pbgrpc.dart';
 import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
@@ -15,12 +16,14 @@ import 'package:shared_utils/shared_utils.dart';
 class ProcheAuthRepository extends BaseAuthRepository {
   final AuthServiceClient authClient;
   final SmsServiceClient smsClient;
+  final MediaServiceClient mediaClient;
   final BaseLocalStorageRepository storage;
   final BaseMessagingRepository messaging;
 
   ProcheAuthRepository({
     required this.authClient,
     required this.smsClient,
+    required this.mediaClient,
     required this.storage,
     required this.messaging,
   });
@@ -236,6 +239,45 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<Account, String>> updateAccount(Account account) async {
     try {
+      // avatar
+      if (!account.avatarUrl.isNullOrEmpty() &&
+          account.avatarUrl.startsWith("assets/")) {
+        var bytesToTransfer = await assetToBytes(account.avatarUrl);
+        var response = await mediaClient.upload_media(UploadMediaRequest(
+          media: bytesToTransfer,
+          owner: account.phoneNumber,
+          name: 'avatar',
+          type: MediaType.IMAGE,
+        ));
+        account.avatarUrl = response.value;
+      }
+
+      // vaccine card
+      if (account.vaccineCardUrl.isNotEmpty &&
+          !account.vaccineCardUrl.startsWith('http')) {
+        var bytesToTransfer = await fileToBytes(account.vaccineCardUrl);
+        var response = await mediaClient.upload_media(UploadMediaRequest(
+          media: bytesToTransfer,
+          owner: account.phoneNumber,
+          name: 'vaccine_card',
+          type: MediaType.IMAGE,
+        ));
+        account.vaccineCardUrl = response.value;
+      }
+
+      // id card
+      if (account.idCardUrl.isNotEmpty &&
+          !account.idCardUrl.startsWith('http')) {
+        var bytesToTransfer = await fileToBytes(account.idCardUrl);
+        var response = await mediaClient.upload_media(UploadMediaRequest(
+          media: bytesToTransfer,
+          owner: account.phoneNumber,
+          name: 'id_card',
+          type: MediaType.IMAGE,
+        ));
+        account.idCardUrl = response.value;
+      }
+
       var updatedAccount = await authClient.update_account(account);
       return left(updatedAccount);
     } on GrpcError catch (e) {

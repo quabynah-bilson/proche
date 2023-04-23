@@ -375,9 +375,10 @@ extension BuildContextX on BuildContext {
                   }
                 },
                 builder: (context, state) => AnimatedColumn(
-                  animateType: AnimateType.slideDown,
+                  animateType: AnimateType.slideUp,
                   children: [
                     Lottie.asset(Assets.animLogout,
+                            repeat: false,
                             height: height * 0.15, width: width * 0.7)
                         .bottom(24),
                     EmptyContentPlaceholder(
@@ -785,6 +786,101 @@ extension BuildContextX on BuildContext {
             },
           );
         },
+      ),
+    );
+  }
+
+  /// show a list of locales supported by the app
+  Future<String?> showLocalesSheet() async {
+    var locales = [localizer.english, localizer.french];
+    return await showBarModalBottomSheet(
+      context: this,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => SafeArea(
+          top: false,
+          child: ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+            children: [
+              localizer.changeLanguageHeader.subtitle1(context).bottom(16),
+              ...[localizer.english, localizer.french]
+                  .map(
+                    (e) => ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () => context.navigator
+                          .pop(e == locales.first ? 'en' : 'fr'),
+                      minLeadingWidth: 48,
+                      leading: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color:
+                              (context.colorScheme.secondary).withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          TablerIcons.language,
+                          color: context.colorScheme.secondary,
+                        ),
+                      ),
+                      title: Text(e),
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// show a list of theme supported by the app
+  Future<ThemeMode?> showThemePickerSheet() async {
+    var icons = const [
+      TablerIcons.id_badge,
+      TablerIcons.sun_high,
+      TablerIcons.moon,
+    ];
+    return await showBarModalBottomSheet(
+      context: this,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => SafeArea(
+          top: false,
+          child: ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+            children: [
+              localizer.themeBuilderSubhead.subtitle1(context).bottom(16),
+              ...ThemeMode.values
+                  .map(
+                    (e) => ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () => context.navigator.pop(ThemeMode.values
+                          .firstWhere((element) => element.name == e.name)),
+                      minLeadingWidth: 48,
+                      leading: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color:
+                              (context.colorScheme.secondary).withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          icons[ThemeMode.values.indexOf(e)],
+                          color: context.colorScheme.secondary,
+                        ),
+                      ),
+                      title: Text(
+                          e.name.replaceAll('ThemeMode.', '').capitalize()),
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
+        ),
       ),
     );
   }

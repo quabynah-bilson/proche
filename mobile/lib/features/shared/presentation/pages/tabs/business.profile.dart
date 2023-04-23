@@ -1,0 +1,21 @@
+part of '../dashboard.dart';
+
+class _BusinessProfileTab extends StatefulWidget {
+  final Account? account;
+
+  const _BusinessProfileTab({Key? key, this.account}) : super(key: key);
+
+  @override
+  State<_BusinessProfileTab> createState() => _BusinessProfileTabState();
+}
+
+class _BusinessProfileTabState extends State<_BusinessProfileTab> {
+  @override
+  Widget build(BuildContext context) {
+    return EmptyContentPlaceholder(
+      icon: TablerIcons.businessplan,
+      title: context.localizer.underMaintenanceHeader,
+      subtitle: context.localizer.underMaintenanceSubhead,
+    );
+  }
+}

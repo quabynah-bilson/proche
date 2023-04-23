@@ -99,9 +99,12 @@ class ProcheMessagingRepository extends BaseMessagingRepository {
 
       _subscription = client
           .get_notifications(StringValue(value: userId))
-          .listen((response) {
-            logger.i('notification received: $response');
+          .listen((response) async {
+        logger.i('notification received: $response');
         // todo -> show local notification
+        await flutterLocalNotificationsPlugin.show(
+            1, 'Testing', 'Testing with a body', const NotificationDetails(),
+            payload: 'Testing');
       }, onError: (e) {
         logger.e(e);
       }, onDone: () {

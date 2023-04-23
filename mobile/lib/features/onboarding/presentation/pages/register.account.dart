@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/validator.dart';
@@ -18,7 +19,6 @@ class RegisterAccountPage extends StatefulWidget {
 class _RegisterAccountPageState extends State<RegisterAccountPage> {
   final _authBloc = AuthBloc(),
       _createAccountBloc = AuthBloc(),
-      _countryBloc = AuthBloc(),
       _currentAccountBloc = AuthBloc();
   var _loading = false, _showPicturePickerUI = false;
   String? _selectedAvatarAsset;
@@ -149,36 +149,49 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                       ).top(24),
 
                       /// show avatars
-                      GridView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 8),
-                        itemCount: _avatars.length,
-                        itemBuilder: (context, index) {
-                          var avatar = _avatars[index];
-                          return GestureDetector(
-                            onTap: () =>
-                                setState(() => _selectedAvatarAsset = avatar),
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                color: _selectedAvatarAsset == avatar
-                                    ? context.colorScheme.secondary
-                                    : null,
-                                border: Border.all(
-                                    color: context.theme.disabledColor
-                                        .withOpacity(kEmphasisMedium)),
-                                shape: BoxShape.circle,
-                                image:
-                                    DecorationImage(image: AssetImage(avatar)),
+                      AnimationLimiter(
+                        child: GridView.builder(
+                          padding: const EdgeInsets.only(top: 20, bottom: 16),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 8),
+                          itemCount: _avatars.length,
+                          itemBuilder: (context, index) =>
+                              AnimationConfiguration.staggeredGrid(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            columnCount: 3,
+                            child: ScaleAnimation(
+                              child: FadeInAnimation(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() =>
+                                        _selectedAvatarAsset = _avatars[index]);
+                                  },
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: _selectedAvatarAsset ==
+                                              _avatars[index]
+                                          ? context.colorScheme.secondary
+                                          : null,
+                                      border: Border.all(
+                                          color: context.theme.disabledColor
+                                              .withOpacity(kEmphasisMedium)),
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: AssetImage(_avatars[index])),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          );
-                        },
-                      ).fillMaxWidth(context).fillMaxHeight(context, 0.3),
+                          ),
+                        ).fillMaxWidth(context).fillMaxHeight(context, 0.3),
+                      ),
 
                       AppRoundedButton(
                         text: context.localizer.next,

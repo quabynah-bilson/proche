@@ -1,17 +1,27 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile/core/routing/router.dart';
+import 'package:mobile/core/utils/actions.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/session.dart';
+import 'package:mobile/core/utils/validator.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/manager/device/device.dart';
+import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.dart';
 import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
+import 'package:mobile/features/shared/presentation/manager/theme/theme_cubit.dart';
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
+import 'package:mobile/features/shared/presentation/widgets/image.picker.dart';
 import 'package:mobile/features/shared/presentation/widgets/quick.help.tile.dart';
+import 'package:mobile/features/shared/presentation/widgets/setting.list.tile.dart';
+import 'package:mobile/features/shared/presentation/widgets/tab.container.dart';
 import 'package:mobile/features/task/presentation/manager/task_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
@@ -20,9 +30,13 @@ import 'package:mobile/generated/protos/shared.pb.dart';
 import 'package:mobile/generated/protos/task.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
 
+part 'tabs/business.profile.dart';
+
 part 'tabs/home.dart';
 
 part 'tabs/notification.dart';
+
+part 'tabs/personal.profile.dart';
 
 part 'tabs/search.dart';
 
@@ -79,6 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
         extendBody: true,
         body: PageView(
           controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
           onPageChanged: (page) => setState(() => _bottomNavIndex = page),
           children: [
             _HomeTab(account: _account),
