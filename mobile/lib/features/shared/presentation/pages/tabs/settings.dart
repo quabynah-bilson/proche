@@ -11,7 +11,6 @@ class _SettingsTab extends StatefulWidget {
 
 class _SettingsTabState extends State<_SettingsTab> {
   final _authBloc = AuthBloc(), _deviceCubit = DeviceInfoCubit();
-  late final _tabs = [context.localizer.personal, context.localizer.business];
   late var _account = widget.account;
   var _loading = false, _activeTab = 0;
 
@@ -60,7 +59,10 @@ class _SettingsTabState extends State<_SettingsTab> {
                         ).bottom(8),
                       ),
                       PilledTabContainer(
-                        labels: _tabs,
+                        labels: [
+                          context.localizer.personal,
+                          context.localizer.business,
+                        ],
                         selectedIndex: _activeTab,
                         onTabSelected: (index) =>
                             setState(() => _activeTab = index),

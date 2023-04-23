@@ -6,10 +6,15 @@ class RoundedIconButton extends StatelessWidget {
   final IconData icon;
   final Color? color;
   final VoidCallback onTap;
+  final bool hasBadge;
 
-  const RoundedIconButton(
-      {Key? key, required this.icon, this.color, required this.onTap})
-      : super(key: key);
+  const RoundedIconButton({
+    Key? key,
+    required this.icon,
+    required this.onTap,
+    this.color,
+    this.hasBadge = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -24,10 +29,27 @@ class RoundedIconButton extends StatelessWidget {
             border: Border.all(
                 width: 1, color: color ?? context.colorScheme.primary),
           ),
-          child: Icon(
-            icon,
-            size: 20,
-            color: color ?? context.colorScheme.primary,
+          child: Stack(
+            children: [
+              Icon(
+                icon,
+                size: 20,
+                color: color ?? context.colorScheme.primary,
+              ).centered(),
+              if (hasBadge)
+                Positioned(
+                  top: 10,
+                  right: 12,
+                  child: Container(
+                    height: 12,
+                    width: 12,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: context.colorScheme.primary,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       );
