@@ -113,5 +113,9 @@
   "publicAccount": "Public Account",
   "publicAccountSubhead": "Make your account visible to friends and family",
   "vaccineCard" : "COVID-19 Vaccine Card",
-  "idCard" : "Valid Nation ID Card"
+  "idCard" : "Valid Nation ID Card",
+  "uploadService" : "Upload Service",
+  "numberOfVolunteers" : "{number} people applied",
+  "candidates" : "Candidates",
+  "postDetails" : "Post Details"
 }

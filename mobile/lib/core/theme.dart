@@ -10,8 +10,10 @@ extension ThemeBuilderX on BuildContext {
         disabledColor: const Color(0xffe0e0e0),
         colorScheme: useColorScheme(),
         platform: TargetPlatform.iOS,
-        appBarTheme:
-            const AppBarTheme(backgroundColor: backgroundColor, elevation: 0),
+        appBarTheme: const AppBarTheme(
+            backgroundColor: backgroundColor,
+            elevation: 0,
+            scrolledUnderElevation: 0),
         textTheme: _textTheme());
   }
 
@@ -19,6 +21,7 @@ extension ThemeBuilderX on BuildContext {
       useMaterial3: true,
       colorScheme: useColorScheme(ThemeMode.dark),
       platform: TargetPlatform.iOS,
+      appBarTheme: const AppBarTheme(elevation: 0, scrolledUnderElevation: 0),
       textTheme: _textTheme(Colors.white));
 }
 

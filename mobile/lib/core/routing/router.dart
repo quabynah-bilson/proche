@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/features/chat/presentation/pages/chat.dart';
 import 'package:mobile/features/onboarding/presentation/pages/phone.verification.dart';
@@ -9,8 +10,11 @@ import 'package:mobile/features/onboarding/presentation/pages/welcome.dart';
 import 'package:mobile/features/shared/presentation/pages/dashboard.dart';
 import 'package:mobile/features/shared/presentation/pages/finder.dart';
 import 'package:mobile/features/shared/presentation/pages/public.profile.dart';
+import 'package:mobile/features/shared/presentation/pages/user.activities.dart';
 import 'package:mobile/features/shared/presentation/pages/user.favorites.dart';
+import 'package:mobile/features/task/presentation/pages/task.details.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:mobile/generated/protos/task.pb.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -42,9 +46,17 @@ class AppRouterConfig {
             builder: (_) =>
                 PublicUserProfilePage(account: settings.arguments as Account),
             settings: settings);
+      case AppRouter.userActivitiesRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => const UserActivitiesPage(), settings: settings);
       case AppRouter.chatRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => ChatPage(account: settings.arguments as Account),
+            settings: settings);
+      case AppRouter.taskDetailsRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) =>
+                ProcheTaskDetailsPage(task: settings.arguments as ProcheTask),
             settings: settings);
       case AppRouter.dashboardRoute:
         return MaterialWithModalsPageRoute(
@@ -63,13 +75,13 @@ class AppRouterConfig {
 
     return MaterialPageRoute(
       builder: (context) => Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
             elevation: 0, backgroundColor: context.colorScheme.background),
-        body: const EmptyContentPlaceholder(
-          icon: TablerIcons.mood_empty,
-          title: 'Oops...you seem far from home',
-          subtitle:
-              'An error occurred while getting your content. Please try again later',
+        body: EmptyContentPlaceholder(
+          icon: TablerIcons.building_factory,
+          title: context.localizer.underMaintenanceHeader,
+          subtitle: context.localizer.underMaintenanceSubhead,
         ),
       ),
     );
@@ -88,6 +100,7 @@ class AppRouter {
   static const userFavoritesRoute = '/favorites';
   static const publicProfileRoute = '/public-profile'; // todo
   static const notificationsRoute = '/notifications'; // todo
-  static const userActivitiesRoute = '/user-activities'; // todo
+  static const userActivitiesRoute = '/user-activities';
+  static const taskDetailsRoute = '/task-details';
   static const chatRoute = '/chat'; // todo
 }

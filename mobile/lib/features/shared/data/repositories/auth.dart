@@ -200,6 +200,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       UserSession.kLocale = await storage.defaultLocale;
       UserSession.kIsLoggedIn = !UserSession.kAccessToken.isNullOrEmpty();
       var account = await authClient.get_account(Empty());
+      UserSession.kUserId = account.id;
       return left(account);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
