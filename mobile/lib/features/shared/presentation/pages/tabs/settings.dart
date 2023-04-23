@@ -10,9 +10,7 @@ class _SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<_SettingsTab> {
-  final _authBloc = AuthBloc(),
-      _logoutBloc = AuthBloc(),
-      _deviceCubit = DeviceInfoCubit();
+  final _authBloc = AuthBloc(), _deviceCubit = DeviceInfoCubit();
   late var _account = widget.account;
   var _loading = false;
 
@@ -26,21 +24,6 @@ class _SettingsTabState extends State<_SettingsTab> {
   @override
   Widget build(BuildContext context) => MultiBlocListener(
         listeners: [
-          BlocListener(
-            bloc: _logoutBloc,
-            listener: (context, state) {
-              if (!mounted) return;
-
-              if (state is ErrorState<String>) {
-                context.showMessageDialog(state.failure);
-              }
-
-              if (state is SuccessState<void>) {
-                context.navigator.pushNamedAndRemoveUntil(
-                    AppRouter.welcomeRoute, (route) => false);
-              }
-            },
-          ),
           BlocListener(
             bloc: _authBloc,
             listener: (context, state) {
@@ -139,12 +122,7 @@ class _SettingsTabState extends State<_SettingsTab> {
                       child: SafeArea(
                         bottom: false,
                         child: RoundedIconButton(
-                          onTap: () => context.showMessageDialog(
-                            context.localizer.signOutPrompt,
-                            animationAsset: Assets.animLogout,
-                            title: context.localizer.signOut,
-                            onTap: () => _logoutBloc.add(LogoutAuthEvent()),
-                          ),
+                          onTap: context.showLogoutDialog,
                           icon: Icons.exit_to_app_sharp,
                         ),
                       ),

@@ -24,6 +24,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
   String? _selectedAvatarAsset;
   Country? _selectedCountry;
   final _formKey = GlobalKey<FormState>(),
+      _countryController = TextEditingController(),
       _nameController = TextEditingController(),
       _phoneNumberController = TextEditingController(),
       _passwordController = TextEditingController(),
@@ -50,12 +51,6 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
         Assets.avatarsLorelei18,
         Assets.avatarsLorelei19,
       ];
-
-  @override
-  void initState() {
-    super.initState();
-    _countryBloc.add(GetCountriesAuthEvent());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,33 +192,28 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                           .bodyText2(context, alignment: TextAlign.center)
                           .top(8)
                           .bottom(40),
-                      BlocBuilder(
-                        bloc: _countryBloc,
-                        builder: (context, state) {
-                          final countries = state is SuccessState<List<Country>>
-                              ? state.data
-                              : <Country>[];
-                          return AppDropdownField(
-                            label: context.localizer.selectCountry,
-                            values: countries.map((e) => e.name).toList(),
-                            onSelected: (name) {
-                              _selectedCountry = countries.firstWhere(
-                                  (element) => element.name == name);
-                              setState(() {});
-                            },
-                            current: _selectedCountry?.name,
-                            enabled: state is! LoadingState,
-                            prefixIcon: _selectedCountry == null
-                                ? null
-                                : Container(
-                                    margin: const EdgeInsets.fromLTRB(
-                                        12, 12, 8, 12),
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: const BoxDecoration(),
-                                    child: _selectedCountry!.flagUrl
-                                        .asSvg(size: 16, fromAsset: false),
-                                  ),
-                          );
+                      AppTextField(
+                        context.localizer.selectCountry,
+                        controller: _countryController,
+                        readOnly: true,
+                        enabled: !_loading,
+                        validator: Validators.validate,
+                        prefixIcon: _selectedCountry == null
+                            ? null
+                            : Container(
+                          margin:
+                          const EdgeInsets.fromLTRB(12, 12, 8, 12),
+                          clipBehavior: Clip.hardEdge,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle),
+                          child: _selectedCountry?.flagUrl
+                              .asSvg(size: 16, fromAsset: false),
+                        ),
+                        onTap: () async {
+                          _selectedCountry = await context.showCountriesSheet();
+                          _countryController.text =
+                              _selectedCountry?.name ?? '';
+                          setState(() {});
                         },
                       ),
                       if (_selectedCountry != null) ...{

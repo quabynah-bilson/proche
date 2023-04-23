@@ -6,7 +6,6 @@ import 'package:mobile/core/theme.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.dart';
-import 'package:mobile/features/shared/presentation/manager/messaging/messaging_cubit.dart';
 import 'package:mobile/features/shared/presentation/manager/shared/shared_cubit.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -33,7 +32,6 @@ class _ProcheAppState extends State<ProcheApp> {
           providers: [
             BlocProvider(create: (context) => AuthBloc()),
             BlocProvider(create: (context) => SharedCubit()),
-            BlocProvider(create: (context) => MessagingCubit()),
             BlocProvider(create: (context) => _localeBloc),
           ],
           child: BlocBuilder(

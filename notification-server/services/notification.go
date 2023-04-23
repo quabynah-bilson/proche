@@ -2,11 +2,15 @@ package services
 
 import (
 	"context"
+	firebase "firebase.google.com/go"
+	"firebase.google.com/go/messaging"
 	"fmt"
 	"github.com/jackc/pgx"
 	"github.com/quabynah-bilson/notification-server/config"
 	pb "github.com/quabynah-bilson/notification-server/gen"
+	"github.com/quabynah-bilson/notification-server/utils"
 	"github.com/sideshow/apns2"
+	"google.golang.org/api/option"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -41,10 +45,8 @@ func (n *NotificationServiceImpl) RegisterDevice(ctx context.Context, req *pb.Re
 	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Second*15))
 	defer cancel()
 
-	token := config.NotificationClient.Token.GenerateIfExpired()
-
 	// generate a random string to be used as the device id
-	//token := utils.GenerateRandomString(40)
+	token := utils.GenerateRandomString(40)
 
 	// insert the device into the database
 	if result, err := dbPool.QueryEx(ctx, "SELECT insert_device($1, $2, $3)", nil, req.GetUserId(), req.GetDeviceType(), token); err != nil {
@@ -94,6 +96,42 @@ func (n *NotificationServiceImpl) SendNotification(ctx context.Context, req *pb.
 	//		}
 	//	}
 	//}
+
+	// TODO: Replace with your own project ID and service account key path
+	//projectID := "your-project-id"
+	keyPath := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+	// Initialize the Firebase app
+	opt := option.WithCredentialsFile(keyPath)
+	app, err := firebase.NewApp(context.Background(), nil, opt)
+	if err != nil {
+		panic(fmt.Errorf("error initializing Firebase app: %v", err))
+	}
+
+	// Get a client to the FCM service
+	client, err := app.Messaging(ctx)
+	if err != nil {
+		panic(fmt.Errorf("error getting FCM client: %v", err))
+	}
+
+	// Send a message to a device with the specified registration token
+	message := &messaging.Message{
+		//Token: "eyuIGiQSCEZYnuy1r6cnm0:APA91bEB4kzvkhlFe-LUy2ck6ipNIVClEML8CRR2MzUkiS4PIAu7sBZ2-PW_YtN-TU1k331XmxUs53OSITeFTsrQ6n3dSjjKwmN_0tK-rjP8Ho8cufthcJFrArEac0Q1L9wXuOriNvAk",
+		//Notification: &messaging.Notification{
+		//	Title: "Test message",
+		//	Body:  "This is a test message sent from Go",
+		//},
+		Topic: "news",
+		Data: map[string]string{
+			"score": "850",
+			"time":  "2:45",
+		},
+	}
+	response, err := client.Send(ctx, message)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Failed to send notification: %v", err)
+	}
+	fmt.Printf("Message sent successfully with response: %v\n", response)
 
 	return &emptypb.Empty{}, nil
 }

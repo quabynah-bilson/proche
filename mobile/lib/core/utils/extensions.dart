@@ -322,40 +322,78 @@ extension BuildContextX on BuildContext {
   }
 
   /// show a welcome dialog for new users
-  void showWelcomeDialog() async {
-    await Future.delayed(const Duration(milliseconds: 850));
-    showBarModalBottomSheet(
+  void showWelcomeDialog() async => showBarModalBottomSheet(
+        context: this,
+        backgroundColor: colorScheme.background,
+        useRootNavigator: true,
+        bounce: true,
+        isDismissible: false,
+        builder: (context) => AnimatedColumn(
+          animateType: AnimateType.slideDown,
+          children: [
+            Lottie.asset(Assets.animWelcomeNewUser,
+                    frameRate: FrameRate(90),
+                    height: height * 0.25,
+                    width: width * 0.7)
+                .bottom(24),
+            EmptyContentPlaceholder(
+                title: localizer.thanksForExploring(localizer.appName),
+                subtitle: localizer.appWelcomeText),
+            AppRoundedButton(
+                    text: localizer.gotIt, onTap: context.navigator.pop)
+                .top(40),
+            SafeArea(
+              top: false,
+              child: TextButton(
+                onPressed: () {
+                  context.navigator.pop();
+                  doAfterDelay(showLoginSheet);
+                },
+                child: localizer.joinUs
+                    .button(context, alignment: TextAlign.center),
+              ).top(8),
+            ),
+          ],
+        ),
+      );
+
+  /// shows a sheet which allows users to sign out
+  void showLogoutDialog() async {
+    final logoutBloc = AuthBloc();
+    await showBarModalBottomSheet(
       context: this,
       backgroundColor: colorScheme.background,
       useRootNavigator: true,
       bounce: true,
-      isDismissible: false,
-      builder: (context) => AnimatedColumn(
-        animateType: AnimateType.slideDown,
-        children: [
-          Lottie.asset(Assets.animWelcomeNewUser,
-                  frameRate: FrameRate(90),
-                  height: height * 0.25,
-                  width: width * 0.7)
-              .bottom(24),
-          EmptyContentPlaceholder(
-              title: localizer.thanksForExploring(localizer.appName),
-              subtitle: localizer.appWelcomeText),
-          AppRoundedButton(text: localizer.gotIt, onTap: context.navigator.pop)
-              .top(40),
-          SafeArea(
-            top: false,
-            child: TextButton(
-              onPressed: () {
-                context.navigator.pop();
-                doAfterDelay(showLoginSheet);
-              },
-              child:
-                  localizer.joinUs.button(context, alignment: TextAlign.center),
-            ).top(8),
-          ),
-        ],
-      ),
+      builder: (context) => StatefulBuilder(
+          builder: (context, setState) => BlocConsumer(
+                bloc: logoutBloc,
+                listener: (context, state) {
+                  if (state is SuccessState<void>) {
+                    context.navigator.pushNamedAndRemoveUntil(
+                        AppRouter.welcomeRoute, (route) => false);
+                  }
+                },
+                builder: (context, state) => AnimatedColumn(
+                  animateType: AnimateType.slideDown,
+                  children: [
+                    Lottie.asset(Assets.animLogout,
+                            height: height * 0.15, width: width * 0.7)
+                        .bottom(24),
+                    EmptyContentPlaceholder(
+                        title: localizer.signOut,
+                        subtitle: localizer.signOutPrompt).bottom(24),
+                    SafeArea(
+                      child: state is LoadingState
+                          ? const CircularProgressIndicator.adaptive()
+                          : AppRoundedButton(
+                              text: localizer.signOut,
+                              onTap: () => logoutBloc.add(LogoutAuthEvent()),
+                            ),
+                    ),
+                  ],
+                ),
+              )),
     );
   }
 

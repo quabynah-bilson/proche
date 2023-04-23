@@ -7,6 +7,7 @@ import 'package:mobile/core/network/token.interceptor.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:mobile/generated/protos/event.pbgrpc.dart';
 import 'package:mobile/generated/protos/giveaway.pbgrpc.dart';
+import 'package:mobile/generated/protos/notification.pbgrpc.dart';
 import 'package:mobile/generated/protos/shared.pbgrpc.dart';
 import 'package:mobile/generated/protos/sms.pbgrpc.dart';
 import 'package:mobile/generated/protos/task.pbgrpc.dart';
@@ -37,6 +38,12 @@ abstract class NetworkConfigModule {
   SmsServiceClient get smsServiceClient => SmsServiceClient(
       _createChannel(int.parse(dotenv.env['SMS_SERVER_PORT'].toString()),
           dotenv.env['SMS_SERVER_URL']),
+      interceptors: [_tokenInterceptor, _logInterceptor]);
+
+  @injectable
+  NotificationServiceClient get notificationServiceClient => NotificationServiceClient(
+      _createChannel(int.parse(dotenv.env['NOTIFICATION_SERVER_PORT'].toString()),
+          dotenv.env['NOTIFICATION_SERVER_URL']),
       interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable

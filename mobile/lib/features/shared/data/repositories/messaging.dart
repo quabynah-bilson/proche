@@ -3,20 +3,24 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 import 'package:mobile/features/shared/domain/repositories/messaging.dart';
+import 'package:mobile/generated/protos/notification.pbgrpc.dart';
+import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 @Injectable(as: BaseMessagingRepository)
 class FirebaseMessagingRepository extends BaseMessagingRepository {
-  final FirebaseMessaging messaging;
   final DeviceInfoPlugin deviceInfoPlugin;
+  final NotificationServiceClient client;
+  final BaseLocalStorageRepository storage;
   StreamSubscription? _subscription;
 
   FirebaseMessagingRepository({
-    required this.messaging,
+    required this.client,
+    required this.storage,
     required this.deviceInfoPlugin,
   });
 
@@ -41,12 +45,15 @@ class FirebaseMessagingRepository extends BaseMessagingRepository {
   }
 
   @override
-  Future<Either<String, String>> getDeviceToken() async {
+  Future<Either<String, String>> getDeviceToken(String userId) async {
     try {
-      var token = await messaging.getToken();
-      return token.isNullOrEmpty()
-          ? right('Failed to generate token')
-          : left(token!);
+      var request = RegisterDeviceRequest(
+        deviceType: await getDeviceType()
+            .then((value) => value.fold((l) => l, (r) => '')),
+        userId: userId,
+      );
+      var token = await client.register_device(request);
+      return left(token.value);
     } on PlatformException catch (e) {
       logger.e(e);
       return right(e.toString());
@@ -74,48 +81,26 @@ class FirebaseMessagingRepository extends BaseMessagingRepository {
   }
 
   @override
-  Future<void> clearToken() async {
+  Future<void> clearToken(String userId) async {
     try {
-      await messaging.deleteToken();
+      await client.unregister_device(StringValue(value: userId));
     } on PlatformException catch (e) {
       logger.e(e);
     }
   }
 
   @override
-  Future<void> subscribeToNotifications() async {
+  Future<void> subscribeToNotifications(String userId) async {
     try {
-      var notificationSettings = await messaging.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true,
-      );
-
-      if (notificationSettings.authorizationStatus ==
-          AuthorizationStatus.denied) {
-        logger.i('User declined or has not accepted permission');
-        return;
-      }
-
-      logger.i('User granted permission...subscribing to notifications');
-      // initial message (when app is closed)
-      var remoteMessage = await messaging.getInitialMessage();
-      logger.d('initial message -> ${remoteMessage?.notification?.body}');
-
-      // foreground
-      _subscription = FirebaseMessaging.onMessage.listen((payload) {
-        logger.i('firebase messaging body-> ${payload.notification?.body}');
-        logger.i('firebase messaging data -> ${payload.data}');
-      });
-      // background
-      FirebaseMessaging.onMessageOpenedApp.listen((payload) {
-        logger.i(
-            'firebase opened app messaging body-> ${payload.notification?.body}');
-        logger.i('firebase opened app messaging data -> ${payload.data}');
+      // todo -> request permission for local notifications
+      _subscription = client
+          .get_notifications(StringValue(value: userId))
+          .listen((response) {
+        // todo -> show local notification
+      }, onError: (e) {
+        logger.e(e);
+      }, onDone: () {
+        logger.i('Done with notification service');
       });
     } on PlatformException catch (e) {
       logger.e(e);
@@ -123,5 +108,6 @@ class FirebaseMessagingRepository extends BaseMessagingRepository {
   }
 
   @override
-  Future<void> unsubscribeFromNotifications() async => _subscription?.cancel();
+  Future<void> unsubscribeFromNotifications() async =>
+      await _subscription?.cancel();
 }

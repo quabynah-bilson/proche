@@ -95,11 +95,14 @@ class ProcheAuthRepository extends BaseAuthRepository {
     try {
       await authClient.logout(Empty());
 
+      // unsubscribe from notifications
+      var account = await authClient.get_account(Empty());
+      await messaging.clearToken(account.phoneNumber);
+
       // clear token
       await storage.clearAccessToken();
       UserSession.kAccessToken = null;
       UserSession.kIsLoggedIn = false;
-      await messaging.clearToken();
       await messaging.unsubscribeFromNotifications();
 
       return left(null);
@@ -255,7 +258,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       var account = await authClient.get_account(Empty());
 
       // get device token and update account
-      var either = await messaging.getDeviceToken();
+      var either = await messaging.getDeviceToken(account.phoneNumber);
       var deviceToken = either.fold((l) => l, (r) => null);
       account.deviceToken = deviceToken ?? '';
 
@@ -271,7 +274,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
 
       // save updated account
       var updatedAccount = await authClient.update_account(account);
-      await messaging.subscribeToNotifications();
+      await messaging.subscribeToNotifications(updatedAccount.phoneNumber);
     } on GrpcError catch (e) {
       logger.e(e);
     }

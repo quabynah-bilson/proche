@@ -1,5 +1,4 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/utils/storage.keys.dart';
@@ -30,10 +29,4 @@ abstract class SharedAppModule {
 
   @injectable
   DeviceInfoPlugin get deviceInfo => DeviceInfoPlugin();
-}
-
-@module
-abstract class FirebaseAppModule {
-  @injectable
-  FirebaseMessaging get messaging => FirebaseMessaging.instance;
 }
