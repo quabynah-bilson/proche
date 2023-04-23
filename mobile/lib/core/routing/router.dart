@@ -7,6 +7,7 @@ import 'package:mobile/features/onboarding/presentation/pages/tutorial.dart';
 import 'package:mobile/features/onboarding/presentation/pages/welcome.dart';
 import 'package:mobile/features/shared/presentation/pages/dashboard.dart';
 import 'package:mobile/features/shared/presentation/pages/finder.dart';
+import 'package:mobile/features/shared/presentation/pages/user.favorites.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -36,6 +37,9 @@ class AppRouterConfig {
       case AppRouter.dashboardRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => const DashboardPage(), settings: settings);
+      case AppRouter.userFavoritesRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => const UserFavoritesPage(), settings: settings);
       case AppRouter.serviceFinderRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => ServiceFinderPage(
@@ -69,4 +73,5 @@ class AppRouter {
   static const resetPasswordRoute = '/account/reset-password'; // todo
   static const phoneVerificationRoute = '/phone-verification';
   static const editProfileRoute = '/edit-profile'; // todo
+  static const userFavoritesRoute = '/favorites';
 }

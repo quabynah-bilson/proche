@@ -15,8 +15,8 @@ class RoundedIconButton extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
         child: Container(
-          height: 64,
-          width: 64,
+          height: 48,
+          width: 48,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: (color ?? context.colorScheme.primary)
@@ -26,6 +26,7 @@ class RoundedIconButton extends StatelessWidget {
           ),
           child: Icon(
             icon,
+            size: 20,
             color: color ?? context.colorScheme.primary,
           ),
         ),

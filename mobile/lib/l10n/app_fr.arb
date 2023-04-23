@@ -88,5 +88,6 @@
   "search": "Recherche",
   "noResultsFound" : "Aucun résultat trouvé",
   "personal" : "Personnel",
-  "business" : "Entreprise"
+  "business" : "Entreprise",
+  "favorites" : "Favoris"
 }

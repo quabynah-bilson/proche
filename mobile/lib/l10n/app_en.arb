@@ -88,5 +88,6 @@
   "search" : "Search",
   "noResultsFound" : "No results found",
   "personal" : "Personal",
-  "business" : "Business"
+  "business" : "Business",
+  "favorites" : "Favorites"
 }

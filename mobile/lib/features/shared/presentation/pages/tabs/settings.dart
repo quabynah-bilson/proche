@@ -44,132 +44,36 @@ class _SettingsTabState extends State<_SettingsTab> {
           isLoading: _loading,
           child: _account == null
               ? Assets.imgAppLogoAnimated.asAssetImage().centered()
-              : SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
-                  child: SafeArea(
-                    bottom: false,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: context.width,
-                          height: 64,
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: context.colorScheme.surface,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: context.colorScheme.background,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: context.localizer.personal
-                                      .button(context)
-                                      .centered(),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: context.colorScheme.surface,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SafeArea(
+                        bottom: false,
+                        child: TextButton.icon(
+                          onPressed: () => context.navigator
+                              .pushNamed(AppRouter.userFavoritesRoute),
+                          icon: Icon(TablerIcons.heart,
+                              color: context.colorScheme.onBackground),
+                          label: context.localizer.favorites.button(context),
+                        ).bottom(8),
+                      ),
+                      PilledTabContainer(
+                        labels: _tabs,
+                        selectedIndex: _activeTab,
+                        onTabSelected: (index) =>
+                            setState(() => _activeTab = index),
+                      ),
+                      const SizedBox(height: 24),
+                      Expanded(
+                        child: _activeTab == 0
+                            ? _PersonalProfileTab(account: _account)
+                            : _BusinessProfileTab(account: _account),
+                      ),
+                    ],
                   ),
                 ),
         ),
       );
 }
-
-/*
-Positioned.fill(
-                      child: CustomScrollView(
-                        slivers: [
-                          /// user personal info
-                          SliverSafeArea(
-                            bottom: false,
-                            sliver: SliverToBoxAdapter(
-                              child: AnimatedColumn(
-                                animateType: AnimateType.slideDown,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: context
-                                              .theme.colorScheme.onSurface
-                                              .withOpacity(kEmphasisLowest)),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: _account!.avatarUrl
-                                        .avatar(
-                                            size: context.height * 0.15,
-                                            fit: BoxFit.contain,
-                                            circular: true)
-                                        .top(24),
-                                  ),
-                                  _account!.displayName.h6(context),
-                                  '@${_account!.displayName.toLowerCase().replaceAll(' ', '-')}'
-                                      .subtitle2(context,
-                                          emphasis: kEmphasisMedium),
-
-                                  /// app version
-                                  BlocBuilder(
-                                    bloc: _deviceCubit,
-                                    builder: (context, state) {
-                                      if (state is SuccessState<String>) {
-                                        return 'v${state.data}'
-                                            .caption(context,
-                                                emphasis: kEmphasisMedium)
-                                            .centered()
-                                            .top(8);
-                                      }
-                                      return const SizedBox.shrink();
-                                    },
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          SliverToBoxAdapter(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  // onTap: () => context.navigator
-                                  //     .pushNamed(AppRouter.editProfileRoute),
-                                  onTap: () async => await context
-                                      .showVerifyPasswordSheet(_account!),
-                                  leading: const Icon(TablerIcons.user),
-
-                                  title: context.localizer.editProfile
-                                      .subtitle1(context),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    /// sign out button
-                    Positioned(
-                      top: 0,
-                      right: 24,
-                      child: SafeArea(
-                        bottom: false,
-                        child: RoundedIconButton(
-                          onTap: context.showLogoutDialog,
-                          icon: Icons.exit_to_app_sharp,
-                        ),
-                      ),
-                    ),
-* */
