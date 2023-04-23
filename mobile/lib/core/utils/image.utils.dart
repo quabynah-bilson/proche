@@ -1,15 +1,9 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-Future<String> assetToBase64(String assetPath) async {
-  // Load asset file as bytes
-  ByteData assetByteData = await rootBundle.load(assetPath);
-  Uint8List assetBytes = assetByteData.buffer.asUint8List();
-
-  // Convert bytes to base64
-  return base64Encode(assetBytes);
-}
+Future<Uint8List> fileToBytes(String filePath) async =>
+    await File(filePath).readAsBytes();
 
 Future<Uint8List> assetToBytes(String assetPath) async {
   // Load asset file as bytes

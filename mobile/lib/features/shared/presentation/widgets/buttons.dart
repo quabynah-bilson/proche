@@ -5,15 +5,19 @@ import 'package:shared_utils/shared_utils.dart';
 class RoundedIconButton extends StatelessWidget {
   final IconData icon;
   final Color? color;
+  final Color? foregroundColor;
   final VoidCallback onTap;
   final bool hasBadge;
+  final bool isOpaque;
 
   const RoundedIconButton({
     Key? key,
     required this.icon,
     required this.onTap,
     this.color,
+    this.foregroundColor,
     this.hasBadge = false,
+    this.isOpaque = false,
   }) : super(key: key);
 
   @override
@@ -25,7 +29,7 @@ class RoundedIconButton extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: (color ?? context.colorScheme.primary)
-                .withOpacity(kEmphasisLowest),
+                .withOpacity(isOpaque ? kEmphasisHighest : kEmphasisLowest),
             border: Border.all(
                 width: 1, color: color ?? context.colorScheme.primary),
           ),
@@ -34,7 +38,9 @@ class RoundedIconButton extends StatelessWidget {
               Icon(
                 icon,
                 size: 20,
-                color: color ?? context.colorScheme.primary,
+                color: isOpaque
+                    ? (foregroundColor ?? context.colorScheme.onPrimary)
+                    : (color ?? context.colorScheme.primary),
               ).centered(),
               if (hasBadge)
                 Positioned(

@@ -45,6 +45,7 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
       _completedFields = 0,
       _profileCompletionPercentage = 0.0;
   String? _selectedAvatarAsset;
+  File? _vaccineFile, _idFile;
 
   Widget get _buildProfileHeader => Container(
         width: context.width,
@@ -198,13 +199,15 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
           color: context.theme.disabledColor,
           tiles: [
             SettingListTile(
-              title: context.localizer.countryOfOrigin,
-              icon: TablerIcons.globe,
-              subtitle: context.localizer.countryOfOriginSubhead,
+              title: context.localizer.publicAccount,
+              icon: _account!.isPublicAccount
+                  ? TablerIcons.world
+                  : TablerIcons.shield_lock,
+              subtitle: context.localizer.publicAccountSubhead,
               trailing: CupertinoSwitch(
-                value: _account!.isPublic,
+                value: _account!.isPublicAccount,
                 onChanged: (checked) {
-                  setState(() => _account!.isPublic = checked);
+                  setState(() => _account!.isPublicAccount = checked);
                   _authBloc.add(UpdateAccountAuthEvent(_account!));
                 },
               ),
@@ -431,6 +434,36 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                         validator: (input) =>
                             Validators.validatePhone(context, input),
                       ),
+                      context.localizer.idCardRequired
+                          .bodyText2(context,
+                              color: context.colorScheme.secondary)
+                          .bottom(16),
+                      ImagePickerContainer(
+                        context.localizer.idCard,
+                        icon: TablerIcons.id_badge_2,
+                        imageUrl: _account?.idCardUrl,
+                        onImageSelected: (image) =>
+                            setState(() => _idFile = image),
+                        onImageRemoved: () => setState(() {
+                          _account?.idCardUrl = '';
+                          _idFile = null;
+                        }),
+                      ),
+                      context.localizer.vaccineCardRequired
+                          .bodyText2(context,
+                              color: context.colorScheme.secondary)
+                          .bottom(16),
+                      ImagePickerContainer(
+                        context.localizer.vaccineCard,
+                        icon: TablerIcons.face_mask,
+                        imageUrl: _account?.vaccineCardUrl,
+                        onImageSelected: (image) =>
+                            setState(() => _vaccineFile = image),
+                        onImageRemoved: () => setState(() {
+                          _account?.vaccineCardUrl = '';
+                          _vaccineFile = null;
+                        }),
+                      ),
                       AppRoundedButton(
                               text: context.localizer.save,
                               enabled: !_loading,
@@ -486,6 +519,12 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
       if (!_selectedAvatarAsset.isNullOrEmpty()) {
         _account!.avatarUrl = _selectedAvatarAsset!;
       }
+
+      if (_idFile != null) _account!.idCardUrl = _idFile!.absolute.path;
+      if (_vaccineFile != null) {
+        _account!.vaccineCardUrl = _vaccineFile!.absolute.path;
+      }
+
       _authBloc.add(UpdateAccountAuthEvent(_account!));
     }
   }

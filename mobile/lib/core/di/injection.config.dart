@@ -87,13 +87,13 @@ extension GetItInjectableX on _i1.GetIt {
       preResolve: true,
     );
     await gh.factoryAsync<String>(
-      () => persistentStorageModule.accessToken,
-      instanceName: 'access_token',
+      () => persistentStorageModule.locale,
+      instanceName: 'locale',
       preResolve: true,
     );
     await gh.factoryAsync<String>(
-      () => persistentStorageModule.locale,
-      instanceName: 'locale',
+      () => persistentStorageModule.accessToken,
+      instanceName: 'access_token',
       preResolve: true,
     );
     gh.factory<_i14.TaskServiceClient>(

@@ -92,7 +92,8 @@
   "favorites": "Favoris",
   "profileCompletion": "Votre profil est complet à {percentage}%",
   "profileCompletionSubhead": "Complétez votre profil pour obtenir la meilleure expérience",
-  "idCardRequired": "Carte d'identité requise",
+  "idCardRequired": "(Recommandé) Pour la sécurité des utilisateurs sur la plateforme, nous vous conseillons de fournir une pièce d'identité nationale valide à vérifier par notre équipe",
+  "vaccineCardRequired": "(Recommandé) Une carte de vaccination COVID-19 valide est requise pour participer aux événements et aux voyages",
   "report_profile": "Profil du rapport",
   "block_profile": "Bloquer {name}",
   "message": "Message",
@@ -107,6 +108,10 @@
   "changeLanguageSubhead": "Appuyez sur une langue pour commencer",
   "generalSettings": "Paramètres généraux",
   "myPosts": "Mes publications",
-  "pickAvatar" : "Choisissez un avatar",
-  "save" : "Sauvegarder & continuer"
+  "pickAvatar" : "Appuyez pour choisir un fichier",
+  "save" : "Sauvegarder & continuer",
+  "publicAccount" : "Compte public",
+  "publicAccountSubhead" : "Rendez votre compte visible pour vos amis et votre famille",
+  "vaccineCard" : "Carte de vaccin COVID-19",
+  "idCard" : "Carte d'identité nationale valide"
 }

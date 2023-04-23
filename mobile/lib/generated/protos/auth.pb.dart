@@ -424,6 +424,8 @@ class Account extends $pb.GeneratedMessage {
     ..aOS(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceId')
     ..aOS(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceToken')
     ..aOS(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deviceType')
+    ..aOB(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isVerified')
+    ..aOB(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isPublicAccount')
     ..hasRequiredFields = false
   ;
 
@@ -443,6 +445,8 @@ class Account extends $pb.GeneratedMessage {
     $core.String? deviceId,
     $core.String? deviceToken,
     $core.String? deviceType,
+    $core.bool? isVerified,
+    $core.bool? isPublicAccount,
   }) {
     final _result = create();
     if (id != null) {
@@ -486,6 +490,12 @@ class Account extends $pb.GeneratedMessage {
     }
     if (deviceType != null) {
       _result.deviceType = deviceType;
+    }
+    if (isVerified != null) {
+      _result.isVerified = isVerified;
+    }
+    if (isPublicAccount != null) {
+      _result.isPublicAccount = isPublicAccount;
     }
     return _result;
   }
@@ -639,6 +649,24 @@ class Account extends $pb.GeneratedMessage {
   $core.bool hasDeviceType() => $_has(13);
   @$pb.TagNumber(14)
   void clearDeviceType() => clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.bool get isVerified => $_getBF(14);
+  @$pb.TagNumber(15)
+  set isVerified($core.bool v) { $_setBool(14, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasIsVerified() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearIsVerified() => clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.bool get isPublicAccount => $_getBF(15);
+  @$pb.TagNumber(16)
+  set isPublicAccount($core.bool v) { $_setBool(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasIsPublicAccount() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearIsPublicAccount() => clearField(16);
 }
 
 class AccessTokenStore extends $pb.GeneratedMessage {

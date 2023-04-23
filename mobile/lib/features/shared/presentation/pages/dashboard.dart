@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +18,7 @@ import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.
 import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
 import 'package:mobile/features/shared/presentation/manager/theme/theme_cubit.dart';
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
+import 'package:mobile/features/shared/presentation/widgets/image.picker.dart';
 import 'package:mobile/features/shared/presentation/widgets/quick.help.tile.dart';
 import 'package:mobile/features/shared/presentation/widgets/setting.list.tile.dart';
 import 'package:mobile/features/shared/presentation/widgets/tab.container.dart';

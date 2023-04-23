@@ -92,7 +92,8 @@
   "favorites": "Favorites",
   "profileCompletion": "Your profile is {percentage}% complete",
   "profileCompletionSubhead": "Complete your profile to get the best experience",
-  "idCardRequired": "ID card required",
+  "idCardRequired": "(Recommended) For user safety on the platform, we advice that you provide a valid national ID to be verified by our team",
+  "vaccineCardRequired": "(Recommended) A valid COVID-19 vaccine card is required to participate in events and trips",
   "report_profile": "Report Profile",
   "block_profile": "Block {name}",
   "message": "Message",
@@ -107,6 +108,10 @@
   "changeLanguageSubhead": "Tap on a language to get started",
   "generalSettings": "General Settings",
   "myPosts": "My posts",
-  "pickAvatar" : "Pick an avatar",
-  "save" : "Save & Continue"
+  "pickAvatar": "Tap to pick a file",
+  "save": "Save & Continue",
+  "publicAccount": "Public Account",
+  "publicAccountSubhead": "Make your account visible to friends and family",
+  "vaccineCard" : "COVID-19 Vaccine Card",
+  "idCard" : "Valid Nation ID Card"
 }
