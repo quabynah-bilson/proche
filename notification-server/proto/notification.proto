@@ -3,33 +3,33 @@ package notification;
 
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "com.github/quabynah-bilson/proche;core";
 
 // The service definition is pretty straightforward
 service NotificationService {
-  rpc registerDevice (google.protobuf.StringValue) returns (google.protobuf.Empty);
-  rpc unregisterDevice (google.protobuf.StringValue) returns (google.protobuf.Empty);
-  rpc sendNotification (NotificationRequest) returns (google.protobuf.Empty);
-  rpc sendNotificationToAll (NotificationRequest) returns (google.protobuf.Empty);
-  rpc getNotifications (google.protobuf.StringValue) returns (stream NotificationResponse);
+  rpc register_device (RegisterDeviceRequest) returns (google.protobuf.StringValue);
+  rpc unregister_device (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc send_notification (NotificationRequest) returns (google.protobuf.Empty);
+  rpc get_notifications (google.protobuf.StringValue) returns (stream NotificationResponse);
+}
+
+message RegisterDeviceRequest {
+  string device_type = 2;
+  string user_id = 3;
 }
 
 message NotificationResponse {
-  string device_id = 1;
-  string title = 2;
-  string body = 3;
-  optional string image_url = 4;
-  google.protobuf.Timestamp created_at = 5;
-  repeated string device_ids = 6;
+  string title = 1;
+  string body = 2;
+  optional string image_url = 3;
 }
 
 message NotificationRequest {
-  string device_id = 1;
+  repeated string tokens = 1;
   string title = 2;
   string body = 3;
-  optional string image_url = 4;
-  repeated string device_ids = 6;
+  string channel_id = 4;
+  optional string image_url = 5;
 }
 
