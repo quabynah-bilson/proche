@@ -10,12 +10,41 @@ class _PersonalProfileTab extends StatefulWidget {
 }
 
 class _PersonalProfileTabState extends State<_PersonalProfileTab> {
-  final _authBloc = AuthBloc(), _totalFields = 4;
   late var _account = widget.account;
+  final _authBloc = AuthBloc(),
+      _totalFields = 4,
+      _formKey = GlobalKey<FormState>(),
+      _avatars = [
+        Assets.avatarsLorelei0,
+        Assets.avatarsLorelei1,
+        Assets.avatarsLorelei2,
+        Assets.avatarsLorelei3,
+        Assets.avatarsLorelei4,
+        Assets.avatarsLorelei5,
+        Assets.avatarsLorelei6,
+        Assets.avatarsLorelei7,
+        Assets.avatarsLorelei8,
+        Assets.avatarsLorelei9,
+        Assets.avatarsLorelei10,
+        Assets.avatarsLorelei11,
+        Assets.avatarsLorelei12,
+        Assets.avatarsLorelei13,
+        Assets.avatarsLorelei14,
+        Assets.avatarsLorelei15,
+        Assets.avatarsLorelei16,
+        Assets.avatarsLorelei17,
+        Assets.avatarsLorelei18,
+        Assets.avatarsLorelei19,
+      ];
+  late final _nameController =
+          TextEditingController(text: _account?.displayName),
+      _phoneController = TextEditingController(text: _account?.phoneNumber);
   var _loading = false,
       _editingProfile = false,
+      _showPicturePickerUI = false,
       _completedFields = 0,
       _profileCompletionPercentage = 0.0;
+  String? _selectedAvatarAsset;
 
   Widget get _buildProfileHeader => Container(
         width: context.width,
@@ -82,9 +111,9 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                               ),
                               const SizedBox(width: 16),
                               RoundedIconButton(
-                                icon: TablerIcons.upload,
-                                color: context.colorScheme.onBackground,
-                                onTap: () => shareProfile(_account!),
+                                icon: TablerIcons.door_exit,
+                                color: context.colorScheme.errorContainer,
+                                onTap: context.showLogoutDialog,
                               ),
                             ],
                           ).top(12).left(16),
@@ -172,6 +201,25 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
               title: context.localizer.countryOfOrigin,
               icon: TablerIcons.globe,
               subtitle: context.localizer.countryOfOriginSubhead,
+              trailing: CupertinoSwitch(
+                value: _account!.isPublic,
+                onChanged: (checked) {
+                  setState(() => _account!.isPublic = checked);
+                  _authBloc.add(UpdateAccountAuthEvent(_account!));
+                },
+              ),
+              onTap: () async {
+                var country = await context.showCountriesSheet();
+                if (country != null) {
+                  _account!.countryId = country.id;
+                  _authBloc.add(UpdateAccountAuthEvent(_account!));
+                }
+              },
+            ),
+            SettingListTile(
+              title: context.localizer.countryOfOrigin,
+              icon: TablerIcons.globe,
+              subtitle: context.localizer.countryOfOriginSubhead,
               onTap: () async {
                 var country = await context.showCountriesSheet();
                 if (country != null) {
@@ -202,7 +250,9 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
               onTap: () async {
                 var themeMode = await context.showThemePickerSheet();
                 if (themeMode != null) {
-                  // todo -> use theme mode
+                  context
+                      .read<ThemeCubit>()
+                      .setCurrentThemeMode(themeMode.index);
                 }
               },
             ),
@@ -250,139 +300,193 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
           setState(() => _loading = state is LoadingState);
 
           if (state is SuccessState<Account>) {
+            _selectedAvatarAsset = null;
+            _showPicturePickerUI = false;
+            _editingProfile = false;
             setState(() => _account = state.data);
             _calculateProfileCompletion();
           }
         },
         child: LoadingIndicator(
-          child: AnimatedListView(
-            children: [
-              _buildProfileHeader,
-              _buildProfileCompletion,
-              const SizedBox(height: 16),
-              _buildProfileOptions,
-              SafeArea(
-                top: false,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+          isLoading: _loading,
+          lottieAnimResource: Assets.animUploadInProgress,
+          loadingAnimIsAsset: true,
+          child: _editingProfile
+              ? Form(
+                  key: _formKey,
+                  child: AnimatedListView(
+                    animateType: AnimateType.slideUp,
+                    padding: const EdgeInsets.only(bottom: kToolbarHeight),
                     children: [
-                      RoundedIconButton(
-                        icon: TablerIcons.bell,
-                        color: context.colorScheme.onBackground,
-                        // hasBadge: true,
-                        onTap: () => context.navigator
-                            .pushNamed(AppRouter.notificationsRoute),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: AppRoundedButton(
-                          text: context.localizer.seeActivities,
-                          outlined: true,
-                          backgroundColor: context.colorScheme.onBackground,
-                          textColor: context.colorScheme.background,
-                          icon: TablerIcons.activity,
-                          onTap: () => context.navigator
-                              .pushNamed(AppRouter.userActivitiesRoute),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-}
-
-/*
-Positioned.fill(
-                      child: CustomScrollView(
-                        slivers: [
-                          /// user personal info
-                          SliverSafeArea(
-                            bottom: false,
-                            sliver: SliverToBoxAdapter(
-                              child: AnimatedColumn(
-                                animateType: AnimateType.slideDown,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: context
-                                              .theme.colorScheme.onSurface
-                                              .withOpacity(kEmphasisLowest)),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: _account!.avatarUrl
-                                        .avatar(
-                                            size: context.height * 0.15,
-                                            fit: BoxFit.contain,
-                                            circular: true)
-                                        .top(24),
-                                  ),
-                                  _account!.displayName.h6(context),
-                                  '@${_account!.displayName.toLowerCase().replaceAll(' ', '-')}'
-                                      .subtitle2(context,
-                                          emphasis: kEmphasisMedium),
-
-                                  /// app version
-                                  BlocBuilder(
-                                    bloc: _deviceCubit,
-                                    builder: (context, state) {
-                                      if (state is SuccessState<String>) {
-                                        return 'v${state.data}'
-                                            .caption(context,
-                                                emphasis: kEmphasisMedium)
-                                            .centered()
-                                            .top(8);
-                                      }
-                                      return const SizedBox.shrink();
-                                    },
-                                  )
-                                ],
+                      SizedBox(
+                        width: context.width * 0.3,
+                        height: context.width * 0.3,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                width: context.width * 0.3,
+                                height: context.width * 0.3,
+                                decoration: BoxDecoration(
+                                  color: context.colorScheme.background,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: context
+                                          .colorScheme.secondaryContainer,
+                                      width: 2.5),
+                                ),
+                                child: (_selectedAvatarAsset.isNullOrEmpty()
+                                        ? _account?.avatarUrl
+                                        : _selectedAvatarAsset)
+                                    .avatar(
+                                        size: context.width * 0.3,
+                                        fit: BoxFit.contain,
+                                        fromAsset: !_selectedAvatarAsset
+                                            .isNullOrEmpty(),
+                                        circular: true),
                               ),
                             ),
-                          ),
-
-                          SliverToBoxAdapter(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  // onTap: () => context.navigator
-                                  //     .pushNamed(AppRouter.editProfileRoute),
-                                  onTap: () async => await context
-                                      .showVerifyPasswordSheet(_account!),
-                                  leading: const Icon(TablerIcons.user),
-
-                                  title: context.localizer.editProfile
-                                      .subtitle1(context),
-                                ),
-                              ],
+                            Positioned(
+                              bottom: 0,
+                              right: -8,
+                              child: RoundedIconButton(
+                                color: _showPicturePickerUI
+                                    ? context.colorScheme.primary
+                                    : context.colorScheme.onBackground,
+                                icon: _showPicturePickerUI
+                                    ? TablerIcons.x
+                                    : TablerIcons.photo_edit,
+                                onTap: () => setState(() =>
+                                    _showPicturePickerUI =
+                                        !_showPicturePickerUI),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    /// sign out button
-                    Positioned(
-                      top: 0,
-                      right: 24,
-                      child: SafeArea(
-                        bottom: false,
-                        child: RoundedIconButton(
-                          onTap: context.showLogoutDialog,
-                          icon: Icons.exit_to_app_sharp,
+                          ],
                         ),
+                      ).centered(),
+                      if (_showPicturePickerUI) ...{
+                        /// show avatars
+                        AnimationLimiter(
+                          child: GridView.builder(
+                            padding: const EdgeInsets.only(top: 20, bottom: 16),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 12,
+                                    mainAxisSpacing: 8),
+                            itemCount: _avatars.length,
+                            itemBuilder: (context, index) =>
+                                AnimationConfiguration.staggeredGrid(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              columnCount: 3,
+                              child: ScaleAnimation(
+                                child: FadeInAnimation(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() => _selectedAvatarAsset =
+                                          _avatars[index]);
+                                    },
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: _selectedAvatarAsset ==
+                                                _avatars[index]
+                                            ? context.colorScheme.secondary
+                                            : null,
+                                        border: Border.all(
+                                            color: context.theme.disabledColor
+                                                .withOpacity(kEmphasisMedium)),
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: AssetImage(_avatars[index])),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ).fillMaxWidth(context).fillMaxHeight(context, 0.3),
+                        ),
+                      },
+                      context.localizer.profileEditHeader
+                          .subtitle1(context, weight: FontWeight.w600)
+                          .vertical(16),
+                      AppTextField(
+                        context.localizer.username,
+                        controller: _nameController,
+                        enabled: !_loading,
+                        floatLabel: true,
+                        capitalization: TextCapitalization.words,
+                        validator: Validators.validate,
+                      ),
+                      AppTextField(
+                        context.localizer.phoneNumber,
+                        controller: _phoneController,
+                        enabled: !_loading,
+                        readOnly: true,
+                        floatLabel: true,
+                        validator: (input) =>
+                            Validators.validatePhone(context, input),
+                      ),
+                      AppRoundedButton(
+                              text: context.localizer.save,
+                              enabled: !_loading,
+                              onTap: _validateAndSaveProfile)
+                          .top(16),
+                      TextButton(
+                              onPressed: () =>
+                                  setState(() => _editingProfile = false),
+                              child: context.localizer.cancel.button(context))
+                          .centered()
+                          .top(16),
+                    ],
+                  ),
+                )
+              : AnimatedListView(
+                  padding: const EdgeInsets.only(bottom: kToolbarHeight),
+                  children: [
+                    _buildProfileHeader,
+                    _buildProfileCompletion,
+                    const SizedBox(height: 16),
+                    context.localizer.generalSettings
+                        .subtitle1(context, weight: FontWeight.w600)
+                        .top(16),
+                    _buildProfileOptions,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        context.localizer.myPosts
+                            .subtitle1(context, weight: FontWeight.w600),
+                        TextButton(
+                          onPressed: () => context.navigator
+                              .pushNamed(AppRouter.userActivitiesRoute),
+                          child: context.localizer.showMore.button(context),
+                        ),
+                      ],
+                    ).top(16),
+                    SafeArea(
+                      child: EmptyContentPlaceholder(
+                        icon: TablerIcons.subtask,
+                        title: context.localizer.nothingAvailableHeader,
+                        subtitle: context.localizer.nothingAvailableSubhead,
                       ),
                     ),
-* */
+                  ],
+                ),
+        ),
+      );
+
+  void _validateAndSaveProfile() async {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      _account!.displayName = _nameController.text.trim();
+      if (!_selectedAvatarAsset.isNullOrEmpty()) {
+        _account!.avatarUrl = _selectedAvatarAsset!;
+      }
+      _authBloc.add(UpdateAccountAuthEvent(_account!));
+    }
+  }
+}

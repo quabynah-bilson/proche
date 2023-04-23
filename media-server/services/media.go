@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
+	"log"
 	"net/http"
 	"time"
 )
@@ -49,6 +50,12 @@ func (pms *ProcheMediaServer) UploadMedia(ctx context.Context, req *pb.UploadMed
 	// prepend the mime type to the encoded string
 	encodedString = fmt.Sprintf("data:%s;base64,%s", mimeType, encodedString)
 
+	// destroy the previous media
+	invalidate := true
+	if _, err := pms.cld.Upload.Destroy(ctx, uploader.DestroyParams{Invalidate: &invalidate, PublicID: uploadName}); err != nil {
+		log.Printf("failed to destroy previous media: %v", err)
+	}
+
 	// upload to cloudinary
 	var result *uploader.UploadResult
 	if req.GetType() == pb.MediaType_IMAGE {
@@ -69,17 +76,17 @@ func (pms *ProcheMediaServer) UploadMedia(ctx context.Context, req *pb.UploadMed
 	}
 
 	// Instantiate an object for the asset
-	if req.GetType() == pb.MediaType_IMAGE {
-		if img, err := pms.cld.Image(uploadName); err == nil {
-			// add the transformation
-			img.Transformation = "c_fill,h_250,w_250"
-
-			// generate and return the delivery URL
-			if url, err := img.String(); err == nil {
-				return &wrapperspb.StringValue{Value: url}, nil
-			}
-		}
-	}
+	//if req.GetType() == pb.MediaType_IMAGE {
+	//	if img, err := pms.cld.Image(uploadName); err == nil {
+	//		// add the transformation
+	//		img.Transformation = "c_fill,h_250,w_250"
+	//
+	//		// generate and return the delivery URL
+	//		if url, err := img.String(); err == nil {
+	//			return &wrapperspb.StringValue{Value: url}, nil
+	//		}
+	//	}
+	//}
 
 	return &wrapperspb.StringValue{Value: result.SecureURL}, nil
 }

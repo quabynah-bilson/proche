@@ -7,6 +7,7 @@ import 'package:mobile/core/network/token.interceptor.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:mobile/generated/protos/event.pbgrpc.dart';
 import 'package:mobile/generated/protos/giveaway.pbgrpc.dart';
+import 'package:mobile/generated/protos/media.pbgrpc.dart';
 import 'package:mobile/generated/protos/notification.pbgrpc.dart';
 import 'package:mobile/generated/protos/shared.pbgrpc.dart';
 import 'package:mobile/generated/protos/sms.pbgrpc.dart';
@@ -41,9 +42,17 @@ abstract class NetworkConfigModule {
       interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable
-  NotificationServiceClient get notificationServiceClient => NotificationServiceClient(
-      _createChannel(int.parse(dotenv.env['NOTIFICATION_SERVER_PORT'].toString()),
-          dotenv.env['NOTIFICATION_SERVER_URL']),
+  NotificationServiceClient get notificationServiceClient =>
+      NotificationServiceClient(
+          _createChannel(
+              int.parse(dotenv.env['NOTIFICATION_SERVER_PORT'].toString()),
+              dotenv.env['NOTIFICATION_SERVER_URL']),
+          interceptors: [_tokenInterceptor, _logInterceptor]);
+
+  @injectable
+  MediaServiceClient get mediaServiceClient => MediaServiceClient(
+      _createChannel(int.parse(dotenv.env['MEDIA_SERVER_PORT'].toString()),
+          dotenv.env['MEDIA_SERVER_URL']),
       interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable

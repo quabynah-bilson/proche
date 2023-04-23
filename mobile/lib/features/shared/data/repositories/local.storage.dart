@@ -31,4 +31,12 @@ class ProcheLocalStorageRepository extends BaseLocalStorageRepository {
   @override
   Future<void> saveAccessToken(String token) async =>
       await storage.write(key: kAccessTokenKey, value: token);
+
+  @override
+  Future<int> get currentThemeMode async =>
+      int.tryParse(await storage.read(key: kThemeKey) ?? '0') ?? 0;
+
+  @override
+  Future<void> setCurrentThemeMode(int themeMode) async =>
+      await storage.write(key: kThemeKey, value: themeMode.toString());
 }

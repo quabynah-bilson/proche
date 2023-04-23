@@ -104,5 +104,9 @@
   "themeBuilderSubhead": "Customize your app theme",
   "changeLanguage": "Change language ({language})",
   "changeLanguageHeader": "Change language",
-  "changeLanguageSubhead": "Tap on a language to get started"
+  "changeLanguageSubhead": "Tap on a language to get started",
+  "generalSettings": "General Settings",
+  "myPosts": "My posts",
+  "pickAvatar" : "Pick an avatar",
+  "save" : "Save & Continue"
 }

@@ -1,17 +1,21 @@
 import 'dart:async';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/actions.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/session.dart';
+import 'package:mobile/core/utils/validator.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/manager/device/device.dart';
 import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.dart';
 import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
+import 'package:mobile/features/shared/presentation/manager/theme/theme_cubit.dart';
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
 import 'package:mobile/features/shared/presentation/widgets/quick.help.tile.dart';
 import 'package:mobile/features/shared/presentation/widgets/setting.list.tile.dart';

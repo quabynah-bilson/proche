@@ -104,5 +104,9 @@
   "countryOfOriginSubhead": "Mettez à jour votre pays d'origine",
   "changeLanguage": "Changer de langue ({language})",
   "changeLanguageHeader": "Changer de langue",
-  "changeLanguageSubhead": "Appuyez sur une langue pour commencer"
+  "changeLanguageSubhead": "Appuyez sur une langue pour commencer",
+  "generalSettings": "Paramètres généraux",
+  "myPosts": "Mes publications",
+  "pickAvatar" : "Choisissez un avatar",
+  "save" : "Sauvegarder & continuer"
 }

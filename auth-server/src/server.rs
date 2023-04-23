@@ -982,14 +982,20 @@ impl AuthService for AuthServiceImpl {
         };
 
         // validate access token
-        match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
+        let is_guest = match config::session_manager::verify_public_access_token(&request.metadata(), &language_id)
             .await
         {
-            Ok(token) => token,
-            Err(e) => {
-                return Err(e);
-            }
+            Ok(_) => true,
+            Err(_) => false,
         };
+        if !is_guest {
+            match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col).await {
+                Ok(token) => token.0,
+                Err(e) => {
+                    return Err(e);
+                }
+            };
+        }
 
         // get countries from database
         let opts = FindOptions::builder().sort(doc! {"name": 1}).build();

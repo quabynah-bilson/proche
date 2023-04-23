@@ -375,9 +375,10 @@ extension BuildContextX on BuildContext {
                   }
                 },
                 builder: (context, state) => AnimatedColumn(
-                  animateType: AnimateType.slideDown,
+                  animateType: AnimateType.slideUp,
                   children: [
                     Lottie.asset(Assets.animLogout,
+                            repeat: false,
                             height: height * 0.15, width: width * 0.7)
                         .bottom(24),
                     EmptyContentPlaceholder(
