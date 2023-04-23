@@ -38,9 +38,6 @@ mkdir -p "$PAYMENT_SERVER_DIR/gen"
 mkdir -p "$SHARED_SERVER_DIR/gen"
 mkdir -p "$NOTIFICATION_SERVER_DIR/gen"
 
-# remove the proto file media.proto from auth-server
-rm -f $AUTH_PROTO_PATH/media.proto
-
 # generate for core-server using golang
 protoc -I=$CORE_PROTO_PATH -I=$AUTH_PROTO_PATH -I=$MEDIA_PROTO_PATH --go_out=$CORE_SERVER_DIR/gen --go_opt=paths=source_relative \
   --go-grpc_out=$CORE_SERVER_DIR/gen --go-grpc_opt=paths=source_relative \
@@ -62,12 +59,13 @@ protoc -I=$NOTIFICATION_PROTO_PATH --go_out=$NOTIFICATION_SERVER_DIR/gen --go_op
   $(find $NOTIFICATION_PROTO_PATH -iname "*.proto")
 
 # copy the proto file from media-server to auth-server
+#rm -f $AUTH_PROTO_PATH/media.proto
 #cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
 
 # generate for auth-server using rust
 #cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
 
-# generate for auth-server using rust
+# generate for sms-server using rust
 #cargo build --manifest-path $SMS_SERVER_DIR/Cargo.toml
 
 # generate for flutter using dart

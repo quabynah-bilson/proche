@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/joho/godotenv"
-	"github.com/quabynah-bilson/notification-server/config"
 	pb "github.com/quabynah-bilson/notification-server/gen"
 	svc "github.com/quabynah-bilson/notification-server/services"
 	"google.golang.org/grpc"
@@ -16,9 +15,6 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("unable to load environment variables: %+v\n", err)
 	}
-
-	// initialize notification client
-	config.InitNotificationClient()
 
 	// create a new grpc server
 	s := grpc.NewServer()

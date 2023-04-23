@@ -165,7 +165,9 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                                 setState(() => _selectedAvatarAsset = avatar),
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                color: _selectedAvatarAsset == avatar ? context.colorScheme.secondary : null,
+                                color: _selectedAvatarAsset == avatar
+                                    ? context.colorScheme.secondary
+                                    : null,
                                 border: Border.all(
                                     color: context.theme.disabledColor
                                         .withOpacity(kEmphasisMedium)),
@@ -201,14 +203,20 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                         prefixIcon: _selectedCountry == null
                             ? null
                             : Container(
-                          margin:
-                          const EdgeInsets.fromLTRB(12, 12, 8, 12),
-                          clipBehavior: Clip.hardEdge,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle),
-                          child: _selectedCountry?.flagUrl
-                              .asSvg(size: 16, fromAsset: false),
-                        ),
+                                margin:
+                                    const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                clipBehavior: Clip.hardEdge,
+                                decoration: const BoxDecoration(),
+                                child: SizedBox(
+                                  width: 28,
+                                  height: 24,
+                                  child: _selectedCountry?.flagUrl.asSvg(
+                                      height: 24,
+                                      width: 16,
+                                      fit: BoxFit.contain,
+                                      fromAsset: false),
+                                ),
+                              ),
                         onTap: () async {
                           _selectedCountry = await context.showCountriesSheet();
                           _countryController.text =
@@ -222,15 +230,15 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                           enabled: _selectedCountry != null && !_loading,
                           controller: _phoneNumberController,
                           textFieldType: AppTextFieldType.phone,
-                          validator: (input) => Validators.validatePassword(context, input),
+                          validator: (input) =>
+                              Validators.validatePassword(context, input),
                           maxLength: 10,
                           onChange: (input) {
                             if (input == null) return;
                             if (input.length >= 10) {
                               _currentAccountBloc.add(
                                   GetAccountByPhoneNumberAuthEvent(
-
-                                          _phoneNumberController.text.trim()));
+                                      _phoneNumberController.text.trim()));
                             }
                           },
                           floatLabel: true,
@@ -248,7 +256,8 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                               floatLabel: true,
                               textFieldType: AppTextFieldType.password,
                               prefixIcon: const Icon(Icons.password),
-                              validator: (input) => Validators.validatePassword(context, input),
+                              validator: (input) =>
+                                  Validators.validatePassword(context, input),
                             );
                           }
 

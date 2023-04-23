@@ -7,7 +7,7 @@ extension ThemeBuilderX on BuildContext {
     return ThemeData(
         useMaterial3: true,
         scaffoldBackgroundColor: backgroundColor,
-        disabledColor: const Color(0xffe0e0e0),
+        disabledColor: const Color(0xffe7e7e7),
         colorScheme: useColorScheme(),
         platform: TargetPlatform.iOS,
         appBarTheme:

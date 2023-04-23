@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 import 'package:mobile/features/shared/domain/repositories/messaging.dart';
@@ -12,16 +13,18 @@ import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 @Injectable(as: BaseMessagingRepository)
-class FirebaseMessagingRepository extends BaseMessagingRepository {
+class ProcheMessagingRepository extends BaseMessagingRepository {
   final DeviceInfoPlugin deviceInfoPlugin;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   final NotificationServiceClient client;
   final BaseLocalStorageRepository storage;
   StreamSubscription? _subscription;
 
-  FirebaseMessagingRepository({
+  ProcheMessagingRepository({
     required this.client,
     required this.storage,
     required this.deviceInfoPlugin,
+    required this.flutterLocalNotificationsPlugin,
   });
 
   @override
@@ -92,10 +95,12 @@ class FirebaseMessagingRepository extends BaseMessagingRepository {
   @override
   Future<void> subscribeToNotifications(String userId) async {
     try {
-      // todo -> request permission for local notifications
+      await _initializeNotificationPlugin();
+
       _subscription = client
           .get_notifications(StringValue(value: userId))
           .listen((response) {
+            logger.i('notification received: $response');
         // todo -> show local notification
       }, onError: (e) {
         logger.e(e);
@@ -110,4 +115,27 @@ class FirebaseMessagingRepository extends BaseMessagingRepository {
   @override
   Future<void> unsubscribeFromNotifications() async =>
       await _subscription?.cancel();
+
+  Future<void> _initializeNotificationPlugin() async {
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('app_icon');
+    var initializationSettingsIOS = IOSInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+      onDidReceiveLocalNotification: (id, title, body, payload) async {
+        // todo -> handle local notification
+      },
+    );
+    var initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (payload) async {
+      if (payload != null) {
+        logger.i('notification payload: $payload');
+      }
+    });
+  }
 }

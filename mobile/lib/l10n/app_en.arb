@@ -85,5 +85,8 @@
   "loading" : "Loading",
   "unableToLoadWebpage" : "Unable to load webpage",
   "noCountriesFound" : "No countries found",
-  "search" : "Search"
+  "search" : "Search",
+  "noResultsFound" : "No results found",
+  "personal" : "Personal",
+  "business" : "Business"
 }

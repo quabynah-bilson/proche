@@ -381,8 +381,9 @@ extension BuildContextX on BuildContext {
                             height: height * 0.15, width: width * 0.7)
                         .bottom(24),
                     EmptyContentPlaceholder(
-                        title: localizer.signOut,
-                        subtitle: localizer.signOutPrompt).bottom(24),
+                            title: localizer.signOut,
+                            subtitle: localizer.signOutPrompt)
+                        .bottom(24),
                     SafeArea(
                       child: state is LoadingState
                           ? const CircularProgressIndicator.adaptive()
@@ -551,12 +552,18 @@ extension BuildContextX on BuildContext {
                               ? null
                               : Container(
                                   margin:
-                                      const EdgeInsets.fromLTRB(12, 12, 8, 12),
+                                      const EdgeInsets.fromLTRB(12, 12, 12, 12),
                                   clipBehavior: Clip.hardEdge,
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle),
-                                  child: selectedCountry?.flagUrl
-                                      .asSvg(size: 16, fromAsset: false),
+                                  decoration: const BoxDecoration(),
+                                  child: SizedBox(
+                                    width: 28,
+                                    height: 24,
+                                    child: selectedCountry?.flagUrl.asSvg(
+                                        height: 24,
+                                        width: 16,
+                                        fit: BoxFit.contain,
+                                        fromAsset: false),
+                                  ),
                                 ),
                           onTap: () async {
                             selectedCountry = await showCountriesSheet();
@@ -740,18 +747,24 @@ extension BuildContextX on BuildContext {
                           .map(
                             (e) => ListTile(
                               contentPadding: EdgeInsets.zero,
+                              minLeadingWidth: 28,
                               onTap: () => context.navigator.pop(e),
                               leading: Container(
                                 margin:
                                     const EdgeInsets.fromLTRB(12, 12, 0, 12),
                                 clipBehavior: Clip.hardEdge,
-                                decoration:
-                                    const BoxDecoration(shape: BoxShape.circle),
-                                child:
-                                    e.flagUrl.asSvg(size: 28, fromAsset: false),
+                                decoration: const BoxDecoration(),
+                                child: SizedBox(
+                                  width: 28,
+                                  height: 24,
+                                  child: e.flagUrl.asSvg(
+                                      height: 24,
+                                      width: 16,
+                                      fit: BoxFit.contain,
+                                      fromAsset: false),
+                                ),
                               ),
-                              title: Text(e.name),
-                              subtitle: e.dialCode.caption(context),
+                              title: Text('${e.name} (${e.dialCode})'),
                             ),
                           )
                           .toList(),

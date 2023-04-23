@@ -11,8 +11,9 @@ class _SettingsTab extends StatefulWidget {
 
 class _SettingsTabState extends State<_SettingsTab> {
   final _authBloc = AuthBloc(), _deviceCubit = DeviceInfoCubit();
+  late final _tabs = [context.localizer.personal, context.localizer.business];
   late var _account = widget.account;
-  var _loading = false;
+  var _loading = false, _activeTab = 0;
 
   @override
   void initState() {
@@ -43,9 +44,53 @@ class _SettingsTabState extends State<_SettingsTab> {
           isLoading: _loading,
           child: _account == null
               ? Assets.imgAppLogoAnimated.asAssetImage().centered()
-              : Stack(
-                  children: [
-                    Positioned.fill(
+              : SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
+                  child: SafeArea(
+                    bottom: false,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: context.width,
+                          height: 64,
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: context.colorScheme.surface,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: context.colorScheme.background,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: context.localizer.personal
+                                      .button(context)
+                                      .centered(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: context.colorScheme.surface,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+        ),
+      );
+}
+
+/*
+Positioned.fill(
                       child: CustomScrollView(
                         slivers: [
                           /// user personal info
@@ -127,8 +172,4 @@ class _SettingsTabState extends State<_SettingsTab> {
                         ),
                       ),
                     ),
-                  ],
-                ),
-        ),
-      );
-}
+* */

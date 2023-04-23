@@ -85,5 +85,8 @@
   "loading": "Chargement",
   "unableToLoadWebpage": "Impossible de charger la page Web",
   "noCountriesFound": "Aucun pays trouvé",
-  "search": "Recherche"
+  "search": "Recherche",
+  "noResultsFound" : "Aucun résultat trouvé",
+  "personal" : "Personnel",
+  "business" : "Entreprise"
 }

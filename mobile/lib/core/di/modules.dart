@@ -1,4 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/utils/storage.keys.dart';
@@ -29,4 +30,8 @@ abstract class SharedAppModule {
 
   @injectable
   DeviceInfoPlugin get deviceInfo => DeviceInfoPlugin();
+
+  @injectable
+  FlutterLocalNotificationsPlugin get notificationPlugin =>
+      FlutterLocalNotificationsPlugin();
 }
