@@ -35,7 +35,7 @@ class TaskBloc extends Bloc<TaskEvent, BlocState> {
       var either = await _repository.getCandidatesForTask(event.taskId);
       either.fold(
         (l) => emit(
-            BlocState<Stream<List<BusinessAccount>>>.successState(data: l)),
+            BlocState<Stream<List<TaskCandidate>>>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
@@ -45,6 +45,15 @@ class TaskBloc extends Bloc<TaskEvent, BlocState> {
       var either = await _repository.getTask(event.taskId);
       either.fold(
         (l) => emit(BlocState<Stream<ProcheTask>>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<ApplyForTaskEvent>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repository.applyForTask(event.request);
+      either.fold(
+        (l) => emit(BlocState<void>.successState(data: null)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });

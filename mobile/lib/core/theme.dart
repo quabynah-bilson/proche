@@ -4,12 +4,19 @@ import 'package:google_fonts/google_fonts.dart';
 extension ThemeBuilderX on BuildContext {
   ThemeData get useLightTheme {
     const backgroundColor = Color(0xffffffff);
+    final colorScheme = useColorScheme();
     return ThemeData(
         useMaterial3: true,
         scaffoldBackgroundColor: backgroundColor,
         disabledColor: const Color(0xffe0e0e0),
-        colorScheme: useColorScheme(),
+        colorScheme: colorScheme,
         platform: TargetPlatform.iOS,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: colorScheme.secondary,
+          foregroundColor: colorScheme.onSecondary,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        ),
         appBarTheme: const AppBarTheme(
             backgroundColor: backgroundColor,
             elevation: 0,

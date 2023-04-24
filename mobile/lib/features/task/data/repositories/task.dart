@@ -3,7 +3,6 @@ import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/features/task/domain/repositories/task.dart';
-import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:mobile/generated/protos/core_shared.pb.dart';
 import 'package:mobile/generated/protos/task.pbgrpc.dart';
 import 'package:protobuf_google/protobuf_google.dart';
@@ -54,11 +53,22 @@ class ProcheTaskRepository extends BaseTaskRepository {
   }
 
   @override
-  Future<Either<Stream<List<BusinessAccount>>, String>> getCandidatesForTask(
+  Future<Either<Stream<List<TaskCandidate>>, String>> getCandidatesForTask(
       String id) async {
     try {
       var stream = client.get_candidates_for_task(StringValue(value: id));
       return left(stream.map((event) => event.candidates));
+    } on GrpcError catch (e) {
+      return right(e.message ?? e.codeName);
+    }
+  }
+
+  @override
+  Future<Either<void, String>> applyForTask(ApplyForTaskRequest request) async {
+    try {
+      request.userId = UserSession.kUserId ??= throw GrpcError.unauthenticated('Sign in first to apply for a task');
+      await client.apply_for_task(request);
+      return left(null);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }

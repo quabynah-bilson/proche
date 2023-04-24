@@ -15,15 +15,76 @@ import 'package:protobuf_google/protobuf_google.dart' as $6;
 import 'core_shared.pb.dart' as $4;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
 
+class ApplyForTaskRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ApplyForTaskRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'taskId')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
+    ..hasRequiredFields = false
+  ;
+
+  ApplyForTaskRequest._() : super();
+  factory ApplyForTaskRequest({
+    $core.String? taskId,
+    $core.String? userId,
+  }) {
+    final _result = create();
+    if (taskId != null) {
+      _result.taskId = taskId;
+    }
+    if (userId != null) {
+      _result.userId = userId;
+    }
+    return _result;
+  }
+  factory ApplyForTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ApplyForTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ApplyForTaskRequest clone() => ApplyForTaskRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ApplyForTaskRequest copyWith(void Function(ApplyForTaskRequest) updates) => super.copyWith((message) => updates(message as ApplyForTaskRequest)) as ApplyForTaskRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ApplyForTaskRequest create() => ApplyForTaskRequest._();
+  ApplyForTaskRequest createEmptyInstance() => create();
+  static $pb.PbList<ApplyForTaskRequest> createRepeated() => $pb.PbList<ApplyForTaskRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ApplyForTaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ApplyForTaskRequest>(create);
+  static ApplyForTaskRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get taskId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set taskId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTaskId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTaskId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get userId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set userId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUserId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUserId() => clearField(2);
+}
+
 class TaskCandidateList extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TaskCandidateList', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
-    ..pc<$0.BusinessAccount>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'candidates', $pb.PbFieldType.PM, subBuilder: $0.BusinessAccount.create)
+    ..pc<TaskCandidate>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'candidates', $pb.PbFieldType.PM, subBuilder: TaskCandidate.create)
     ..hasRequiredFields = false
   ;
 
   TaskCandidateList._() : super();
   factory TaskCandidateList({
-    $core.Iterable<$0.BusinessAccount>? candidates,
+    $core.Iterable<TaskCandidate>? candidates,
   }) {
     final _result = create();
     if (candidates != null) {
@@ -53,7 +114,130 @@ class TaskCandidateList extends $pb.GeneratedMessage {
   static TaskCandidateList? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$0.BusinessAccount> get candidates => $_getList(0);
+  $core.List<TaskCandidate> get candidates => $_getList(0);
+}
+
+class TaskCandidate extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TaskCandidate', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'taskId')
+    ..aOM<$0.BusinessAccount>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'account', subBuilder: $0.BusinessAccount.create)
+    ..aOM<$5.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $5.Timestamp.create)
+    ..aOM<$5.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $5.Timestamp.create)
+    ..aOB(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hired')
+    ..hasRequiredFields = false
+  ;
+
+  TaskCandidate._() : super();
+  factory TaskCandidate({
+    $core.String? id,
+    $core.String? taskId,
+    $0.BusinessAccount? account,
+    $5.Timestamp? createdAt,
+    $5.Timestamp? updatedAt,
+    $core.bool? hired,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    if (taskId != null) {
+      _result.taskId = taskId;
+    }
+    if (account != null) {
+      _result.account = account;
+    }
+    if (createdAt != null) {
+      _result.createdAt = createdAt;
+    }
+    if (updatedAt != null) {
+      _result.updatedAt = updatedAt;
+    }
+    if (hired != null) {
+      _result.hired = hired;
+    }
+    return _result;
+  }
+  factory TaskCandidate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory TaskCandidate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  TaskCandidate clone() => TaskCandidate()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  TaskCandidate copyWith(void Function(TaskCandidate) updates) => super.copyWith((message) => updates(message as TaskCandidate)) as TaskCandidate; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static TaskCandidate create() => TaskCandidate._();
+  TaskCandidate createEmptyInstance() => create();
+  static $pb.PbList<TaskCandidate> createRepeated() => $pb.PbList<TaskCandidate>();
+  @$core.pragma('dart2js:noInline')
+  static TaskCandidate getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TaskCandidate>(create);
+  static TaskCandidate? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get taskId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set taskId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTaskId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTaskId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $0.BusinessAccount get account => $_getN(2);
+  @$pb.TagNumber(3)
+  set account($0.BusinessAccount v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasAccount() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAccount() => clearField(3);
+  @$pb.TagNumber(3)
+  $0.BusinessAccount ensureAccount() => $_ensure(2);
+
+  @$pb.TagNumber(4)
+  $5.Timestamp get createdAt => $_getN(3);
+  @$pb.TagNumber(4)
+  set createdAt($5.Timestamp v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasCreatedAt() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCreatedAt() => clearField(4);
+  @$pb.TagNumber(4)
+  $5.Timestamp ensureCreatedAt() => $_ensure(3);
+
+  @$pb.TagNumber(5)
+  $5.Timestamp get updatedAt => $_getN(4);
+  @$pb.TagNumber(5)
+  set updatedAt($5.Timestamp v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasUpdatedAt() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUpdatedAt() => clearField(5);
+  @$pb.TagNumber(5)
+  $5.Timestamp ensureUpdatedAt() => $_ensure(4);
+
+  @$pb.TagNumber(6)
+  $core.bool get hired => $_getBF(5);
+  @$pb.TagNumber(6)
+  set hired($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasHired() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearHired() => clearField(6);
 }
 
 class TaskEventRequest extends $pb.GeneratedMessage {

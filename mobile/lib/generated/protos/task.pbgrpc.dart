@@ -105,6 +105,11 @@ class TaskServiceClient extends $grpc.Client {
           ($1.StringValue value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $3.TaskCandidateList.fromBuffer(value));
+  static final _$apply_for_task =
+      $grpc.ClientMethod<$3.ApplyForTaskRequest, $2.Empty>(
+          '/task.TaskService/apply_for_task',
+          ($3.ApplyForTaskRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
 
   TaskServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -227,6 +232,11 @@ class TaskServiceClient extends $grpc.Client {
     return $createStreamingCall(
         _$get_candidates_for_task, $async.Stream.fromIterable([request]),
         options: options);
+  }
+
+  $grpc.ResponseFuture<$2.Empty> apply_for_task($3.ApplyForTaskRequest request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$apply_for_task, request, options: options);
   }
 }
 
@@ -362,6 +372,14 @@ abstract class TaskServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
         ($3.TaskCandidateList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.ApplyForTaskRequest, $2.Empty>(
+        'apply_for_task',
+        apply_for_task_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $3.ApplyForTaskRequest.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
   }
 
   $async.Future<$3.ProcheTask> create_task_Pre($grpc.ServiceCall call,
@@ -456,6 +474,11 @@ abstract class TaskServiceBase extends $grpc.Service {
     yield* get_candidates_for_task(call, await request);
   }
 
+  $async.Future<$2.Empty> apply_for_task_Pre($grpc.ServiceCall call,
+      $async.Future<$3.ApplyForTaskRequest> request) async {
+    return apply_for_task(call, await request);
+  }
+
   $async.Future<$3.ProcheTask> create_task(
       $grpc.ServiceCall call, $3.CreateTaskRequest request);
   $async.Stream<$3.ProcheTask> get_task(
@@ -492,4 +515,6 @@ abstract class TaskServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $3.TaskEventRequest request);
   $async.Stream<$3.TaskCandidateList> get_candidates_for_task(
       $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$2.Empty> apply_for_task(
+      $grpc.ServiceCall call, $3.ApplyForTaskRequest request);
 }

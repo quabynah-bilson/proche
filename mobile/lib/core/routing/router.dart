@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/service.type.dart';
+import 'package:mobile/features/business/presentation/pages/create.business.dart';
 import 'package:mobile/features/chat/presentation/pages/chat.dart';
 import 'package:mobile/features/onboarding/presentation/pages/phone.verification.dart';
 import 'package:mobile/features/onboarding/presentation/pages/register.account.dart';
@@ -21,6 +22,7 @@ import 'package:shared_utils/shared_utils.dart';
 class AppRouterConfig {
   static Route<dynamic>? setupRoutes(RouteSettings settings) {
     switch (settings.name) {
+      /// region onboarding
       case AppRouter.welcomeRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => const WelcomePage(), settings: settings);
@@ -41,6 +43,10 @@ class AppRouterConfig {
                 isPublic: settings.arguments is bool &&
                     settings.arguments as bool == true),
             settings: settings);
+
+      /// endregion onboarding
+
+      /// region shared
       case AppRouter.publicProfileRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) =>
@@ -52,11 +58,6 @@ class AppRouterConfig {
       case AppRouter.chatRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => ChatPage(account: settings.arguments as Account),
-            settings: settings);
-      case AppRouter.taskDetailsRoute:
-        return MaterialWithModalsPageRoute(
-            builder: (_) =>
-                ProcheTaskDetailsPage(task: settings.arguments as ProcheTask),
             settings: settings);
       case AppRouter.dashboardRoute:
         return MaterialWithModalsPageRoute(
@@ -71,6 +72,25 @@ class AppRouterConfig {
                     ? ProcheServiceType.values[settings.arguments as int]
                     : ProcheServiceType.task),
             settings: settings);
+
+      /// endregion shared
+
+      /// region task
+      case AppRouter.taskDetailsRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) =>
+                ProcheTaskDetailsPage(task: settings.arguments as ProcheTask),
+            settings: settings);
+
+      /// endregion task
+
+      /// region business
+      case AppRouter.createBusinessAccountRoute:
+        return MaterialWithModalsPageRoute(
+            builder: (_) => CreateBusinessAccountPage(account: settings.arguments as Account),
+            settings: settings);
+
+      /// endregion business
     }
 
     return MaterialPageRoute(
@@ -102,5 +122,6 @@ class AppRouter {
   static const notificationsRoute = '/notifications'; // todo
   static const userActivitiesRoute = '/user-activities';
   static const taskDetailsRoute = '/task-details';
+  static const createBusinessAccountRoute = '/business/new'; // todo
   static const chatRoute = '/chat'; // todo
 }

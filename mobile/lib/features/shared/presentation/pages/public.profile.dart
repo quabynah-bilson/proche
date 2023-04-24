@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/core/utils/extensions.dart';
+import 'package:mobile/features/business/presentation/manager/business_bloc.dart';
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
@@ -18,6 +20,7 @@ class PublicUserProfilePage extends StatefulWidget {
 class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
   var _loading = false;
   late final _account = widget.account;
+  final _businessBloc = BusinessBloc();
 
   Widget get _buildProfileHeader => Container(
         width: context.width,
@@ -97,15 +100,34 @@ class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
       );
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: LoadingIndicator(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                _buildProfileHeader,
-                // todo -> build UI
-              ],
+  void initState() {
+    super.initState();
+    _businessBloc.add(GetCurrentUserBusinessEvent());
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocListener(
+        bloc: _businessBloc,
+        listener: (context, state) {
+          if (!mounted) return;
+
+          setState(() => _loading = state is LoadingState);
+
+          if (state is ErrorState<String>) {
+            context.showMessageDialog(state.failure);
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(),
+          body: LoadingIndicator(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  _buildProfileHeader,
+                  // todo -> build UI
+                ],
+              ),
             ),
           ),
         ),

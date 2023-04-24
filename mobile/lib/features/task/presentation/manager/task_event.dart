@@ -27,3 +27,8 @@ class GetCandidatesForTask extends TaskEvent {
 
   const GetCandidatesForTask(this.taskId);
 }
+class ApplyForTaskEvent extends TaskEvent {
+  final ApplyForTaskRequest request;
+
+  const ApplyForTaskEvent(this.request);
+}

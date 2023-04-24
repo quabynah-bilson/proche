@@ -11,6 +11,7 @@ import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/core/utils/validator.dart';
+import 'package:mobile/features/business/presentation/manager/business_bloc.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/manager/device/device.dart';
 import 'package:mobile/features/shared/presentation/manager/locale/locale_cubit.dart';
@@ -105,8 +106,6 @@ class _DashboardPageState extends State<DashboardPage> {
         floatingActionButton: _bottomNavIndex == 3
             ? null
             : FloatingActionButton.extended(
-                backgroundColor: context.colorScheme.background,
-                foregroundColor: context.colorScheme.onBackground,
                 onPressed: () async {
                   var serviceTypeIndex =
                       await context.showServiceTypePickerSheet();
@@ -114,16 +113,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   context.navigator.pushNamed(AppRouter.serviceFinderRoute,
                       arguments: serviceTypeIndex);
                 },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40)),
                 label: Text(context.localizer.findService),
-                icon: ClipOval(
-                  child: Assets.imgAppLogoAnimated.asAssetImage(
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                icon: const Icon(TablerIcons.telescope),
               ),
         bottomNavigationBar: AnimatedBottomNavigationBar(
           icons: _iconList,

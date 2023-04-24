@@ -943,6 +943,7 @@ impl AuthService for AuthServiceImpl {
                         .unwrap_or("")
                         .to_string(),
                     avatar_url: Some(account_doc.get_str("avatar_url").unwrap_or("").to_string()),
+                    is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
                     referral_code: None,
                     created_at: None,
                     updated_at: None,
@@ -951,7 +952,6 @@ impl AuthService for AuthServiceImpl {
                     device_id: None,
                     device_type: None,
                     device_token: None,
-                    is_verified: None,
                     is_public_account: None,
                 }
             ),
@@ -1110,6 +1110,7 @@ impl AuthService for AuthServiceImpl {
                 .unwrap_or("")
                 .to_string(),
             avatar_url: Some(account_doc.get_str("avatar_url").unwrap_or("").to_string()),
+            is_verified: Some(account_doc.get_bool("is_verified").unwrap_or(false)),
             referral_code: None,
             created_at: None,
             updated_at: None,
@@ -1118,7 +1119,6 @@ impl AuthService for AuthServiceImpl {
             device_id: None,
             device_type: None,
             device_token: None,
-            is_verified: None,
             is_public_account: None,
         };
 

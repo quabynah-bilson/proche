@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,9 +10,11 @@ import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/actions.dart';
 import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
+import 'package:mobile/features/shared/presentation/widgets/image.picker.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:mobile/generated/protos/shared.pb.dart';
+import 'package:mobile/generated/protos/task.pb.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
@@ -379,7 +382,8 @@ extension BuildContextX on BuildContext {
                   children: [
                     Lottie.asset(Assets.animLogout,
                             repeat: false,
-                            height: height * 0.15, width: width * 0.7)
+                            height: height * 0.15,
+                            width: width * 0.7)
                         .bottom(24),
                     EmptyContentPlaceholder(
                             title: localizer.signOut,
@@ -879,6 +883,195 @@ extension BuildContextX on BuildContext {
                   )
                   .toList(),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// show a list of theme supported by the app
+  Future<String?> showSpecializationSheet() async {
+    final formKey = GlobalKey<FormState>(),
+        otherSpecializationController = TextEditingController();
+    var showNextButton = false;
+    var specializations = [
+      'All',
+      'Mobile Application Development',
+      'Plumbing',
+      'Electrical',
+      'Carpentry',
+      'Painting',
+      'Cleaning',
+      'Gardening',
+      'Masonry',
+      'Tiling',
+      'Roofing',
+      'Locksmith',
+      'Pest Control',
+      'Furniture Assembly',
+      'Appliance Repair',
+      'Home Improvement',
+      'Handyman',
+      'Other'
+    ];
+    return await showBarModalBottomSheet(
+      context: this,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => SafeArea(
+          top: false,
+          child: Material(
+            color: context.colorScheme.background,
+            child: Column(
+              children: [
+                localizer.specializationSubhead
+                    .subtitle1(context)
+                    .horizontal(24)
+                    .bottom(16),
+                Form(
+                  key: formKey,
+                  child: AppTextField(
+                    context.localizer.enterOption,
+                    controller: otherSpecializationController,
+                    capitalization: TextCapitalization.words,
+                    validator: Validators.validate,
+                    onChange: (input) => setState(
+                            () => showNextButton = !input.isNullOrEmpty()),
+                  ),
+                ).horizontal(24),
+                Expanded(
+                  child: AnimatedListView(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                    children: specializations
+                        .map(
+                          (option) => ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        onTap: () => context.navigator.pop(option),
+                        minLeadingWidth: 48,
+                        leading: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: (context.colorScheme.secondary)
+                                .withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            TablerIcons.activity,
+                            color: context.colorScheme.secondary,
+                          ),
+                        ),
+                        title: Text(option),
+                      ),
+                    )
+                        .toList(),
+                  ),
+                ),
+                if (showNextButton)
+                  AppRoundedButton(
+                    text: context.localizer.next,
+                    onTap: () {
+                      if (formKey.currentState!.validate()) {
+                        context.navigator
+                            .pop(otherSpecializationController.text.trim());
+                      }
+                    },
+                  ).centered(),
+              ],
+            ).top(24),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// apply for a task
+  Future<ApplyForTaskRequest?> showTaskApplicationSheet(
+      ProcheTask task, Account seeker) async {
+    final authBloc = AuthBloc(),
+        formKey = GlobalKey<FormState>(),
+        noteController = TextEditingController(),
+        dateController = TextEditingController();
+    authBloc.add(GetCurrentAccountAuthEvent());
+
+    var request = ApplyForTaskRequest();
+
+    return await showCupertinoModalBottomSheet(
+      bounce: true,
+      context: this,
+      isDismissible: false,
+      builder: (context) => Material(
+        color: context.colorScheme.background,
+        child: StatefulBuilder(
+          builder: (context, setState) => BlocBuilder(
+            bloc: authBloc,
+            builder: (context, state) => LoadingIndicator(
+              lottieAnimResource: Assets.animLoading,
+              isLoading: state is LoadingState,
+              loadingAnimIsAsset: true,
+              child: SafeArea(
+                top: false,
+                child: Form(
+                  key: formKey,
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                    children: [
+                      seeker.avatarUrl
+                          .avatar(size: 120, circular: true)
+                          .centered(),
+                      localizer
+                          .applyForTask(seeker.displayName)
+                          .subtitle1(context, alignment: TextAlign.center)
+                          .centered()
+                          .vertical(16),
+                      ImagePickerContainer(
+                        context.localizer.idCard,
+                        icon: TablerIcons.id_badge_2,
+                        imageUrl: state is SuccessState<Account>
+                            ? state.data.idCardUrl
+                            : null,
+                        onImageRemoved: () => setState(() {}),
+                        onImageSelected: (filePicked) {
+                          if (filePicked == null) return;
+                          if (state is! SuccessState<Account>) return;
+                          state.data.idCardUrl = filePicked.absolute.path;
+                          context
+                              .read<AuthBloc>()
+                              .add(UpdateAccountAuthEvent(seeker));
+                        },
+                      ),
+                      AppTextField(
+                        context.localizer.availableToStart,
+                        controller: dateController,
+                        textFieldType: AppTextFieldType.select,
+                        onTap: () {
+                          // todo -> show date picker
+                        },
+                      ),
+                      AppTextField(
+                        context.localizer.notes,
+                        controller: noteController,
+                        inputType: TextInputType.multiline,
+                        capitalization: TextCapitalization.sentences,
+                      ),
+                      AppRoundedButton(
+                        text: context.localizer.applyNow,
+                        onTap: () {
+                          // todo -> add request to bloc
+                          if (formKey.currentState?.validate() == true) {
+                            // request.notes = noteController.text;
+                            // request.seekerId = seeker.id;
+                            request.taskId = task.id;
+                            context.navigator.pop(request);
+                          }
+                        },
+                      ).centered(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

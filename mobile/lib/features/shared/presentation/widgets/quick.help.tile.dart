@@ -8,6 +8,7 @@ import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/core/utils/timestamp.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
+import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:mobile/generated/protos/task.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
@@ -28,9 +29,8 @@ class QuickHelpListTile extends StatefulWidget {
 
 class _QuickHelpListTileState extends State<QuickHelpListTile> {
   final _kBorderRadius = 16.0, _authBloc = AuthBloc();
-  late var _isFavorite = false,
-      _isOwner = UserSession.kUserId == widget.task.userId,
-      _distance = 0.0;
+  late final _isOwner = UserSession.kUserId == widget.task.userId;
+  late var _isFavorite = false, _distance = 0.0;
 
   @override
   void initState() {
@@ -133,8 +133,22 @@ class _QuickHelpListTileState extends State<QuickHelpListTile> {
                     if (state is SuccessState<Account>) {
                       var account = state.data;
                       return ListTile(
-                        onTap: widget.onTap ?? context.showFeatureUnderDevSheet,
-                        title: account.displayName.subtitle2(context),
+                        onTap: widget.onTap ??
+                            () => context.navigator.pushNamed(
+                                AppRouter.publicProfileRoute,
+                                arguments: account),
+                        title: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            account.displayName.subtitle2(context),
+                            if (account.isVerified) ...{
+                              const SizedBox(width: 8),
+                              Assets.imgVerified.asAssetImage(
+                                  size: context.textTheme.titleLarge!.fontSize),
+                            },
+                          ],
+                        ),
                         leading:
                             account.avatarUrl.avatar(size: 40, circular: true),
                         trailing: GestureDetector(

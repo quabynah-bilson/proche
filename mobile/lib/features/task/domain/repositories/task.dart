@@ -8,9 +8,11 @@ abstract class BaseTaskRepository {
 
   Future<Either<Stream<ProcheTask>, String>> getTask(String id);
 
-  Future<Either<Stream<List<BusinessAccount>>, String>> getCandidatesForTask(
+  Future<Either<Stream<List<TaskCandidate>>, String>> getCandidatesForTask(
       String id);
 
   Future<Either<Stream<List<ProcheTask>>, String>> getAllTasks(
       CommonAddress address);
+
+  Future<Either<void, String>> applyForTask(ApplyForTaskRequest request);
 }

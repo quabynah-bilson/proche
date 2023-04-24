@@ -221,18 +221,8 @@ class _UserActivitiesPageState extends State<UserActivitiesPage> {
               context.navigator
                   .pushNamed(AppRouter.serviceFinderRoute, arguments: index);
             },
-            backgroundColor: context.colorScheme.background,
-            foregroundColor: context.colorScheme.onBackground,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-            icon: ClipOval(
-              child: Assets.imgAppLogoAnimated.asAssetImage(
-                width: 40,
-                height: 40,
-                fit: BoxFit.cover,
-              ),
-            ),
-            label: context.localizer.uploadService.button(context),
+            icon: const Icon(TablerIcons.upload),
+            label: Text(context.localizer.uploadService),
           ),
           body: LoadingIndicator(
             isLoading: _loading,

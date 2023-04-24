@@ -17,6 +17,7 @@ service TaskService {
   rpc create_task(CreateTaskRequest) returns (ProcheTask);
   rpc get_task(google.protobuf.StringValue) returns (stream ProcheTask);
   rpc get_tasks(core.CommonAddress) returns (stream TaskList);
+  rpc get_tasks_for_current_user(google.protobuf.Empty) returns (stream TaskList);
   rpc update_task(UpdateTaskRequest) returns (ProcheTask);
   rpc delete_task(google.protobuf.StringValue) returns (google.protobuf.Empty);
 

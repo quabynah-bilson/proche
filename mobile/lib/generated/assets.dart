@@ -40,6 +40,7 @@ class Assets {
   static const String avatarsLorelei9 = 'assets/img/avatars/lorelei_9.png';
   static const String imgAppLogo = 'assets/img/app_logo.png';
   static const String imgAppLogoAnimated = 'assets/img/app_logo_animated.gif';
+  static const String imgVerified = 'assets/img/verified.png';
   static const String mobile = '.env';
 
 }

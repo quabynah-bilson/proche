@@ -8,16 +8,42 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use applyForTaskRequestDescriptor instead')
+const ApplyForTaskRequest$json = const {
+  '1': 'ApplyForTaskRequest',
+  '2': const [
+    const {'1': 'task_id', '3': 1, '4': 1, '5': 9, '10': 'taskId'},
+    const {'1': 'user_id', '3': 2, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `ApplyForTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List applyForTaskRequestDescriptor = $convert.base64Decode('ChNBcHBseUZvclRhc2tSZXF1ZXN0EhcKB3Rhc2tfaWQYASABKAlSBnRhc2tJZBIXCgd1c2VyX2lkGAIgASgJUgZ1c2VySWQ=');
 @$core.Deprecated('Use taskCandidateListDescriptor instead')
 const TaskCandidateList$json = const {
   '1': 'TaskCandidateList',
   '2': const [
-    const {'1': 'candidates', '3': 1, '4': 3, '5': 11, '6': '.auth.BusinessAccount', '10': 'candidates'},
+    const {'1': 'candidates', '3': 1, '4': 3, '5': 11, '6': '.task.TaskCandidate', '10': 'candidates'},
   ],
 };
 
 /// Descriptor for `TaskCandidateList`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List taskCandidateListDescriptor = $convert.base64Decode('ChFUYXNrQ2FuZGlkYXRlTGlzdBI1CgpjYW5kaWRhdGVzGAEgAygLMhUuYXV0aC5CdXNpbmVzc0FjY291bnRSCmNhbmRpZGF0ZXM=');
+final $typed_data.Uint8List taskCandidateListDescriptor = $convert.base64Decode('ChFUYXNrQ2FuZGlkYXRlTGlzdBIzCgpjYW5kaWRhdGVzGAEgAygLMhMudGFzay5UYXNrQ2FuZGlkYXRlUgpjYW5kaWRhdGVz');
+@$core.Deprecated('Use taskCandidateDescriptor instead')
+const TaskCandidate$json = const {
+  '1': 'TaskCandidate',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'task_id', '3': 2, '4': 1, '5': 9, '10': 'taskId'},
+    const {'1': 'account', '3': 3, '4': 1, '5': 11, '6': '.auth.BusinessAccount', '10': 'account'},
+    const {'1': 'created_at', '3': 4, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
+    const {'1': 'updated_at', '3': 5, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
+    const {'1': 'hired', '3': 6, '4': 1, '5': 8, '10': 'hired'},
+  ],
+};
+
+/// Descriptor for `TaskCandidate`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskCandidateDescriptor = $convert.base64Decode('Cg1UYXNrQ2FuZGlkYXRlEg4KAmlkGAEgASgJUgJpZBIXCgd0YXNrX2lkGAIgASgJUgZ0YXNrSWQSLwoHYWNjb3VudBgDIAEoCzIVLmF1dGguQnVzaW5lc3NBY2NvdW50UgdhY2NvdW50EjkKCmNyZWF0ZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdBIUCgVoaXJlZBgGIAEoCFIFaGlyZWQ=');
 @$core.Deprecated('Use taskEventRequestDescriptor instead')
 const TaskEventRequest$json = const {
   '1': 'TaskEventRequest',
