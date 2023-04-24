@@ -35,6 +35,8 @@ func NewProcheTaskServerInstance(taskCol *mongo.Collection, taskEventCol *mongo.
 	}
 }
 
+// ApplyForTask
+// done
 func (s *ProcheTaskServer) ApplyForTask(ctx context.Context, req *pb.ApplyForTaskRequest) (*emptypb.Empty, error) {
 
 	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Second*30))
@@ -85,6 +87,8 @@ func (s *ProcheTaskServer) ApplyForTask(ctx context.Context, req *pb.ApplyForTas
 	}
 }
 
+// GetCandidatesForTask
+// done
 func (s *ProcheTaskServer) GetCandidatesForTask(req *wrapperspb.StringValue, stream pb.TaskService_GetCandidatesForTaskServer) error {
 	ctx := stream.Context()
 

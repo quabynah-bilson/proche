@@ -11,13 +11,14 @@ use tonic::metadata::MetadataMap;
 
 use crate::{client, config, utils};
 use crate::config::{locale, tokenizer};
-use crate::proto::{Account, Country, GetCountriesResponse, LoginRequest, MediaType, RegisterRequest, ResetPasswordRequest, UploadMediaRequest, ValidateAccessTokenResponse};
+use crate::proto::{Account, BusinessAccount, Country, CreateBusinessAccountRequest, GetCountriesResponse, LoginRequest, MediaType, RegisterRequest, ResetPasswordRequest, UploadMediaRequest, ValidateAccessTokenResponse};
 use crate::proto::auth_service_server::AuthService;
 
 rust_i18n::i18n!("locales");
 
 pub struct AuthServiceImpl {
     pub account_col: mongodb::Collection<Document>,
+    pub business_account_col: mongodb::Collection<Document>,
     pub token_col: mongodb::Collection<Document>,
     pub country_col: mongodb::Collection<Document>,
 }
@@ -25,11 +26,13 @@ pub struct AuthServiceImpl {
 impl AuthServiceImpl {
     pub fn new(
         account_col: mongodb::Collection<Document>,
+        business_account_col: mongodb::Collection<Document>,
         token_col: mongodb::Collection<Document>,
         country_col: mongodb::Collection<Document>,
     ) -> Self {
         Self {
             account_col,
+            business_account_col,
             token_col,
             country_col,
         }
@@ -884,6 +887,283 @@ impl AuthService for AuthServiceImpl {
             Ok(_) => Ok(Response::new(())),
             Err(_) => {
                 return Err(Status::not_found(t!("account_not_found")));
+            }
+        }
+    }
+
+    // done
+    async fn get_business_account(&self, request: Request<String>) -> Result<Response<BusinessAccount>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col)
+            .await
+        {
+            Ok(token) => token,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        let id = request.into_inner();
+
+        // get country from database
+        let business_doc = match self
+            .business_account_col
+            .find_one(doc! {"id": &id}, None)
+            .await
+            .unwrap()
+        {
+            Some(business_doc) => business_doc,
+            None => {
+                return Err(Status::not_found(t!("business_not_found")));
+            }
+        };
+
+        // create business model
+        let account_doc = business_doc.get_document("owner").unwrap();
+        let business = BusinessAccount {
+            owner: Some(
+                Account {
+                    id: account_doc.get_str("id").unwrap().to_string(),
+                    phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
+                    country_id: account_doc
+                        .get_str("country_id")
+                        .unwrap_or("en-proche-233")
+                        .to_string(),
+                    language_id: language_id.to_string(),
+                    display_name: account_doc
+                        .get_str("display_name")
+                        .unwrap_or("")
+                        .to_string(),
+                    avatar_url: Some(account_doc.get_str("avatar_url").unwrap_or("").to_string()),
+                    referral_code: None,
+                    created_at: None,
+                    updated_at: None,
+                    id_card_url: None,
+                    vaccine_card_url: None,
+                    device_id: None,
+                    device_type: None,
+                    device_token: None,
+                    is_verified: None,
+                    is_public_account: None,
+                }
+            ),
+            specialization: business_doc.get_str("specialization").unwrap().to_string(),
+            jobs_completed: business_doc.get_i32("jobs_completed").unwrap_or(0),
+            hourly_rate: business_doc.get_f64("hourly_rate").unwrap_or(0.99),
+            ratings: business_doc.get_f64("ratings").unwrap_or(3.50),
+        };
+
+        Ok(Response::new(business))
+    }
+
+    // done
+    async fn update_business_account(&self, request: Request<BusinessAccount>) -> Result<Response<BusinessAccount>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col)
+            .await
+        {
+            Ok(token) => token,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // extract account object from request
+        let account = request.into_inner();
+        let owner = account.clone().owner.unwrap();
+
+        // perform account update with account object from request
+        match self
+            .business_account_col
+            .find_one_and_update(
+                doc! {"id": &owner.id},
+                doc! {"$set": {
+                    "specialization": &account.specialization,
+                    "jobs_completed": &account.jobs_completed,
+                    "hourly_rate": &account.hourly_rate,
+                    "ratings" : &account.ratings,
+                }},
+                None,
+            )
+            .await
+            .unwrap()
+        {
+            Some(acct_doc) => acct_doc,
+            None => {
+                return Err(Status::not_found(t!("business_account_not_found")));
+            }
+        };
+
+        Ok(Response::new(account))
+    }
+
+    // done
+    async fn delete_business_account(&self, request: Request<String>) -> Result<Response<()>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col)
+            .await
+        {
+            Ok(token) => token,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // delete account using account id from token payload
+        match self
+            .business_account_col
+            .delete_one(doc! {"id": request.into_inner()}, None)
+            .await
+        {
+            Ok(_) => Ok(Response::new(())),
+            Err(_) => {
+                return Err(Status::not_found(t!("business_account_not_found")));
+            }
+        }
+    }
+
+    // done
+    async fn create_business_account(&self, request: Request<CreateBusinessAccountRequest>) -> Result<Response<BusinessAccount>, Status> {
+        // validate language id
+        let language_id = match _validate_language_id_from_request(request.metadata()) {
+            Ok(language_id) => language_id,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        // validate access token
+        match config::session_manager::verify_access_token(&request.metadata(), &language_id, &self.token_col)
+            .await
+        {
+            Ok(token) => token,
+            Err(e) => {
+                return Err(e);
+            }
+        };
+
+        let req = request.into_inner();
+        let id = &req.account_id;
+
+        let has_existing_account = match self
+            .business_account_col
+            .find_one(doc! {"id": &id}, None)
+            .await
+            .unwrap()
+        {
+            Some(_) => {
+                true
+            }
+            None => false,
+        };
+        if has_existing_account {
+            return Err(Status::already_exists(t!("business_account_exists")));
+        }
+
+        // get account
+        let account_doc = match self.account_col.find_one(doc! {"id" : &id}, None).await {
+            Ok(doc) => match doc {
+                Some(doc) => doc,
+                None => {
+                    return Err(Status::not_found(t!("account_not_found", locale=&language_id)));
+                }
+            }
+            Err(_) => {
+                return Err(Status::not_found(t!("account_not_found", locale=&language_id)));
+            }
+        };
+
+        let account = Account {
+            id: account_doc.get_str("id").unwrap().to_string(),
+            phone_number: account_doc.get_str("phone_number").unwrap().to_string(),
+            country_id: account_doc
+                .get_str("country_id")
+                .unwrap_or("en-proche-233")
+                .to_string(),
+            language_id: language_id.to_string(),
+            display_name: account_doc
+                .get_str("display_name")
+                .unwrap_or("")
+                .to_string(),
+            avatar_url: Some(account_doc.get_str("avatar_url").unwrap_or("").to_string()),
+            referral_code: None,
+            created_at: None,
+            updated_at: None,
+            id_card_url: None,
+            vaccine_card_url: None,
+            device_id: None,
+            device_type: None,
+            device_token: None,
+            is_verified: None,
+            is_public_account: None,
+        };
+
+        let business_account_doc = doc! {
+            "id" : &id,
+            "owner" : &account_doc.clone(),
+            "jobs_completed" : 0,
+            "specialization" : &req.specialization,
+            "hourly_rate" : &req.hourly_rate,
+            "ratings" : 3.55,
+            "created_at": _create_timestamp_field(),
+            "updated_at": _create_timestamp_field(),
+        };
+
+        match self.business_account_col.insert_one(&business_account_doc.clone(), None).await {
+            Ok(_) => {
+                // FIXME: uncomment this for multi business account support
+                // // update id field with result
+                // business_account_doc.insert("id", &result.inserted_id.as_object_id().unwrap().to_hex());
+                //
+                // // replace one in db with updated account doc
+                // match self
+                //     .business_account_col
+                //     .replace_one(doc! {"account.id": &id}, &business_account_doc, None)
+                //     .await
+                // {
+                //     Ok(_) => (),
+                //     Err(_) => {
+                //         return Err(Status::internal(t!("auth_failed")));
+                //     }
+                // }
+
+
+                let business = BusinessAccount {
+                    owner: Some(account),
+                    specialization: business_account_doc.get_str("specialization").unwrap().to_string(),
+                    jobs_completed: business_account_doc.get_i32("jobs_completed").unwrap_or(0),
+                    hourly_rate: business_account_doc.get_f64("hourly_rate").unwrap_or(0.99),
+                    ratings: business_account_doc.get_f64("ratings").unwrap_or(3.50),
+                };
+
+                Ok(Response::new(business))
+            }
+            Err(_) => {
+                return Err(Status::internal(t!("auth_failed")));
             }
         }
     }
