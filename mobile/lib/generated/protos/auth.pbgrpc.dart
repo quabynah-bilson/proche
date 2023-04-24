@@ -6,14 +6,13 @@
 // ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:async' as $async;
+
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
+import 'auth.pb.dart' as $0;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
 import 'package:protobuf_google/protobuf_google.dart' as $2;
-
-import 'auth.pb.dart' as $0;
-
 export 'auth.pb.dart';
 
 class AuthServiceClient extends $grpc.Client {
@@ -72,6 +71,29 @@ class AuthServiceClient extends $grpc.Client {
       '/auth.AuthService/delete_account',
       ($2.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+  static final _$get_business_account =
+      $grpc.ClientMethod<$1.StringValue, $0.BusinessAccount>(
+          '/auth.AuthService/get_business_account',
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.BusinessAccount.fromBuffer(value));
+  static final _$update_business_account =
+      $grpc.ClientMethod<$0.BusinessAccount, $0.BusinessAccount>(
+          '/auth.AuthService/update_business_account',
+          ($0.BusinessAccount value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.BusinessAccount.fromBuffer(value));
+  static final _$delete_business_account =
+      $grpc.ClientMethod<$1.StringValue, $2.Empty>(
+          '/auth.AuthService/delete_business_account',
+          ($1.StringValue value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $2.Empty.fromBuffer(value));
+  static final _$create_business_account =
+      $grpc.ClientMethod<$0.CreateBusinessAccountRequest, $0.BusinessAccount>(
+          '/auth.AuthService/create_business_account',
+          ($0.CreateBusinessAccountRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.BusinessAccount.fromBuffer(value));
   static final _$get_referral_code =
       $grpc.ClientMethod<$2.Empty, $1.StringValue>(
           '/auth.AuthService/get_referral_code',
@@ -171,6 +193,32 @@ class AuthServiceClient extends $grpc.Client {
   $grpc.ResponseFuture<$2.Empty> delete_account($2.Empty request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$delete_account, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.BusinessAccount> get_business_account(
+      $1.StringValue request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$get_business_account, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.BusinessAccount> update_business_account(
+      $0.BusinessAccount request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$update_business_account, request,
+        options: options);
+  }
+
+  $grpc.ResponseFuture<$2.Empty> delete_business_account($1.StringValue request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$delete_business_account, request,
+        options: options);
+  }
+
+  $grpc.ResponseFuture<$0.BusinessAccount> create_business_account(
+      $0.CreateBusinessAccountRequest request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$create_business_account, request,
+        options: options);
   }
 
   $grpc.ResponseFuture<$1.StringValue> get_referral_code($2.Empty request,
@@ -295,6 +343,36 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
         ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $0.BusinessAccount>(
+        'get_business_account',
+        get_business_account_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($0.BusinessAccount value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.BusinessAccount, $0.BusinessAccount>(
+        'update_business_account',
+        update_business_account_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.BusinessAccount.fromBuffer(value),
+        ($0.BusinessAccount value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StringValue, $2.Empty>(
+        'delete_business_account',
+        delete_business_account_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
+        ($2.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.CreateBusinessAccountRequest,
+            $0.BusinessAccount>(
+        'create_business_account',
+        create_business_account_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.CreateBusinessAccountRequest.fromBuffer(value),
+        ($0.BusinessAccount value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$2.Empty, $1.StringValue>(
         'get_referral_code',
         get_referral_code_Pre,
@@ -399,6 +477,27 @@ abstract class AuthServiceBase extends $grpc.Service {
     return delete_account(call, await request);
   }
 
+  $async.Future<$0.BusinessAccount> get_business_account_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
+    return get_business_account(call, await request);
+  }
+
+  $async.Future<$0.BusinessAccount> update_business_account_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.BusinessAccount> request) async {
+    return update_business_account(call, await request);
+  }
+
+  $async.Future<$2.Empty> delete_business_account_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.StringValue> request) async {
+    return delete_business_account(call, await request);
+  }
+
+  $async.Future<$0.BusinessAccount> create_business_account_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.CreateBusinessAccountRequest> request) async {
+    return create_business_account(call, await request);
+  }
+
   $async.Future<$1.StringValue> get_referral_code_Pre(
       $grpc.ServiceCall call, $async.Future<$2.Empty> request) async {
     return get_referral_code(call, await request);
@@ -431,54 +530,45 @@ abstract class AuthServiceBase extends $grpc.Service {
 
   $async.Future<$1.StringValue> login(
       $grpc.ServiceCall call, $0.LoginRequest request);
-
   $async.Future<$1.StringValue> register(
       $grpc.ServiceCall call, $0.RegisterRequest request);
-
   $async.Future<$1.StringValue> reset_password(
       $grpc.ServiceCall call, $0.ResetPasswordRequest request);
-
   $async.Future<$2.Empty> logout($grpc.ServiceCall call, $2.Empty request);
-
   $async.Future<$2.Empty> verify_password(
       $grpc.ServiceCall call, $1.StringValue request);
-
   $async.Future<$1.StringValue> request_public_access_token(
       $grpc.ServiceCall call, $2.Empty request);
-
   $async.Future<$0.ValidateAccessTokenResponse> validate_access_token(
       $grpc.ServiceCall call, $2.Empty request);
-
   $async.Future<$0.Account> get_account(
       $grpc.ServiceCall call, $2.Empty request);
-
   $async.Future<$0.Account> get_account_by_phone_number(
       $grpc.ServiceCall call, $1.StringValue request);
-
   $async.Future<$0.Account> get_account_by_id(
       $grpc.ServiceCall call, $1.StringValue request);
-
   $async.Future<$0.Account> update_account(
       $grpc.ServiceCall call, $0.Account request);
-
   $async.Future<$2.Empty> delete_account(
       $grpc.ServiceCall call, $2.Empty request);
-
+  $async.Future<$0.BusinessAccount> get_business_account(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$0.BusinessAccount> update_business_account(
+      $grpc.ServiceCall call, $0.BusinessAccount request);
+  $async.Future<$2.Empty> delete_business_account(
+      $grpc.ServiceCall call, $1.StringValue request);
+  $async.Future<$0.BusinessAccount> create_business_account(
+      $grpc.ServiceCall call, $0.CreateBusinessAccountRequest request);
   $async.Future<$1.StringValue> get_referral_code(
       $grpc.ServiceCall call, $2.Empty request);
-
   $async.Future<$1.StringValue> get_referral_code_by_phone_number(
       $grpc.ServiceCall call, $1.StringValue request);
-
   $async.Future<$0.GetCountriesResponse> get_countries(
       $grpc.ServiceCall call, $2.Empty request);
-
   $async.Future<$0.Country> get_country_by_id(
       $grpc.ServiceCall call, $1.StringValue request);
-
   $async.Future<$0.Country> add_country(
       $grpc.ServiceCall call, $0.Country request);
-
   $async.Future<$2.Empty> delete_country(
       $grpc.ServiceCall call, $1.StringValue request);
 }

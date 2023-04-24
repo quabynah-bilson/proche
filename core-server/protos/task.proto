@@ -2,138 +2,37 @@ syntax = "proto3";
 package task;
 
 import "google/protobuf/wrappers.proto";
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/duration.proto";
 
 import "core_shared.proto";
-import "auth.proto";
 
 option go_package = "com.github/quabynah-bilson/proche;core";
 
 // TaskService is the service that handles task related operations
 service TaskService {
   // task related operations
-  rpc create_task(CreateTaskRequest) returns (ProcheTask);
-  rpc get_task(google.protobuf.StringValue) returns (stream ProcheTask);
-  rpc get_tasks(core.CommonAddress) returns (stream TaskList);
-  rpc get_tasks_for_current_user(google.protobuf.Empty) returns (stream TaskList);
-  rpc update_task(UpdateTaskRequest) returns (ProcheTask);
+  rpc create_task(core.CreateTaskRequest) returns (core.ProcheTask);
+  rpc get_task(google.protobuf.StringValue) returns (stream core.ProcheTask);
+  rpc get_tasks(core.CommonAddress) returns (stream core.TaskList);
+  rpc get_tasks_for_current_user(google.protobuf.Empty) returns (stream core.TaskList);
+  rpc update_task(core.UpdateTaskRequest) returns (core.ProcheTask);
   rpc delete_task(google.protobuf.StringValue) returns (google.protobuf.Empty);
 
   // task event related operations
-  rpc create_task_event(CreateTaskEventRequest) returns (TaskEvent);
-  rpc get_task_event(google.protobuf.StringValue) returns (stream TaskEvent);
-  rpc get_task_events(google.protobuf.StringValue) returns (stream TaskEventList);
-  rpc cancel_task_event(google.protobuf.StringValue) returns (TaskEvent);
-  rpc complete_task_event(CompleteTaskEventRequest) returns (TaskEvent);
-  rpc get_task_events_for_user(google.protobuf.StringValue) returns (stream TaskEventList);
-  rpc get_task_events_for_task(google.protobuf.StringValue) returns (stream TaskEventList);
-  rpc get_task_events_for_user_and_task(TaskEventRequest) returns (stream TaskEventList);
+  rpc create_task_event(core.CreateTaskEventRequest) returns (core.TaskEvent);
+  rpc get_task_event(google.protobuf.StringValue) returns (stream core.TaskEvent);
+  rpc get_task_events(google.protobuf.StringValue) returns (stream core.TaskEventList);
+  rpc cancel_task_event(google.protobuf.StringValue) returns (core.TaskEvent);
+  rpc complete_task_event(core.CompleteTaskEventRequest) returns (core.TaskEvent);
+  rpc get_task_events_for_user(google.protobuf.StringValue) returns (stream core.TaskEventList);
+  rpc get_task_events_for_task(google.protobuf.StringValue) returns (stream core.TaskEventList);
+  rpc get_task_events_for_user_and_task(core.TaskEventRequest) returns (stream core.TaskEventList);
   rpc delete_task_event(google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc delete_task_events_for_task(google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc delete_task_events_for_user(google.protobuf.StringValue) returns (google.protobuf.Empty);
-  rpc delete_task_events_for_user_and_task(TaskEventRequest) returns (google.protobuf.Empty);
+  rpc delete_task_events_for_user_and_task(core.TaskEventRequest) returns (google.protobuf.Empty);
 
   // candidates
-  rpc get_candidates_for_task(google.protobuf.StringValue) returns (stream TaskCandidateList);
-  rpc apply_for_task(ApplyForTaskRequest) returns (google.protobuf.Empty);
-}
-
-message ApplyForTaskRequest {
-  string task_id = 1;
-  string user_id = 2;
-}
-
-message TaskCandidateList {
-  repeated TaskCandidate candidates = 1;
-}
-
-message TaskCandidate {
-  string id = 1;
-  string task_id = 2;
-  auth.BusinessAccount account = 3;
-  google.protobuf.Timestamp created_at = 4;
-  google.protobuf.Timestamp updated_at = 5;
-  bool hired = 6;
-}
-
-// TaskEventRequest is the request object for getting task events for a user and task
-message TaskEventRequest {
-  string user_id = 1;
-  string task_id = 2;
-}
-
-// CompleteTaskEventRequest is the request object for completing a task event
-message CompleteTaskEventRequest {
-  string task_id = 1;
-  google.protobuf.Timestamp end_time = 2;
-  optional string notes = 3;
-}
-
-// TaskEventList is the list of task events
-message TaskEventList {
-  repeated TaskEvent task_events = 1;
-}
-
-// CreateTaskEventRequest is the request object for creating a task event
-message CreateTaskEventRequest {
-  string task_id = 1;
-  string user_id = 2;
-  google.protobuf.Timestamp start_time = 3;
-  optional string notes = 4;
-  optional string vaccine_card_url = 5;
-}
-
-// CreateTaskRequest is the request object for creating a task
-message CreateTaskRequest {
-  string title = 1;
-  string description = 2;
-  google.protobuf.Timestamp due_date = 3;
-  google.protobuf.Duration duration = 4;
-  string user_id = 5;
-  optional double charge_per_hour = 6;
-  core.CommonAddress address = 7;
-  optional string image_url = 8;
-}
-
-// UpdateTaskRequest is the request object for updating a task
-message UpdateTaskRequest {
-  string id = 1;
-  string title = 2;
-  string description = 3;
-  google.protobuf.Timestamp due_date = 4;
-  google.protobuf.Duration duration = 5;
-  google.protobuf.BoolValue completed = 6;
-}
-
-// TaskList is the list of tasks
-message TaskList {
-  repeated ProcheTask tasks = 1;
-}
-
-// Task is the task object
-message ProcheTask {
-  string id = 1;
-  string title = 2;
-  string description = 3;
-  google.protobuf.Timestamp created_at = 4;
-  google.protobuf.Timestamp updated_at = 5;
-  google.protobuf.Timestamp due_date = 6;
-  google.protobuf.Duration duration = 7;
-  bool completed = 8;
-  optional double charge_per_hour = 9;
-  string user_id = 10;
-  core.CommonAddress address = 11;
-  optional string image_url = 12;
-}
-
-// TaskEvent is the task event object
-message TaskEvent {
-  string id = 1;
-  string task_id = 2;
-  string user_id = 3;
-  google.protobuf.Timestamp start_time = 4;
-  google.protobuf.Timestamp end_time = 5;
-  optional string notes = 6;
+  rpc get_candidates_for_task(google.protobuf.StringValue) returns (stream core.TaskCandidateList);
+  rpc apply_for_task(core.ApplyForTaskRequest) returns (google.protobuf.Empty);
 }

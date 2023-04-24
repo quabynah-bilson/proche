@@ -2,63 +2,22 @@ syntax = "proto3";
 package event;
 
 import "google/protobuf/wrappers.proto";
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/duration.proto";
 
 import "core_shared.proto";
-import "auth.proto";
 
 option go_package = "com.github/quabynah-bilson/proche;core";
 
 
 // GiveAwayService is the service that handles all GiveAway related operations
 service GiveAwayService {
-  rpc create_giveaway (CreateGiveAwayRequest) returns (google.protobuf.StringValue);
-  rpc get_giveaway (google.protobuf.StringValue) returns (GiveAway);
-  rpc get_giveaways (core.CommonAddress) returns (stream GiveAwayList);
-  rpc get_giveaways_by_owner (google.protobuf.StringValue) returns (stream GiveAwayList);
-  rpc update_giveaway (GiveAway) returns (google.protobuf.Empty);
+  rpc create_giveaway (core.CreateGiveAwayRequest) returns (google.protobuf.StringValue);
+  rpc get_giveaway (google.protobuf.StringValue) returns (core.GiveAway);
+  rpc get_giveaways (core.CommonAddress) returns (stream core.GiveAwayList);
+  rpc get_giveaways_by_owner (google.protobuf.StringValue) returns (stream core.GiveAwayList);
+  rpc update_giveaway (core.GiveAway) returns (google.protobuf.Empty);
   rpc delete_giveaway (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
   // candidates
-  rpc get_candidates_for_giveaway(google.protobuf.StringValue) returns (stream GiveawayCandidateList);
-}
-
-message GiveawayCandidateList {
-  repeated auth.Account candidates = 1;
-}
-
-
-// GiveAwayList is the list of GiveAways
-message GiveAwayList {
-  repeated GiveAway giveaways = 1;
-}
-
-// CreateGiveAwayRequest is the request for creating a GiveAway
-message CreateGiveAwayRequest {
-  string name = 1;
-  string description = 2;
-  repeated string images = 3;
-  core.CommonAddress address = 4;
-  GiveAwayDispatchType dispatch_type = 5;
-  google.protobuf.Duration dispatch_duration = 6;
-}
-
-// GiveAway is the model for a GiveAway
-message GiveAway {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  repeated string images = 4;
-  string owner = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
-  core.CommonAddress address = 8;
-}
-
-// GiveAwayDispatchType is the type of dispatch for a GiveAway
-enum GiveAwayDispatchType {
-  GIVEAWAY_PICKUP = 0;
-  GIVEAWAY_DELIVERY = 1;
+  rpc get_candidates_for_giveaway(google.protobuf.StringValue) returns (stream core.GiveawayCandidateList);
 }

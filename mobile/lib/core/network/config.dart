@@ -5,6 +5,7 @@ import 'package:mobile/core/di/injection.dart';
 import 'package:mobile/core/network/log.interceptor.dart';
 import 'package:mobile/core/network/token.interceptor.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
+import 'package:mobile/generated/protos/core_shared.pbgrpc.dart';
 import 'package:mobile/generated/protos/event.pbgrpc.dart';
 import 'package:mobile/generated/protos/giveaway.pbgrpc.dart';
 import 'package:mobile/generated/protos/media.pbgrpc.dart';
@@ -59,6 +60,12 @@ abstract class NetworkConfigModule {
   SharedServiceClient get sharedServiceClient => SharedServiceClient(
       _createChannel(int.parse(dotenv.env['SHARED_SERVER_PORT'].toString()),
           dotenv.env['SHARED_SERVER_URL']),
+      interceptors: [_tokenInterceptor, _logInterceptor]);
+
+  @injectable
+  CoreSharedServiceClient get coreSharedServiceClient => CoreSharedServiceClient(
+      _createChannel(int.parse(dotenv.env['CORE_SERVER_PORT'].toString()),
+          dotenv.env['CORE_SERVER_URL']),
       interceptors: [_tokenInterceptor, _logInterceptor]);
 
   @injectable

@@ -10,7 +10,7 @@ import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.d
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
-import 'package:mobile/generated/protos/task.pb.dart';
+import 'package:mobile/generated/protos/core_shared.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 class QuickHelpListTile extends StatefulWidget {

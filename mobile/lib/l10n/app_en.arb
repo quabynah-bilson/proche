@@ -132,5 +132,12 @@
   "specialization": "Specialization",
   "specializationSubhead": "Select a specialization",
   "hourlyRate": "Hourly rate",
-  "enterOption" : "Enter an option"
+  "enterOption": "Enter an option",
+  "jobsCompleted": "Jobs completed",
+  "ratingsAndReviews": "Ratings & Reviews",
+  "businessAccountInfo": "A business account is required to post & receive services. This account is not visible to the public unless you choose to make it public",
+  "delete" : "Delete",
+  "deleteAccount" : "Do you wish to delete your account?",
+  "deleteBusinessAccount" : "Do you wish to delete your business account?",
+  "accountCreatedSuccessfully" : "Account created successfully"
 }

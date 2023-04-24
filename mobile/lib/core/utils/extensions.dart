@@ -10,12 +10,14 @@ import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/actions.dart';
 import 'package:mobile/core/utils/service.type.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
+import 'package:mobile/features/shared/presentation/widgets/country.flag.dart';
 import 'package:mobile/features/shared/presentation/widgets/image.picker.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:mobile/generated/protos/core_shared.pb.dart';
 import 'package:mobile/generated/protos/shared.pb.dart';
-import 'package:mobile/generated/protos/task.pb.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
@@ -47,7 +49,7 @@ extension BuildContextX on BuildContext {
               setState(() => passwordController.clear());
             }
 
-            if (state is SuccessState<void>) {
+            if (state is SuccessState<Empty>) {
               context.navigator.pop();
             }
           },
@@ -372,7 +374,7 @@ extension BuildContextX on BuildContext {
           builder: (context, setState) => BlocConsumer(
                 bloc: logoutBloc,
                 listener: (context, state) {
-                  if (state is SuccessState<void>) {
+                  if (state is SuccessState<Empty>) {
                     context.navigator.pushNamedAndRemoveUntil(
                         AppRouter.welcomeRoute, (route) => false);
                   }
@@ -435,9 +437,12 @@ extension BuildContextX on BuildContext {
           SafeArea(
             top: false,
             child: AppRoundedButton(
-                    text: actionLabel ?? localizer.okay,
-                    onTap: onTap ?? context.navigator.pop)
-                .top(40),
+              text: actionLabel ?? localizer.okay,
+              onTap: () {
+                context.navigator.pop();
+                onTap?.call();
+              },
+            ).top(40),
           ),
         ],
       ).top(24),
@@ -474,7 +479,7 @@ extension BuildContextX on BuildContext {
                   showMessageDialog(state.failure, title: localizer.authFailed);
                 }
 
-                if (state is SuccessState<void>) {
+                if (state is SuccessState<Empty>) {
                   navigator.pushNamedAndRemoveUntil(
                       AppRouter.dashboardRoute, (route) => false);
                 }
@@ -555,21 +560,7 @@ extension BuildContextX on BuildContext {
                           validator: Validators.validate,
                           prefixIcon: selectedCountry == null
                               ? null
-                              : Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: const BoxDecoration(),
-                                  child: SizedBox(
-                                    width: 28,
-                                    height: 24,
-                                    child: selectedCountry?.flagUrl.asSvg(
-                                        height: 24,
-                                        width: 16,
-                                        fit: BoxFit.contain,
-                                        fromAsset: false),
-                                  ),
-                                ),
+                              : CountryFlagIcon(country: selectedCountry),
                           onTap: () async {
                             selectedCountry = await showCountriesSheet();
                             countryController.text =
@@ -754,21 +745,7 @@ extension BuildContextX on BuildContext {
                               contentPadding: EdgeInsets.zero,
                               minLeadingWidth: 28,
                               onTap: () => context.navigator.pop(e),
-                              leading: Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(12, 12, 0, 12),
-                                clipBehavior: Clip.hardEdge,
-                                decoration: const BoxDecoration(),
-                                child: SizedBox(
-                                  width: 28,
-                                  height: 24,
-                                  child: e.flagUrl.asSvg(
-                                      height: 24,
-                                      width: 16,
-                                      fit: BoxFit.contain,
-                                      fromAsset: false),
-                                ),
-                              ),
+                              leading: CountryFlagIcon(country: e),
                               title: Text('${e.name} (${e.dialCode})'),
                             ),
                           )
@@ -895,7 +872,6 @@ extension BuildContextX on BuildContext {
         otherSpecializationController = TextEditingController();
     var showNextButton = false;
     var specializations = [
-      'All',
       'Mobile Application Development',
       'Plumbing',
       'Electrical',
@@ -934,8 +910,8 @@ extension BuildContextX on BuildContext {
                     controller: otherSpecializationController,
                     capitalization: TextCapitalization.words,
                     validator: Validators.validate,
-                    onChange: (input) => setState(
-                            () => showNextButton = !input.isNullOrEmpty()),
+                    onChange: (input) =>
+                        setState(() => showNextButton = !input.isNullOrEmpty()),
                   ),
                 ).horizontal(24),
                 Expanded(
@@ -944,25 +920,25 @@ extension BuildContextX on BuildContext {
                     children: specializations
                         .map(
                           (option) => ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        onTap: () => context.navigator.pop(option),
-                        minLeadingWidth: 48,
-                        leading: Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: (context.colorScheme.secondary)
-                                .withOpacity(0.1),
-                            shape: BoxShape.circle,
+                            contentPadding: EdgeInsets.zero,
+                            onTap: () => context.navigator.pop(option),
+                            minLeadingWidth: 48,
+                            leading: Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: (context.colorScheme.secondary)
+                                    .withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                TablerIcons.activity,
+                                color: context.colorScheme.secondary,
+                              ),
+                            ),
+                            title: Text(option),
                           ),
-                          child: Icon(
-                            TablerIcons.activity,
-                            color: context.colorScheme.secondary,
-                          ),
-                        ),
-                        title: Text(option),
-                      ),
-                    )
+                        )
                         .toList(),
                   ),
                 ),

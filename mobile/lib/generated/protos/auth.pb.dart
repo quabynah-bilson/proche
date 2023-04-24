@@ -9,7 +9,82 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'package:protobuf_google/protobuf_google.dart' as $5;
+import 'package:protobuf_google/protobuf_google.dart' as $4;
+
+class CreateBusinessAccountRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateBusinessAccountRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountId')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'specialization')
+    ..a<$core.double>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hourlyRate', $pb.PbFieldType.OD)
+    ..hasRequiredFields = false
+  ;
+
+  CreateBusinessAccountRequest._() : super();
+  factory CreateBusinessAccountRequest({
+    $core.String? accountId,
+    $core.String? specialization,
+    $core.double? hourlyRate,
+  }) {
+    final _result = create();
+    if (accountId != null) {
+      _result.accountId = accountId;
+    }
+    if (specialization != null) {
+      _result.specialization = specialization;
+    }
+    if (hourlyRate != null) {
+      _result.hourlyRate = hourlyRate;
+    }
+    return _result;
+  }
+  factory CreateBusinessAccountRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateBusinessAccountRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateBusinessAccountRequest clone() => CreateBusinessAccountRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateBusinessAccountRequest copyWith(void Function(CreateBusinessAccountRequest) updates) => super.copyWith((message) => updates(message as CreateBusinessAccountRequest)) as CreateBusinessAccountRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static CreateBusinessAccountRequest create() => CreateBusinessAccountRequest._();
+  CreateBusinessAccountRequest createEmptyInstance() => create();
+  static $pb.PbList<CreateBusinessAccountRequest> createRepeated() => $pb.PbList<CreateBusinessAccountRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CreateBusinessAccountRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateBusinessAccountRequest>(create);
+  static CreateBusinessAccountRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get accountId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set accountId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAccountId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccountId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get specialization => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set specialization($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasSpecialization() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSpecialization() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.double get hourlyRate => $_getN(2);
+  @$pb.TagNumber(3)
+  set hourlyRate($core.double v) { $_setDouble(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasHourlyRate() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearHourlyRate() => clearField(3);
+}
 
 class GetCountriesResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetCountriesResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'auth'), createEmptyInstance: create)
@@ -414,8 +489,8 @@ class Account extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'phoneNumber')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'languageId')
-    ..aOM<$5.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $5.Timestamp.create)
-    ..aOM<$5.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $5.Timestamp.create)
+    ..aOM<$4.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $4.Timestamp.create)
+    ..aOM<$4.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $4.Timestamp.create)
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'avatarUrl')
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'idCardUrl')
     ..aOS(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'vaccineCardUrl')
@@ -435,8 +510,8 @@ class Account extends $pb.GeneratedMessage {
     $core.String? phoneNumber,
     $core.String? displayName,
     $core.String? languageId,
-    $5.Timestamp? createdAt,
-    $5.Timestamp? updatedAt,
+    $4.Timestamp? createdAt,
+    $4.Timestamp? updatedAt,
     $core.String? avatarUrl,
     $core.String? idCardUrl,
     $core.String? vaccineCardUrl,
@@ -557,26 +632,26 @@ class Account extends $pb.GeneratedMessage {
   void clearLanguageId() => clearField(4);
 
   @$pb.TagNumber(5)
-  $5.Timestamp get createdAt => $_getN(4);
+  $4.Timestamp get createdAt => $_getN(4);
   @$pb.TagNumber(5)
-  set createdAt($5.Timestamp v) { setField(5, v); }
+  set createdAt($4.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasCreatedAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearCreatedAt() => clearField(5);
   @$pb.TagNumber(5)
-  $5.Timestamp ensureCreatedAt() => $_ensure(4);
+  $4.Timestamp ensureCreatedAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  $5.Timestamp get updatedAt => $_getN(5);
+  $4.Timestamp get updatedAt => $_getN(5);
   @$pb.TagNumber(6)
-  set updatedAt($5.Timestamp v) { setField(6, v); }
+  set updatedAt($4.Timestamp v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasUpdatedAt() => $_has(5);
   @$pb.TagNumber(6)
   void clearUpdatedAt() => clearField(6);
   @$pb.TagNumber(6)
-  $5.Timestamp ensureUpdatedAt() => $_ensure(5);
+  $4.Timestamp ensureUpdatedAt() => $_ensure(5);
 
   @$pb.TagNumber(7)
   $core.String get avatarUrl => $_getSZ(6);

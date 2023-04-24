@@ -2,9 +2,295 @@ syntax = "proto3";
 package core;
 
 option go_package = "com.github/quabynah-bilson/proche;core";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+
+import "auth.proto";
+
+service CoreSharedService {
+  rpc get_posts_for_current_user (google.protobuf.Empty) returns (GetPostsForUserResponse);
+  rpc get_posts_for_user (google.protobuf.StringValue) returns (GetPostsForUserResponse);
+}
+
+message GetPostsForUserResponse {
+  repeated ProcheTask tasks = 1;
+  repeated ProcheEvent events = 2;
+  repeated Trip trips = 3;
+  repeated GiveAway giveaways = 4;
+}
 
 message CommonAddress {
   double latitude = 1;
   double longitude = 2;
   double radius = 3;
 }
+
+// ----------- start of trip section --------------- //
+message TripCandidateList {
+  repeated auth.Account candidates = 1;
+}
+
+// TripList is the list of trips
+message TripList {
+  repeated Trip trips = 1;
+}
+
+// TripEventList is the list of trip events
+message TripEventList {
+  repeated TripEvent trip_events = 1;
+}
+
+// BookTripRequest is the request for booking a trip
+message BookTripRequest {
+  string user_id = 1;
+  core.CommonAddress origin = 2;
+  core.CommonAddress destination = 3;
+  google.protobuf.Timestamp departure_time = 4;
+  google.protobuf.Duration duration = 5;
+  optional string vaccine_card_url = 6;
+}
+
+// Trip is the trip message
+message Trip {
+  string id = 1;
+  string user_id = 2;
+  core.CommonAddress origin = 3;
+  core.CommonAddress destination = 4;
+  google.protobuf.Timestamp departure_time = 5;
+  google.protobuf.Duration duration = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// TripEvent is the event that occurred during a trip
+message TripEvent {
+  string id = 1;
+  string trip_id = 2;
+  string user_id = 3;
+  core.CommonAddress origin = 4;
+  core.CommonAddress destination = 5;
+  google.protobuf.Timestamp departure_time = 6;
+  google.protobuf.Duration duration = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+  google.protobuf.Timestamp event_time = 10;
+  TripEventType event_type = 11;
+}
+
+// TripEventRequest is the request for a trip event
+message TripEventRequest {
+  string trip_id = 1;
+  string user_id = 2;
+  core.CommonAddress origin = 3;
+  core.CommonAddress destination = 4;
+  google.protobuf.Timestamp departure_time = 5;
+  google.protobuf.Duration duration = 6;
+  google.protobuf.Timestamp event_time = 7;
+  TripEventType event_type = 8;
+}
+
+// TripEventType is the type of event that occurred
+enum TripEventType {
+  EVENT_UNKNOWN = 0;
+  EVENT_BOOKED = 1;
+  EVENT_CANCELLED = 2;
+  EVENT_STARTED = 3;
+  EVENT_COMPLETED = 4;
+}
+// ----------- end of trip section ----------------- //
+
+
+
+// ----------- start of task section --------------- //
+message ApplyForTaskRequest {
+  string task_id = 1;
+  string user_id = 2;
+}
+
+message TaskCandidateList {
+  repeated TaskCandidate candidates = 1;
+}
+
+message TaskCandidate {
+  string id = 1;
+  string task_id = 2;
+  auth.BusinessAccount account = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  bool hired = 6;
+}
+
+// TaskEventRequest is the request object for getting task events for a user and task
+message TaskEventRequest {
+  string user_id = 1;
+  string task_id = 2;
+}
+
+// CompleteTaskEventRequest is the request object for completing a task event
+message CompleteTaskEventRequest {
+  string task_id = 1;
+  google.protobuf.Timestamp end_time = 2;
+  optional string notes = 3;
+}
+
+// TaskEventList is the list of task events
+message TaskEventList {
+  repeated TaskEvent task_events = 1;
+}
+
+// CreateTaskEventRequest is the request object for creating a task event
+message CreateTaskEventRequest {
+  string task_id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp start_time = 3;
+  optional string notes = 4;
+  optional string vaccine_card_url = 5;
+}
+
+// CreateTaskRequest is the request object for creating a task
+message CreateTaskRequest {
+  string title = 1;
+  string description = 2;
+  google.protobuf.Timestamp due_date = 3;
+  google.protobuf.Duration duration = 4;
+  string user_id = 5;
+  optional double charge_per_hour = 6;
+  core.CommonAddress address = 7;
+  optional string image_url = 8;
+}
+
+// UpdateTaskRequest is the request object for updating a task
+message UpdateTaskRequest {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp due_date = 4;
+  google.protobuf.Duration duration = 5;
+  google.protobuf.BoolValue completed = 6;
+}
+
+// TaskList is the list of tasks
+message TaskList {
+  repeated ProcheTask tasks = 1;
+}
+
+// Task is the task object
+message ProcheTask {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp due_date = 6;
+  google.protobuf.Duration duration = 7;
+  bool completed = 8;
+  optional double charge_per_hour = 9;
+  string user_id = 10;
+  core.CommonAddress address = 11;
+  optional string image_url = 12;
+}
+
+// TaskEvent is the task event object
+message TaskEvent {
+  string id = 1;
+  string task_id = 2;
+  string user_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  optional string notes = 6;
+}
+// ----------- end of task section ----------------- //
+
+
+
+// ----------- start of giveaway section --------------- //
+message GiveawayCandidateList {
+  repeated auth.Account candidates = 1;
+}
+
+
+// GiveAwayList is the list of GiveAways
+message GiveAwayList {
+  repeated GiveAway giveaways = 1;
+}
+
+// CreateGiveAwayRequest is the request for creating a GiveAway
+message CreateGiveAwayRequest {
+  string name = 1;
+  string description = 2;
+  repeated string images = 3;
+  core.CommonAddress address = 4;
+  GiveAwayDispatchType dispatch_type = 5;
+  google.protobuf.Duration dispatch_duration = 6;
+}
+
+// GiveAway is the model for a GiveAway
+message GiveAway {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string images = 4;
+  string owner = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  core.CommonAddress address = 8;
+}
+
+// GiveAwayDispatchType is the type of dispatch for a GiveAway
+enum GiveAwayDispatchType {
+  GIVEAWAY_PICKUP = 0;
+  GIVEAWAY_DELIVERY = 1;
+}
+// ----------- end of giveaway section ----------------- //
+
+
+
+// ----------- start of event section --------------- //
+message EventCandidateList {
+  repeated auth.Account candidates = 1;
+}
+
+message CreateEventRequest {
+  string name = 1;
+  string description = 2;
+  string location = 3;
+  double latitude = 4;
+  double longitude = 5;
+  google.protobuf.Timestamp start_time = 6;
+  google.protobuf.Timestamp end_time = 7;
+  google.protobuf.Duration duration = 8;
+  string user_id = 9;
+  repeated string photos = 10;
+  optional string video = 11;
+}
+
+message ProcheEvent {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string location = 4;
+  double latitude = 5;
+  double longitude = 6;
+  google.protobuf.Timestamp start_time = 7;
+  google.protobuf.Timestamp end_time = 8;
+  google.protobuf.Duration duration = 9;
+  string user_id = 10;
+  ProcheEventStatus status = 11;
+  repeated string photos = 12;
+  optional string video = 13;
+
+}
+
+enum ProcheEventStatus {
+  ACTIVE = 0;
+  CANCELLED = 1;
+  COMPLETED = 2;
+}
+
+message ProcheEventList {
+  repeated ProcheEvent events = 1;
+}
+// ----------- end of event section ----------------- //
+

@@ -132,5 +132,12 @@
   "specialization": "Spécialisation",
   "specializationSubhead": "Sélectionnez votre spécialisation",
   "hourlyRate": "Taux horaire",
-  "enterOption" : "Entrez une option"
+  "enterOption": "Entrez une option",
+  "jobsCompleted": "Travaux terminés",
+  "ratingsAndReviews": "Évaluations et commentaires",
+  "businessAccountInfo": "Un compte professionnel est requis pour publier et recevoir des services. Ce compte n'est pas visible par le public, sauf si vous choisissez de le rendre public",
+  "delete" : "Supprimer",
+  "deleteAccount" : "Souhaitez-vous supprimer votre compte?",
+  "deleteBusinessAccount" : "Souhaitez-vous supprimer votre compte professionnel?",
+  "accountCreatedSuccessfully" : "Votre compte a été créé avec succès"
 }

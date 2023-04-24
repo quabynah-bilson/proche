@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:protobuf_google/protobuf_google.dart';
 
 abstract class BaseBusinessRepository {
   Future<Either<BusinessAccount, String>> registerBusiness({
@@ -10,7 +11,7 @@ abstract class BaseBusinessRepository {
   Future<Either<BusinessAccount, String>> updateBusinessAccount(
       BusinessAccount account);
 
-  Future<Either<void, String>> deleteBusinessAccount(String id);
+  Future<Either<Empty, String>> deleteBusinessAccount(String id);
 
   Future<Either<BusinessAccount, String>> getBusinessAccount(String ownerId);
 

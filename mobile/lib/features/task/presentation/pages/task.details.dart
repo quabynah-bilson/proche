@@ -13,8 +13,8 @@ import 'package:mobile/features/shared/presentation/widgets/tab.container.dart';
 import 'package:mobile/features/task/presentation/manager/task_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:mobile/generated/protos/core_shared.pb.dart';
 import 'package:mobile/generated/protos/shared.pb.dart';
-import 'package:mobile/generated/protos/task.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 class ProcheTaskDetailsPage extends StatefulWidget {

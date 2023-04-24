@@ -66,9 +66,28 @@ class ProcheTaskRepository extends BaseTaskRepository {
   @override
   Future<Either<void, String>> applyForTask(ApplyForTaskRequest request) async {
     try {
-      request.userId = UserSession.kUserId ??= throw GrpcError.unauthenticated('Sign in first to apply for a task');
+      request.userId = UserSession.kUserId ??=
+          throw GrpcError.unauthenticated('Sign in first to apply for a task');
       await client.apply_for_task(request);
       return left(null);
+    } on GrpcError catch (e) {
+      return right(e.message ?? e.codeName);
+    }
+  }
+
+  @override
+  Future<Either<Stream<List<ProcheTask>>, String>>
+      getAllTasksForCurrentUser() async {
+    try {
+      var stream = client.get_tasks_for_current_user(
+        Empty(),
+        options: CallOptions(metadata: {
+          'x-page': '${QuickHelpSession.kTasksPage}',
+          'x-per-page': '${QuickHelpSession.kTasksPerPage}',
+        }),
+      );
+
+      return left(stream.map((event) => event.tasks));
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }

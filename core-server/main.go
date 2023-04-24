@@ -46,6 +46,11 @@ func main() {
 		pb.RegisterTripServiceServer(s, svc.NewProcheTripServerInstance(tripsCollection, tripEventsCollection))
 		pb.RegisterTaskServiceServer(s, svc.NewProcheTaskServerInstance(tasksCollection, taskEventsCollection, taskCandidatesCollection))
 		pb.RegisterGiveAwayServiceServer(s, svc.NewProcheGiveAwayServer(giveAwayCollection))
+		pb.RegisterCoreSharedServiceServer(s, svc.NewProcheSharedServerInstance(
+			tripsCollection,
+			eventsCollection,
+			tasksCollection,
+			giveAwayCollection))
 		reflection.Register(s)
 
 		// run server

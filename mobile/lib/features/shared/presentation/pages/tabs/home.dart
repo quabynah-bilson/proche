@@ -19,11 +19,19 @@ class _HomeTabState extends State<_HomeTab> {
       _currentAddress = 'Loading...';
   late var _account = widget.account;
 
+  final _quickHelpStream = StreamController<List<ProcheTask>>.broadcast();
+
   @override
   void initState() {
     super.initState();
     _authBloc.add(GetCurrentAccountAuthEvent());
     _locationCubit.getCurrentLocation();
+  }
+
+  @override
+  void dispose() {
+    _closeStreams();
+    super.dispose();
   }
 
   @override
@@ -68,6 +76,16 @@ class _HomeTabState extends State<_HomeTab> {
                         longitude: state.data.longitude),
                   ),
                 );
+              }
+            },
+          ),
+          BlocListener(
+            bloc: _quickHelpBloc,
+            listener: (context, state) {
+              if (!mounted) return;
+
+              if (state is SuccessState<Stream<List<ProcheTask>>>) {
+                _quickHelpStream.sink.addStream(state.data);
               }
             },
           ),
@@ -191,13 +209,13 @@ class _HomeTabState extends State<_HomeTab> {
                           ).horizontal(24).top(16),
 
                           /// quick help content
-                          BlocBuilder(
-                            bloc: _quickHelpBloc,
-                            builder: (context, state) {
-                              if (state is ErrorState<String>) {
+                          StreamBuilder<List<ProcheTask>>(
+                            stream: _quickHelpStream.stream,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
                                 return SafeArea(
                                   child: EmptyContentPlaceholder(
-                                    icon: TablerIcons.package_off,
+                                    icon: TablerIcons.subtask,
                                     title: context
                                         .localizer.nothingAvailableHeader,
                                     subtitle: context
@@ -206,59 +224,30 @@ class _HomeTabState extends State<_HomeTab> {
                                 );
                               }
 
-                              if (state
-                                  is SuccessState<Stream<List<ProcheTask>>>) {
-                                return StreamBuilder<List<ProcheTask>>(
-                                  stream: state.data,
-                                  initialData: const <ProcheTask>[],
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasError) {
-                                      return SafeArea(
-                                        child: EmptyContentPlaceholder(
-                                          icon: TablerIcons.subtask,
-                                          title: context
-                                              .localizer.nothingAvailableHeader,
-                                          subtitle: context.localizer
-                                              .nothingAvailableSubhead,
-                                        ),
-                                      );
-                                    }
+                              if (snapshot.hasData) {
+                                final tasks = snapshot.data;
+                                if (tasks!.isEmpty) {
+                                  return SafeArea(
+                                    child: EmptyContentPlaceholder(
+                                      icon: TablerIcons.subtask,
+                                      title: context
+                                          .localizer.nothingAvailableHeader,
+                                      subtitle: context
+                                          .localizer.nothingAvailableSubhead,
+                                    ),
+                                  );
+                                }
 
-                                    if (snapshot.hasData) {
-                                      final tasks = snapshot.data;
-                                      if (tasks!.isEmpty) {
-                                        return SafeArea(
-                                          child: EmptyContentPlaceholder(
-                                            icon: TablerIcons.subtask,
-                                            title: context.localizer
-                                                .nothingAvailableHeader,
-                                            subtitle: context.localizer
-                                                .nothingAvailableSubhead,
-                                          ),
-                                        );
-                                      }
-
-                                      return ListView.separated(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        padding: const EdgeInsets.fromLTRB(
-                                            24, 16, 24, 20),
-                                        itemBuilder: (context, index) =>
-                                            QuickHelpListTile(
-                                                task: tasks[index]),
-                                        separatorBuilder: (_, __) =>
-                                            const SizedBox(height: 12),
-                                        itemCount: tasks.length,
-                                      );
-                                    }
-
-                                    return SafeArea(
-                                      child: const CircularProgressIndicator
-                                              .adaptive()
-                                          .centered(),
-                                    );
-                                  },
+                                return ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(24, 16, 24, 20),
+                                  itemBuilder: (context, index) =>
+                                      QuickHelpListTile(task: tasks[index]),
+                                  separatorBuilder: (_, __) =>
+                                      const SizedBox(height: 12),
+                                  itemCount: tasks.length,
                                 );
                               }
 
@@ -351,4 +340,8 @@ class _HomeTabState extends State<_HomeTab> {
           ],
         ).fillMaxSize(context),
       );
+
+  void _closeStreams() async {
+    if (await _quickHelpStream.done) _quickHelpStream.close();
+  }
 }

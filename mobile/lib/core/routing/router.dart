@@ -15,7 +15,7 @@ import 'package:mobile/features/shared/presentation/pages/user.activities.dart';
 import 'package:mobile/features/shared/presentation/pages/user.favorites.dart';
 import 'package:mobile/features/task/presentation/pages/task.details.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
-import 'package:mobile/generated/protos/task.pb.dart';
+import 'package:mobile/generated/protos/core_shared.pb.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -87,7 +87,8 @@ class AppRouterConfig {
       /// region business
       case AppRouter.createBusinessAccountRoute:
         return MaterialWithModalsPageRoute(
-            builder: (_) => CreateBusinessAccountPage(account: settings.arguments as Account),
+            builder: (_) => CreateBusinessAccountPage(
+                account: settings.arguments as Account),
             settings: settings);
 
       /// endregion business

@@ -28,6 +28,7 @@ type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*ProcheTask, error)
 	GetTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetTaskClient, error)
 	GetTasks(ctx context.Context, in *CommonAddress, opts ...grpc.CallOption) (TaskService_GetTasksClient, error)
+	GetTasksForCurrentUser(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (TaskService_GetTasksForCurrentUserClient, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*ProcheTask, error)
 	DeleteTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// task event related operations
@@ -129,6 +130,38 @@ func (x *taskServiceGetTasksClient) Recv() (*TaskList, error) {
 	return m, nil
 }
 
+func (c *taskServiceClient) GetTasksForCurrentUser(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (TaskService_GetTasksForCurrentUserClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[2], "/task.TaskService/get_tasks_for_current_user", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &taskServiceGetTasksForCurrentUserClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TaskService_GetTasksForCurrentUserClient interface {
+	Recv() (*TaskList, error)
+	grpc.ClientStream
+}
+
+type taskServiceGetTasksForCurrentUserClient struct {
+	grpc.ClientStream
+}
+
+func (x *taskServiceGetTasksForCurrentUserClient) Recv() (*TaskList, error) {
+	m := new(TaskList)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *taskServiceClient) UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*ProcheTask, error) {
 	out := new(ProcheTask)
 	err := c.cc.Invoke(ctx, "/task.TaskService/update_task", in, out, opts...)
@@ -157,7 +190,7 @@ func (c *taskServiceClient) CreateTaskEvent(ctx context.Context, in *CreateTaskE
 }
 
 func (c *taskServiceClient) GetTaskEvent(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetTaskEventClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[2], "/task.TaskService/get_task_event", opts...)
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[3], "/task.TaskService/get_task_event", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +222,7 @@ func (x *taskServiceGetTaskEventClient) Recv() (*TaskEvent, error) {
 }
 
 func (c *taskServiceClient) GetTaskEvents(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetTaskEventsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[3], "/task.TaskService/get_task_events", opts...)
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[4], "/task.TaskService/get_task_events", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -239,7 +272,7 @@ func (c *taskServiceClient) CompleteTaskEvent(ctx context.Context, in *CompleteT
 }
 
 func (c *taskServiceClient) GetTaskEventsForUser(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetTaskEventsForUserClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[4], "/task.TaskService/get_task_events_for_user", opts...)
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[5], "/task.TaskService/get_task_events_for_user", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -271,7 +304,7 @@ func (x *taskServiceGetTaskEventsForUserClient) Recv() (*TaskEventList, error) {
 }
 
 func (c *taskServiceClient) GetTaskEventsForTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetTaskEventsForTaskClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[5], "/task.TaskService/get_task_events_for_task", opts...)
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[6], "/task.TaskService/get_task_events_for_task", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -303,7 +336,7 @@ func (x *taskServiceGetTaskEventsForTaskClient) Recv() (*TaskEventList, error) {
 }
 
 func (c *taskServiceClient) GetTaskEventsForUserAndTask(ctx context.Context, in *TaskEventRequest, opts ...grpc.CallOption) (TaskService_GetTaskEventsForUserAndTaskClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[6], "/task.TaskService/get_task_events_for_user_and_task", opts...)
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[7], "/task.TaskService/get_task_events_for_user_and_task", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -371,7 +404,7 @@ func (c *taskServiceClient) DeleteTaskEventsForUserAndTask(ctx context.Context, 
 }
 
 func (c *taskServiceClient) GetCandidatesForTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetCandidatesForTaskClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[7], "/task.TaskService/get_candidates_for_task", opts...)
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[8], "/task.TaskService/get_candidates_for_task", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -419,6 +452,7 @@ type TaskServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*ProcheTask, error)
 	GetTask(*wrapperspb.StringValue, TaskService_GetTaskServer) error
 	GetTasks(*CommonAddress, TaskService_GetTasksServer) error
+	GetTasksForCurrentUser(*emptypb.Empty, TaskService_GetTasksForCurrentUserServer) error
 	UpdateTask(context.Context, *UpdateTaskRequest) (*ProcheTask, error)
 	DeleteTask(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	// task event related operations
@@ -452,6 +486,9 @@ func (UnimplementedTaskServiceServer) GetTask(*wrapperspb.StringValue, TaskServi
 }
 func (UnimplementedTaskServiceServer) GetTasks(*CommonAddress, TaskService_GetTasksServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetTasks not implemented")
+}
+func (UnimplementedTaskServiceServer) GetTasksForCurrentUser(*emptypb.Empty, TaskService_GetTasksForCurrentUserServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetTasksForCurrentUser not implemented")
 }
 func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*ProcheTask, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
@@ -571,6 +608,27 @@ type taskServiceGetTasksServer struct {
 }
 
 func (x *taskServiceGetTasksServer) Send(m *TaskList) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TaskService_GetTasksForCurrentUser_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(emptypb.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TaskServiceServer).GetTasksForCurrentUser(m, &taskServiceGetTasksForCurrentUserServer{stream})
+}
+
+type TaskService_GetTasksForCurrentUserServer interface {
+	Send(*TaskList) error
+	grpc.ServerStream
+}
+
+type taskServiceGetTasksForCurrentUserServer struct {
+	grpc.ServerStream
+}
+
+func (x *taskServiceGetTasksForCurrentUserServer) Send(m *TaskList) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -941,6 +999,11 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "get_tasks",
 			Handler:       _TaskService_GetTasks_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "get_tasks_for_current_user",
+			Handler:       _TaskService_GetTasksForCurrentUser_Handler,
 			ServerStreams: true,
 		},
 		{

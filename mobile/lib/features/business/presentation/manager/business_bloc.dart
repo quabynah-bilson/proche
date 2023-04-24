@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:mobile/core/di/injection.dart';
 import 'package:mobile/features/business/domain/repositories/business.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 part 'business_event.dart';
@@ -52,7 +53,7 @@ class BusinessBloc extends Bloc<BusinessEvent, BlocState> {
       emit(BlocState.loadingState());
       var either = await _repo.deleteBusinessAccount(event.id);
       either.fold(
-        (l) => emit(BlocState<void>.successState(data: null)),
+        (l) => emit(BlocState<Empty>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });

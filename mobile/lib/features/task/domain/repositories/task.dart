@@ -14,5 +14,7 @@ abstract class BaseTaskRepository {
   Future<Either<Stream<List<ProcheTask>>, String>> getAllTasks(
       CommonAddress address);
 
+  Future<Either<Stream<List<ProcheTask>>, String>> getAllTasksForCurrentUser();
+
   Future<Either<void, String>> applyForTask(ApplyForTaskRequest request);
 }

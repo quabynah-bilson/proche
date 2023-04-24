@@ -12,6 +12,7 @@ class _PersonalProfileTab extends StatefulWidget {
 class _PersonalProfileTabState extends State<_PersonalProfileTab> {
   late var _account = widget.account;
   final _authBloc = AuthBloc(),
+      _postsBloc = PostsBloc(),
       _totalFields = 4,
       _formKey = GlobalKey<FormState>(),
       _avatars = [
@@ -291,6 +292,7 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
   void initState() {
     super.initState();
     _authBloc.add(GetCurrentAccountAuthEvent());
+    _postsBloc.add(GetCurrentUserPostsEvent());
     doAfterDelay(() => context.read<LocaleCubit>().getCurrentLocale());
     _calculateProfileCompletion();
   }
@@ -502,12 +504,32 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                         ),
                       ],
                     ).top(16),
-                    SafeArea(
-                      child: EmptyContentPlaceholder(
-                        icon: TablerIcons.subtask,
-                        title: context.localizer.nothingAvailableHeader,
-                        subtitle: context.localizer.nothingAvailableSubhead,
-                      ),
+                    BlocBuilder(
+                      bloc: _postsBloc,
+                      builder: (context, state) {
+                        if (state is SuccessState<GetPostsForUserResponse>) {
+                          // TODO -> show a list of users' posts
+                          return SafeArea(
+                              child: context.localizer.underMaintenanceSubhead
+                                  .subtitle1(context)
+                                  .centered());
+                        }
+
+                        if (state is ErrorState<String>) {
+                          return SafeArea(
+                            child: EmptyContentPlaceholder(
+                              icon: TablerIcons.subtask,
+                              title: context.localizer.nothingAvailableHeader,
+                              subtitle:
+                                  context.localizer.nothingAvailableSubhead,
+                            ),
+                          );
+                        }
+
+                        return SafeArea(
+                            child: const CircularProgressIndicator.adaptive()
+                                .centered());
+                      },
                     ),
                   ],
                 ),

@@ -10,9 +10,8 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
-import 'task.pb.dart' as $3;
+import 'core_shared.pb.dart' as $3;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
-import 'core_shared.pb.dart' as $4;
 import 'package:protobuf_google/protobuf_google.dart' as $2;
 export 'task.pb.dart';
 
@@ -26,10 +25,15 @@ class TaskServiceClient extends $grpc.Client {
       '/task.TaskService/get_task',
       ($1.StringValue value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $3.ProcheTask.fromBuffer(value));
-  static final _$get_tasks = $grpc.ClientMethod<$4.CommonAddress, $3.TaskList>(
+  static final _$get_tasks = $grpc.ClientMethod<$3.CommonAddress, $3.TaskList>(
       '/task.TaskService/get_tasks',
-      ($4.CommonAddress value) => value.writeToBuffer(),
+      ($3.CommonAddress value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $3.TaskList.fromBuffer(value));
+  static final _$get_tasks_for_current_user =
+      $grpc.ClientMethod<$2.Empty, $3.TaskList>(
+          '/task.TaskService/get_tasks_for_current_user',
+          ($2.Empty value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $3.TaskList.fromBuffer(value));
   static final _$update_task =
       $grpc.ClientMethod<$3.UpdateTaskRequest, $3.ProcheTask>(
           '/task.TaskService/update_task',
@@ -128,10 +132,17 @@ class TaskServiceClient extends $grpc.Client {
         options: options);
   }
 
-  $grpc.ResponseStream<$3.TaskList> get_tasks($4.CommonAddress request,
+  $grpc.ResponseStream<$3.TaskList> get_tasks($3.CommonAddress request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
         _$get_tasks, $async.Stream.fromIterable([request]),
+        options: options);
+  }
+
+  $grpc.ResponseStream<$3.TaskList> get_tasks_for_current_user($2.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createStreamingCall(
+        _$get_tasks_for_current_user, $async.Stream.fromIterable([request]),
         options: options);
   }
 
@@ -258,12 +269,19 @@ abstract class TaskServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $1.StringValue.fromBuffer(value),
         ($3.ProcheTask value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.CommonAddress, $3.TaskList>(
+    $addMethod($grpc.ServiceMethod<$3.CommonAddress, $3.TaskList>(
         'get_tasks',
         get_tasks_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $4.CommonAddress.fromBuffer(value),
+        ($core.List<$core.int> value) => $3.CommonAddress.fromBuffer(value),
+        ($3.TaskList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.Empty, $3.TaskList>(
+        'get_tasks_for_current_user',
+        get_tasks_for_current_user_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) => $2.Empty.fromBuffer(value),
         ($3.TaskList value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$3.UpdateTaskRequest, $3.ProcheTask>(
         'update_task',
@@ -393,8 +411,13 @@ abstract class TaskServiceBase extends $grpc.Service {
   }
 
   $async.Stream<$3.TaskList> get_tasks_Pre(
-      $grpc.ServiceCall call, $async.Future<$4.CommonAddress> request) async* {
+      $grpc.ServiceCall call, $async.Future<$3.CommonAddress> request) async* {
     yield* get_tasks(call, await request);
+  }
+
+  $async.Stream<$3.TaskList> get_tasks_for_current_user_Pre(
+      $grpc.ServiceCall call, $async.Future<$2.Empty> request) async* {
+    yield* get_tasks_for_current_user(call, await request);
   }
 
   $async.Future<$3.ProcheTask> update_task_Pre($grpc.ServiceCall call,
@@ -484,7 +507,9 @@ abstract class TaskServiceBase extends $grpc.Service {
   $async.Stream<$3.ProcheTask> get_task(
       $grpc.ServiceCall call, $1.StringValue request);
   $async.Stream<$3.TaskList> get_tasks(
-      $grpc.ServiceCall call, $4.CommonAddress request);
+      $grpc.ServiceCall call, $3.CommonAddress request);
+  $async.Stream<$3.TaskList> get_tasks_for_current_user(
+      $grpc.ServiceCall call, $2.Empty request);
   $async.Future<$3.ProcheTask> update_task(
       $grpc.ServiceCall call, $3.UpdateTaskRequest request);
   $async.Future<$2.Empty> delete_task(

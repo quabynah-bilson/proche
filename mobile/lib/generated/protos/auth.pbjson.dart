@@ -8,6 +8,18 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use createBusinessAccountRequestDescriptor instead')
+const CreateBusinessAccountRequest$json = const {
+  '1': 'CreateBusinessAccountRequest',
+  '2': const [
+    const {'1': 'account_id', '3': 1, '4': 1, '5': 9, '10': 'accountId'},
+    const {'1': 'specialization', '3': 2, '4': 1, '5': 9, '10': 'specialization'},
+    const {'1': 'hourly_rate', '3': 3, '4': 1, '5': 1, '10': 'hourlyRate'},
+  ],
+};
+
+/// Descriptor for `CreateBusinessAccountRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createBusinessAccountRequestDescriptor = $convert.base64Decode('ChxDcmVhdGVCdXNpbmVzc0FjY291bnRSZXF1ZXN0Eh0KCmFjY291bnRfaWQYASABKAlSCWFjY291bnRJZBImCg5zcGVjaWFsaXphdGlvbhgCIAEoCVIOc3BlY2lhbGl6YXRpb24SHwoLaG91cmx5X3JhdGUYAyABKAFSCmhvdXJseVJhdGU=');
 @$core.Deprecated('Use getCountriesResponseDescriptor instead')
 const GetCountriesResponse$json = const {
   '1': 'GetCountriesResponse',

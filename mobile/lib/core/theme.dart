@@ -47,6 +47,8 @@ ColorScheme useColorScheme([ThemeMode mode = ThemeMode.light]) =>
             onSurface: Color(0xff2B2723),
             error: Colors.deepOrangeAccent,
             onError: Colors.white,
+            errorContainer: Colors.pink,
+            onErrorContainer: Colors.white,
             tertiary: Color(0xff16855D),
             onTertiary: Color(0xff2B2723),
             secondaryContainer: Color(0xffF6F6F6),
