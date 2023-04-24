@@ -13,7 +13,7 @@ password_reset_failed: Échec de la réinitialisation du mot de passe
 invalid_referral_code: Code de référence invalide
 
 # business messages
-business_not_found: Compte professionnel introuvable
+business_not_found: Compte professionnel introuvable. Créez-en un à partir de votre page de profil pour commencer
 business_account_exists: Le compte professionnel existe déjà
 
 # auth messages

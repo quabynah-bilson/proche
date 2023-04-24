@@ -51,7 +51,7 @@ message TaskCandidateList {
 message TaskCandidate {
   string id = 1;
   string task_id = 2;
-  auth.BusinessAccount volunteer = 3;
+  auth.BusinessAccount account = 3;
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
   bool hired = 6;

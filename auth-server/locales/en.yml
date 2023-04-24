@@ -13,7 +13,7 @@ password_reset_failed: Password reset failed
 invalid_referral_code: Invalid referral code
 
 # business messages
-business_not_found: Business account not found
+business_not_found: Business account not found. Create one from your profile page to get started
 business_account_exists: Business account already exists
 
 # auth messages

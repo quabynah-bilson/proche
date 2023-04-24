@@ -46,8 +46,7 @@ func (s *ProcheTaskServer) ApplyForTask(ctx context.Context, req *pb.ApplyForTas
 	candidateId := req.GetUserId()
 
 	// check if candidate has already applied for task
-	var candidate bson.D
-	if err := s.candidatesCol.FindOne(ctx, bson.M{"candidate": candidateId}).Decode(&candidate); err != mongo.ErrNoDocuments {
+	if count, _ := s.candidatesCol.CountDocuments(ctx, bson.M{"account.owner.id": candidateId}); count != 0 {
 		return nil, status.Errorf(codes.AlreadyExists, "candidate has already applied for task")
 	}
 
@@ -66,7 +65,7 @@ func (s *ProcheTaskServer) ApplyForTask(ctx context.Context, req *pb.ApplyForTas
 		candidate := &pb.TaskCandidate{
 			Id:        primitive.NewObjectID().Hex(),
 			TaskId:    req.GetTaskId(),
-			Volunteer: account,
+			Account:   account,
 			CreatedAt: timestamppb.Now(),
 			UpdatedAt: timestamppb.Now(),
 			Hired:     false,
@@ -94,7 +93,7 @@ func (s *ProcheTaskServer) GetCandidatesForTask(req *wrapperspb.StringValue, str
 
 	response := &pb.TaskCandidateList{}
 	var candidates []*pb.TaskCandidate
-	if cursor, err := s.candidatesCol.Find(ctx, bson.M{"task_id": req.GetValue()}); err != nil {
+	if cursor, err := s.candidatesCol.Find(ctx, bson.M{"taskid": req.GetValue()}); err != nil {
 		log.Printf("unable to find candidates for this task: %v", err)
 		return status.Errorf(codes.Internal, "unable to find candidates for this task")
 	} else {
@@ -113,6 +112,7 @@ func (s *ProcheTaskServer) GetCandidatesForTask(req *wrapperspb.StringValue, str
 	if watchStream, err := s.candidatesCol.Watch(ctx, pipeline, changeStreamOptions); err != nil {
 		return status.Errorf(codes.Internal, "failed to create watch stream: %v", err)
 	} else {
+		var candidates []*pb.TaskCandidate
 
 		// iterate over watch stream
 		for watchStream.Next(ctx) {
@@ -125,7 +125,7 @@ func (s *ProcheTaskServer) GetCandidatesForTask(req *wrapperspb.StringValue, str
 			}
 
 			// append candidate to candidate list
-			response.Candidates = append(response.GetCandidates(), candidate.FullDocument)
+			response.Candidates = append(candidates, candidate.FullDocument)
 
 			// send task list
 			if err := stream.Send(response); err != nil {
