@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"github.com/quabynah-bilson/core-server/config"
 	pb "github.com/quabynah-bilson/core-server/gen"
 	"github.com/quabynah-bilson/core-server/util"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,20 +16,126 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"log"
+	"time"
 )
 
 type ProcheTaskServer struct {
 	pb.UnimplementedTaskServiceServer
-	taskCol      *mongo.Collection
-	taskEventCol *mongo.Collection
+	taskCol       *mongo.Collection
+	taskEventCol  *mongo.Collection
+	candidatesCol *mongo.Collection
 }
 
-func NewProcheTaskServerInstance(taskCol *mongo.Collection, taskEventCol *mongo.Collection) *ProcheTaskServer {
+func NewProcheTaskServerInstance(taskCol *mongo.Collection, taskEventCol *mongo.Collection, candidatesCol *mongo.Collection) *ProcheTaskServer {
 	return &ProcheTaskServer{
 		UnimplementedTaskServiceServer: pb.UnimplementedTaskServiceServer{},
 		taskCol:                        taskCol,
 		taskEventCol:                   taskEventCol,
+		candidatesCol:                  candidatesCol,
 	}
+}
+
+func (s *ProcheTaskServer) ApplyForTask(ctx context.Context, req *pb.ApplyForTaskRequest) (*emptypb.Empty, error) {
+
+	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Second*30))
+	defer cancel()
+
+	// get candidate
+	candidateId := req.GetUserId()
+
+	// check if candidate has already applied for task
+	var candidate bson.D
+	if err := s.candidatesCol.FindOne(ctx, bson.M{"candidate": candidateId}).Decode(&candidate); err != mongo.ErrNoDocuments {
+		return nil, status.Errorf(codes.AlreadyExists, "candidate has already applied for task")
+	}
+
+	// get task id
+	taskId := req.GetTaskId()
+
+	var task pb.ProcheTask
+	if err := s.taskCol.FindOne(ctx, bson.M{"id": taskId}).Decode(&task); err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get task: %v", err)
+	}
+
+	// check if candidate has a business account
+	if account, err := config.CreateAuthClient().GetBusinessAccount(ctx, &wrapperspb.StringValue{Value: candidateId}); err != nil {
+		return nil, err
+	} else {
+		candidate := &pb.TaskCandidate{
+			Id:        primitive.NewObjectID().Hex(),
+			TaskId:    req.GetTaskId(),
+			Volunteer: account,
+			CreatedAt: timestamppb.Now(),
+			UpdatedAt: timestamppb.Now(),
+			Hired:     false,
+		}
+
+		// add to candidates
+		if result, err := s.candidatesCol.InsertOne(ctx, candidate, nil); err != nil {
+			log.Printf("unable to complete application for this task: %v", err)
+			return nil, status.Errorf(codes.Internal, "unable to complete application for this task")
+		} else {
+			go func(res *mongo.InsertOneResult, candidate *pb.TaskCandidate, col *mongo.Collection) {
+				candidate.Id = res.InsertedID.(primitive.ObjectID).Hex()
+				_, _ = col.ReplaceOne(context.Background(), bson.M{"_id": res.InsertedID.(primitive.ObjectID)}, &candidate)
+			}(result, candidate, s.candidatesCol)
+		}
+
+		return &emptypb.Empty{}, nil
+	}
+}
+
+func (s *ProcheTaskServer) GetCandidatesForTask(req *wrapperspb.StringValue, stream pb.TaskService_GetCandidatesForTaskServer) error {
+	ctx := stream.Context()
+
+	response := &pb.TaskCandidateList{}
+	var candidates []*pb.TaskCandidate
+	if cursor, err := s.candidatesCol.Find(ctx, bson.M{"task_id": req.GetValue()}); err != nil {
+		log.Printf("unable to find candidates for this task: %v", err)
+		return status.Errorf(codes.Internal, "unable to find candidates for this task")
+	} else {
+		_ = cursor.All(ctx, &candidates)
+		response.Candidates = candidates
+	}
+	_ = stream.Send(response)
+
+	// create a change stream option
+	changeStreamOptions := options.ChangeStream().SetFullDocument(options.UpdateLookup)
+
+	// create a new aggregation pipeline
+	pipeline := mongo.Pipeline{}
+
+	// create a watch stream for the tasks collection
+	if watchStream, err := s.candidatesCol.Watch(ctx, pipeline, changeStreamOptions); err != nil {
+		return status.Errorf(codes.Internal, "failed to create watch stream: %v", err)
+	} else {
+
+		// iterate over watch stream
+		for watchStream.Next(ctx) {
+			// create task
+			var candidate util.MongoDocToProto[*pb.TaskCandidate]
+
+			// decode candidate
+			if err := watchStream.Decode(&candidate); err != nil {
+				return status.Errorf(codes.Internal, "failed to decode candidate: %v", err)
+			}
+
+			// append candidate to candidate list
+			response.Candidates = append(response.GetCandidates(), candidate.FullDocument)
+
+			// send task list
+			if err := stream.Send(response); err != nil {
+				return status.Errorf(codes.Internal, "failed to push candidate data: %v", err)
+			}
+		}
+
+		// close watch stream
+		defer func(watchStream *mongo.ChangeStream, ctx context.Context) {
+			_ = watchStream.Close(ctx)
+		}(watchStream, ctx)
+	}
+
+	return nil
 }
 
 // CreateTask creates a new task
@@ -36,6 +143,8 @@ func NewProcheTaskServerInstance(taskCol *mongo.Collection, taskEventCol *mongo.
 func (s *ProcheTaskServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.ProcheTask, error) {
 	// get request charge per hour
 	chargePerHour := req.GetChargePerHour()
+
+	imageUrl := req.GetImageUrl()
 
 	// create task
 	task := pb.ProcheTask{
@@ -49,6 +158,7 @@ func (s *ProcheTaskServer) CreateTask(ctx context.Context, req *pb.CreateTaskReq
 		ChargePerHour: &chargePerHour,
 		UserId:        req.GetUserId(),
 		Address:       req.GetAddress(),
+		ImageUrl:      &imageUrl,
 	}
 
 	// insert task into database
@@ -58,12 +168,12 @@ func (s *ProcheTaskServer) CreateTask(ctx context.Context, req *pb.CreateTaskReq
 		// update task id with insertResultId
 		task.Id = insertResultId.InsertedID.(primitive.ObjectID).Hex()
 
-		go func(task *pb.ProcheTask) {
+		go func(task *pb.ProcheTask, col *mongo.Collection) {
 			// save to database
-			if _, err := s.taskCol.ReplaceOne(context.Background(), bson.M{"title": task.GetTitle()}, &task); err != nil {
+			if _, err := col.ReplaceOne(context.Background(), bson.M{"title": task.GetTitle()}, &task); err != nil {
 				log.Fatalf("failed to update task: %v", err)
 			}
-		}(&task)
+		}(&task, s.taskCol)
 		return &task, nil
 	}
 }
@@ -126,7 +236,9 @@ func (s *ProcheTaskServer) GetTask(req *wrapperspb.StringValue, stream pb.TaskSe
 
 // GetTasks gets all tasks
 // done
-func (s *ProcheTaskServer) GetTasks(req *pb.CommonAddress, stream pb.TaskService_GetTasksServer) error {
+func (s *ProcheTaskServer) GetTasks(_ *pb.CommonAddress, stream pb.TaskService_GetTasksServer) error {
+	// TODO -> use location to get tasks
+
 	// get context from stream
 	ctx := stream.Context()
 

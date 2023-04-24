@@ -62,6 +62,17 @@ class _QuickHelpListTileState extends State<QuickHelpListTile> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                height: context.height * 0.18,
+                clipBehavior: Clip.antiAlias,
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(_kBorderRadius),
+                ),
+                child: widget.task.imageUrl.asNetworkImage(
+                    width: context.width, height: context.height * 0.18),
+              ),
               // purpose
               widget.task.title.bodyText2(context,
                   weight: FontWeight.w600,
@@ -102,7 +113,8 @@ class _QuickHelpListTileState extends State<QuickHelpListTile> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      context.localizer.numberOfVolunteers(14).subtitle2(context,
+                      context.localizer.numberOfVolunteers(14).subtitle2(
+                          context,
                           color: context.colorScheme.onSurface),
                       RoundedIconButton(
                         icon: TablerIcons.chevron_right,

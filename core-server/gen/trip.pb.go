@@ -80,6 +80,53 @@ func (TripEventType) EnumDescriptor() ([]byte, []int) {
 	return file_trip_proto_rawDescGZIP(), []int{0}
 }
 
+type TripCandidateList struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Candidates []*Account `protobuf:"bytes,1,rep,name=candidates,proto3" json:"candidates,omitempty"`
+}
+
+func (x *TripCandidateList) Reset() {
+	*x = TripCandidateList{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_trip_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TripCandidateList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TripCandidateList) ProtoMessage() {}
+
+func (x *TripCandidateList) ProtoReflect() protoreflect.Message {
+	mi := &file_trip_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TripCandidateList.ProtoReflect.Descriptor instead.
+func (*TripCandidateList) Descriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *TripCandidateList) GetCandidates() []*Account {
+	if x != nil {
+		return x.Candidates
+	}
+	return nil
+}
+
 // TripList is the list of trips
 type TripList struct {
 	state         protoimpl.MessageState
@@ -92,7 +139,7 @@ type TripList struct {
 func (x *TripList) Reset() {
 	*x = TripList{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_trip_proto_msgTypes[0]
+		mi := &file_trip_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -105,7 +152,7 @@ func (x *TripList) String() string {
 func (*TripList) ProtoMessage() {}
 
 func (x *TripList) ProtoReflect() protoreflect.Message {
-	mi := &file_trip_proto_msgTypes[0]
+	mi := &file_trip_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -118,7 +165,7 @@ func (x *TripList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TripList.ProtoReflect.Descriptor instead.
 func (*TripList) Descriptor() ([]byte, []int) {
-	return file_trip_proto_rawDescGZIP(), []int{0}
+	return file_trip_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *TripList) GetTrips() []*Trip {
@@ -140,7 +187,7 @@ type TripEventList struct {
 func (x *TripEventList) Reset() {
 	*x = TripEventList{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_trip_proto_msgTypes[1]
+		mi := &file_trip_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -153,7 +200,7 @@ func (x *TripEventList) String() string {
 func (*TripEventList) ProtoMessage() {}
 
 func (x *TripEventList) ProtoReflect() protoreflect.Message {
-	mi := &file_trip_proto_msgTypes[1]
+	mi := &file_trip_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -166,7 +213,7 @@ func (x *TripEventList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TripEventList.ProtoReflect.Descriptor instead.
 func (*TripEventList) Descriptor() ([]byte, []int) {
-	return file_trip_proto_rawDescGZIP(), []int{1}
+	return file_trip_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *TripEventList) GetTripEvents() []*TripEvent {
@@ -193,7 +240,7 @@ type BookTripRequest struct {
 func (x *BookTripRequest) Reset() {
 	*x = BookTripRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_trip_proto_msgTypes[2]
+		mi := &file_trip_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -206,7 +253,7 @@ func (x *BookTripRequest) String() string {
 func (*BookTripRequest) ProtoMessage() {}
 
 func (x *BookTripRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_trip_proto_msgTypes[2]
+	mi := &file_trip_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -219,7 +266,7 @@ func (x *BookTripRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BookTripRequest.ProtoReflect.Descriptor instead.
 func (*BookTripRequest) Descriptor() ([]byte, []int) {
-	return file_trip_proto_rawDescGZIP(), []int{2}
+	return file_trip_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *BookTripRequest) GetUserId() string {
@@ -283,7 +330,7 @@ type Trip struct {
 func (x *Trip) Reset() {
 	*x = Trip{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_trip_proto_msgTypes[3]
+		mi := &file_trip_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -296,7 +343,7 @@ func (x *Trip) String() string {
 func (*Trip) ProtoMessage() {}
 
 func (x *Trip) ProtoReflect() protoreflect.Message {
-	mi := &file_trip_proto_msgTypes[3]
+	mi := &file_trip_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -309,7 +356,7 @@ func (x *Trip) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Trip.ProtoReflect.Descriptor instead.
 func (*Trip) Descriptor() ([]byte, []int) {
-	return file_trip_proto_rawDescGZIP(), []int{3}
+	return file_trip_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Trip) GetId() string {
@@ -390,7 +437,7 @@ type TripEvent struct {
 func (x *TripEvent) Reset() {
 	*x = TripEvent{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_trip_proto_msgTypes[4]
+		mi := &file_trip_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -403,7 +450,7 @@ func (x *TripEvent) String() string {
 func (*TripEvent) ProtoMessage() {}
 
 func (x *TripEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_trip_proto_msgTypes[4]
+	mi := &file_trip_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -416,7 +463,7 @@ func (x *TripEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TripEvent.ProtoReflect.Descriptor instead.
 func (*TripEvent) Descriptor() ([]byte, []int) {
-	return file_trip_proto_rawDescGZIP(), []int{4}
+	return file_trip_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *TripEvent) GetId() string {
@@ -515,7 +562,7 @@ type TripEventRequest struct {
 func (x *TripEventRequest) Reset() {
 	*x = TripEventRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_trip_proto_msgTypes[5]
+		mi := &file_trip_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -528,7 +575,7 @@ func (x *TripEventRequest) String() string {
 func (*TripEventRequest) ProtoMessage() {}
 
 func (x *TripEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_trip_proto_msgTypes[5]
+	mi := &file_trip_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -541,7 +588,7 @@ func (x *TripEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TripEventRequest.ProtoReflect.Descriptor instead.
 func (*TripEventRequest) Descriptor() ([]byte, []int) {
-	return file_trip_proto_rawDescGZIP(), []int{5}
+	return file_trip_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *TripEventRequest) GetTripId() string {
@@ -613,7 +660,12 @@ var file_trip_proto_rawDesc = []byte{
 	0x1a, 0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
 	0x66, 0x2f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x1a, 0x11, 0x63, 0x6f, 0x72, 0x65, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x22, 0x2c, 0x0a, 0x08, 0x54, 0x72, 0x69, 0x70, 0x4c, 0x69, 0x73, 0x74, 0x12,
+	0x6f, 0x74, 0x6f, 0x1a, 0x0a, 0x61, 0x75, 0x74, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
+	0x42, 0x0a, 0x11, 0x54, 0x72, 0x69, 0x70, 0x43, 0x61, 0x6e, 0x64, 0x69, 0x64, 0x61, 0x74, 0x65,
+	0x4c, 0x69, 0x73, 0x74, 0x12, 0x2d, 0x0a, 0x0a, 0x63, 0x61, 0x6e, 0x64, 0x69, 0x64, 0x61, 0x74,
+	0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x61, 0x75, 0x74, 0x68, 0x2e,
+	0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x0a, 0x63, 0x61, 0x6e, 0x64, 0x69, 0x64, 0x61,
+	0x74, 0x65, 0x73, 0x22, 0x2c, 0x0a, 0x08, 0x54, 0x72, 0x69, 0x70, 0x4c, 0x69, 0x73, 0x74, 0x12,
 	0x20, 0x0a, 0x05, 0x74, 0x72, 0x69, 0x70, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0a,
 	0x2e, 0x74, 0x72, 0x69, 0x70, 0x2e, 0x54, 0x72, 0x69, 0x70, 0x52, 0x05, 0x74, 0x72, 0x69, 0x70,
 	0x73, 0x22, 0x41, 0x0a, 0x0d, 0x54, 0x72, 0x69, 0x70, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x4c, 0x69,
@@ -731,7 +783,7 @@ var file_trip_proto_rawDesc = []byte{
 	0x43, 0x41, 0x4e, 0x43, 0x45, 0x4c, 0x4c, 0x45, 0x44, 0x10, 0x02, 0x12, 0x11, 0x0a, 0x0d, 0x45,
 	0x56, 0x45, 0x4e, 0x54, 0x5f, 0x53, 0x54, 0x41, 0x52, 0x54, 0x45, 0x44, 0x10, 0x03, 0x12, 0x13,
 	0x0a, 0x0f, 0x45, 0x56, 0x45, 0x4e, 0x54, 0x5f, 0x43, 0x4f, 0x4d, 0x50, 0x4c, 0x45, 0x54, 0x45,
-	0x44, 0x10, 0x04, 0x32, 0xf4, 0x04, 0x0a, 0x0b, 0x54, 0x72, 0x69, 0x70, 0x53, 0x65, 0x72, 0x76,
+	0x44, 0x10, 0x04, 0x32, 0xc8, 0x05, 0x0a, 0x0b, 0x54, 0x72, 0x69, 0x70, 0x53, 0x65, 0x72, 0x76,
 	0x69, 0x63, 0x65, 0x12, 0x40, 0x0a, 0x09, 0x62, 0x6f, 0x6f, 0x6b, 0x5f, 0x74, 0x72, 0x69, 0x70,
 	0x12, 0x15, 0x2e, 0x74, 0x72, 0x69, 0x70, 0x2e, 0x42, 0x6f, 0x6f, 0x6b, 0x54, 0x72, 0x69, 0x70,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
@@ -770,10 +822,15 @@ var file_trip_proto_rawDesc = []byte{
 	0x72, 0x69, 0x70, 0x5f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
 	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x72, 0x69,
 	0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x69, 0x70, 0x2e, 0x54,
-	0x72, 0x69, 0x70, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x30, 0x01, 0x42, 0x28, 0x5a, 0x26, 0x63, 0x6f,
-	0x6d, 0x2e, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2f, 0x71, 0x75, 0x61, 0x62, 0x79, 0x6e, 0x61,
-	0x68, 0x2d, 0x62, 0x69, 0x6c, 0x73, 0x6f, 0x6e, 0x2f, 0x70, 0x72, 0x6f, 0x63, 0x68, 0x65, 0x3b,
-	0x63, 0x6f, 0x72, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x69, 0x70, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x30, 0x01, 0x12, 0x52, 0x0a, 0x17, 0x67, 0x65,
+	0x74, 0x5f, 0x63, 0x61, 0x6e, 0x64, 0x69, 0x64, 0x61, 0x74, 0x65, 0x73, 0x5f, 0x66, 0x6f, 0x72,
+	0x5f, 0x74, 0x72, 0x69, 0x70, 0x12, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61,
+	0x6c, 0x75, 0x65, 0x1a, 0x17, 0x2e, 0x74, 0x72, 0x69, 0x70, 0x2e, 0x54, 0x72, 0x69, 0x70, 0x43,
+	0x61, 0x6e, 0x64, 0x69, 0x64, 0x61, 0x74, 0x65, 0x4c, 0x69, 0x73, 0x74, 0x30, 0x01, 0x42, 0x28,
+	0x5a, 0x26, 0x63, 0x6f, 0x6d, 0x2e, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2f, 0x71, 0x75, 0x61,
+	0x62, 0x79, 0x6e, 0x61, 0x68, 0x2d, 0x62, 0x69, 0x6c, 0x73, 0x6f, 0x6e, 0x2f, 0x70, 0x72, 0x6f,
+	0x63, 0x68, 0x65, 0x3b, 0x63, 0x6f, 0x72, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -789,71 +846,76 @@ func file_trip_proto_rawDescGZIP() []byte {
 }
 
 var file_trip_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_trip_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_trip_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_trip_proto_goTypes = []interface{}{
 	(TripEventType)(0),             // 0: trip.TripEventType
-	(*TripList)(nil),               // 1: trip.TripList
-	(*TripEventList)(nil),          // 2: trip.TripEventList
-	(*BookTripRequest)(nil),        // 3: trip.BookTripRequest
-	(*Trip)(nil),                   // 4: trip.Trip
-	(*TripEvent)(nil),              // 5: trip.TripEvent
-	(*TripEventRequest)(nil),       // 6: trip.TripEventRequest
-	(*CommonAddress)(nil),          // 7: core.CommonAddress
-	(*timestamppb.Timestamp)(nil),  // 8: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),    // 9: google.protobuf.Duration
-	(*wrapperspb.StringValue)(nil), // 10: google.protobuf.StringValue
-	(*emptypb.Empty)(nil),          // 11: google.protobuf.Empty
+	(*TripCandidateList)(nil),      // 1: trip.TripCandidateList
+	(*TripList)(nil),               // 2: trip.TripList
+	(*TripEventList)(nil),          // 3: trip.TripEventList
+	(*BookTripRequest)(nil),        // 4: trip.BookTripRequest
+	(*Trip)(nil),                   // 5: trip.Trip
+	(*TripEvent)(nil),              // 6: trip.TripEvent
+	(*TripEventRequest)(nil),       // 7: trip.TripEventRequest
+	(*Account)(nil),                // 8: auth.Account
+	(*CommonAddress)(nil),          // 9: core.CommonAddress
+	(*timestamppb.Timestamp)(nil),  // 10: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),    // 11: google.protobuf.Duration
+	(*wrapperspb.StringValue)(nil), // 12: google.protobuf.StringValue
+	(*emptypb.Empty)(nil),          // 13: google.protobuf.Empty
 }
 var file_trip_proto_depIdxs = []int32{
-	4,  // 0: trip.TripList.trips:type_name -> trip.Trip
-	5,  // 1: trip.TripEventList.trip_events:type_name -> trip.TripEvent
-	7,  // 2: trip.BookTripRequest.origin:type_name -> core.CommonAddress
-	7,  // 3: trip.BookTripRequest.destination:type_name -> core.CommonAddress
-	8,  // 4: trip.BookTripRequest.departure_time:type_name -> google.protobuf.Timestamp
-	9,  // 5: trip.BookTripRequest.duration:type_name -> google.protobuf.Duration
-	7,  // 6: trip.Trip.origin:type_name -> core.CommonAddress
-	7,  // 7: trip.Trip.destination:type_name -> core.CommonAddress
-	8,  // 8: trip.Trip.departure_time:type_name -> google.protobuf.Timestamp
-	9,  // 9: trip.Trip.duration:type_name -> google.protobuf.Duration
-	8,  // 10: trip.Trip.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 11: trip.Trip.updated_at:type_name -> google.protobuf.Timestamp
-	7,  // 12: trip.TripEvent.origin:type_name -> core.CommonAddress
-	7,  // 13: trip.TripEvent.destination:type_name -> core.CommonAddress
-	8,  // 14: trip.TripEvent.departure_time:type_name -> google.protobuf.Timestamp
-	9,  // 15: trip.TripEvent.duration:type_name -> google.protobuf.Duration
-	8,  // 16: trip.TripEvent.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 17: trip.TripEvent.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 18: trip.TripEvent.event_time:type_name -> google.protobuf.Timestamp
-	0,  // 19: trip.TripEvent.event_type:type_name -> trip.TripEventType
-	7,  // 20: trip.TripEventRequest.origin:type_name -> core.CommonAddress
-	7,  // 21: trip.TripEventRequest.destination:type_name -> core.CommonAddress
-	8,  // 22: trip.TripEventRequest.departure_time:type_name -> google.protobuf.Timestamp
-	9,  // 23: trip.TripEventRequest.duration:type_name -> google.protobuf.Duration
-	8,  // 24: trip.TripEventRequest.event_time:type_name -> google.protobuf.Timestamp
-	0,  // 25: trip.TripEventRequest.event_type:type_name -> trip.TripEventType
-	3,  // 26: trip.TripService.book_trip:input_type -> trip.BookTripRequest
-	10, // 27: trip.TripService.get_trip:input_type -> google.protobuf.StringValue
-	10, // 28: trip.TripService.get_trips:input_type -> google.protobuf.StringValue
-	10, // 29: trip.TripService.delete_trip:input_type -> google.protobuf.StringValue
-	10, // 30: trip.TripService.cancel_trip_event:input_type -> google.protobuf.StringValue
-	10, // 31: trip.TripService.start_trip_event:input_type -> google.protobuf.StringValue
-	10, // 32: trip.TripService.complete_trip_event:input_type -> google.protobuf.StringValue
-	10, // 33: trip.TripService.get_trip_events:input_type -> google.protobuf.StringValue
-	10, // 34: trip.TripService.get_trip_event:input_type -> google.protobuf.StringValue
-	10, // 35: trip.TripService.book_trip:output_type -> google.protobuf.StringValue
-	4,  // 36: trip.TripService.get_trip:output_type -> trip.Trip
-	1,  // 37: trip.TripService.get_trips:output_type -> trip.TripList
-	11, // 38: trip.TripService.delete_trip:output_type -> google.protobuf.Empty
-	11, // 39: trip.TripService.cancel_trip_event:output_type -> google.protobuf.Empty
-	11, // 40: trip.TripService.start_trip_event:output_type -> google.protobuf.Empty
-	11, // 41: trip.TripService.complete_trip_event:output_type -> google.protobuf.Empty
-	2,  // 42: trip.TripService.get_trip_events:output_type -> trip.TripEventList
-	5,  // 43: trip.TripService.get_trip_event:output_type -> trip.TripEvent
-	35, // [35:44] is the sub-list for method output_type
-	26, // [26:35] is the sub-list for method input_type
-	26, // [26:26] is the sub-list for extension type_name
-	26, // [26:26] is the sub-list for extension extendee
-	0,  // [0:26] is the sub-list for field type_name
+	8,  // 0: trip.TripCandidateList.candidates:type_name -> auth.Account
+	5,  // 1: trip.TripList.trips:type_name -> trip.Trip
+	6,  // 2: trip.TripEventList.trip_events:type_name -> trip.TripEvent
+	9,  // 3: trip.BookTripRequest.origin:type_name -> core.CommonAddress
+	9,  // 4: trip.BookTripRequest.destination:type_name -> core.CommonAddress
+	10, // 5: trip.BookTripRequest.departure_time:type_name -> google.protobuf.Timestamp
+	11, // 6: trip.BookTripRequest.duration:type_name -> google.protobuf.Duration
+	9,  // 7: trip.Trip.origin:type_name -> core.CommonAddress
+	9,  // 8: trip.Trip.destination:type_name -> core.CommonAddress
+	10, // 9: trip.Trip.departure_time:type_name -> google.protobuf.Timestamp
+	11, // 10: trip.Trip.duration:type_name -> google.protobuf.Duration
+	10, // 11: trip.Trip.created_at:type_name -> google.protobuf.Timestamp
+	10, // 12: trip.Trip.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 13: trip.TripEvent.origin:type_name -> core.CommonAddress
+	9,  // 14: trip.TripEvent.destination:type_name -> core.CommonAddress
+	10, // 15: trip.TripEvent.departure_time:type_name -> google.protobuf.Timestamp
+	11, // 16: trip.TripEvent.duration:type_name -> google.protobuf.Duration
+	10, // 17: trip.TripEvent.created_at:type_name -> google.protobuf.Timestamp
+	10, // 18: trip.TripEvent.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 19: trip.TripEvent.event_time:type_name -> google.protobuf.Timestamp
+	0,  // 20: trip.TripEvent.event_type:type_name -> trip.TripEventType
+	9,  // 21: trip.TripEventRequest.origin:type_name -> core.CommonAddress
+	9,  // 22: trip.TripEventRequest.destination:type_name -> core.CommonAddress
+	10, // 23: trip.TripEventRequest.departure_time:type_name -> google.protobuf.Timestamp
+	11, // 24: trip.TripEventRequest.duration:type_name -> google.protobuf.Duration
+	10, // 25: trip.TripEventRequest.event_time:type_name -> google.protobuf.Timestamp
+	0,  // 26: trip.TripEventRequest.event_type:type_name -> trip.TripEventType
+	4,  // 27: trip.TripService.book_trip:input_type -> trip.BookTripRequest
+	12, // 28: trip.TripService.get_trip:input_type -> google.protobuf.StringValue
+	12, // 29: trip.TripService.get_trips:input_type -> google.protobuf.StringValue
+	12, // 30: trip.TripService.delete_trip:input_type -> google.protobuf.StringValue
+	12, // 31: trip.TripService.cancel_trip_event:input_type -> google.protobuf.StringValue
+	12, // 32: trip.TripService.start_trip_event:input_type -> google.protobuf.StringValue
+	12, // 33: trip.TripService.complete_trip_event:input_type -> google.protobuf.StringValue
+	12, // 34: trip.TripService.get_trip_events:input_type -> google.protobuf.StringValue
+	12, // 35: trip.TripService.get_trip_event:input_type -> google.protobuf.StringValue
+	12, // 36: trip.TripService.get_candidates_for_trip:input_type -> google.protobuf.StringValue
+	12, // 37: trip.TripService.book_trip:output_type -> google.protobuf.StringValue
+	5,  // 38: trip.TripService.get_trip:output_type -> trip.Trip
+	2,  // 39: trip.TripService.get_trips:output_type -> trip.TripList
+	13, // 40: trip.TripService.delete_trip:output_type -> google.protobuf.Empty
+	13, // 41: trip.TripService.cancel_trip_event:output_type -> google.protobuf.Empty
+	13, // 42: trip.TripService.start_trip_event:output_type -> google.protobuf.Empty
+	13, // 43: trip.TripService.complete_trip_event:output_type -> google.protobuf.Empty
+	3,  // 44: trip.TripService.get_trip_events:output_type -> trip.TripEventList
+	6,  // 45: trip.TripService.get_trip_event:output_type -> trip.TripEvent
+	1,  // 46: trip.TripService.get_candidates_for_trip:output_type -> trip.TripCandidateList
+	37, // [37:47] is the sub-list for method output_type
+	27, // [27:37] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_trip_proto_init() }
@@ -862,9 +924,10 @@ func file_trip_proto_init() {
 		return
 	}
 	file_core_shared_proto_init()
+	file_auth_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_trip_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TripList); i {
+			switch v := v.(*TripCandidateList); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -876,7 +939,7 @@ func file_trip_proto_init() {
 			}
 		}
 		file_trip_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TripEventList); i {
+			switch v := v.(*TripList); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -888,7 +951,7 @@ func file_trip_proto_init() {
 			}
 		}
 		file_trip_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BookTripRequest); i {
+			switch v := v.(*TripEventList); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -900,7 +963,7 @@ func file_trip_proto_init() {
 			}
 		}
 		file_trip_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Trip); i {
+			switch v := v.(*BookTripRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -912,7 +975,7 @@ func file_trip_proto_init() {
 			}
 		}
 		file_trip_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TripEvent); i {
+			switch v := v.(*Trip); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -924,6 +987,18 @@ func file_trip_proto_init() {
 			}
 		}
 		file_trip_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TripEvent); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_trip_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*TripEventRequest); i {
 			case 0:
 				return &v.state
@@ -936,14 +1011,14 @@ func file_trip_proto_init() {
 			}
 		}
 	}
-	file_trip_proto_msgTypes[2].OneofWrappers = []interface{}{}
+	file_trip_proto_msgTypes[3].OneofWrappers = []interface{}{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_trip_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

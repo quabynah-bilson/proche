@@ -116,8 +116,7 @@ class _HomeTabState extends State<_HomeTab> {
                                 right: 16,
                                 bottom: 8,
                                 top: context.height * 0.015),
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
                               color: context.colorScheme.background,
                               borderRadius:
@@ -172,8 +171,8 @@ class _HomeTabState extends State<_HomeTab> {
                   /// main content
                   SliverToBoxAdapter(
                     child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          color: context.colorScheme.background),
+                      decoration:
+                          BoxDecoration(color: context.colorScheme.background),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -185,8 +184,8 @@ class _HomeTabState extends State<_HomeTab> {
                               context.localizer.quickHelp.h6(context),
                               TextButton(
                                 onPressed: context.showFeatureUnderDevSheet,
-                                child: context.localizer.showMore
-                                    .button(context),
+                                child:
+                                    context.localizer.showMore.button(context),
                               ),
                             ],
                           ).horizontal(24).top(16),
@@ -217,8 +216,8 @@ class _HomeTabState extends State<_HomeTab> {
                                       return SafeArea(
                                         child: EmptyContentPlaceholder(
                                           icon: TablerIcons.subtask,
-                                          title: context.localizer
-                                              .nothingAvailableHeader,
+                                          title: context
+                                              .localizer.nothingAvailableHeader,
                                           subtitle: context.localizer
                                               .nothingAvailableSubhead,
                                         ),
@@ -279,8 +278,8 @@ class _HomeTabState extends State<_HomeTab> {
                               context.localizer.freeGiveaway.h6(context),
                               TextButton(
                                 onPressed: context.showFeatureUnderDevSheet,
-                                child: context.localizer.showMore
-                                    .button(context),
+                                child:
+                                    context.localizer.showMore.button(context),
                               ),
                             ],
                           ).horizontal(24).top(16),
@@ -289,10 +288,9 @@ class _HomeTabState extends State<_HomeTab> {
                           SafeArea(
                             child: EmptyContentPlaceholder(
                                 icon: TablerIcons.gift_off,
-                                title:
-                                    context.localizer.underMaintenanceHeader,
-                                subtitle: context
-                                    .localizer.underMaintenanceSubhead),
+                                title: context.localizer.underMaintenanceHeader,
+                                subtitle:
+                                    context.localizer.underMaintenanceSubhead),
                           ),
 
                           /// events header
@@ -303,8 +301,8 @@ class _HomeTabState extends State<_HomeTab> {
                               context.localizer.events.h6(context),
                               TextButton(
                                 onPressed: context.showFeatureUnderDevSheet,
-                                child: context.localizer.showMore
-                                    .button(context),
+                                child:
+                                    context.localizer.showMore.button(context),
                               ),
                             ],
                           ).horizontal(24).top(16),
@@ -313,10 +311,9 @@ class _HomeTabState extends State<_HomeTab> {
                           SafeArea(
                             child: EmptyContentPlaceholder(
                                 icon: TablerIcons.calendar_off,
-                                title:
-                                    context.localizer.underMaintenanceHeader,
-                                subtitle: context
-                                    .localizer.underMaintenanceSubhead),
+                                title: context.localizer.underMaintenanceHeader,
+                                subtitle:
+                                    context.localizer.underMaintenanceSubhead),
                           ),
 
                           /// trips header
@@ -327,8 +324,8 @@ class _HomeTabState extends State<_HomeTab> {
                               context.localizer.trips.h6(context),
                               TextButton(
                                 onPressed: context.showFeatureUnderDevSheet,
-                                child: context.localizer.showMore
-                                    .button(context),
+                                child:
+                                    context.localizer.showMore.button(context),
                               ),
                             ],
                           ).horizontal(24).top(16),
@@ -337,10 +334,9 @@ class _HomeTabState extends State<_HomeTab> {
                           SafeArea(
                             child: EmptyContentPlaceholder(
                                 icon: TablerIcons.bus_off,
-                                title:
-                                    context.localizer.underMaintenanceHeader,
-                                subtitle: context
-                                    .localizer.underMaintenanceSubhead),
+                                title: context.localizer.underMaintenanceHeader,
+                                subtitle:
+                                    context.localizer.underMaintenanceSubhead),
                           ),
 
                           // spacing at the bottom for padding

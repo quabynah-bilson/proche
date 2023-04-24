@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:mobile/core/di/injection.dart';
 import 'package:mobile/features/task/domain/repositories/task.dart';
+import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:mobile/generated/protos/core_shared.pb.dart';
 import 'package:mobile/generated/protos/task.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
@@ -25,6 +26,16 @@ class TaskBloc extends Bloc<TaskEvent, BlocState> {
       var either = await _repository.getAllTasks(event.address);
       either.fold(
         (l) => emit(BlocState<Stream<List<ProcheTask>>>.successState(data: l)),
+        (r) => emit(BlocState<String>.errorState(failure: r)),
+      );
+    });
+
+    on<GetCandidatesForTask>((event, emit) async {
+      emit(BlocState.loadingState());
+      var either = await _repository.getCandidatesForTask(event.taskId);
+      either.fold(
+        (l) => emit(
+            BlocState<Stream<List<BusinessAccount>>>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });

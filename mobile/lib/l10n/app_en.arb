@@ -116,6 +116,6 @@
   "idCard" : "Valid Nation ID Card",
   "uploadService" : "Upload Service",
   "numberOfVolunteers" : "{number} people applied",
-  "candidates" : "Candidates",
+  "candidates" : "Candidates ({number})",
   "postDetails" : "Post Details"
 }

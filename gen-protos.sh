@@ -38,10 +38,13 @@ mkdir -p "$PAYMENT_SERVER_DIR/gen"
 mkdir -p "$SHARED_SERVER_DIR/gen"
 mkdir -p "$NOTIFICATION_SERVER_DIR/gen"
 
+rm -f $AUTH_PROTO_PATH/media.proto
+
 # generate for core-server using golang
-protoc -I=$CORE_PROTO_PATH -I=$AUTH_PROTO_PATH -I=$MEDIA_PROTO_PATH --go_out=$CORE_SERVER_DIR/gen --go_opt=paths=source_relative \
+cp $AUTH_PROTO_PATH/auth.proto $CORE_PROTO_PATH/auth.proto
+protoc -I=$CORE_PROTO_PATH -I=$MEDIA_PROTO_PATH --go_out=$CORE_SERVER_DIR/gen --go_opt=paths=source_relative \
   --go-grpc_out=$CORE_SERVER_DIR/gen --go-grpc_opt=paths=source_relative \
-  $(find $CORE_PROTO_PATH -iname "*.proto") $(find $AUTH_PROTO_PATH -iname "*.proto") $(find $MEDIA_PROTO_PATH -iname "*.proto")
+  $(find $CORE_PROTO_PATH -iname "*.proto") $(find $MEDIA_PROTO_PATH -iname "*.proto")
 
 # generate for media-server using golang
 protoc -I=$MEDIA_PROTO_PATH --go_out=$MEDIA_SERVER_DIR/gen --go_opt=paths=source_relative \
@@ -59,7 +62,6 @@ protoc -I=$NOTIFICATION_PROTO_PATH --go_out=$NOTIFICATION_SERVER_DIR/gen --go_op
   $(find $NOTIFICATION_PROTO_PATH -iname "*.proto")
 
 # copy the proto file from media-server to auth-server
-#rm -f $AUTH_PROTO_PATH/media.proto
 #cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
 
 # generate for auth-server using rust

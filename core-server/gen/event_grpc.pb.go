@@ -31,6 +31,8 @@ type EventServiceClient interface {
 	ListEvents(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (EventService_ListEventsClient, error)
 	UpdateEvent(ctx context.Context, in *ProcheEvent, opts ...grpc.CallOption) (*ProcheEvent, error)
 	DeleteEvent(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// candidates
+	GetCandidatesForEvent(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (EventService_GetCandidatesForEventClient, error)
 }
 
 type eventServiceClient struct {
@@ -196,6 +198,38 @@ func (c *eventServiceClient) DeleteEvent(ctx context.Context, in *wrapperspb.Str
 	return out, nil
 }
 
+func (c *eventServiceClient) GetCandidatesForEvent(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (EventService_GetCandidatesForEventClient, error) {
+	stream, err := c.cc.NewStream(ctx, &EventService_ServiceDesc.Streams[4], "/event.EventService/get_candidates_for_event", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &eventServiceGetCandidatesForEventClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type EventService_GetCandidatesForEventClient interface {
+	Recv() (*EventCandidateList, error)
+	grpc.ClientStream
+}
+
+type eventServiceGetCandidatesForEventClient struct {
+	grpc.ClientStream
+}
+
+func (x *eventServiceGetCandidatesForEventClient) Recv() (*EventCandidateList, error) {
+	m := new(EventCandidateList)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // EventServiceServer is the server API for EventService service.
 // All implementations must embed UnimplementedEventServiceServer
 // for forward compatibility
@@ -207,6 +241,8 @@ type EventServiceServer interface {
 	ListEvents(*emptypb.Empty, EventService_ListEventsServer) error
 	UpdateEvent(context.Context, *ProcheEvent) (*ProcheEvent, error)
 	DeleteEvent(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
+	// candidates
+	GetCandidatesForEvent(*wrapperspb.StringValue, EventService_GetCandidatesForEventServer) error
 	mustEmbedUnimplementedEventServiceServer()
 }
 
@@ -234,6 +270,9 @@ func (UnimplementedEventServiceServer) UpdateEvent(context.Context, *ProcheEvent
 }
 func (UnimplementedEventServiceServer) DeleteEvent(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteEvent not implemented")
+}
+func (UnimplementedEventServiceServer) GetCandidatesForEvent(*wrapperspb.StringValue, EventService_GetCandidatesForEventServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetCandidatesForEvent not implemented")
 }
 func (UnimplementedEventServiceServer) mustEmbedUnimplementedEventServiceServer() {}
 
@@ -386,6 +425,27 @@ func _EventService_DeleteEvent_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EventService_GetCandidatesForEvent_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(wrapperspb.StringValue)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(EventServiceServer).GetCandidatesForEvent(m, &eventServiceGetCandidatesForEventServer{stream})
+}
+
+type EventService_GetCandidatesForEventServer interface {
+	Send(*EventCandidateList) error
+	grpc.ServerStream
+}
+
+type eventServiceGetCandidatesForEventServer struct {
+	grpc.ServerStream
+}
+
+func (x *eventServiceGetCandidatesForEventServer) Send(m *EventCandidateList) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // EventService_ServiceDesc is the grpc.ServiceDesc for EventService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -425,6 +485,11 @@ var EventService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "list_events",
 			Handler:       _EventService_ListEvents_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "get_candidates_for_event",
+			Handler:       _EventService_GetCandidatesForEvent_Handler,
 			ServerStreams: true,
 		},
 	},

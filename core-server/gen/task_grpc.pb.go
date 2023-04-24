@@ -43,6 +43,9 @@ type TaskServiceClient interface {
 	DeleteTaskEventsForTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteTaskEventsForUser(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteTaskEventsForUserAndTask(ctx context.Context, in *TaskEventRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// candidates
+	GetCandidatesForTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetCandidatesForTaskClient, error)
+	ApplyForTask(ctx context.Context, in *ApplyForTaskRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type taskServiceClient struct {
@@ -367,6 +370,47 @@ func (c *taskServiceClient) DeleteTaskEventsForUserAndTask(ctx context.Context, 
 	return out, nil
 }
 
+func (c *taskServiceClient) GetCandidatesForTask(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TaskService_GetCandidatesForTaskClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[7], "/task.TaskService/get_candidates_for_task", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &taskServiceGetCandidatesForTaskClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TaskService_GetCandidatesForTaskClient interface {
+	Recv() (*TaskCandidateList, error)
+	grpc.ClientStream
+}
+
+type taskServiceGetCandidatesForTaskClient struct {
+	grpc.ClientStream
+}
+
+func (x *taskServiceGetCandidatesForTaskClient) Recv() (*TaskCandidateList, error) {
+	m := new(TaskCandidateList)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *taskServiceClient) ApplyForTask(ctx context.Context, in *ApplyForTaskRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/task.TaskService/apply_for_task", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskServiceServer is the server API for TaskService service.
 // All implementations must embed UnimplementedTaskServiceServer
 // for forward compatibility
@@ -390,6 +434,9 @@ type TaskServiceServer interface {
 	DeleteTaskEventsForTask(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	DeleteTaskEventsForUser(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	DeleteTaskEventsForUserAndTask(context.Context, *TaskEventRequest) (*emptypb.Empty, error)
+	// candidates
+	GetCandidatesForTask(*wrapperspb.StringValue, TaskService_GetCandidatesForTaskServer) error
+	ApplyForTask(context.Context, *ApplyForTaskRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
 
@@ -447,6 +494,12 @@ func (UnimplementedTaskServiceServer) DeleteTaskEventsForUser(context.Context, *
 }
 func (UnimplementedTaskServiceServer) DeleteTaskEventsForUserAndTask(context.Context, *TaskEventRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTaskEventsForUserAndTask not implemented")
+}
+func (UnimplementedTaskServiceServer) GetCandidatesForTask(*wrapperspb.StringValue, TaskService_GetCandidatesForTaskServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetCandidatesForTask not implemented")
+}
+func (UnimplementedTaskServiceServer) ApplyForTask(context.Context, *ApplyForTaskRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApplyForTask not implemented")
 }
 func (UnimplementedTaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {}
 
@@ -788,6 +841,45 @@ func _TaskService_DeleteTaskEventsForUserAndTask_Handler(srv interface{}, ctx co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskService_GetCandidatesForTask_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(wrapperspb.StringValue)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TaskServiceServer).GetCandidatesForTask(m, &taskServiceGetCandidatesForTaskServer{stream})
+}
+
+type TaskService_GetCandidatesForTaskServer interface {
+	Send(*TaskCandidateList) error
+	grpc.ServerStream
+}
+
+type taskServiceGetCandidatesForTaskServer struct {
+	grpc.ServerStream
+}
+
+func (x *taskServiceGetCandidatesForTaskServer) Send(m *TaskCandidateList) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TaskService_ApplyForTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApplyForTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).ApplyForTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/task.TaskService/apply_for_task",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).ApplyForTask(ctx, req.(*ApplyForTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskService_ServiceDesc is the grpc.ServiceDesc for TaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -835,6 +927,10 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "delete_task_events_for_user_and_task",
 			Handler:    _TaskService_DeleteTaskEventsForUserAndTask_Handler,
 		},
+		{
+			MethodName: "apply_for_task",
+			Handler:    _TaskService_ApplyForTask_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
@@ -870,6 +966,11 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "get_task_events_for_user_and_task",
 			Handler:       _TaskService_GetTaskEventsForUserAndTask_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "get_candidates_for_task",
+			Handler:       _TaskService_GetCandidatesForTask_Handler,
 			ServerStreams: true,
 		},
 	},

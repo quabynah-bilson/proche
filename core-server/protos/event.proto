@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
 import "core_shared.proto";
+import "auth.proto";
 
 option go_package = "com.github/quabynah-bilson/proche;core";
 
@@ -19,6 +20,12 @@ service EventService {
   rpc list_events (google.protobuf.Empty) returns (stream ProcheEventList);
   rpc update_event (ProcheEvent) returns (ProcheEvent);
   rpc delete_event (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  // candidates
+  rpc get_candidates_for_event(google.protobuf.StringValue) returns (stream EventCandidateList);
+}
+
+message EventCandidateList {
+  repeated auth.Account candidates = 1;
 }
 
 message CreateEventRequest {

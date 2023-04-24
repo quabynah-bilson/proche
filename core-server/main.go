@@ -34,6 +34,7 @@ func main() {
 		tripEventsCollection := mongoClient.Database(os.Getenv("TRIP_DATABASE_NAME")).Collection(os.Getenv("TRIP_EVENTS_COLLECTION"))
 		tasksCollection := mongoClient.Database(os.Getenv("TASK_DATABASE_NAME")).Collection(os.Getenv("TASKS_COLLECTION"))
 		taskEventsCollection := mongoClient.Database(os.Getenv("TASK_DATABASE_NAME")).Collection(os.Getenv("TASK_EVENTS_COLLECTION"))
+		taskCandidatesCollection := mongoClient.Database(os.Getenv("TASK_DATABASE_NAME")).Collection(os.Getenv("TASK_CANDIDATES_COLLECTION"))
 		giveAwayCollection := mongoClient.Database(os.Getenv("GIVEAWAY_DATABASE_NAME")).Collection(os.Getenv("GIVEAWAYS_COLLECTION"))
 
 		// setup grpc server with interceptors
@@ -43,7 +44,7 @@ func main() {
 		)
 		pb.RegisterEventServiceServer(s, svc.NewProcheEventServerInstance(eventsCollection))
 		pb.RegisterTripServiceServer(s, svc.NewProcheTripServerInstance(tripsCollection, tripEventsCollection))
-		pb.RegisterTaskServiceServer(s, svc.NewProcheTaskServerInstance(tasksCollection, taskEventsCollection))
+		pb.RegisterTaskServiceServer(s, svc.NewProcheTaskServerInstance(tasksCollection, taskEventsCollection, taskCandidatesCollection))
 		pb.RegisterGiveAwayServiceServer(s, svc.NewProcheGiveAwayServer(giveAwayCollection))
 		reflection.Register(s)
 

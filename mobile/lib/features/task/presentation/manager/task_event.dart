@@ -21,3 +21,9 @@ class GetTaskEvent extends TaskEvent {
 
   const GetTaskEvent(this.taskId);
 }
+
+class GetCandidatesForTask extends TaskEvent {
+  final String taskId;
+
+  const GetCandidatesForTask(this.taskId);
+}

@@ -6,13 +6,14 @@
 // ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:async' as $async;
-
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
-import 'auth.pb.dart' as $0;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
 import 'package:protobuf_google/protobuf_google.dart' as $2;
+
+import 'auth.pb.dart' as $0;
+
 export 'auth.pb.dart';
 
 class AuthServiceClient extends $grpc.Client {
@@ -430,37 +431,54 @@ abstract class AuthServiceBase extends $grpc.Service {
 
   $async.Future<$1.StringValue> login(
       $grpc.ServiceCall call, $0.LoginRequest request);
+
   $async.Future<$1.StringValue> register(
       $grpc.ServiceCall call, $0.RegisterRequest request);
+
   $async.Future<$1.StringValue> reset_password(
       $grpc.ServiceCall call, $0.ResetPasswordRequest request);
+
   $async.Future<$2.Empty> logout($grpc.ServiceCall call, $2.Empty request);
+
   $async.Future<$2.Empty> verify_password(
       $grpc.ServiceCall call, $1.StringValue request);
+
   $async.Future<$1.StringValue> request_public_access_token(
       $grpc.ServiceCall call, $2.Empty request);
+
   $async.Future<$0.ValidateAccessTokenResponse> validate_access_token(
       $grpc.ServiceCall call, $2.Empty request);
+
   $async.Future<$0.Account> get_account(
       $grpc.ServiceCall call, $2.Empty request);
+
   $async.Future<$0.Account> get_account_by_phone_number(
       $grpc.ServiceCall call, $1.StringValue request);
+
   $async.Future<$0.Account> get_account_by_id(
       $grpc.ServiceCall call, $1.StringValue request);
+
   $async.Future<$0.Account> update_account(
       $grpc.ServiceCall call, $0.Account request);
+
   $async.Future<$2.Empty> delete_account(
       $grpc.ServiceCall call, $2.Empty request);
+
   $async.Future<$1.StringValue> get_referral_code(
       $grpc.ServiceCall call, $2.Empty request);
+
   $async.Future<$1.StringValue> get_referral_code_by_phone_number(
       $grpc.ServiceCall call, $1.StringValue request);
+
   $async.Future<$0.GetCountriesResponse> get_countries(
       $grpc.ServiceCall call, $2.Empty request);
+
   $async.Future<$0.Country> get_country_by_id(
       $grpc.ServiceCall call, $1.StringValue request);
+
   $async.Future<$0.Country> add_country(
       $grpc.ServiceCall call, $0.Country request);
+
   $async.Future<$2.Empty> delete_country(
       $grpc.ServiceCall call, $1.StringValue request);
 }

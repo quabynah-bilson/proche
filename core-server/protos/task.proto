@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
 import "core_shared.proto";
+import "auth.proto";
 
 option go_package = "com.github/quabynah-bilson/proche;core";
 
@@ -32,6 +33,28 @@ service TaskService {
   rpc delete_task_events_for_task(google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc delete_task_events_for_user(google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc delete_task_events_for_user_and_task(TaskEventRequest) returns (google.protobuf.Empty);
+
+  // candidates
+  rpc get_candidates_for_task(google.protobuf.StringValue) returns (stream TaskCandidateList);
+  rpc apply_for_task(ApplyForTaskRequest) returns (google.protobuf.Empty);
+}
+
+message ApplyForTaskRequest {
+  string task_id = 1;
+  string user_id = 2;
+}
+
+message TaskCandidateList {
+  repeated TaskCandidate candidates = 1;
+}
+
+message TaskCandidate {
+  string id = 1;
+  string task_id = 2;
+  auth.BusinessAccount volunteer = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  bool hired = 6;
 }
 
 // TaskEventRequest is the request object for getting task events for a user and task
@@ -70,6 +93,7 @@ message CreateTaskRequest {
   string user_id = 5;
   optional double charge_per_hour = 6;
   core.CommonAddress address = 7;
+  optional string image_url = 8;
 }
 
 // UpdateTaskRequest is the request object for updating a task

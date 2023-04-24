@@ -8,6 +8,16 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use taskCandidateListDescriptor instead')
+const TaskCandidateList$json = const {
+  '1': 'TaskCandidateList',
+  '2': const [
+    const {'1': 'candidates', '3': 1, '4': 3, '5': 11, '6': '.auth.BusinessAccount', '10': 'candidates'},
+  ],
+};
+
+/// Descriptor for `TaskCandidateList`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskCandidateListDescriptor = $convert.base64Decode('ChFUYXNrQ2FuZGlkYXRlTGlzdBI1CgpjYW5kaWRhdGVzGAEgAygLMhUuYXV0aC5CdXNpbmVzc0FjY291bnRSCmNhbmRpZGF0ZXM=');
 @$core.Deprecated('Use taskEventRequestDescriptor instead')
 const TaskEventRequest$json = const {
   '1': 'TaskEventRequest',
@@ -73,14 +83,16 @@ const CreateTaskRequest$json = const {
     const {'1': 'user_id', '3': 5, '4': 1, '5': 9, '10': 'userId'},
     const {'1': 'charge_per_hour', '3': 6, '4': 1, '5': 1, '9': 0, '10': 'chargePerHour', '17': true},
     const {'1': 'address', '3': 7, '4': 1, '5': 11, '6': '.core.CommonAddress', '10': 'address'},
+    const {'1': 'image_url', '3': 8, '4': 1, '5': 9, '9': 1, '10': 'imageUrl', '17': true},
   ],
   '8': const [
     const {'1': '_charge_per_hour'},
+    const {'1': '_image_url'},
   ],
 };
 
 /// Descriptor for `CreateTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createTaskRequestDescriptor = $convert.base64Decode('ChFDcmVhdGVUYXNrUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAiABKAlSC2Rlc2NyaXB0aW9uEjUKCGR1ZV9kYXRlGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIHZHVlRGF0ZRI1CghkdXJhdGlvbhgEIAEoCzIZLmdvb2dsZS5wcm90b2J1Zi5EdXJhdGlvblIIZHVyYXRpb24SFwoHdXNlcl9pZBgFIAEoCVIGdXNlcklkEisKD2NoYXJnZV9wZXJfaG91chgGIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBEi0KB2FkZHJlc3MYByABKAsyEy5jb3JlLkNvbW1vbkFkZHJlc3NSB2FkZHJlc3NCEgoQX2NoYXJnZV9wZXJfaG91cg==');
+final $typed_data.Uint8List createTaskRequestDescriptor = $convert.base64Decode('ChFDcmVhdGVUYXNrUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAiABKAlSC2Rlc2NyaXB0aW9uEjUKCGR1ZV9kYXRlGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIHZHVlRGF0ZRI1CghkdXJhdGlvbhgEIAEoCzIZLmdvb2dsZS5wcm90b2J1Zi5EdXJhdGlvblIIZHVyYXRpb24SFwoHdXNlcl9pZBgFIAEoCVIGdXNlcklkEisKD2NoYXJnZV9wZXJfaG91chgGIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBEi0KB2FkZHJlc3MYByABKAsyEy5jb3JlLkNvbW1vbkFkZHJlc3NSB2FkZHJlc3MSIAoJaW1hZ2VfdXJsGAggASgJSAFSCGltYWdlVXJsiAEBQhIKEF9jaGFyZ2VfcGVyX2hvdXJCDAoKX2ltYWdlX3VybA==');
 @$core.Deprecated('Use updateTaskRequestDescriptor instead')
 const UpdateTaskRequest$json = const {
   '1': 'UpdateTaskRequest',
@@ -121,14 +133,16 @@ const ProcheTask$json = const {
     const {'1': 'charge_per_hour', '3': 9, '4': 1, '5': 1, '9': 0, '10': 'chargePerHour', '17': true},
     const {'1': 'user_id', '3': 10, '4': 1, '5': 9, '10': 'userId'},
     const {'1': 'address', '3': 11, '4': 1, '5': 11, '6': '.core.CommonAddress', '10': 'address'},
+    const {'1': 'image_url', '3': 12, '4': 1, '5': 9, '9': 1, '10': 'imageUrl', '17': true},
   ],
   '8': const [
     const {'1': '_charge_per_hour'},
+    const {'1': '_image_url'},
   ],
 };
 
 /// Descriptor for `ProcheTask`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List procheTaskDescriptor = $convert.base64Decode('CgpQcm9jaGVUYXNrEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEjkKCmNyZWF0ZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdBI1CghkdWVfZGF0ZRgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSB2R1ZURhdGUSNQoIZHVyYXRpb24YByABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb25SCGR1cmF0aW9uEhwKCWNvbXBsZXRlZBgIIAEoCFIJY29tcGxldGVkEisKD2NoYXJnZV9wZXJfaG91chgJIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBEhcKB3VzZXJfaWQYCiABKAlSBnVzZXJJZBItCgdhZGRyZXNzGAsgASgLMhMuY29yZS5Db21tb25BZGRyZXNzUgdhZGRyZXNzQhIKEF9jaGFyZ2VfcGVyX2hvdXI=');
+final $typed_data.Uint8List procheTaskDescriptor = $convert.base64Decode('CgpQcm9jaGVUYXNrEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEjkKCmNyZWF0ZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdBI1CghkdWVfZGF0ZRgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSB2R1ZURhdGUSNQoIZHVyYXRpb24YByABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb25SCGR1cmF0aW9uEhwKCWNvbXBsZXRlZBgIIAEoCFIJY29tcGxldGVkEisKD2NoYXJnZV9wZXJfaG91chgJIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBEhcKB3VzZXJfaWQYCiABKAlSBnVzZXJJZBItCgdhZGRyZXNzGAsgASgLMhMuY29yZS5Db21tb25BZGRyZXNzUgdhZGRyZXNzEiAKCWltYWdlX3VybBgMIAEoCUgBUghpbWFnZVVybIgBAUISChBfY2hhcmdlX3Blcl9ob3VyQgwKCl9pbWFnZV91cmw=');
 @$core.Deprecated('Use taskEventDescriptor instead')
 const TaskEvent$json = const {
   '1': 'TaskEvent',

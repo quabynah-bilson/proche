@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
 import "core_shared.proto";
+import "auth.proto";
 
 option go_package = "com.github/quabynah-bilson/proche;core";
 
@@ -24,6 +25,12 @@ service TripService {
   rpc complete_trip_event (google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc get_trip_events (google.protobuf.StringValue) returns (stream TripEventList);
   rpc get_trip_event (google.protobuf.StringValue) returns (stream TripEvent);
+  // candidates
+  rpc get_candidates_for_trip(google.protobuf.StringValue) returns (stream TripCandidateList);
+}
+
+message TripCandidateList {
+  repeated auth.Account candidates = 1;
 }
 
 // TripList is the list of trips

@@ -35,6 +35,8 @@ type TripServiceClient interface {
 	CompleteTripEvent(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetTripEvents(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TripService_GetTripEventsClient, error)
 	GetTripEvent(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TripService_GetTripEventClient, error)
+	// candidates
+	GetCandidatesForTrip(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TripService_GetCandidatesForTripClient, error)
 }
 
 type tripServiceClient struct {
@@ -195,6 +197,38 @@ func (x *tripServiceGetTripEventClient) Recv() (*TripEvent, error) {
 	return m, nil
 }
 
+func (c *tripServiceClient) GetCandidatesForTrip(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (TripService_GetCandidatesForTripClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TripService_ServiceDesc.Streams[3], "/trip.TripService/get_candidates_for_trip", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &tripServiceGetCandidatesForTripClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TripService_GetCandidatesForTripClient interface {
+	Recv() (*TripCandidateList, error)
+	grpc.ClientStream
+}
+
+type tripServiceGetCandidatesForTripClient struct {
+	grpc.ClientStream
+}
+
+func (x *tripServiceGetCandidatesForTripClient) Recv() (*TripCandidateList, error) {
+	m := new(TripCandidateList)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // TripServiceServer is the server API for TripService service.
 // All implementations must embed UnimplementedTripServiceServer
 // for forward compatibility
@@ -210,6 +244,8 @@ type TripServiceServer interface {
 	CompleteTripEvent(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
 	GetTripEvents(*wrapperspb.StringValue, TripService_GetTripEventsServer) error
 	GetTripEvent(*wrapperspb.StringValue, TripService_GetTripEventServer) error
+	// candidates
+	GetCandidatesForTrip(*wrapperspb.StringValue, TripService_GetCandidatesForTripServer) error
 	mustEmbedUnimplementedTripServiceServer()
 }
 
@@ -243,6 +279,9 @@ func (UnimplementedTripServiceServer) GetTripEvents(*wrapperspb.StringValue, Tri
 }
 func (UnimplementedTripServiceServer) GetTripEvent(*wrapperspb.StringValue, TripService_GetTripEventServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetTripEvent not implemented")
+}
+func (UnimplementedTripServiceServer) GetCandidatesForTrip(*wrapperspb.StringValue, TripService_GetCandidatesForTripServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetCandidatesForTrip not implemented")
 }
 func (UnimplementedTripServiceServer) mustEmbedUnimplementedTripServiceServer() {}
 
@@ -428,6 +467,27 @@ func (x *tripServiceGetTripEventServer) Send(m *TripEvent) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _TripService_GetCandidatesForTrip_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(wrapperspb.StringValue)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TripServiceServer).GetCandidatesForTrip(m, &tripServiceGetCandidatesForTripServer{stream})
+}
+
+type TripService_GetCandidatesForTripServer interface {
+	Send(*TripCandidateList) error
+	grpc.ServerStream
+}
+
+type tripServiceGetCandidatesForTripServer struct {
+	grpc.ServerStream
+}
+
+func (x *tripServiceGetCandidatesForTripServer) Send(m *TripCandidateList) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // TripService_ServiceDesc is the grpc.ServiceDesc for TripService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -474,6 +534,11 @@ var TripService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "get_trip_event",
 			Handler:       _TripService_GetTripEvent_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "get_candidates_for_trip",
+			Handler:       _TripService_GetCandidatesForTrip_Handler,
 			ServerStreams: true,
 		},
 	},

@@ -9,10 +9,52 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'package:protobuf_google/protobuf_google.dart' as $4;
+import 'auth.pb.dart' as $0;
 import 'package:protobuf_google/protobuf_google.dart' as $5;
-import 'core_shared.pb.dart' as $2;
+import 'package:protobuf_google/protobuf_google.dart' as $6;
+import 'core_shared.pb.dart' as $4;
 import 'package:protobuf_google/protobuf_google.dart' as $1;
+
+class TaskCandidateList extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TaskCandidateList', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
+    ..pc<$0.BusinessAccount>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'candidates', $pb.PbFieldType.PM, subBuilder: $0.BusinessAccount.create)
+    ..hasRequiredFields = false
+  ;
+
+  TaskCandidateList._() : super();
+  factory TaskCandidateList({
+    $core.Iterable<$0.BusinessAccount>? candidates,
+  }) {
+    final _result = create();
+    if (candidates != null) {
+      _result.candidates.addAll(candidates);
+    }
+    return _result;
+  }
+  factory TaskCandidateList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory TaskCandidateList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  TaskCandidateList clone() => TaskCandidateList()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  TaskCandidateList copyWith(void Function(TaskCandidateList) updates) => super.copyWith((message) => updates(message as TaskCandidateList)) as TaskCandidateList; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static TaskCandidateList create() => TaskCandidateList._();
+  TaskCandidateList createEmptyInstance() => create();
+  static $pb.PbList<TaskCandidateList> createRepeated() => $pb.PbList<TaskCandidateList>();
+  @$core.pragma('dart2js:noInline')
+  static TaskCandidateList getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TaskCandidateList>(create);
+  static TaskCandidateList? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$0.BusinessAccount> get candidates => $_getList(0);
+}
 
 class TaskEventRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TaskEventRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
@@ -78,7 +120,7 @@ class TaskEventRequest extends $pb.GeneratedMessage {
 class CompleteTaskEventRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CompleteTaskEventRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'taskId')
-    ..aOM<$4.Timestamp>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'endTime', subBuilder: $4.Timestamp.create)
+    ..aOM<$5.Timestamp>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'endTime', subBuilder: $5.Timestamp.create)
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
     ..hasRequiredFields = false
   ;
@@ -86,7 +128,7 @@ class CompleteTaskEventRequest extends $pb.GeneratedMessage {
   CompleteTaskEventRequest._() : super();
   factory CompleteTaskEventRequest({
     $core.String? taskId,
-    $4.Timestamp? endTime,
+    $5.Timestamp? endTime,
     $core.String? notes,
   }) {
     final _result = create();
@@ -132,15 +174,15 @@ class CompleteTaskEventRequest extends $pb.GeneratedMessage {
   void clearTaskId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $4.Timestamp get endTime => $_getN(1);
+  $5.Timestamp get endTime => $_getN(1);
   @$pb.TagNumber(2)
-  set endTime($4.Timestamp v) { setField(2, v); }
+  set endTime($5.Timestamp v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasEndTime() => $_has(1);
   @$pb.TagNumber(2)
   void clearEndTime() => clearField(2);
   @$pb.TagNumber(2)
-  $4.Timestamp ensureEndTime() => $_ensure(1);
+  $5.Timestamp ensureEndTime() => $_ensure(1);
 
   @$pb.TagNumber(3)
   $core.String get notes => $_getSZ(2);
@@ -197,7 +239,7 @@ class CreateTaskEventRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateTaskEventRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'taskId')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOM<$4.Timestamp>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'startTime', subBuilder: $4.Timestamp.create)
+    ..aOM<$5.Timestamp>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'startTime', subBuilder: $5.Timestamp.create)
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'vaccineCardUrl')
     ..hasRequiredFields = false
@@ -207,7 +249,7 @@ class CreateTaskEventRequest extends $pb.GeneratedMessage {
   factory CreateTaskEventRequest({
     $core.String? taskId,
     $core.String? userId,
-    $4.Timestamp? startTime,
+    $5.Timestamp? startTime,
     $core.String? notes,
     $core.String? vaccineCardUrl,
   }) {
@@ -269,15 +311,15 @@ class CreateTaskEventRequest extends $pb.GeneratedMessage {
   void clearUserId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $4.Timestamp get startTime => $_getN(2);
+  $5.Timestamp get startTime => $_getN(2);
   @$pb.TagNumber(3)
-  set startTime($4.Timestamp v) { setField(3, v); }
+  set startTime($5.Timestamp v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasStartTime() => $_has(2);
   @$pb.TagNumber(3)
   void clearStartTime() => clearField(3);
   @$pb.TagNumber(3)
-  $4.Timestamp ensureStartTime() => $_ensure(2);
+  $5.Timestamp ensureStartTime() => $_ensure(2);
 
   @$pb.TagNumber(4)
   $core.String get notes => $_getSZ(3);
@@ -302,11 +344,12 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateTaskRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'task'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'description')
-    ..aOM<$4.Timestamp>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dueDate', subBuilder: $4.Timestamp.create)
-    ..aOM<$5.Duration>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $5.Duration.create)
+    ..aOM<$5.Timestamp>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dueDate', subBuilder: $5.Timestamp.create)
+    ..aOM<$6.Duration>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $6.Duration.create)
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..a<$core.double>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chargePerHour', $pb.PbFieldType.OD)
-    ..aOM<$2.CommonAddress>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address', subBuilder: $2.CommonAddress.create)
+    ..aOM<$4.CommonAddress>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address', subBuilder: $4.CommonAddress.create)
+    ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'imageUrl')
     ..hasRequiredFields = false
   ;
 
@@ -314,11 +357,12 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   factory CreateTaskRequest({
     $core.String? title,
     $core.String? description,
-    $4.Timestamp? dueDate,
-    $5.Duration? duration,
+    $5.Timestamp? dueDate,
+    $6.Duration? duration,
     $core.String? userId,
     $core.double? chargePerHour,
-    $2.CommonAddress? address,
+    $4.CommonAddress? address,
+    $core.String? imageUrl,
   }) {
     final _result = create();
     if (title != null) {
@@ -341,6 +385,9 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     }
     if (address != null) {
       _result.address = address;
+    }
+    if (imageUrl != null) {
+      _result.imageUrl = imageUrl;
     }
     return _result;
   }
@@ -384,26 +431,26 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   void clearDescription() => clearField(2);
 
   @$pb.TagNumber(3)
-  $4.Timestamp get dueDate => $_getN(2);
+  $5.Timestamp get dueDate => $_getN(2);
   @$pb.TagNumber(3)
-  set dueDate($4.Timestamp v) { setField(3, v); }
+  set dueDate($5.Timestamp v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasDueDate() => $_has(2);
   @$pb.TagNumber(3)
   void clearDueDate() => clearField(3);
   @$pb.TagNumber(3)
-  $4.Timestamp ensureDueDate() => $_ensure(2);
+  $5.Timestamp ensureDueDate() => $_ensure(2);
 
   @$pb.TagNumber(4)
-  $5.Duration get duration => $_getN(3);
+  $6.Duration get duration => $_getN(3);
   @$pb.TagNumber(4)
-  set duration($5.Duration v) { setField(4, v); }
+  set duration($6.Duration v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasDuration() => $_has(3);
   @$pb.TagNumber(4)
   void clearDuration() => clearField(4);
   @$pb.TagNumber(4)
-  $5.Duration ensureDuration() => $_ensure(3);
+  $6.Duration ensureDuration() => $_ensure(3);
 
   @$pb.TagNumber(5)
   $core.String get userId => $_getSZ(4);
@@ -424,15 +471,24 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   void clearChargePerHour() => clearField(6);
 
   @$pb.TagNumber(7)
-  $2.CommonAddress get address => $_getN(6);
+  $4.CommonAddress get address => $_getN(6);
   @$pb.TagNumber(7)
-  set address($2.CommonAddress v) { setField(7, v); }
+  set address($4.CommonAddress v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasAddress() => $_has(6);
   @$pb.TagNumber(7)
   void clearAddress() => clearField(7);
   @$pb.TagNumber(7)
-  $2.CommonAddress ensureAddress() => $_ensure(6);
+  $4.CommonAddress ensureAddress() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  $core.String get imageUrl => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set imageUrl($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasImageUrl() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearImageUrl() => clearField(8);
 }
 
 class UpdateTaskRequest extends $pb.GeneratedMessage {
@@ -440,8 +496,8 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'description')
-    ..aOM<$4.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dueDate', subBuilder: $4.Timestamp.create)
-    ..aOM<$5.Duration>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $5.Duration.create)
+    ..aOM<$5.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dueDate', subBuilder: $5.Timestamp.create)
+    ..aOM<$6.Duration>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $6.Duration.create)
     ..aOM<$1.BoolValue>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'completed', subBuilder: $1.BoolValue.create)
     ..hasRequiredFields = false
   ;
@@ -451,8 +507,8 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? title,
     $core.String? description,
-    $4.Timestamp? dueDate,
-    $5.Duration? duration,
+    $5.Timestamp? dueDate,
+    $6.Duration? duration,
     $1.BoolValue? completed,
   }) {
     final _result = create();
@@ -525,26 +581,26 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $4.Timestamp get dueDate => $_getN(3);
+  $5.Timestamp get dueDate => $_getN(3);
   @$pb.TagNumber(4)
-  set dueDate($4.Timestamp v) { setField(4, v); }
+  set dueDate($5.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasDueDate() => $_has(3);
   @$pb.TagNumber(4)
   void clearDueDate() => clearField(4);
   @$pb.TagNumber(4)
-  $4.Timestamp ensureDueDate() => $_ensure(3);
+  $5.Timestamp ensureDueDate() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $5.Duration get duration => $_getN(4);
+  $6.Duration get duration => $_getN(4);
   @$pb.TagNumber(5)
-  set duration($5.Duration v) { setField(5, v); }
+  set duration($6.Duration v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasDuration() => $_has(4);
   @$pb.TagNumber(5)
   void clearDuration() => clearField(5);
   @$pb.TagNumber(5)
-  $5.Duration ensureDuration() => $_ensure(4);
+  $6.Duration ensureDuration() => $_ensure(4);
 
   @$pb.TagNumber(6)
   $1.BoolValue get completed => $_getN(5);
@@ -604,14 +660,15 @@ class ProcheTask extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'description')
-    ..aOM<$4.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $4.Timestamp.create)
-    ..aOM<$4.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $4.Timestamp.create)
-    ..aOM<$4.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dueDate', subBuilder: $4.Timestamp.create)
-    ..aOM<$5.Duration>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $5.Duration.create)
+    ..aOM<$5.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt', subBuilder: $5.Timestamp.create)
+    ..aOM<$5.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt', subBuilder: $5.Timestamp.create)
+    ..aOM<$5.Timestamp>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dueDate', subBuilder: $5.Timestamp.create)
+    ..aOM<$6.Duration>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'duration', subBuilder: $6.Duration.create)
     ..aOB(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'completed')
     ..a<$core.double>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chargePerHour', $pb.PbFieldType.OD)
     ..aOS(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOM<$2.CommonAddress>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address', subBuilder: $2.CommonAddress.create)
+    ..aOM<$4.CommonAddress>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address', subBuilder: $4.CommonAddress.create)
+    ..aOS(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'imageUrl')
     ..hasRequiredFields = false
   ;
 
@@ -620,14 +677,15 @@ class ProcheTask extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? title,
     $core.String? description,
-    $4.Timestamp? createdAt,
-    $4.Timestamp? updatedAt,
-    $4.Timestamp? dueDate,
-    $5.Duration? duration,
+    $5.Timestamp? createdAt,
+    $5.Timestamp? updatedAt,
+    $5.Timestamp? dueDate,
+    $6.Duration? duration,
     $core.bool? completed,
     $core.double? chargePerHour,
     $core.String? userId,
-    $2.CommonAddress? address,
+    $4.CommonAddress? address,
+    $core.String? imageUrl,
   }) {
     final _result = create();
     if (id != null) {
@@ -662,6 +720,9 @@ class ProcheTask extends $pb.GeneratedMessage {
     }
     if (address != null) {
       _result.address = address;
+    }
+    if (imageUrl != null) {
+      _result.imageUrl = imageUrl;
     }
     return _result;
   }
@@ -714,48 +775,48 @@ class ProcheTask extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $4.Timestamp get createdAt => $_getN(3);
+  $5.Timestamp get createdAt => $_getN(3);
   @$pb.TagNumber(4)
-  set createdAt($4.Timestamp v) { setField(4, v); }
+  set createdAt($5.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasCreatedAt() => $_has(3);
   @$pb.TagNumber(4)
   void clearCreatedAt() => clearField(4);
   @$pb.TagNumber(4)
-  $4.Timestamp ensureCreatedAt() => $_ensure(3);
+  $5.Timestamp ensureCreatedAt() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $4.Timestamp get updatedAt => $_getN(4);
+  $5.Timestamp get updatedAt => $_getN(4);
   @$pb.TagNumber(5)
-  set updatedAt($4.Timestamp v) { setField(5, v); }
+  set updatedAt($5.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasUpdatedAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearUpdatedAt() => clearField(5);
   @$pb.TagNumber(5)
-  $4.Timestamp ensureUpdatedAt() => $_ensure(4);
+  $5.Timestamp ensureUpdatedAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  $4.Timestamp get dueDate => $_getN(5);
+  $5.Timestamp get dueDate => $_getN(5);
   @$pb.TagNumber(6)
-  set dueDate($4.Timestamp v) { setField(6, v); }
+  set dueDate($5.Timestamp v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasDueDate() => $_has(5);
   @$pb.TagNumber(6)
   void clearDueDate() => clearField(6);
   @$pb.TagNumber(6)
-  $4.Timestamp ensureDueDate() => $_ensure(5);
+  $5.Timestamp ensureDueDate() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $5.Duration get duration => $_getN(6);
+  $6.Duration get duration => $_getN(6);
   @$pb.TagNumber(7)
-  set duration($5.Duration v) { setField(7, v); }
+  set duration($6.Duration v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasDuration() => $_has(6);
   @$pb.TagNumber(7)
   void clearDuration() => clearField(7);
   @$pb.TagNumber(7)
-  $5.Duration ensureDuration() => $_ensure(6);
+  $6.Duration ensureDuration() => $_ensure(6);
 
   @$pb.TagNumber(8)
   $core.bool get completed => $_getBF(7);
@@ -785,15 +846,24 @@ class ProcheTask extends $pb.GeneratedMessage {
   void clearUserId() => clearField(10);
 
   @$pb.TagNumber(11)
-  $2.CommonAddress get address => $_getN(10);
+  $4.CommonAddress get address => $_getN(10);
   @$pb.TagNumber(11)
-  set address($2.CommonAddress v) { setField(11, v); }
+  set address($4.CommonAddress v) { setField(11, v); }
   @$pb.TagNumber(11)
   $core.bool hasAddress() => $_has(10);
   @$pb.TagNumber(11)
   void clearAddress() => clearField(11);
   @$pb.TagNumber(11)
-  $2.CommonAddress ensureAddress() => $_ensure(10);
+  $4.CommonAddress ensureAddress() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  $core.String get imageUrl => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set imageUrl($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasImageUrl() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearImageUrl() => clearField(12);
 }
 
 class TaskEvent extends $pb.GeneratedMessage {
@@ -801,8 +871,8 @@ class TaskEvent extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'taskId')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOM<$4.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'startTime', subBuilder: $4.Timestamp.create)
-    ..aOM<$4.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'endTime', subBuilder: $4.Timestamp.create)
+    ..aOM<$5.Timestamp>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'startTime', subBuilder: $5.Timestamp.create)
+    ..aOM<$5.Timestamp>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'endTime', subBuilder: $5.Timestamp.create)
     ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
     ..hasRequiredFields = false
   ;
@@ -812,8 +882,8 @@ class TaskEvent extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? taskId,
     $core.String? userId,
-    $4.Timestamp? startTime,
-    $4.Timestamp? endTime,
+    $5.Timestamp? startTime,
+    $5.Timestamp? endTime,
     $core.String? notes,
   }) {
     final _result = create();
@@ -886,26 +956,26 @@ class TaskEvent extends $pb.GeneratedMessage {
   void clearUserId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $4.Timestamp get startTime => $_getN(3);
+  $5.Timestamp get startTime => $_getN(3);
   @$pb.TagNumber(4)
-  set startTime($4.Timestamp v) { setField(4, v); }
+  set startTime($5.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStartTime() => $_has(3);
   @$pb.TagNumber(4)
   void clearStartTime() => clearField(4);
   @$pb.TagNumber(4)
-  $4.Timestamp ensureStartTime() => $_ensure(3);
+  $5.Timestamp ensureStartTime() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $4.Timestamp get endTime => $_getN(4);
+  $5.Timestamp get endTime => $_getN(4);
   @$pb.TagNumber(5)
-  set endTime($4.Timestamp v) { setField(5, v); }
+  set endTime($5.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasEndTime() => $_has(4);
   @$pb.TagNumber(5)
   void clearEndTime() => clearField(5);
   @$pb.TagNumber(5)
-  $4.Timestamp ensureEndTime() => $_ensure(4);
+  $5.Timestamp ensureEndTime() => $_ensure(4);
 
   @$pb.TagNumber(6)
   $core.String get notes => $_getSZ(5);

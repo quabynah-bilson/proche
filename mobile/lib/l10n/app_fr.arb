@@ -116,6 +116,6 @@
   "idCard": "Carte d'identité nationale valide",
   "uploadService": "Télécharger un service",
   "numberOfVolunteers": "{number} personnes ont postulé",
-  "candidates" : "Candidats",
+  "candidates" : "Candidats ({number})",
   "postDetails" : "Détails de la publication"
 }
