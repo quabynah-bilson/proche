@@ -105,7 +105,8 @@ class _CreateBusinessAccountPageState extends State<CreateBusinessAccountPage> {
                           validator: Validators.validate,
                           textFieldType: AppTextFieldType.currency,
                           prefixIcon: state is SuccessState<Country>
-                              ? CountryFlagIcon(country: state.data, showCurrency: true)
+                              ? CountryFlagIcon(
+                                  country: state.data, showCurrency: true)
                               : null,
                         ),
                       ),
@@ -127,7 +128,9 @@ class _CreateBusinessAccountPageState extends State<CreateBusinessAccountPage> {
       _businessBloc.add(
         RegisterBusinessEvent(
           specialization: _specializationController.text,
-          hourlyCharge: double.tryParse(_hourlyChargeController.text) ?? 0,
+          hourlyCharge: double.tryParse(
+                  _hourlyChargeController.text.replaceAll(',', '')) ??
+              0,
         ),
       );
     }

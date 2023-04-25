@@ -152,5 +152,6 @@
   "noBusinessAccountForUser" : "{name} does not have a business account",
   "promptToHire" : "Do you wish to hire this professional for you existing or new task?",
   "deleteTask" : "Do you wish to delete this task?",
-  "deleteTaskConfirmation" : "Task deleted successfully"
+  "deleteTaskConfirmation" : "Task deleted successfully",
+  "you" : "You"
 }

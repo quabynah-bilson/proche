@@ -152,5 +152,6 @@
   "noBusinessAccountForUser": "Ce compte n'est pas un compte professionnel pour {name}",
   "promptToHire": "Souhaitez-vous embaucher ce professionnel pour votre tâche existante ou nouvelle?",
   "deleteTask": "Souhaitez-vous supprimer cette tâche?",
-  "deleteTaskConfirmation": "Cette tâche sera supprimée et vous ne pourrez pas la récupérer"
+  "deleteTaskConfirmation": "Cette tâche sera supprimée et vous ne pourrez pas la récupérer",
+  "you" : "Vous"
 }

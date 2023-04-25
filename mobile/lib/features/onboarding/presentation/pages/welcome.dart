@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
@@ -63,7 +62,8 @@ class _WelcomePageState extends State<WelcomePage>
                     children: [
                       const Spacer(),
                       // image
-                      Lottie.asset(Assets.animSearchOnMap),
+                      Assets.imgAppLogoAnimated
+                          .asAssetImage(height: context.height * 0.3),
 
                       // desc
                       AnimatedColumn(
