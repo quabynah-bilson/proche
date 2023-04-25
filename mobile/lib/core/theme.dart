@@ -11,6 +11,8 @@ extension ThemeBuilderX on BuildContext {
         disabledColor: const Color(0xffe0e0e0),
         colorScheme: colorScheme,
         platform: TargetPlatform.iOS,
+        dividerTheme: DividerThemeData(
+            color: colorScheme.secondaryContainer, indent: 24, endIndent: 24, space: 24),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: colorScheme.secondary,
           foregroundColor: colorScheme.onSecondary,
@@ -40,8 +42,10 @@ ColorScheme useColorScheme([ThemeMode mode = ThemeMode.light]) =>
             onBackground: Colors.black,
             onPrimary: Color(0xff000000),
             primary: Color(0xffFF6600),
-            secondary: Color(0xff2B2921),
-            onSecondary: Color(0xffFFE7AB),
+            // secondary: Color(0xff2B2921),
+            // onSecondary: Color(0xffFFE7AB),
+            secondary: Color(0xff004532),
+            onSecondary: Colors.white,
             // surface: Color(0xffF8F8F9),
             surface: Color(0xffFCFCFD),
             onSurface: Color(0xff2B2723),

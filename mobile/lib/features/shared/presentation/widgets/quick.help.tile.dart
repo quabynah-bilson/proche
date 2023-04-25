@@ -53,8 +53,7 @@ class _QuickHelpListTileState extends State<QuickHelpListTile> {
         child: Container(
           decoration: BoxDecoration(
             color: context.colorScheme.background,
-            border: Border.all(
-                color: context.theme.disabledColor.withOpacity(kEmphasisLow)),
+            border: Border.all(color: context.colorScheme.secondaryContainer),
             borderRadius: BorderRadius.circular(_kBorderRadius),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -63,15 +62,15 @@ class _QuickHelpListTileState extends State<QuickHelpListTile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: context.height * 0.18,
                 clipBehavior: Clip.antiAlias,
                 margin: const EdgeInsets.only(bottom: 12),
+                height: context.height * 0.18,
+                width: context.width,
                 decoration: BoxDecoration(
                   color: context.colorScheme.surface,
                   borderRadius: BorderRadius.circular(_kBorderRadius),
                 ),
-                child: widget.task.imageUrl.asNetworkImage(
-                    width: context.width, height: context.height * 0.18),
+                child: widget.task.imageUrl.asNetworkImage(),
               ),
               // purpose
               widget.task.title.bodyText2(context,
@@ -113,9 +112,10 @@ class _QuickHelpListTileState extends State<QuickHelpListTile> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      context.localizer.numberOfVolunteers(widget.task.numberOfApplicants).subtitle2(
-                          context,
-                          color: context.colorScheme.onSurface),
+                      context.localizer
+                          .numberOfVolunteers(widget.task.numberOfApplicants)
+                          .subtitle2(context,
+                              color: context.colorScheme.onSurface),
                       RoundedIconButton(
                         icon: TablerIcons.chevron_right,
                         color: context.colorScheme.onSurface,
@@ -174,6 +174,119 @@ class _QuickHelpListTileState extends State<QuickHelpListTile> {
                         .centered();
                   },
                 ).top(12),
+              },
+            ],
+          ),
+        ),
+      );
+}
+
+class SummaryQuickHelpListTile extends StatefulWidget {
+  final ProcheTask task;
+  final VoidCallback? onTap;
+
+  const SummaryQuickHelpListTile({Key? key, required this.task, this.onTap})
+      : super(key: key);
+
+  @override
+  State<SummaryQuickHelpListTile> createState() =>
+      _SummaryQuickHelpListTileState();
+}
+
+class _SummaryQuickHelpListTileState extends State<SummaryQuickHelpListTile> {
+  final _kBorderRadius = 16.0, _authBloc = AuthBloc();
+  late final _isOwner = UserSession.kUserId == widget.task.userId;
+  late var _isFavorite = false, _distance = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _authBloc.add(GetAccountByIdAuthEvent(widget.task.userId));
+    doAfterDelay(() async {
+      var distance = Geolocator.distanceBetween(
+          UserSession.lat,
+          UserSession.lng,
+          widget.task.address.latitude,
+          widget.task.address.longitude);
+      setState(() => _distance = distance / 1000);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () => context.navigator
+            .pushNamed(AppRouter.taskDetailsRoute, arguments: widget.task),
+        child: Container(
+          width: context.width * 0.6,
+          decoration: BoxDecoration(
+            color: context.colorScheme.background,
+            border: Border.all(color: context.colorScheme.secondaryContainer),
+            borderRadius: BorderRadius.circular(_kBorderRadius),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              widget.task.title.bodyText2(context,
+                  weight: FontWeight.w600,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  color: context.colorScheme.onSurface),
+              // metadata
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: '${_distance.toStringAsFixed(2)}m away'),
+                    const TextSpan(text: ' • '),
+                    TextSpan(
+                        text:
+                            '\$${widget.task.chargePerHour.toStringAsFixed(2)}/hr'),
+                  ],
+                ),
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.onSurface
+                      .withOpacity(kEmphasisMedium),
+                ),
+              ).top(8),
+              if (_isOwner) ...{
+                const Spacer(),
+                BlocBuilder(
+                  bloc: _authBloc,
+                  builder: (context, state) {
+                    if (state is SuccessState<Account>) {
+                      var account = state.data;
+                      return ListTile(
+                        minVerticalPadding: 0,
+                        onTap: widget.onTap ??
+                            () => context.navigator.pushNamed(
+                                AppRouter.publicProfileRoute,
+                                arguments: account),
+                        title: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            account.displayName
+                                .split(' ')
+                                .first
+                                .subtitle2(context),
+                            if (account.isVerified) ...{
+                              const SizedBox(width: 8),
+                              Assets.imgVerified.asAssetImage(
+                                  size: context.textTheme.titleLarge!.fontSize),
+                            },
+                          ],
+                        ),
+                        leading:
+                            account.avatarUrl.avatar(size: 32, circular: true),
+                        minLeadingWidth: 16,
+                        contentPadding: EdgeInsets.zero,
+                      );
+                    }
+
+                    return const CircularProgressIndicator.adaptive()
+                        .centered();
+                  },
+                )
               },
             ],
           ),

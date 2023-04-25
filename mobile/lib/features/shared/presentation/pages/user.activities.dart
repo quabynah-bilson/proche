@@ -3,27 +3,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
+import 'package:mobile/features/shared/presentation/manager/post/posts_bloc.dart';
 import 'package:mobile/features/shared/presentation/widgets/quick.help.tile.dart';
-import 'package:mobile/features/task/presentation/manager/task_bloc.dart';
 import 'package:mobile/generated/assets.dart';
+import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:mobile/generated/protos/core_shared.pb.dart';
-import 'package:mobile/generated/protos/shared.pb.dart';
-import 'package:mobile/generated/protos/task.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 /// shows user's activities [events, tasks, trips etc] in a curated list
 class UserActivitiesPage extends StatefulWidget {
-  const UserActivitiesPage({Key? key}) : super(key: key);
+  final Account? account;
+
+  const UserActivitiesPage({Key? key, this.account}) : super(key: key);
 
   @override
   State<UserActivitiesPage> createState() => _UserActivitiesPageState();
 }
 
 class _UserActivitiesPageState extends State<UserActivitiesPage> {
-  late final _quickHelpBloc = TaskBloc(),
-      _locationBloc = LocationCubit(context);
+  late final _postsBloc = PostsBloc(), _locationBloc = LocationCubit(context);
   var _loading = true, _selectedTabIndex = 0;
   CommonAddress? _currentAddress;
+  var _tasks = <ProcheTask>[],
+      _giveaways = <GiveAway>[],
+      _trips = <Trip>[],
+      _events = <ProcheEvent>[];
 
   Widget get _buildCategoriesPicker {
     final headers = [
@@ -40,10 +44,7 @@ class _UserActivitiesPageState extends State<UserActivitiesPage> {
         itemBuilder: (context, index) {
           var active = index == _selectedTabIndex;
           return GestureDetector(
-            onTap: () {
-              setState(() => _selectedTabIndex = index);
-              _getServiceForSelectedTab();
-            },
+            onTap: () => setState(() => _selectedTabIndex = index),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -95,123 +96,98 @@ class _UserActivitiesPageState extends State<UserActivitiesPage> {
     return SliverFillRemaining(child: child);
   }
 
-  Widget get _buildQuickHelpContent => BlocBuilder(
-        bloc: _quickHelpBloc,
-        builder: (context, state) {
-          if (state is ErrorState<String>) {
-            return EmptyContentPlaceholder(
-              icon: TablerIcons.package_off,
-              title: context.localizer.nothingAvailableHeader,
-              subtitle: context.localizer.nothingAvailableSubhead,
-            );
-          }
-
-          if (state is SuccessState<Stream<List<ProcheTask>>>) {
-            return StreamBuilder<List<ProcheTask>>(
-              stream: state.data,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return SafeArea(
-                    child: EmptyContentPlaceholder(
-                      icon: TablerIcons.subtask,
-                      title: context.localizer.nothingAvailableHeader,
-                      subtitle: context.localizer.nothingAvailableSubhead,
-                    ),
-                  );
-                }
-
-                if (snapshot.hasData) {
-                  final tasks = snapshot.data;
-                  if (tasks!.isEmpty) {
-                    return SafeArea(
-                      child: EmptyContentPlaceholder(
-                        icon: TablerIcons.subtask,
-                        title: context.localizer.nothingAvailableHeader,
-                        subtitle: context.localizer.nothingAvailableSubhead,
-                      ),
-                    );
-                  }
-
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
-                    itemBuilder: (context, index) =>
-                        QuickHelpListTile(task: tasks[index]),
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemCount: tasks.length,
-                  );
-                }
-
-                return SafeArea(
-                  child: const CircularProgressIndicator.adaptive().centered(),
-                );
-              },
-            );
-          }
-
-          return SafeArea(
-            child: const CircularProgressIndicator.adaptive().centered(),
-          );
-        },
-      );
+  Widget get _buildQuickHelpContent => _tasks.isEmpty
+      ? EmptyContentPlaceholder(
+          icon: TablerIcons.package_off,
+          title: context.localizer.nothingAvailableHeader,
+          subtitle: context.localizer.nothingAvailableSubhead,
+        )
+      : ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+          itemBuilder: (context, index) =>
+              QuickHelpListTile(task: _tasks[index]),
+          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          itemCount: _tasks.length,
+        );
 
   // TODO implement this
-  Widget get _buildFreeGiveawayContent => EmptyContentPlaceholder(
-        title: context.localizer.underMaintenanceHeader,
-        subtitle: context.localizer.underMaintenanceSubhead,
-        icon: TablerIcons.gift_off,
-      );
+  Widget get _buildFreeGiveawayContent => _giveaways.isEmpty
+      ? EmptyContentPlaceholder(
+          icon: TablerIcons.gift_off,
+          title: context.localizer.nothingAvailableHeader,
+          subtitle: context.localizer.nothingAvailableSubhead,
+        )
+      : ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+          // todo -> build list tile
+          itemBuilder: (context, index) => Container(),
+          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          itemCount: _giveaways.length,
+        );
 
   // TODO implement this
-  Widget get _buildTripsContent => EmptyContentPlaceholder(
-        title: context.localizer.underMaintenanceHeader,
-        subtitle: context.localizer.underMaintenanceSubhead,
-        icon: TablerIcons.bus_off,
-      );
+  Widget get _buildTripsContent => _trips.isEmpty
+      ? EmptyContentPlaceholder(
+          icon: TablerIcons.bus_off,
+          title: context.localizer.nothingAvailableHeader,
+          subtitle: context.localizer.nothingAvailableSubhead,
+        )
+      : ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+          // todo -> build list tile
+          itemBuilder: (context, index) => Container(),
+          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          itemCount: _trips.length,
+        );
 
   // TODO implement this
-  Widget get _buildEventsContent => EmptyContentPlaceholder(
-        title: context.localizer.underMaintenanceHeader,
-        subtitle: context.localizer.underMaintenanceSubhead,
-        icon: TablerIcons.calendar_event,
-      );
+  Widget get _buildEventsContent => _events.isEmpty
+      ? EmptyContentPlaceholder(
+          icon: TablerIcons.calendar_off,
+          title: context.localizer.nothingAvailableHeader,
+          subtitle: context.localizer.nothingAvailableSubhead,
+        )
+      : ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+          // todo -> build list tile
+          itemBuilder: (context, index) => Container(),
+          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          itemCount: _events.length,
+        );
 
   @override
   void initState() {
     super.initState();
-    _locationBloc.getCurrentLocation();
+    _postsBloc.add(widget.account == null
+        ? GetCurrentUserPostsEvent()
+        : GetUserPostsEvent(widget.account!.id));
   }
 
   @override
-  Widget build(BuildContext context) => MultiBlocListener(
-        listeners: [
-          BlocListener(
-            bloc: _locationBloc,
-            listener: (context, state) {
-              if (!mounted) return;
+  Widget build(BuildContext context) => BlocListener(
+        bloc: _postsBloc,
+        listener: (context, state) {
+          if (!mounted) return;
 
-              setState(() => _loading = state is LoadingState);
+          setState(() => _loading = state is LoadingState);
 
-              if (state is SuccessState<AddressWithLatLngName>) {
-                setState(() => _currentAddress = CommonAddress(
-                      longitude: state.data.longitude,
-                      latitude: state.data.latitude,
-                      radius: 10,
-                    ));
-                _getServiceForSelectedTab();
-              }
-            },
-          ),
-          BlocListener(
-            bloc: _quickHelpBloc,
-            listener: (context, state) {
-              if (!mounted) return;
-
-              setState(() => _loading = state is LoadingState);
-            },
-          ),
-        ],
+          if (state is SuccessState<GetPostsForUserResponse>) {
+            setState(() {
+              _tasks = state.data.tasks;
+              _giveaways = state.data.giveaways;
+              _trips = state.data.trips;
+              _events = state.data.events;
+            });
+          }
+        },
         child: Scaffold(
           appBar: AppBar(),
           floatingActionButton: FloatingActionButton.extended(
@@ -243,15 +219,4 @@ class _UserActivitiesPageState extends State<UserActivitiesPage> {
           ),
         ),
       );
-
-  void _getServiceForSelectedTab() {
-    switch (_selectedTabIndex) {
-      case 0:
-        _quickHelpBloc.add(GetAllTasksEvent(_currentAddress!));
-        break;
-      // todo -> add others
-      default:
-        break;
-    }
-  }
 }

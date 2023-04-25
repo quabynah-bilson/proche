@@ -92,4 +92,14 @@ class ProcheTaskRepository extends BaseTaskRepository {
       return right(e.message ?? e.codeName);
     }
   }
+
+  @override
+  Future<Either<Empty, String>> deleteTask(String id) async {
+    try {
+      var empty = await client.delete_task(StringValue(value: id));
+      return left(empty);
+    } on GrpcError catch (e) {
+      return right(e.message ?? e.codeName);
+    }
+  }
 }

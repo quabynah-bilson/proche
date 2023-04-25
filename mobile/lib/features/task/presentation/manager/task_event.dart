@@ -16,6 +16,12 @@ class CreateTaskEvent extends TaskEvent {
   const CreateTaskEvent(this.request);
 }
 
+class DeleteTaskEvent extends TaskEvent {
+  final String id;
+
+  const DeleteTaskEvent(this.id);
+}
+
 class GetTaskEvent extends TaskEvent {
   final String taskId;
 

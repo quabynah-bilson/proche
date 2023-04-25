@@ -311,6 +311,10 @@ func (s *ProcheTaskServer) GetTasks(_ *pb.CommonAddress, stream pb.TaskService_G
 				return status.Errorf(codes.Internal, "failed to decode task: %v", err)
 			}
 
+			if task.FullDocument == nil {
+				continue
+			}
+
 			// count number of candidates
 			if count, err := s.candidatesCol.CountDocuments(ctx, bson.M{"taskid": task.FullDocument.GetId()}); err == nil {
 				task.FullDocument.NumberOfApplicants = int32(count)

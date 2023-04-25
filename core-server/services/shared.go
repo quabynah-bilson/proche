@@ -17,10 +17,11 @@ import (
 
 type ProcheSharedServer struct {
 	pb.UnimplementedCoreSharedServiceServer
-	tripCol     *mongo.Collection
-	eventCol    *mongo.Collection
-	taskCol     *mongo.Collection
-	giveAwayCol *mongo.Collection
+	tripCol       *mongo.Collection
+	eventCol      *mongo.Collection
+	taskCol       *mongo.Collection
+	giveAwayCol   *mongo.Collection
+	candidatesCol *mongo.Collection
 }
 
 func NewProcheSharedServerInstance(
@@ -28,6 +29,7 @@ func NewProcheSharedServerInstance(
 	eventCol *mongo.Collection,
 	taskCol *mongo.Collection,
 	giveAwayCol *mongo.Collection,
+	candidatesCol *mongo.Collection,
 ) *ProcheSharedServer {
 	return &ProcheSharedServer{
 		UnimplementedCoreSharedServiceServer: pb.UnimplementedCoreSharedServiceServer{},
@@ -35,6 +37,7 @@ func NewProcheSharedServerInstance(
 		taskCol:                              taskCol,
 		giveAwayCol:                          giveAwayCol,
 		eventCol:                             eventCol,
+		candidatesCol:                        candidatesCol,
 	}
 }
 
@@ -116,6 +119,13 @@ func (s *ProcheSharedServer) GetPostsForUser(ctx context.Context, req *wrappersp
 
 		var tasks []*pb.ProcheTask
 		_ = cursor.All(context.Background(), &tasks)
+
+		for _, task := range tasks {
+			if count, err := s.candidatesCol.CountDocuments(context.Background(), bson.M{"taskid": task.Id}); err == nil {
+				task.NumberOfApplicants = int32(count)
+			}
+		}
+
 		log.Printf("tasks -> %v\n", &tasks)
 		wg.Done()
 		tasksChan <- tasks

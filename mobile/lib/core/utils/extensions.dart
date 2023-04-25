@@ -632,22 +632,14 @@ extension BuildContextX on BuildContext {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: Divider(
-                                  height: 40,
-                                  color: context.theme.disabledColor
-                                      .withOpacity(kEmphasisMedium),
-                                  indent: 24),
+                            const Expanded(
+                              child: Divider(height: 40),
                             ),
                             context.localizer.or
                                 .subtitle2(context)
                                 .horizontal(16),
-                            Expanded(
-                              child: Divider(
-                                  height: 40,
-                                  color: context.theme.disabledColor
-                                      .withOpacity(kEmphasisMedium),
-                                  endIndent: 24),
+                            const Expanded(
+                              child: Divider(height: 40),
                             ),
                           ],
                         ),

@@ -201,7 +201,8 @@ class _HomeTabState extends State<_HomeTab> {
                             children: [
                               context.localizer.quickHelp.h6(context),
                               TextButton(
-                                onPressed: context.showFeatureUnderDevSheet,
+                                onPressed: () => context.navigator
+                                    .pushNamed(AppRouter.userActivitiesRoute),
                                 child:
                                     context.localizer.showMore.button(context),
                               ),
@@ -266,7 +267,8 @@ class _HomeTabState extends State<_HomeTab> {
                             children: [
                               context.localizer.freeGiveaway.h6(context),
                               TextButton(
-                                onPressed: context.showFeatureUnderDevSheet,
+                                onPressed: () => context.navigator
+                                    .pushNamed(AppRouter.userActivitiesRoute),
                                 child:
                                     context.localizer.showMore.button(context),
                               ),
@@ -289,7 +291,8 @@ class _HomeTabState extends State<_HomeTab> {
                             children: [
                               context.localizer.events.h6(context),
                               TextButton(
-                                onPressed: context.showFeatureUnderDevSheet,
+                                onPressed: () => context.navigator
+                                    .pushNamed(AppRouter.userActivitiesRoute),
                                 child:
                                     context.localizer.showMore.button(context),
                               ),
@@ -312,7 +315,8 @@ class _HomeTabState extends State<_HomeTab> {
                             children: [
                               context.localizer.trips.h6(context),
                               TextButton(
-                                onPressed: context.showFeatureUnderDevSheet,
+                                onPressed: () => context.navigator
+                                    .pushNamed(AppRouter.userActivitiesRoute),
                                 child:
                                     context.localizer.showMore.button(context),
                               ),

@@ -207,7 +207,7 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
               subtitle: context.localizer.publicAccountSubhead,
               trailing: CupertinoSwitch(
                 value: _account!.isPublicAccount,
-                activeColor: context.colorScheme.primary,
+                activeColor: context.colorScheme.secondary,
                 onChanged: (checked) {
                   setState(() => _account!.isPublicAccount = checked);
                   _authBloc.add(UpdateAccountAuthEvent(_account!));
@@ -508,11 +508,12 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                       bloc: _postsBloc,
                       builder: (context, state) {
                         if (state is SuccessState<GetPostsForUserResponse>) {
-                          // TODO -> show a list of users' posts
-                          return SafeArea(
-                              child: context.localizer.underMaintenanceSubhead
-                                  .subtitle1(context)
-                                  .centered());
+                          return UserPostsForProfileView(
+                            tasks: state.data.tasks,
+                            events: state.data.events,
+                            giveaways: state.data.giveaways,
+                            trips: state.data.trips,
+                          );
                         }
 
                         if (state is ErrorState<String>) {

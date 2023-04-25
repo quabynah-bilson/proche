@@ -9,12 +9,15 @@ import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/core/utils/timestamp.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
+import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
 import 'package:mobile/features/shared/presentation/widgets/tab.container.dart';
 import 'package:mobile/features/task/presentation/manager/task_bloc.dart';
+import 'package:mobile/features/task/presentation/widgets/candidate.tile.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:mobile/generated/protos/core_shared.pb.dart';
 import 'package:mobile/generated/protos/shared.pb.dart';
+import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 class ProcheTaskDetailsPage extends StatefulWidget {
@@ -41,75 +44,25 @@ class _ProcheTaskDetailsPageState extends State<ProcheTaskDetailsPage> {
 
   Widget _buildCandidatesTab(AsyncSnapshot<List<TaskCandidate>> snapshot) {
     if (snapshot.hasData) {
+      if (snapshot.data!.isEmpty) {
+        return EmptyContentPlaceholder(
+          icon: TablerIcons.user_search,
+          title: context.localizer.nothingAvailableHeader,
+          subtitle: context.localizer.nothingAvailableSubhead,
+        );
+      }
+
       return ListView.separated(
         padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
         itemCount: snapshot.data!.length,
-        separatorBuilder: (_, __) =>
-            Divider(color: context.colorScheme.secondaryContainer),
+        separatorBuilder: (_, __) => const Divider(),
         itemBuilder: (context, index) {
           var candidate = snapshot.data![index];
           return GestureDetector(
             onTap: () => context.navigator.pushNamed(
                 AppRouter.publicProfileRoute,
                 arguments: candidate.account.owner),
-            child: Column(
-              key: ValueKey(candidate.id),
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: Container(
-                    width: context.width * 0.17,
-                    height: context.width * 0.17,
-                    decoration: BoxDecoration(
-                      color: context.colorScheme.background,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: context.colorScheme.secondaryContainer,
-                          width: 2.5),
-                    ),
-                    child: candidate.account.owner.avatarUrl
-                        .avatar(size: context.width * 0.2, circular: true),
-                  ),
-                  title: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      candidate.account.owner.displayName
-                          .subtitle1(context, weight: FontWeight.w600),
-                      if (candidate.account.owner.isVerified) ...{
-                        const SizedBox(width: 8),
-                        Assets.imgVerified.asAssetImage(
-                            size: context.textTheme.titleLarge!.fontSize),
-                      },
-                    ],
-                  ),
-                  subtitle: candidate.account.specialization
-                      .bodyText2(context, emphasis: kEmphasisMedium),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(left: context.width * 0.21, bottom: 16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '\$${candidate.account.hourlyRate.toStringAsFixed(2)}/hr',
-                        style: context.textTheme.titleLarge
-                            ?.copyWith(color: context.colorScheme.secondary),
-                      ),
-                      Text(
-                        '⭐️${candidate.account.ratings.toStringAsFixed(1)}',
-                        style: context.textTheme.titleMedium
-                            ?.copyWith(color: context.colorScheme.secondary),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            child: TaskCandidateTile(candidate: candidate),
           );
         },
       );
@@ -254,20 +207,44 @@ class _ProcheTaskDetailsPageState extends State<ProcheTaskDetailsPage> {
                       .subtitle1(context, weight: FontWeight.w600)
                       .bottom(8),
                   currentTask.description.bodyText1(context),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: context.colorScheme.secondary
-                          .withOpacity(kEmphasisLowest),
-                      borderRadius: BorderRadius.circular(8),
+                  if (_isCurrentOwner) ...{
+                    // todo: add edit button
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RoundedIconButton(
+                            icon: TablerIcons.edit,
+                            onTap: context.showFeatureUnderDevSheet),
+                        const SizedBox(width: 16),
+                        AppRoundedButton(
+                          text: context.localizer.delete,
+                          onTap: () async {
+                            context.showMessageDialog(
+                                context.localizer.deleteTask,
+                                title: context.localizer.confirm,
+                                actionLabel: context.localizer.delete,
+                                onTap: () => _taskBloc
+                                    .add(DeleteTaskEvent(currentTask.id)));
+                          },
+                        ),
+                      ],
+                    ).top(20),
+                  } else ...{
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: context.colorScheme.secondary
+                            .withOpacity(kEmphasisLowest),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: context
+                          .localizer.idCardRequiredForServiceApplication
+                          .subtitle1(context,
+                              alignment: TextAlign.center,
+                              color: context.colorScheme.secondary),
                     ),
-                    child: context.localizer.idCardRequiredForServiceApplication
-                        .subtitle1(context,
-                            alignment: TextAlign.center,
-                            color: context.colorScheme.secondary),
-                  ),
-                  if (!_isCurrentOwner)
                     BlocBuilder(
                       bloc: _ownerBloc,
                       builder: (context, state) {
@@ -292,6 +269,7 @@ class _ProcheTaskDetailsPageState extends State<ProcheTaskDetailsPage> {
                             .centered();
                       },
                     ),
+                  }
                 ],
               );
             }),
@@ -344,6 +322,15 @@ class _ProcheTaskDetailsPageState extends State<ProcheTaskDetailsPage> {
 
               if (state is SuccessState<Stream<ProcheTask>>) {
                 _taskStreamController.sink.addStream(state.data);
+              }
+
+              if (state is SuccessState<Empty>) {
+                context.showMessageDialog(
+                  context.localizer.deleteTaskConfirmation,
+                  showAsError: false,
+                  title: context.localizer.success,
+                  onTap: context.navigator.pop,
+                );
               }
             },
           ),

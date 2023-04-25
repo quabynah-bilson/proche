@@ -50,7 +50,8 @@ func main() {
 			tripsCollection,
 			eventsCollection,
 			tasksCollection,
-			giveAwayCollection))
+			giveAwayCollection,
+			taskCandidatesCollection))
 		reflection.Register(s)
 
 		// run server

@@ -54,7 +54,9 @@ class AppRouterConfig {
             settings: settings);
       case AppRouter.userActivitiesRoute:
         return MaterialWithModalsPageRoute(
-            builder: (_) => const UserActivitiesPage(), settings: settings);
+            builder: (_) =>
+                UserActivitiesPage(account: settings.arguments as Account?),
+            settings: settings);
       case AppRouter.chatRoute:
         return MaterialWithModalsPageRoute(
             builder: (_) => ChatPage(account: settings.arguments as Account),
@@ -125,4 +127,5 @@ class AppRouter {
   static const taskDetailsRoute = '/task-details';
   static const createBusinessAccountRoute = '/business/new'; // todo
   static const chatRoute = '/chat'; // todo
+  static const newTaskRoute = '/tasks/new'; // todo
 }

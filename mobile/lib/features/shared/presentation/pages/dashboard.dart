@@ -24,6 +24,7 @@ import 'package:mobile/features/shared/presentation/widgets/image.picker.dart';
 import 'package:mobile/features/shared/presentation/widgets/quick.help.tile.dart';
 import 'package:mobile/features/shared/presentation/widgets/setting.list.tile.dart';
 import 'package:mobile/features/shared/presentation/widgets/tab.container.dart';
+import 'package:mobile/features/shared/presentation/widgets/user.posts.for.profile.dart';
 import 'package:mobile/features/task/presentation/manager/task_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
