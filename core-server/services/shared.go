@@ -11,7 +11,6 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
-	"log"
 	"sync"
 )
 
@@ -85,7 +84,6 @@ func (s *ProcheSharedServer) GetPostsForUser(ctx context.Context, req *wrappersp
 
 		var trips []*pb.Trip
 		_ = cursor.All(context.Background(), &trips)
-		log.Printf("trips -> %v\n", &trips)
 		wg.Done()
 		tripsChan <- trips
 	}()
@@ -102,7 +100,6 @@ func (s *ProcheSharedServer) GetPostsForUser(ctx context.Context, req *wrappersp
 
 		var events []*pb.ProcheEvent
 		_ = cursor.All(context.Background(), &events)
-		log.Printf("events -> %v\n", &events)
 		wg.Done()
 		eventsChan <- events
 	}()
@@ -126,7 +123,6 @@ func (s *ProcheSharedServer) GetPostsForUser(ctx context.Context, req *wrappersp
 			}
 		}
 
-		log.Printf("tasks -> %v\n", &tasks)
 		wg.Done()
 		tasksChan <- tasks
 	}()
@@ -143,7 +139,6 @@ func (s *ProcheSharedServer) GetPostsForUser(ctx context.Context, req *wrappersp
 		}(cursor, context.Background())
 		var giveaways []*pb.GiveAway
 		_ = cursor.All(context.Background(), &giveaways)
-		log.Printf("giveaways -> %v\n", &giveaways)
 		wg.Done()
 		giveawaysChan <- giveaways
 	}()

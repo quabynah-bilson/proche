@@ -58,12 +58,7 @@ class _ProcheTaskDetailsPageState extends State<ProcheTaskDetailsPage> {
         separatorBuilder: (_, __) => const Divider(),
         itemBuilder: (context, index) {
           var candidate = snapshot.data![index];
-          return GestureDetector(
-            onTap: () => context.navigator.pushNamed(
-                AppRouter.publicProfileRoute,
-                arguments: candidate.account.owner),
-            child: TaskCandidateTile(candidate: candidate),
-          );
+          return TaskCandidateTile(candidate: candidate);
         },
       );
     }
@@ -134,14 +129,18 @@ class _ProcheTaskDetailsPageState extends State<ProcheTaskDetailsPage> {
                       if (state is SuccessState<Account>) {
                         var account = state.data;
                         return ListTile(
-                          onTap: () => context.navigator.pushNamed(
-                              AppRouter.publicProfileRoute,
-                              arguments: account),
+                          onTap: () => UserSession.kUserId == account.id
+                              ? null
+                              : context.navigator.pushNamed(
+                                  AppRouter.publicProfileRoute,
+                                  arguments: account),
                           title: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              account.displayName
+                              (UserSession.kUserId == account.id
+                                  ? context.localizer.you
+                                  : account.displayName)
                                   .subtitle1(context, weight: FontWeight.w600),
                               if (account.isVerified) ...{
                                 const SizedBox(width: 8),
@@ -151,13 +150,16 @@ class _ProcheTaskDetailsPageState extends State<ProcheTaskDetailsPage> {
                               },
                             ],
                           ),
-                          trailing: IconButton(
-                              onPressed: () => context.navigator.pushNamed(
-                                  AppRouter.chatRoute,
-                                  arguments: account),
-                              color: context.colorScheme.secondary,
-                              iconSize: 28,
-                              icon: const Icon(TablerIcons.message_2_share)),
+                          trailing: UserSession.kUserId == account.id
+                              ? null
+                              : IconButton(
+                                  onPressed: () => context.navigator.pushNamed(
+                                      AppRouter.chatRoute,
+                                      arguments: account),
+                                  color: context.colorScheme.secondary,
+                                  iconSize: 28,
+                                  icon:
+                                      const Icon(TablerIcons.message_2_share)),
                           subtitle: (account.isPublicAccount
                                   ? context.localizer.publicAccount
                                   : context.localizer.privateAccount)
