@@ -54,6 +54,8 @@ PODS:
     - FlutterMacOS
     - Sentry/HybridSDK (= 8.4.0)
   - SentryPrivate (8.4.0)
+  - share_plus (0.0.1):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -91,6 +93,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - smart_auth (from `.symlinks/plugins/smart_auth/ios`)
@@ -147,6 +150,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/rive_common/ios"
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/ios"
   shared_preferences_ios:
@@ -185,6 +190,7 @@ SPEC CHECKSUMS:
   Sentry: 16d46dd5ca10e7f4469a2611805a3de123188add
   sentry_flutter: 45124526f72f01bacc790d075443692cd490ee78
   SentryPrivate: 2bb4f8d9ff558b25ac70b66c1dedc58a7c43630b
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   smart_auth: 4bedbc118723912d0e45a07e8ab34039c19e04f2

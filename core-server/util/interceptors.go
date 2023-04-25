@@ -4,14 +4,11 @@ import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
-	pb "github.com/quabynah-bilson/core-server/gen"
+	"github.com/quabynah-bilson/core-server/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-	"log"
-	"os"
 	"time"
 )
 
@@ -19,23 +16,10 @@ const (
 	AccountIdKey = "x-account-id"
 )
 
-// createAuthClient => creates a new auth client
-func createAuthClient() pb.AuthServiceClient {
-	// create a connection to the server
-	authClientUri := os.Getenv("AUTH_SERVICE_URL")
-	conn, err := grpc.Dial(authClientUri, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("did not connect to auth server: %v", err)
-	}
-
-	// create a new client
-	return pb.NewAuthServiceClient(conn)
-}
-
 // AuthUnaryInterceptor => intercepts all incoming requests and checks if the user is authenticated and authorized to access the resource
 func AuthUnaryInterceptor(parentCtx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	// create a new auth client
-	client := createAuthClient()
+	client := config.CreateAuthClient()
 
 	// get context from the stream and set a deadline of 15 seconds
 	deadlineCtx, cancel := context.WithDeadline(parentCtx, time.Now().Add(time.Second*15))
@@ -59,7 +43,7 @@ func AuthUnaryInterceptor(parentCtx context.Context, req interface{}, _ *grpc.Un
 // AuthStreamInterceptor => intercepts all incoming requests and checks if the user is authenticated and authorized to access the resource
 func AuthStreamInterceptor(srv interface{}, ss grpc.ServerStream, _ *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 	// create a new auth client
-	client := createAuthClient()
+	client := config.CreateAuthClient()
 
 	// get context from the stream
 	parentCtx := ss.Context()

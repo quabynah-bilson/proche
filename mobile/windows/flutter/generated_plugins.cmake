@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   local_auth_windows
   rive_common
   sentry_flutter
+  share_plus
   smart_auth
   url_launcher_windows
 )

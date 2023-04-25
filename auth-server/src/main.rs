@@ -8,6 +8,7 @@ use std::io::Write;
 use env_logger;
 use env_logger::{Builder, fmt::Color};
 use log::{Level, LevelFilter};
+use mongodb::bson::Document;
 
 use crate::proto::auth_service_server::AuthServiceServer;
 use crate::server::AuthServiceImpl;
@@ -73,19 +74,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::env::var("TOKEN_COLLECTION").expect("TOKEN_COLLECTION must be set");
     let account_collection_name =
         std::env::var("ACCOUNT_COLLECTION").expect("ACCOUNT_COLLECTION must be set");
+    let business_account_collection_name =
+        std::env::var("BUSINESS_ACCOUNT_COLLECTION").expect("BUSINESS_ACCOUNT_COLLECTION must be set");
     let country_collection_name =
         std::env::var("COUNTRY_COLLECTION").expect("ACCOUNT_COLLECTION must be set");
 
     // create collections based on proto
-    let account_collection = mongo_db.collection/*::<proto::Account>*/(&account_collection_name);
+    let account_collection = mongo_db.collection::<Document>(&account_collection_name);
+    let business_account_collection = mongo_db.collection::<Document>(&business_account_collection_name);
     let token_collection =
-        mongo_db.collection/*::<proto::AccessTokenStore>*/(&token_collection_name);
+        mongo_db.collection::<Document>(&token_collection_name);
     let country_collection =
-        mongo_db.collection/*::<proto::AccessTokenStore>*/(&country_collection_name);
+        mongo_db.collection::<Document>(&country_collection_name);
 
     // create grpc services
     let auth_service = AuthServiceImpl::new(
         account_collection.clone(),
+        business_account_collection.clone(),
         token_collection.clone(),
         country_collection.clone(),
     );

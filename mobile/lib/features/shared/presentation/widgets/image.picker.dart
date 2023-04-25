@@ -30,6 +30,7 @@ class ImagePickerContainer extends StatefulWidget {
 
 class _ImagePickerContainerState extends State<ImagePickerContainer> {
   File? _selectedFile;
+  late var _imageUrl = widget.imageUrl;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -48,7 +49,7 @@ class _ImagePickerContainerState extends State<ImagePickerContainer> {
             children: [
               Positioned.fill(
                 child: _selectedFile == null
-                    ? widget.imageUrl.isNullOrEmpty()
+                    ? _imageUrl.isNullOrEmpty()
                         ? AnimatedColumn(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -68,17 +69,16 @@ class _ImagePickerContainerState extends State<ImagePickerContainer> {
                                   emphasis: kEmphasisMedium),
                             ],
                           ).horizontal(40).centered()
-                        : widget.imageUrl.asNetworkImage(width: context.width)
+                        : _imageUrl.asNetworkImage(width: context.width)
                     : Image.file(_selectedFile!, fit: BoxFit.cover),
               ),
 
-              // remove image button -> show only when image is selected or when image is not selected but has imageUrl
+              // show only when image is selected or when image is not selected but has imageUrl
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
-                bottom:
-                    _selectedFile != null || !widget.imageUrl.isNullOrEmpty()
-                        ? 16
-                        : -100,
+                bottom: _selectedFile != null || !_imageUrl.isNullOrEmpty()
+                    ? 16
+                    : -100,
                 right: 16,
                 child: RoundedIconButton(
                   icon: TablerIcons.trash,
@@ -89,9 +89,11 @@ class _ImagePickerContainerState extends State<ImagePickerContainer> {
                     if (_selectedFile != null) {
                       _selectedFile = null;
                     } else {
+                      _imageUrl = '';
                       if (widget.onImageRemoved == null) return;
                       widget.onImageRemoved!();
                     }
+                    setState(() {});
                   },
                 ),
               ),

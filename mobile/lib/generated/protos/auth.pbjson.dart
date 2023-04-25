@@ -8,6 +8,18 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use createBusinessAccountRequestDescriptor instead')
+const CreateBusinessAccountRequest$json = const {
+  '1': 'CreateBusinessAccountRequest',
+  '2': const [
+    const {'1': 'account_id', '3': 1, '4': 1, '5': 9, '10': 'accountId'},
+    const {'1': 'specialization', '3': 2, '4': 1, '5': 9, '10': 'specialization'},
+    const {'1': 'hourly_rate', '3': 3, '4': 1, '5': 1, '10': 'hourlyRate'},
+  ],
+};
+
+/// Descriptor for `CreateBusinessAccountRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createBusinessAccountRequestDescriptor = $convert.base64Decode('ChxDcmVhdGVCdXNpbmVzc0FjY291bnRSZXF1ZXN0Eh0KCmFjY291bnRfaWQYASABKAlSCWFjY291bnRJZBImCg5zcGVjaWFsaXphdGlvbhgCIAEoCVIOc3BlY2lhbGl6YXRpb24SHwoLaG91cmx5X3JhdGUYAyABKAFSCmhvdXJseVJhdGU=');
 @$core.Deprecated('Use getCountriesResponseDescriptor instead')
 const GetCountriesResponse$json = const {
   '1': 'GetCountriesResponse',
@@ -117,6 +129,20 @@ const Account$json = const {
 
 /// Descriptor for `Account`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List accountDescriptor = $convert.base64Decode('CgdBY2NvdW50Eg4KAmlkGAEgASgJUgJpZBIhCgxwaG9uZV9udW1iZXIYAiABKAlSC3Bob25lTnVtYmVyEiEKDGRpc3BsYXlfbmFtZRgDIAEoCVILZGlzcGxheU5hbWUSHwoLbGFuZ3VhZ2VfaWQYBCABKAlSCmxhbmd1YWdlSWQSOQoKY3JlYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0EiIKCmF2YXRhcl91cmwYByABKAlIAFIJYXZhdGFyVXJsiAEBEiMKC2lkX2NhcmRfdXJsGAggASgJSAFSCWlkQ2FyZFVybIgBARItChB2YWNjaW5lX2NhcmRfdXJsGAkgASgJSAJSDnZhY2NpbmVDYXJkVXJsiAEBEigKDXJlZmVycmFsX2NvZGUYCiABKAlIA1IMcmVmZXJyYWxDb2RliAEBEh0KCmNvdW50cnlfaWQYCyABKAlSCWNvdW50cnlJZBIgCglkZXZpY2VfaWQYDCABKAlIBFIIZGV2aWNlSWSIAQESJgoMZGV2aWNlX3Rva2VuGA0gASgJSAVSC2RldmljZVRva2VuiAEBEiQKC2RldmljZV90eXBlGA4gASgJSAZSCmRldmljZVR5cGWIAQESJAoLaXNfdmVyaWZpZWQYDyABKAhIB1IKaXNWZXJpZmllZIgBARIvChFpc19wdWJsaWNfYWNjb3VudBgQIAEoCEgIUg9pc1B1YmxpY0FjY291bnSIAQFCDQoLX2F2YXRhcl91cmxCDgoMX2lkX2NhcmRfdXJsQhMKEV92YWNjaW5lX2NhcmRfdXJsQhAKDl9yZWZlcnJhbF9jb2RlQgwKCl9kZXZpY2VfaWRCDwoNX2RldmljZV90b2tlbkIOCgxfZGV2aWNlX3R5cGVCDgoMX2lzX3ZlcmlmaWVkQhQKEl9pc19wdWJsaWNfYWNjb3VudA==');
+@$core.Deprecated('Use businessAccountDescriptor instead')
+const BusinessAccount$json = const {
+  '1': 'BusinessAccount',
+  '2': const [
+    const {'1': 'owner', '3': 1, '4': 1, '5': 11, '6': '.auth.Account', '10': 'owner'},
+    const {'1': 'specialization', '3': 2, '4': 1, '5': 9, '10': 'specialization'},
+    const {'1': 'jobs_completed', '3': 3, '4': 1, '5': 5, '10': 'jobsCompleted'},
+    const {'1': 'hourly_rate', '3': 4, '4': 1, '5': 1, '10': 'hourlyRate'},
+    const {'1': 'ratings', '3': 5, '4': 1, '5': 1, '10': 'ratings'},
+  ],
+};
+
+/// Descriptor for `BusinessAccount`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List businessAccountDescriptor = $convert.base64Decode('Cg9CdXNpbmVzc0FjY291bnQSIwoFb3duZXIYASABKAsyDS5hdXRoLkFjY291bnRSBW93bmVyEiYKDnNwZWNpYWxpemF0aW9uGAIgASgJUg5zcGVjaWFsaXphdGlvbhIlCg5qb2JzX2NvbXBsZXRlZBgDIAEoBVINam9ic0NvbXBsZXRlZBIfCgtob3VybHlfcmF0ZRgEIAEoAVIKaG91cmx5UmF0ZRIYCgdyYXRpbmdzGAUgASgBUgdyYXRpbmdz');
 @$core.Deprecated('Use accessTokenStoreDescriptor instead')
 const AccessTokenStore$json = const {
   '1': 'AccessTokenStore',

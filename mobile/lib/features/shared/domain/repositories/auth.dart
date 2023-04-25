@@ -1,18 +1,19 @@
 import 'package:dartz/dartz.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:protobuf_google/protobuf_google.dart';
 
 abstract class BaseAuthRepository {
-  Future<Either<void, String>> login({
+  Future<Either<Empty, String>> login({
     required String phoneNumber,
     required String password,
     required String countryId,
   });
 
-  Future<Either<void, String>> verifyPassword(String password);
+  Future<Either<Empty, String>> verifyPassword(String password);
 
-  Future<Either<void, String>> logout();
+  Future<Either<Empty, String>> logout();
 
-  Future<Either<void, String>> register({
+  Future<Either<Empty, String>> register({
     required String phoneNumber,
     required String password,
     required String displayName,
@@ -28,18 +29,18 @@ abstract class BaseAuthRepository {
 
   Future<Either<Account, String>> updateAccount(Account account);
 
-  Future<Either<void, String>> resetPassword({
+  Future<Either<Empty, String>> resetPassword({
     required String phoneNumber,
     required String password,
     bool isPublic,
   });
 
-  Future<Either<void, String>> sendVerificationCode(String phoneNumber);
+  Future<Either<Empty, String>> sendVerificationCode(String phoneNumber);
 
-  Future<Either<void, String>> verifyPhoneNumber(
+  Future<Either<Empty, String>> verifyPhoneNumber(
       {required String phoneNumber, required String code});
 
-  Future<Either<void, String>> getPublicAccessToken();
+  Future<Either<Empty, String>> getPublicAccessToken();
 
   Future<Either<String, String>> getReferralCode();
 

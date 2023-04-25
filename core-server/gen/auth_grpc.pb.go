@@ -40,6 +40,11 @@ type AuthServiceClient interface {
 	GetAccountById(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*Account, error)
 	UpdateAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error)
 	DeleteAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// business account
+	GetBusinessAccount(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*BusinessAccount, error)
+	UpdateBusinessAccount(ctx context.Context, in *BusinessAccount, opts ...grpc.CallOption) (*BusinessAccount, error)
+	DeleteBusinessAccount(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateBusinessAccount(ctx context.Context, in *CreateBusinessAccountRequest, opts ...grpc.CallOption) (*BusinessAccount, error)
 	// referral code
 	GetReferralCode(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	GetReferralCodeByPhoneNumber(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
@@ -166,6 +171,42 @@ func (c *authServiceClient) DeleteAccount(ctx context.Context, in *emptypb.Empty
 	return out, nil
 }
 
+func (c *authServiceClient) GetBusinessAccount(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*BusinessAccount, error) {
+	out := new(BusinessAccount)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/get_business_account", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) UpdateBusinessAccount(ctx context.Context, in *BusinessAccount, opts ...grpc.CallOption) (*BusinessAccount, error) {
+	out := new(BusinessAccount)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/update_business_account", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) DeleteBusinessAccount(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/delete_business_account", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) CreateBusinessAccount(ctx context.Context, in *CreateBusinessAccountRequest, opts ...grpc.CallOption) (*BusinessAccount, error) {
+	out := new(BusinessAccount)
+	err := c.cc.Invoke(ctx, "/auth.AuthService/create_business_account", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authServiceClient) GetReferralCode(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
 	out := new(wrapperspb.StringValue)
 	err := c.cc.Invoke(ctx, "/auth.AuthService/get_referral_code", in, out, opts...)
@@ -240,6 +281,11 @@ type AuthServiceServer interface {
 	GetAccountById(context.Context, *wrapperspb.StringValue) (*Account, error)
 	UpdateAccount(context.Context, *Account) (*Account, error)
 	DeleteAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	// business account
+	GetBusinessAccount(context.Context, *wrapperspb.StringValue) (*BusinessAccount, error)
+	UpdateBusinessAccount(context.Context, *BusinessAccount) (*BusinessAccount, error)
+	DeleteBusinessAccount(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
+	CreateBusinessAccount(context.Context, *CreateBusinessAccountRequest) (*BusinessAccount, error)
 	// referral code
 	GetReferralCode(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
 	GetReferralCodeByPhoneNumber(context.Context, *wrapperspb.StringValue) (*wrapperspb.StringValue, error)
@@ -290,6 +336,18 @@ func (UnimplementedAuthServiceServer) UpdateAccount(context.Context, *Account) (
 }
 func (UnimplementedAuthServiceServer) DeleteAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccount not implemented")
+}
+func (UnimplementedAuthServiceServer) GetBusinessAccount(context.Context, *wrapperspb.StringValue) (*BusinessAccount, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBusinessAccount not implemented")
+}
+func (UnimplementedAuthServiceServer) UpdateBusinessAccount(context.Context, *BusinessAccount) (*BusinessAccount, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateBusinessAccount not implemented")
+}
+func (UnimplementedAuthServiceServer) DeleteBusinessAccount(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteBusinessAccount not implemented")
+}
+func (UnimplementedAuthServiceServer) CreateBusinessAccount(context.Context, *CreateBusinessAccountRequest) (*BusinessAccount, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBusinessAccount not implemented")
 }
 func (UnimplementedAuthServiceServer) GetReferralCode(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReferralCode not implemented")
@@ -538,6 +596,78 @@ func _AuthService_DeleteAccount_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_GetBusinessAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(wrapperspb.StringValue)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetBusinessAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/get_business_account",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetBusinessAccount(ctx, req.(*wrapperspb.StringValue))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_UpdateBusinessAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BusinessAccount)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).UpdateBusinessAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/update_business_account",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).UpdateBusinessAccount(ctx, req.(*BusinessAccount))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_DeleteBusinessAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(wrapperspb.StringValue)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).DeleteBusinessAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/delete_business_account",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).DeleteBusinessAccount(ctx, req.(*wrapperspb.StringValue))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_CreateBusinessAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateBusinessAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).CreateBusinessAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.AuthService/create_business_account",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).CreateBusinessAccount(ctx, req.(*CreateBusinessAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthService_GetReferralCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -700,6 +830,22 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "delete_account",
 			Handler:    _AuthService_DeleteAccount_Handler,
+		},
+		{
+			MethodName: "get_business_account",
+			Handler:    _AuthService_GetBusinessAccount_Handler,
+		},
+		{
+			MethodName: "update_business_account",
+			Handler:    _AuthService_UpdateBusinessAccount_Handler,
+		},
+		{
+			MethodName: "delete_business_account",
+			Handler:    _AuthService_DeleteBusinessAccount_Handler,
+		},
+		{
+			MethodName: "create_business_account",
+			Handler:    _AuthService_CreateBusinessAccount_Handler,
 		},
 		{
 			MethodName: "get_referral_code",

@@ -24,14 +24,14 @@ func PaginateFilter(meta metadata.MD) *options.FindOptions {
 	}
 
 	// get perPage from metadata
-	perPage := 10
+	perPage := 5
 	if perPageStr := meta.Get(perPageKey); len(perPageStr) > 0 {
 		// convert perPage to int
 		perPage, _ = strconv.Atoi(perPageStr[0])
 	}
 
 	// Return the FindOptions with the skip and limit set
-	skip := int64(page*perPage - perPage) // e.g. page 2, perPage 10 => 10 * 2 - 10 = 10
+	skip := int64(page*perPage - perPage) // e.g. page 2, perPage 5 => 5 * 2 - 5 = 5
 	limit := int64(perPage)
 	return &options.FindOptions{
 		Skip:  &skip,

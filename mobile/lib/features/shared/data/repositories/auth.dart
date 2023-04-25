@@ -41,7 +41,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   }
 
   @override
-  Future<Either<void, String>> getPublicAccessToken() async {
+  Future<Either<Empty, String>> getPublicAccessToken() async {
     try {
       var token = await authClient.request_public_access_token(Empty());
 
@@ -50,7 +50,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       UserSession.kAccessToken = token.value;
       UserSession.kIsLoggedIn = token.value.isNotEmpty;
 
-      return left(null);
+      return left(Empty());
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }
@@ -67,7 +67,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
   }
 
   @override
-  Future<Either<void, String>> login({
+  Future<Either<Empty, String>> login({
     required String phoneNumber,
     required String password,
     required String countryId,
@@ -87,20 +87,21 @@ class ProcheAuthRepository extends BaseAuthRepository {
 
       _getCurrentAccountAndUpdateMessagingToken();
 
-      return left(null);
+      return left(Empty());
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }
   }
 
   @override
-  Future<Either<void, String>> logout() async {
+  Future<Either<Empty, String>> logout() async {
     try {
-      await authClient.logout(Empty());
 
       // unsubscribe from notifications
       var account = await authClient.get_account(Empty());
       await messaging.clearToken(account.phoneNumber);
+
+      var empty = await authClient.logout(Empty());
 
       // clear token
       await storage.clearAccessToken();
@@ -108,14 +109,14 @@ class ProcheAuthRepository extends BaseAuthRepository {
       UserSession.kIsLoggedIn = false;
       await messaging.unsubscribeFromNotifications();
 
-      return left(null);
+      return left(empty);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }
   }
 
   @override
-  Future<Either<void, String>> register({
+  Future<Either<Empty, String>> register({
     required String phoneNumber,
     required String password,
     required String displayName,
@@ -139,14 +140,14 @@ class ProcheAuthRepository extends BaseAuthRepository {
 
       _getCurrentAccountAndUpdateMessagingToken();
 
-      return left(null);
+      return left(Empty());
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }
   }
 
   @override
-  Future<Either<void, String>> resetPassword({
+  Future<Either<Empty, String>> resetPassword({
     required String phoneNumber,
     required String password,
     bool isPublic = true,
@@ -163,31 +164,31 @@ class ProcheAuthRepository extends BaseAuthRepository {
         UserSession.kIsLoggedIn = token.value.isNotEmpty;
       }
 
-      return left(null);
+      return left(Empty());
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }
   }
 
   @override
-  Future<Either<void, String>> sendVerificationCode(String phoneNumber) async {
+  Future<Either<Empty, String>> sendVerificationCode(String phoneNumber) async {
     try {
-      await smsClient
+      var empty = await smsClient
           .send_phone_verification_code(StringValue(value: phoneNumber));
-      return left(null);
+      return left(empty);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }
   }
 
   @override
-  Future<Either<void, String>> verifyPhoneNumber(
+  Future<Either<Empty, String>> verifyPhoneNumber(
       {required String phoneNumber, required String code}) async {
     try {
       final request =
           VerifyPhoneRequest(phoneNumber: phoneNumber, verificationCode: code);
-      await smsClient.verify_phone_verification_code(request);
-      return left(null);
+      var empty = await smsClient.verify_phone_verification_code(request);
+      return left(empty);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }
@@ -200,6 +201,7 @@ class ProcheAuthRepository extends BaseAuthRepository {
       UserSession.kLocale = await storage.defaultLocale;
       UserSession.kIsLoggedIn = !UserSession.kAccessToken.isNullOrEmpty();
       var account = await authClient.get_account(Empty());
+      UserSession.kUserId = account.id;
       return left(account);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
@@ -227,10 +229,10 @@ class ProcheAuthRepository extends BaseAuthRepository {
   }
 
   @override
-  Future<Either<void, String>> verifyPassword(String password) async {
+  Future<Either<Empty, String>> verifyPassword(String password) async {
     try {
-      await authClient.verify_password(StringValue(value: password));
-      return left(null);
+      var empty = await authClient.verify_password(StringValue(value: password));
+      return left(empty);
     } on GrpcError catch (e) {
       return right(e.message ?? e.codeName);
     }

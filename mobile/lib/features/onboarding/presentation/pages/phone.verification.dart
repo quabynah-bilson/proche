@@ -7,6 +7,7 @@ import 'package:mobile/core/utils/validator.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:pinput/pinput.dart';
+import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 /// phone number verification flow
@@ -94,7 +95,7 @@ class _PhoneNumberVerificationPageState
             context.showMessageDialog(state.failure);
           }
 
-          if (state is SuccessState<void>) {
+          if (state is SuccessState<Empty>) {
             context.navigator.pop(true);
           }
         },

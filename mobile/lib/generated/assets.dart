@@ -2,12 +2,14 @@
 class Assets {
   Assets._();
 
+  static const String animBlockedAccount = 'assets/anim/blocked_account.json';
   static const String animError = 'assets/anim/error.json';
   static const String animEvent = 'assets/anim/event.json';
   static const String animGiveaway = 'assets/anim/giveaway.json';
   static const String animLoading = 'assets/anim/loading.json';
   static const String animLogout = 'assets/anim/logout.json';
   static const String animNoInternetConnection = 'assets/anim/no_internet_connection.json';
+  static const String animNotFound = 'assets/anim/not_found.json';
   static const String animPhoneVerification = 'assets/anim/phone_verification.json';
   static const String animRecoverPassword = 'assets/anim/recover_password.json';
   static const String animRive = 'assets/anim/rive.riv';
@@ -40,6 +42,7 @@ class Assets {
   static const String avatarsLorelei9 = 'assets/img/avatars/lorelei_9.png';
   static const String imgAppLogo = 'assets/img/app_logo.png';
   static const String imgAppLogoAnimated = 'assets/img/app_logo_animated.gif';
+  static const String imgVerified = 'assets/img/verified.png';
   static const String mobile = '.env';
 
 }
