@@ -29,3 +29,9 @@ generate-language-mobile:
 
 gen-signing-key-for-android:
 	keytool -genkey -v -keystore mobile/android/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+
+gen-docker-images:
+	docker build -t proche/core-server:latest -f ./core-server/Dockerfile ./core-server
+	docker build -t proche/notification-server:latest -f ./notification-server/Dockerfile ./notification-server
+	docker build -t proche/media-server:latest -f ./media-server/Dockerfile ./media-server
+	docker build -t proche/shared-server:latest -f ./shared-server/Dockerfile ./shared-server
