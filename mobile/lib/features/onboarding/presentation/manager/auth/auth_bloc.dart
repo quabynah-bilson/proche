@@ -20,7 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
         countryId: event.countryId,
       );
       either.fold(
-        (l) => emit(BlocState<void>.successState(data: null)),
+        (l) => emit(BlocState<Empty>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
@@ -38,7 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       emit(BlocState.loadingState());
       var either = await _repo.verifyPassword(event.password);
       either.fold(
-        (l) => emit(BlocState<void>.successState(data: null)),
+        (l) => emit(BlocState<Empty>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
@@ -47,7 +47,7 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       emit(BlocState.loadingState());
       var either = await _repo.logout();
       either.fold(
-        (l) => emit(BlocState<void>.successState(data: null)),
+        (l) => emit(BlocState<Empty>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
@@ -111,7 +111,7 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       var either = await _repo.verifyPhoneNumber(
           phoneNumber: event.phoneNumber, code: event.code);
       either.fold(
-        (l) => emit(BlocState<void>.successState(data: null)),
+        (l) => emit(BlocState<Empty>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });
@@ -121,7 +121,7 @@ class AuthBloc extends Bloc<AuthEvent, BlocState> {
       var either = await _repo.getPublicAccessToken();
       UserSession.kIsLoggedIn = false;
       either.fold(
-        (l) => emit(BlocState<void>.successState(data: null)),
+        (l) => emit(BlocState<Empty>.successState(data: l)),
         (r) => emit(BlocState<String>.errorState(failure: r)),
       );
     });

@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String animBlockedAccount = 'assets/anim/blocked_account.json';
   static const String animError = 'assets/anim/error.json';
   static const String animEvent = 'assets/anim/event.json';
   static const String animGiveaway = 'assets/anim/giveaway.json';

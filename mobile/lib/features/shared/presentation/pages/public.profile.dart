@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/features/business/presentation/manager/business_bloc.dart';
 import 'package:mobile/features/shared/presentation/widgets/buttons.dart';
+import 'package:mobile/features/shared/presentation/widgets/tab.container.dart';
+import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
 import 'package:shared_utils/shared_utils.dart';
 
@@ -18,7 +21,7 @@ class PublicUserProfilePage extends StatefulWidget {
 }
 
 class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
-  var _loading = false;
+  var _loading = false, _selectedIndex = 0;
   late final _account = widget.account;
   final _businessBloc = BusinessBloc();
 
@@ -120,14 +123,42 @@ class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
         child: Scaffold(
           appBar: AppBar(),
           body: LoadingIndicator(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  _buildProfileHeader,
-                  // todo -> build UI
-                ],
-              ),
+            child: Column(
+              children: [
+                PilledTabContainer(
+                    labels: [
+                      context.localizer.personal,
+                      context.localizer.business
+                    ],
+                    selectedIndex: _selectedIndex,
+                    onTabSelected: (index) =>
+                        setState(() => _selectedIndex = index)).horizontal(24),
+                Expanded(
+                  child: _account.isPublicAccount ? Column(
+                    children: [
+                      _buildProfileHeader,
+                      // todo -> build UI
+                    ],
+                  ) : Column(
+                    children: [
+                      Lottie.asset(Assets.animBlockedAccount,
+                          repeat: false,
+                          height: context.height * 0.35,
+                          width: context.width),
+                      EmptyContentPlaceholder(
+                        title:
+                            context.localizer.accountLocked(_account.displayName),
+                        subtitle: context.localizer.accountLockedSubhead,
+                      ),
+                      // TODO -> send a request to view a user's business account
+                      AppRoundedButton(
+                              text: context.localizer.sendAccountViewRequest,
+                              onTap: context.showFeatureUnderDevSheet)
+                          .top(40),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),

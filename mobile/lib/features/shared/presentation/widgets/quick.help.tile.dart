@@ -113,7 +113,7 @@ class _QuickHelpListTileState extends State<QuickHelpListTile> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      context.localizer.numberOfVolunteers(14).subtitle2(
+                      context.localizer.numberOfVolunteers(widget.task.numberOfApplicants).subtitle2(
                           context,
                           color: context.colorScheme.onSurface),
                       RoundedIconButton(

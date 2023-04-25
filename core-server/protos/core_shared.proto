@@ -190,6 +190,7 @@ message ProcheTask {
   string user_id = 10;
   core.CommonAddress address = 11;
   optional string image_url = 12;
+  int32 numberOfApplicants = 13;
 }
 
 // TaskEvent is the task event object

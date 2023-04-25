@@ -324,6 +324,7 @@ const ProcheTask$json = const {
     const {'1': 'user_id', '3': 10, '4': 1, '5': 9, '10': 'userId'},
     const {'1': 'address', '3': 11, '4': 1, '5': 11, '6': '.core.CommonAddress', '10': 'address'},
     const {'1': 'image_url', '3': 12, '4': 1, '5': 9, '9': 1, '10': 'imageUrl', '17': true},
+    const {'1': 'numberOfApplicants', '3': 13, '4': 1, '5': 5, '10': 'numberOfApplicants'},
   ],
   '8': const [
     const {'1': '_charge_per_hour'},
@@ -332,7 +333,7 @@ const ProcheTask$json = const {
 };
 
 /// Descriptor for `ProcheTask`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List procheTaskDescriptor = $convert.base64Decode('CgpQcm9jaGVUYXNrEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEjkKCmNyZWF0ZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdBI1CghkdWVfZGF0ZRgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSB2R1ZURhdGUSNQoIZHVyYXRpb24YByABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb25SCGR1cmF0aW9uEhwKCWNvbXBsZXRlZBgIIAEoCFIJY29tcGxldGVkEisKD2NoYXJnZV9wZXJfaG91chgJIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBEhcKB3VzZXJfaWQYCiABKAlSBnVzZXJJZBItCgdhZGRyZXNzGAsgASgLMhMuY29yZS5Db21tb25BZGRyZXNzUgdhZGRyZXNzEiAKCWltYWdlX3VybBgMIAEoCUgBUghpbWFnZVVybIgBAUISChBfY2hhcmdlX3Blcl9ob3VyQgwKCl9pbWFnZV91cmw=');
+final $typed_data.Uint8List procheTaskDescriptor = $convert.base64Decode('CgpQcm9jaGVUYXNrEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEjkKCmNyZWF0ZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdBI1CghkdWVfZGF0ZRgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSB2R1ZURhdGUSNQoIZHVyYXRpb24YByABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb25SCGR1cmF0aW9uEhwKCWNvbXBsZXRlZBgIIAEoCFIJY29tcGxldGVkEisKD2NoYXJnZV9wZXJfaG91chgJIAEoAUgAUg1jaGFyZ2VQZXJIb3VyiAEBEhcKB3VzZXJfaWQYCiABKAlSBnVzZXJJZBItCgdhZGRyZXNzGAsgASgLMhMuY29yZS5Db21tb25BZGRyZXNzUgdhZGRyZXNzEiAKCWltYWdlX3VybBgMIAEoCUgBUghpbWFnZVVybIgBARIuChJudW1iZXJPZkFwcGxpY2FudHMYDSABKAVSEm51bWJlck9mQXBwbGljYW50c0ISChBfY2hhcmdlX3Blcl9ob3VyQgwKCl9pbWFnZV91cmw=');
 @$core.Deprecated('Use taskEventDescriptor instead')
 const TaskEvent$json = const {
   '1': 'TaskEvent',

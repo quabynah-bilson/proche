@@ -139,5 +139,8 @@
   "delete" : "Delete",
   "deleteAccount" : "Do you wish to delete your account?",
   "deleteBusinessAccount" : "Do you wish to delete your business account?",
-  "accountCreatedSuccessfully" : "Account created successfully"
+  "accountCreatedSuccessfully" : "Account created successfully",
+  "accountLocked" : "You can't see {name}'s profile because the account is private",
+  "accountLockedSubhead" : "Send a request to the account owner to share this profile",
+  "sendAccountViewRequest" : "Send request"
 }

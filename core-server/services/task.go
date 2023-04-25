@@ -198,6 +198,11 @@ func (s *ProcheTaskServer) GetTask(req *wrapperspb.StringValue, stream pb.TaskSe
 	if err := s.taskCol.FindOne(ctx, bson.M{"id": taskId}).Decode(&task); err != nil {
 		return status.Errorf(codes.Internal, "failed to get task: %v", err)
 	} else {
+		// count number of candidates
+		if count, err := s.candidatesCol.CountDocuments(ctx, bson.M{"taskid": taskId}); err == nil {
+			task.NumberOfApplicants = int32(count)
+		}
+
 		// send task
 		if err := stream.Send(&task); err != nil {
 			return status.Errorf(codes.Internal, "failed to send task: %v", err)
@@ -226,6 +231,11 @@ func (s *ProcheTaskServer) GetTask(req *wrapperspb.StringValue, stream pb.TaskSe
 			// check if task id is equal to the task id in the request
 			if task.FullDocument.GetId() != taskId {
 				continue
+			}
+
+			// count number of candidates
+			if count, err := s.candidatesCol.CountDocuments(ctx, bson.M{"taskid": taskId}); err == nil {
+				task.FullDocument.NumberOfApplicants = int32(count)
 			}
 
 			// send task
@@ -263,6 +273,11 @@ func (s *ProcheTaskServer) GetTasks(_ *pb.CommonAddress, stream pb.TaskService_G
 				return status.Errorf(codes.Internal, "failed to decode task: %v", err)
 			}
 
+			// count number of candidates
+			if count, err := s.candidatesCol.CountDocuments(ctx, bson.M{"taskid": task.GetId()}); err == nil {
+				task.NumberOfApplicants = int32(count)
+			}
+
 			// append task to task list
 			taskList.Tasks = append(taskList.Tasks, &task)
 
@@ -294,6 +309,11 @@ func (s *ProcheTaskServer) GetTasks(_ *pb.CommonAddress, stream pb.TaskService_G
 			// decode task
 			if err := watchStream.Decode(&task); err != nil {
 				return status.Errorf(codes.Internal, "failed to decode task: %v", err)
+			}
+
+			// count number of candidates
+			if count, err := s.candidatesCol.CountDocuments(ctx, bson.M{"taskid": task.FullDocument.GetId()}); err == nil {
+				task.FullDocument.NumberOfApplicants = int32(count)
 			}
 
 			// append task to task list

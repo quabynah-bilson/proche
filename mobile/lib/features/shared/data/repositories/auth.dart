@@ -96,11 +96,12 @@ class ProcheAuthRepository extends BaseAuthRepository {
   @override
   Future<Either<Empty, String>> logout() async {
     try {
-      var empty = await authClient.logout(Empty());
 
       // unsubscribe from notifications
       var account = await authClient.get_account(Empty());
       await messaging.clearToken(account.phoneNumber);
+
+      var empty = await authClient.logout(Empty());
 
       // clear token
       await storage.clearAccessToken();

@@ -1757,6 +1757,7 @@ class ProcheTask extends $pb.GeneratedMessage {
     ..aOS(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..aOM<CommonAddress>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address', subBuilder: CommonAddress.create)
     ..aOS(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'imageUrl')
+    ..a<$core.int>(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'numberOfApplicants', $pb.PbFieldType.O3, protoName: 'numberOfApplicants')
     ..hasRequiredFields = false
   ;
 
@@ -1774,6 +1775,7 @@ class ProcheTask extends $pb.GeneratedMessage {
     $core.String? userId,
     CommonAddress? address,
     $core.String? imageUrl,
+    $core.int? numberOfApplicants,
   }) {
     final _result = create();
     if (id != null) {
@@ -1811,6 +1813,9 @@ class ProcheTask extends $pb.GeneratedMessage {
     }
     if (imageUrl != null) {
       _result.imageUrl = imageUrl;
+    }
+    if (numberOfApplicants != null) {
+      _result.numberOfApplicants = numberOfApplicants;
     }
     return _result;
   }
@@ -1952,6 +1957,15 @@ class ProcheTask extends $pb.GeneratedMessage {
   $core.bool hasImageUrl() => $_has(11);
   @$pb.TagNumber(12)
   void clearImageUrl() => clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.int get numberOfApplicants => $_getIZ(12);
+  @$pb.TagNumber(13)
+  set numberOfApplicants($core.int v) { $_setSignedInt32(12, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasNumberOfApplicants() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearNumberOfApplicants() => clearField(13);
 }
 
 class TaskEvent extends $pb.GeneratedMessage {
