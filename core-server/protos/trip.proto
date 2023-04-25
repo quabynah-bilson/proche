@@ -2,9 +2,7 @@ syntax = "proto3";
 package trip;
 
 import "google/protobuf/wrappers.proto";
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/duration.proto";
 
 import "core_shared.proto";
 
@@ -13,84 +11,17 @@ option go_package = "com.github/quabynah-bilson/proche;core";
 // TripService is the service that handles trip related operations
 service TripService {
   // trip related operations
-  rpc book_trip (BookTripRequest) returns (google.protobuf.StringValue);
-  rpc get_trip (google.protobuf.StringValue) returns (Trip);
-  rpc get_trips (google.protobuf.StringValue) returns (stream TripList);
+  rpc book_trip (core.BookTripRequest) returns (google.protobuf.StringValue);
+  rpc get_trip (google.protobuf.StringValue) returns (core.Trip);
+  rpc get_trips (google.protobuf.StringValue) returns (stream core.TripList);
   rpc delete_trip (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
   // trip event related operations
   rpc cancel_trip_event (google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc start_trip_event (google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc complete_trip_event (google.protobuf.StringValue) returns (google.protobuf.Empty);
-  rpc get_trip_events (google.protobuf.StringValue) returns (stream TripEventList);
-  rpc get_trip_event (google.protobuf.StringValue) returns (stream TripEvent);
+  rpc get_trip_events (google.protobuf.StringValue) returns (stream core.TripEventList);
+  rpc get_trip_event (google.protobuf.StringValue) returns (stream core.TripEvent);
+  // candidates
+  rpc get_candidates_for_trip(google.protobuf.StringValue) returns (stream core.TripCandidateList);
 }
-
-// TripList is the list of trips
-message TripList {
-  repeated Trip trips = 1;
-}
-
-// TripEventList is the list of trip events
-message TripEventList {
-  repeated TripEvent trip_events = 1;
-}
-
-// BookTripRequest is the request for booking a trip
-message BookTripRequest {
-  string user_id = 1;
-  core.CommonAddress origin = 2;
-  core.CommonAddress destination = 3;
-  google.protobuf.Timestamp departure_time = 4;
-  google.protobuf.Duration duration = 5;
-  optional string vaccine_card_url = 6;
-}
-
-// Trip is the trip message
-message Trip {
-  string id = 1;
-  string user_id = 2;
-  core.CommonAddress origin = 3;
-  core.CommonAddress destination = 4;
-  google.protobuf.Timestamp departure_time = 5;
-  google.protobuf.Duration duration = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
-}
-
-// TripEvent is the event that occurred during a trip
-message TripEvent {
-  string id = 1;
-  string trip_id = 2;
-  string user_id = 3;
-  core.CommonAddress origin = 4;
-  core.CommonAddress destination = 5;
-  google.protobuf.Timestamp departure_time = 6;
-  google.protobuf.Duration duration = 7;
-  google.protobuf.Timestamp created_at = 8;
-  google.protobuf.Timestamp updated_at = 9;
-  google.protobuf.Timestamp event_time = 10;
-  TripEventType event_type = 11;
-}
-
-// TripEventRequest is the request for a trip event
-message TripEventRequest {
-  string trip_id = 1;
-  string user_id = 2;
-  core.CommonAddress origin = 3;
-  core.CommonAddress destination = 4;
-  google.protobuf.Timestamp departure_time = 5;
-  google.protobuf.Duration duration = 6;
-  google.protobuf.Timestamp event_time = 7;
-  TripEventType event_type = 8;
-}
-
-// TripEventType is the type of event that occurred
-enum TripEventType {
-  EVENT_UNKNOWN = 0;
-  EVENT_BOOKED = 1;
-  EVENT_CANCELLED = 2;
-  EVENT_STARTED = 3;
-  EVENT_COMPLETED = 4;
-}
-

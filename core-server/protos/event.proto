@@ -2,9 +2,7 @@ syntax = "proto3";
 package event;
 
 import "google/protobuf/wrappers.proto";
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/duration.proto";
 
 import "core_shared.proto";
 
@@ -12,52 +10,13 @@ option go_package = "com.github/quabynah-bilson/proche;core";
 
 // event management service
 service EventService {
-  rpc create_event (CreateEventRequest) returns (ProcheEvent);
-  rpc get_event (google.protobuf.StringValue) returns (stream ProcheEvent);
-  rpc get_event_by_user (google.protobuf.StringValue) returns (stream ProcheEventList);
-  rpc get_events_by_location (core.CommonAddress) returns (stream ProcheEventList);
-  rpc list_events (google.protobuf.Empty) returns (stream ProcheEventList);
-  rpc update_event (ProcheEvent) returns (ProcheEvent);
+  rpc create_event (core.CreateEventRequest) returns (core.ProcheEvent);
+  rpc get_event (google.protobuf.StringValue) returns (stream core.ProcheEvent);
+  rpc get_event_by_user (google.protobuf.StringValue) returns (stream core.ProcheEventList);
+  rpc get_events_by_location (core.CommonAddress) returns (stream core.ProcheEventList);
+  rpc list_events (google.protobuf.Empty) returns (stream core.ProcheEventList);
+  rpc update_event (core.ProcheEvent) returns (core.ProcheEvent);
   rpc delete_event (google.protobuf.StringValue) returns (google.protobuf.Empty);
-}
-
-message CreateEventRequest {
-  string name = 1;
-  string description = 2;
-  string location = 3;
-  double latitude = 4;
-  double longitude = 5;
-  google.protobuf.Timestamp start_time = 6;
-  google.protobuf.Timestamp end_time = 7;
-  google.protobuf.Duration duration = 8;
-  string user_id = 9;
-  repeated string photos = 10;
-  optional string video = 11;
-}
-
-message ProcheEvent {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  string location = 4;
-  double latitude = 5;
-  double longitude = 6;
-  google.protobuf.Timestamp start_time = 7;
-  google.protobuf.Timestamp end_time = 8;
-  google.protobuf.Duration duration = 9;
-  string user_id = 10;
-  ProcheEventStatus status = 11;
-  repeated string photos = 12;
-  optional string video = 13;
-
-}
-
-enum ProcheEventStatus {
-  ACTIVE = 0;
-  CANCELLED = 1;
-  COMPLETED = 2;
-}
-
-message ProcheEventList {
-  repeated ProcheEvent events = 1;
+  // candidates
+  rpc get_candidates_for_event(google.protobuf.StringValue) returns (stream core.EventCandidateList);
 }

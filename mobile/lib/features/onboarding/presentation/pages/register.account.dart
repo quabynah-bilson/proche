@@ -5,8 +5,10 @@ import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/validator.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
+import 'package:mobile/features/shared/presentation/widgets/country.flag.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:protobuf_google/protobuf_google.dart' show Empty;
 import 'package:shared_utils/shared_utils.dart';
 
 class RegisterAccountPage extends StatefulWidget {
@@ -64,7 +66,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
 
             setState(() => _loading = state is LoadingState);
 
-            if (state is SuccessState<void>) _createAccount();
+            if (state is SuccessState<Empty>) _createAccount();
 
             if (state is ErrorState<String>) {
               context.showMessageDialog(state.failure);
@@ -78,7 +80,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
 
             setState(() => _loading = state is LoadingState);
 
-            if (state is SuccessState<void>) {
+            if (state is SuccessState<Empty>) {
               context.navigator.pushNamedAndRemoveUntil(
                   AppRouter.dashboardRoute, (route) => false);
               return;
@@ -215,21 +217,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                         validator: Validators.validate,
                         prefixIcon: _selectedCountry == null
                             ? null
-                            : Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                                clipBehavior: Clip.hardEdge,
-                                decoration: const BoxDecoration(),
-                                child: SizedBox(
-                                  width: 28,
-                                  height: 24,
-                                  child: _selectedCountry?.flagUrl.asSvg(
-                                      height: 24,
-                                      width: 16,
-                                      fit: BoxFit.contain,
-                                      fromAsset: false),
-                                ),
-                              ),
+                            : CountryFlagIcon(country: _selectedCountry),
                         onTap: () async {
                           _selectedCountry = await context.showCountriesSheet();
                           _countryController.text =

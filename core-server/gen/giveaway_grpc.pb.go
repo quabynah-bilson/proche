@@ -30,6 +30,8 @@ type GiveAwayServiceClient interface {
 	GetGiveawaysByOwner(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (GiveAwayService_GetGiveawaysByOwnerClient, error)
 	UpdateGiveaway(ctx context.Context, in *GiveAway, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteGiveaway(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// candidates
+	GetCandidatesForGiveaway(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (GiveAwayService_GetCandidatesForGiveawayClient, error)
 }
 
 type giveAwayServiceClient struct {
@@ -140,6 +142,38 @@ func (c *giveAwayServiceClient) DeleteGiveaway(ctx context.Context, in *wrappers
 	return out, nil
 }
 
+func (c *giveAwayServiceClient) GetCandidatesForGiveaway(ctx context.Context, in *wrapperspb.StringValue, opts ...grpc.CallOption) (GiveAwayService_GetCandidatesForGiveawayClient, error) {
+	stream, err := c.cc.NewStream(ctx, &GiveAwayService_ServiceDesc.Streams[2], "/event.GiveAwayService/get_candidates_for_giveaway", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &giveAwayServiceGetCandidatesForGiveawayClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type GiveAwayService_GetCandidatesForGiveawayClient interface {
+	Recv() (*GiveawayCandidateList, error)
+	grpc.ClientStream
+}
+
+type giveAwayServiceGetCandidatesForGiveawayClient struct {
+	grpc.ClientStream
+}
+
+func (x *giveAwayServiceGetCandidatesForGiveawayClient) Recv() (*GiveawayCandidateList, error) {
+	m := new(GiveawayCandidateList)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GiveAwayServiceServer is the server API for GiveAwayService service.
 // All implementations must embed UnimplementedGiveAwayServiceServer
 // for forward compatibility
@@ -150,6 +184,8 @@ type GiveAwayServiceServer interface {
 	GetGiveawaysByOwner(*wrapperspb.StringValue, GiveAwayService_GetGiveawaysByOwnerServer) error
 	UpdateGiveaway(context.Context, *GiveAway) (*emptypb.Empty, error)
 	DeleteGiveaway(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error)
+	// candidates
+	GetCandidatesForGiveaway(*wrapperspb.StringValue, GiveAwayService_GetCandidatesForGiveawayServer) error
 	mustEmbedUnimplementedGiveAwayServiceServer()
 }
 
@@ -174,6 +210,9 @@ func (UnimplementedGiveAwayServiceServer) UpdateGiveaway(context.Context, *GiveA
 }
 func (UnimplementedGiveAwayServiceServer) DeleteGiveaway(context.Context, *wrapperspb.StringValue) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteGiveaway not implemented")
+}
+func (UnimplementedGiveAwayServiceServer) GetCandidatesForGiveaway(*wrapperspb.StringValue, GiveAwayService_GetCandidatesForGiveawayServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetCandidatesForGiveaway not implemented")
 }
 func (UnimplementedGiveAwayServiceServer) mustEmbedUnimplementedGiveAwayServiceServer() {}
 
@@ -302,6 +341,27 @@ func _GiveAwayService_DeleteGiveaway_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GiveAwayService_GetCandidatesForGiveaway_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(wrapperspb.StringValue)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GiveAwayServiceServer).GetCandidatesForGiveaway(m, &giveAwayServiceGetCandidatesForGiveawayServer{stream})
+}
+
+type GiveAwayService_GetCandidatesForGiveawayServer interface {
+	Send(*GiveawayCandidateList) error
+	grpc.ServerStream
+}
+
+type giveAwayServiceGetCandidatesForGiveawayServer struct {
+	grpc.ServerStream
+}
+
+func (x *giveAwayServiceGetCandidatesForGiveawayServer) Send(m *GiveawayCandidateList) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // GiveAwayService_ServiceDesc is the grpc.ServiceDesc for GiveAwayService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -335,6 +395,11 @@ var GiveAwayService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "get_giveaways_by_owner",
 			Handler:       _GiveAwayService_GetGiveawaysByOwner_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "get_candidates_for_giveaway",
+			Handler:       _GiveAwayService_GetCandidatesForGiveaway_Handler,
 			ServerStreams: true,
 		},
 	},

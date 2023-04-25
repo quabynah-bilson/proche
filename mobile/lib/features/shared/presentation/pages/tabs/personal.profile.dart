@@ -12,6 +12,7 @@ class _PersonalProfileTab extends StatefulWidget {
 class _PersonalProfileTabState extends State<_PersonalProfileTab> {
   late var _account = widget.account;
   final _authBloc = AuthBloc(),
+      _postsBloc = PostsBloc(),
       _totalFields = 4,
       _formKey = GlobalKey<FormState>(),
       _avatars = [
@@ -104,8 +105,8 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                                 child: AppRoundedButton(
                                   text: context.localizer.editProfile,
                                   backgroundColor:
-                                      context.colorScheme.onBackground,
-                                  textColor: context.colorScheme.surface,
+                                      context.colorScheme.secondary,
+                                  textColor: context.colorScheme.onSecondary,
                                   onTap: () => setState(
                                       () => _editingProfile = !_editingProfile),
                                 ),
@@ -135,13 +136,13 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
       decoration: BoxDecoration(
         color: (completed
                 ? context.colorScheme.tertiary
-                : context.colorScheme.onBackground)
+                : context.colorScheme.secondary)
             .withOpacity(kEmphasisLowest),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
             color: completed
                 ? context.colorScheme.tertiary
-                : context.colorScheme.onBackground,
+                : context.colorScheme.secondary,
             width: 1.5),
       ),
       child: Column(
@@ -153,7 +154,7 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
               .subtitle1(context,
                   color: completed
                       ? context.colorScheme.tertiary
-                      : context.colorScheme.onBackground,
+                      : context.colorScheme.secondary,
                   weight: FontWeight.bold),
           const SizedBox(height: 16),
           Row(
@@ -171,7 +172,7 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                       backgroundColor: context.colorScheme.background,
                       valueColor: AlwaysStoppedAnimation(completed
                           ? context.colorScheme.tertiary
-                          : context.colorScheme.onBackground),
+                          : context.colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -181,7 +182,7 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                 icon: completed ? TablerIcons.checks : TablerIcons.photo_edit,
                 color: completed
                     ? context.colorScheme.tertiary
-                    : context.colorScheme.onBackground,
+                    : context.colorScheme.secondary,
                 onTap: () => setState(() => _editingProfile = true),
               ),
             ],
@@ -206,6 +207,7 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
               subtitle: context.localizer.publicAccountSubhead,
               trailing: CupertinoSwitch(
                 value: _account!.isPublicAccount,
+                activeColor: context.colorScheme.secondary,
                 onChanged: (checked) {
                   setState(() => _account!.isPublicAccount = checked);
                   _authBloc.add(UpdateAccountAuthEvent(_account!));
@@ -290,6 +292,7 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
   void initState() {
     super.initState();
     _authBloc.add(GetCurrentAccountAuthEvent());
+    _postsBloc.add(GetCurrentUserPostsEvent());
     doAfterDelay(() => context.read<LocaleCubit>().getCurrentLocale());
     _calculateProfileCompletion();
   }
@@ -355,8 +358,8 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                               right: -8,
                               child: RoundedIconButton(
                                 color: _showPicturePickerUI
-                                    ? context.colorScheme.primary
-                                    : context.colorScheme.onBackground,
+                                    ? context.colorScheme.errorContainer
+                                    : context.colorScheme.secondary,
                                 icon: _showPicturePickerUI
                                     ? TablerIcons.x
                                     : TablerIcons.photo_edit,
@@ -501,12 +504,33 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                         ),
                       ],
                     ).top(16),
-                    SafeArea(
-                      child: EmptyContentPlaceholder(
-                        icon: TablerIcons.subtask,
-                        title: context.localizer.nothingAvailableHeader,
-                        subtitle: context.localizer.nothingAvailableSubhead,
-                      ),
+                    BlocBuilder(
+                      bloc: _postsBloc,
+                      builder: (context, state) {
+                        if (state is SuccessState<GetPostsForUserResponse>) {
+                          return UserPostsForProfileView(
+                            tasks: state.data.tasks,
+                            events: state.data.events,
+                            giveaways: state.data.giveaways,
+                            trips: state.data.trips,
+                          );
+                        }
+
+                        if (state is ErrorState<String>) {
+                          return SafeArea(
+                            child: EmptyContentPlaceholder(
+                              icon: TablerIcons.subtask,
+                              title: context.localizer.nothingAvailableHeader,
+                              subtitle:
+                                  context.localizer.nothingAvailableSubhead,
+                            ),
+                          );
+                        }
+
+                        return SafeArea(
+                            child: const CircularProgressIndicator.adaptive()
+                                .centered());
+                      },
                     ),
                   ],
                 ),

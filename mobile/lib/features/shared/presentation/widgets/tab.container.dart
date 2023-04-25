@@ -39,6 +39,7 @@ class PilledTabContainer extends StatelessWidget {
                     ),
                     child: label
                         .button(context,
+                            alignment: TextAlign.center,
                             color: active
                                 ? context.colorScheme.onBackground
                                 : context.colorScheme.onSecondaryContainer)

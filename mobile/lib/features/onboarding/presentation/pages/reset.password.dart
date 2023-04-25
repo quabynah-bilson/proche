@@ -7,6 +7,7 @@ import 'package:mobile/core/utils/validator.dart';
 import 'package:mobile/features/onboarding/presentation/manager/auth/auth_bloc.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/auth.pb.dart';
+import 'package:protobuf_google/protobuf_google.dart';
 import 'package:shared_utils/shared_utils.dart';
 
 /// reset password flow
@@ -42,7 +43,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 context.showMessageDialog(state.failure);
               }
 
-              if (state is SuccessState<void>) {
+              if (state is SuccessState<Empty>) {
                 context.showMessageDialog(
                   context.localizer.resetPasswordSuccess,
                   showAsError: false,
@@ -80,7 +81,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 return;
               }
 
-              if (state is SuccessState<void>) _resetPassword();
+              if (state is SuccessState<Empty>) _resetPassword();
             },
           ),
         ],
