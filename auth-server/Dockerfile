@@ -21,7 +21,7 @@ COPY --from=cacher $CARGO_HOME $CARGO_HOME
 RUN cargo build --release
 
 # stage 4 - final image
-FROM debian:stable-slim as runtime
+FROM alpine:latest as runtime
 WORKDIR /app
 RUN apt update \
     && apt install -y openssl ca-certificates \
