@@ -1,31 +1,36 @@
-FROM rust:latest AS builder
-WORKDIR /usr/src/app
-COPY Cargo.toml Cargo.lock ./
-COPY . .
-#RUN apt-get update && apt-get install -y git
-#RUN cargo build --config net.git-fetch-with-cli=true --target x86_64-unknown-linux-musl --release
-
-# Install Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain 1.61.0 -y
-ENV PATH=/root/.cargo/bin:$PATH
-
-# Switch Rust to the nightly bui
-RUN rustup toolchain install nightly
-
-# Install the cargo-ament-build plugin
-RUN cargo +nightly install -Z sparse-registry --debug cargo-ament-build
-
-# Create release
-RUN cargo +nightly build --target x86_64-unknown-linux-musl --release
-
-FROM alpine
+# stage 1 - build planner
+FROM rust:latest as planner
 WORKDIR /app
-RUN apk update \
-    && apk add ca-certificates wget \
-    && update-ca-certificates
-COPY --from=builder /usr/src/app/target/release/sms-server .
-COPY --from=builder /usr/src/app/.env .
+RUN cargo install cargo-chef
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
 
-EXPOSE 1500
+# stage 2 - build cacher
+FROM rust:latest as cacher
+WORKDIR /app
+RUN cargo install cargo-chef
+COPY --from=planner /app/recipe.json recipe.json
+RUN cargo chef cook --release --recipe-path recipe.json
+
+# stage 3 - build release
+FROM rust:latest as builder
+COPY . /app
+WORKDIR /app
+COPY --from=cacher /app/target target
+COPY --from=cacher $CARGO_HOME $CARGO_HOME
+RUN cargo build --release
+
+# stage 4 - final image
+FROM alpine:latest as runtime
+WORKDIR /app
+RUN apt update \
+    && apt install -y openssl ca-certificates \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+EXPOSE 1500 443
+
+COPY --from=builder /app/.env ./.env
+COPY --from=builder /app/target/release/sms-server ./sms-server
 
 CMD ["./sms-server"]
