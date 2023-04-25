@@ -74,4 +74,8 @@ cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
 protoc -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH -I=$SMS_PROTO_PATH -I=$NOTIFICATION_PROTO_PATH \
   --dart_out=grpc:$MOBILE_OUT_DIR \
    core_shared.proto
+
+#protoc -I=$AUTH_PROTO_PATH -I=$SHARED_PROTO_PATH -I=$CORE_PROTO_PATH -I=$SMS_PROTO_PATH -I=$NOTIFICATION_PROTO_PATH \
+#  --dart_out=grpc:$MOBILE_OUT_DIR \
+#  auth.proto
 #  $(find $AUTH_PROTO_PATH -iname "*.proto") $(find $SHARED_PROTO_PATH -iname "*.proto") $(find $CORE_PROTO_PATH -iname "*.proto") $(find $NOTIFICATION_PROTO_PATH -iname "*.proto")
