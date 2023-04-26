@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core-grpc-server
+  labels:
+    app: core-grpc-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: core-grpc-server
+  template:
+    metadata:
+      labels:
+        app: core-grpc-server
+    spec:
+      containers:
+        - name: core-grpc-server
+          image: quabynah1809/proche-core-server:latest
+          command:
+            - /app/main
+          ports:
+            - containerPort: 2000
+          env:
+            - name: PORT
+              value: "2000"
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: core-grpc-service
+spec:
+  selector:
+    app: core-grpc-server
+  ports:
+    - name: grpc
+      port: 2000
+      targetPort: 2000
+  type: LoadBalancer
