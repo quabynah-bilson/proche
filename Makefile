@@ -37,3 +37,9 @@ gen-docker-images:
 	docker build -t quabynah1809/proche-notification-server:latest -f ./notification-server/Dockerfile ./notification-server
 	docker build -t quabynah1809/proche-media-server:latest -f ./media-server/Dockerfile ./media-server
 	docker build -t quabynah1809/proche-shared-server:latest -f ./shared-server/Dockerfile ./shared-server
+
+start-servers:
+	docker-compose up
+
+stop-servers:
+	docker-compose down

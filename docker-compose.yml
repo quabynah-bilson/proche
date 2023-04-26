@@ -1,0 +1,21 @@
+services:
+
+  postgres-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  core-grpc-server:
+    image: quabynah1809/proche-core-server:latest
+    command:
+      - /app/main
+    ports:
+      - 2000:2000
+    environment:
+       PORT: "2000"
+
+volumes:
+  pgdata:
