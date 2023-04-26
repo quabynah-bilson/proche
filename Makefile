@@ -31,9 +31,9 @@ gen-signing-key-for-android:
 	keytool -genkey -v -keystore mobile/android/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
 
 gen-docker-images:
-	docker build -t proche/auth-server:latest -f ./auth-server/Dockerfile ./auth-server
-	docker build -t proche/sms-server:latest -f ./sms-server/Dockerfile ./sms-server
-	docker build -t proche/core-server:latest -f ./core-server/Dockerfile ./core-server
-	docker build -t proche/notification-server:latest -f ./notification-server/Dockerfile ./notification-server
-	docker build -t proche/media-server:latest -f ./media-server/Dockerfile ./media-server
-	docker build -t proche/shared-server:latest -f ./shared-server/Dockerfile ./shared-server
+	docker build -t quabynah1809/proche-auth-server:latest -f ./auth-server/Dockerfile ./auth-server
+	docker build -t quabynah1809/proche-sms-server:latest -f ./sms-server/Dockerfile ./sms-server
+	docker build -t quabynah1809/proche-core-server:latest -f ./core-server/Dockerfile ./core-server
+	docker build -t quabynah1809/proche-notification-server:latest -f ./notification-server/Dockerfile ./notification-server
+	docker build -t quabynah1809/proche-media-server:latest -f ./media-server/Dockerfile ./media-server
+	docker build -t quabynah1809/proche-shared-server:latest -f ./shared-server/Dockerfile ./shared-server
