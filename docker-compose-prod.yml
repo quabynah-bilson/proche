@@ -1,0 +1,66 @@
+services:
+
+  postgres-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  sms-grpc-server:
+    image: quabynah1809/proche-sms-server:latest
+    command:
+      - /app/main
+    ports:
+      - 1500:1500
+    environment:
+      PORT: "1500"
+
+  notification-grpc-server:
+    image: quabynah1809/proche-notification-server:latest
+    command:
+      - /app/main
+    ports:
+      - 1600:1600
+    environment:
+       PORT: "1600"
+
+  media-grpc-server:
+    image: quabynah1809/proche-media-server:latest
+    command:
+      - /app/main
+    ports:
+      - 1700:1700
+    environment:
+       PORT: "1700"
+
+  auth-grpc-server:
+    image: quabynah1809/proche-auth-server:latest
+    command:
+      - /app/main
+    ports:
+      - 1800:1800
+    environment:
+      PORT: "1800"
+
+  shared-grpc-server:
+    image: quabynah1809/proche-shared-server:latest
+    command:
+      - /app/main
+    ports:
+      - 1900:1900
+    environment:
+       PORT: "1900"
+
+  core-grpc-server:
+    image: quabynah1809/proche-core-server:latest
+    command:
+      - /app/main
+    ports:
+      - 2000:2000
+    environment:
+      PORT: "2000"
+
+volumes:
+  pgdata:

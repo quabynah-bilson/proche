@@ -122,7 +122,7 @@ class ProcheMessagingRepository extends BaseMessagingRepository {
   Future<void> _initializeNotificationPlugin() async {
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS = IOSInitializationSettings(
+    var initializationSettingsIOS = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
@@ -135,10 +135,8 @@ class ProcheMessagingRepository extends BaseMessagingRepository {
       iOS: initializationSettingsIOS,
     );
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (payload) async {
-      if (payload != null) {
-        logger.i('notification payload: $payload');
-      }
+        onDidReceiveNotificationResponse: (payload) async {
+      logger.i('notification payload: $payload');
     });
   }
 }

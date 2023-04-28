@@ -24,7 +24,6 @@ import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'validator.dart';
 
 extension BuildContextX on BuildContext {
-  TextTheme get textTheme => theme.textTheme;
 
   AppLocalizations get localizer => AppLocalizations.of(this)!;
 

@@ -4,18 +4,52 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: proche
+      POSTGRES_USER: proche
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  core-grpc-server:
-    image: quabynah1809/proche-core-server:latest
-    command:
-      - /app/main
+#  sms-grpc-server:
+#    build: sms-server
+#    depends_on:
+#      - postgres-db
+#    command:
+#      - cargo run
+#    ports:
+#      - "1500:1500"
+
+  notification-grpc-server:
+    build: notification-server
+    restart: always
+    depends_on:
+      - postgres-db
     ports:
-      - 2000:2000
-    environment:
-       PORT: "2000"
+      - "1600:1600"
+
+  media-grpc-server:
+    build: media-server
+    restart: always
+    ports:
+      - "1700:1700"
+
+#  auth-grpc-server:
+#    build: auth-server
+#    restart: always
+#    command:
+#      - cargo run
+#    ports:
+#      - "1800:1800"
+
+  shared-grpc-server:
+    build: shared-server
+    restart: always
+    ports:
+      - "1900:1900"
+
+  core-grpc-server:
+    build: core-server
+    ports:
+      - "2000:2000"
 
 volumes:
   pgdata:
