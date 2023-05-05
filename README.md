@@ -8,7 +8,6 @@
 [![GoDoc](https://godoc.org/github.com/quabynah-bilson/proche?status.svg)](https://godoc.org/github.com/quabynah-bilson/proche)
 [![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)](https://github.com/quabynah-bilson/proche)
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://github.com/quabynah-bilson/proche)
-[![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://github.com/quabynah-bilson/proche)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/quabynah-bilson/proche/master/LICENSE)
 
