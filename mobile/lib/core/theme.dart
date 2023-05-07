@@ -1,29 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_utils/shared_utils.dart';
 
 extension ThemeBuilderX on BuildContext {
   ThemeData get useLightTheme {
     const backgroundColor = Color(0xffffffff);
     final colorScheme = useColorScheme();
     return ThemeData(
-        useMaterial3: true,
-        scaffoldBackgroundColor: backgroundColor,
-        disabledColor: const Color(0xffe0e0e0),
-        colorScheme: colorScheme,
-        platform: TargetPlatform.iOS,
-        dividerTheme: DividerThemeData(
-            color: colorScheme.secondaryContainer, indent: 24, endIndent: 24, space: 24),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: colorScheme.secondary,
-          foregroundColor: colorScheme.onSecondary,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-        ),
-        appBarTheme: const AppBarTheme(
-            backgroundColor: backgroundColor,
-            elevation: 0,
-            scrolledUnderElevation: 0),
-        textTheme: _textTheme());
+      useMaterial3: true,
+      scaffoldBackgroundColor: backgroundColor,
+      disabledColor: const Color(0xffe0e0e0),
+      colorScheme: colorScheme,
+      platform: TargetPlatform.iOS,
+      dividerTheme: DividerThemeData(
+          color: colorScheme.secondaryContainer,
+          indent: 24,
+          endIndent: 24,
+          space: 24),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: colorScheme.secondary,
+        foregroundColor: colorScheme.onSecondary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      ),
+      appBarTheme: const AppBarTheme(
+          backgroundColor: backgroundColor,
+          elevation: 0,
+          scrolledUnderElevation: 0),
+      textTheme: _textTheme(),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colorScheme.surface,
+        prefixIconColor: colorScheme.onSurface.withOpacity(kEmphasisMedium),
+        hintStyle:
+            TextStyle(color: colorScheme.onSurface.withOpacity(kEmphasisLow)),
+        labelStyle: TextStyle(
+            color: colorScheme.onSurface.withOpacity(kEmphasisMedium)),
+        suffixIconColor: colorScheme.onSurface.withOpacity(kEmphasisMedium),
+        border: OutlineInputBorder(
+            borderSide: BorderSide(color: colorScheme.surface),
+            borderRadius: BorderRadius.circular(40)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: colorScheme.surface),
+            borderRadius: BorderRadius.circular(40)),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: colorScheme.secondary),
+            borderRadius: BorderRadius.circular(40)),
+        errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: colorScheme.error),
+            borderRadius: BorderRadius.circular(40)),
+        focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: colorScheme.error),
+            borderRadius: BorderRadius.circular(40)),
+      ),
+    );
   }
 
   ThemeData get useDarkTheme => ThemeData.dark().copyWith(

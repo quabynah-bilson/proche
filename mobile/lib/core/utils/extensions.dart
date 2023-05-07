@@ -555,12 +555,12 @@ extension BuildContextX on BuildContext {
                           context.localizer.selectCountry,
                           controller: countryController,
                           readOnly: true,
+                          horizontalPadding: 0,
                           enabled: !loading,
                           validator: Validators.validate,
-                          // TODO add country flag icon
-                          // prefixIcon: selectedCountry == null
-                          //     ? null
-                          //     : CountryFlagIcon(country: selectedCountry),
+                          prefix: selectedCountry == null
+                              ? null
+                              : CountryFlagIcon(country: selectedCountry),
                           onTap: () async {
                             selectedCountry = await showCountriesSheet();
                             countryController.text =
@@ -571,15 +571,16 @@ extension BuildContextX on BuildContext {
                         if (selectedCountry != null) ...{
                           FilledTextField(
                             localizer.phoneNumber,
+                            horizontalPadding: 0,
                             enabled: selectedCountry != null && !loading,
                             controller: phoneNumberController,
                             type: AppTextFieldType.phone,
                             validator: (input) =>
                                 Validators.validatePhone(context, input),
-                            maxLength: 10,
                             onChanged: (input) {
                               if (input.isEmpty) return;
-                              if (input.length >= 10) {
+                              if (input.trim().replaceAll(' ', '').length >=
+                                  10) {
                                 account = null;
                                 currentAccountBloc.add(
                                     GetAccountByPhoneNumberAuthEvent(
@@ -593,9 +594,10 @@ extension BuildContextX on BuildContext {
                           FilledTextField(
                             localizer.password,
                             enabled: !loading,
+                            horizontalPadding: 0,
                             controller: passwordController,
                             type: AppTextFieldType.password,
-                            prefixIcon: Icons.password,
+                            prefixIcon: TablerIcons.shield_lock,
                             validator: (input) =>
                                 Validators.validatePassword(context, input),
                           ),
@@ -714,6 +716,7 @@ extension BuildContextX on BuildContext {
                       FilledTextField(
                         localizer.search,
                         controller: searchController,
+                        horizontalPadding: 0,
                         onChanged: (input) {
                           if (input.isEmpty) {
                             setState(() => countries = state.data);

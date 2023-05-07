@@ -16,7 +16,7 @@ func NewSharedService() *SharedServiceImpl {
 }
 
 func (i *SharedServiceImpl) CheckForUpdates(_ context.Context, req *wrapperspb.StringValue) (*pb.AppVersion, error) {
-	appVersion := "0.0.1" // 0.0.0 is the latest version
+	appVersion := "0.0.0" // 0.0.0 is the latest version
 	var updateType pb.AppVersion_UpdateType
 	if appVersion == req.GetValue() {
 		updateType = pb.AppVersion_OPTIONAL

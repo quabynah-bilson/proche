@@ -715,10 +715,10 @@ packages:
     dependency: "direct main"
     description:
       name: get_it
-      sha256: ca77bd0c23e609e09a70989726295a92978589745e129c27d354e61e4070f804
+      sha256: "43133b45f32f1d96bbaeb43ea35a50ce854981baa80f47c3e26ee2ad23bef113"
       url: "https://pub.dev"
     source: hosted
-    version: "7.4.1"
+    version: "7.5.0"
   glob:
     dependency: transitive
     description:
@@ -843,10 +843,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: "73964e3609fb96e01e69b0924b939967c556e46c7ff05db2ea9e31019000f4ef"
+      sha256: a72242c9a0ffb65d03de1b7113bc4e189686fc07c7147b8b41811d0dd0e0d9bf
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.16"
+    version: "4.0.17"
   image_cropper:
     dependency: "direct main"
     description:
@@ -1426,10 +1426,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "05deb5a2de3967b387f08d7776ba002aa25b75cc"
+      resolved-ref: "18cd84f691b32d409d6212517819b0ce0e75508f"
       url: "https://github.com/quabynah-bilson/shared_utils.git"
     source: git
-    version: "0.0.52-dev.52"
+    version: "0.1.0-alpha.2"
   shelf:
     dependency: transitive
     description:
