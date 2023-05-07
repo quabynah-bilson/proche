@@ -24,7 +24,6 @@ import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'validator.dart';
 
 extension BuildContextX on BuildContext {
-
   AppLocalizations get localizer => AppLocalizations.of(this)!;
 
   Future<void> showVerifyPasswordSheet(Account updatedAccount) async {
@@ -75,10 +74,11 @@ extension BuildContextX on BuildContext {
                             color: colorScheme.error,
                             alignment: TextAlign.center)
                         .bottom(16),
-                  AppTextField(
+                  FilledTextField(
                     localizer.password,
-                    focusNode: focusNode,
-                    textFieldType: AppTextFieldType.password,
+                    // TODO uncomment when focus node is added to FilledTextField
+                    // focusNode: focusNode,
+                    type: AppTextFieldType.password,
                     validator: (input) =>
                         Validators.validatePassword(context, input),
                     controller: passwordController,
@@ -254,6 +254,7 @@ extension BuildContextX on BuildContext {
       backgroundColor: colorScheme.background,
       useRootNavigator: true,
       bounce: true,
+      enableDrag: appVersion.updateType == AppVersion_UpdateType.OPTIONAL,
       isDismissible: false,
       builder: (context) => AnimatedColumn(
         animateType: AnimateType.slideDown,
@@ -276,16 +277,15 @@ extension BuildContextX on BuildContext {
             onTap: () => _showInAppBrowser(
                 Platform.isAndroid ? appVersion.androidUrl : appVersion.iosUrl),
           ).top(40),
-          SafeArea(
-            top: false,
-            child: TextButton(
+          if (appVersion.updateType == AppVersion_UpdateType.OPTIONAL) ...{
+            TextButton(
               onPressed: context.navigator.pop,
               child: localizer.updateLater
                   .button(context, alignment: TextAlign.center),
             ).top(8),
-          ),
+          },
         ],
-      ),
+      ).bottom(mediaQuery.padding.bottom + 8),
     );
   }
 
@@ -551,15 +551,16 @@ extension BuildContextX on BuildContext {
                             .bodyText2(context, alignment: TextAlign.center)
                             .top(8)
                             .bottom(40),
-                        AppTextField(
+                        FilledTextField(
                           context.localizer.selectCountry,
                           controller: countryController,
                           readOnly: true,
                           enabled: !loading,
                           validator: Validators.validate,
-                          prefixIcon: selectedCountry == null
-                              ? null
-                              : CountryFlagIcon(country: selectedCountry),
+                          // TODO add country flag icon
+                          // prefixIcon: selectedCountry == null
+                          //     ? null
+                          //     : CountryFlagIcon(country: selectedCountry),
                           onTap: () async {
                             selectedCountry = await showCountriesSheet();
                             countryController.text =
@@ -568,16 +569,16 @@ extension BuildContextX on BuildContext {
                           },
                         ),
                         if (selectedCountry != null) ...{
-                          AppTextField(
+                          FilledTextField(
                             localizer.phoneNumber,
                             enabled: selectedCountry != null && !loading,
                             controller: phoneNumberController,
-                            textFieldType: AppTextFieldType.phone,
+                            type: AppTextFieldType.phone,
                             validator: (input) =>
                                 Validators.validatePhone(context, input),
                             maxLength: 10,
-                            onChange: (input) {
-                              if (input == null) return;
+                            onChanged: (input) {
+                              if (input.isEmpty) return;
                               if (input.length >= 10) {
                                 account = null;
                                 currentAccountBloc.add(
@@ -585,18 +586,16 @@ extension BuildContextX on BuildContext {
                                         phoneNumberController.text.trim()));
                               }
                             },
-                            floatLabel: true,
-                            prefixIcon: const Icon(TablerIcons.phone_plus),
+                            prefixIcon: TablerIcons.phone_plus,
                           ),
                         },
                         if (account != null) ...{
-                          AppTextField(
+                          FilledTextField(
                             localizer.password,
                             enabled: !loading,
                             controller: passwordController,
-                            floatLabel: true,
-                            textFieldType: AppTextFieldType.password,
-                            prefixIcon: const Icon(Icons.password),
+                            type: AppTextFieldType.password,
+                            prefixIcon: Icons.password,
                             validator: (input) =>
                                 Validators.validatePassword(context, input),
                           ),
@@ -712,12 +711,11 @@ extension BuildContextX on BuildContext {
                     padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
                     children: [
                       localizer.selectCountry.subtitle1(context).bottom(16),
-                      AppTextField(
+                      FilledTextField(
                         localizer.search,
                         controller: searchController,
-                        inputType: TextInputType.text,
-                        onChange: (input) {
-                          if (input == null) {
+                        onChanged: (input) {
+                          if (input.isEmpty) {
                             setState(() => countries = state.data);
                           } else {
                             setState(() {
@@ -896,12 +894,12 @@ extension BuildContextX on BuildContext {
                     .bottom(16),
                 Form(
                   key: formKey,
-                  child: AppTextField(
+                  child: FilledTextField(
                     context.localizer.enterOption,
                     controller: otherSpecializationController,
                     capitalization: TextCapitalization.words,
                     validator: Validators.validate,
-                    onChange: (input) =>
+                    onChanged: (input) =>
                         setState(() => showNextButton = !input.isNullOrEmpty()),
                   ),
                 ).horizontal(24),
@@ -1008,18 +1006,19 @@ extension BuildContextX on BuildContext {
                               .add(UpdateAccountAuthEvent(seeker));
                         },
                       ),
-                      AppTextField(
+                      FilledTextField(
                         context.localizer.availableToStart,
                         controller: dateController,
-                        textFieldType: AppTextFieldType.select,
+                        type: AppTextFieldType.select,
                         onTap: () {
                           // todo -> show date picker
                         },
                       ),
-                      AppTextField(
+                      FilledTextField(
                         context.localizer.notes,
                         controller: noteController,
-                        inputType: TextInputType.multiline,
+                        // TODO uncomment when inputType is fixed in the package
+                        // inputType: TextInputType.multiline,
                         capitalization: TextCapitalization.sentences,
                       ),
                       AppRoundedButton(
