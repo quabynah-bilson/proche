@@ -13,8 +13,7 @@ class CountryFlagIcon extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       clipBehavior: Clip.hardEdge,
       decoration: const BoxDecoration(),
@@ -25,5 +24,4 @@ class CountryFlagIcon extends StatelessWidget {
             height: 24, width: 16, fit: BoxFit.contain, fromAsset: false),
       ),
     );
-  }
 }

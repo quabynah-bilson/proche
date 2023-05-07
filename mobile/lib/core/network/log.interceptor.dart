@@ -15,7 +15,7 @@ class LogGrpcInterceptor implements ClientInterceptor {
     // do nothing for now
     return invoker(method, requests, options)
       ..map((data) {
-        logger.d('grpc unary response => $data');
+        logger.d('grpc stream response => $data');
         return data;
       });
   }

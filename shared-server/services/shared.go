@@ -15,10 +15,19 @@ func NewSharedService() *SharedServiceImpl {
 	return &SharedServiceImpl{}
 }
 
-func (i *SharedServiceImpl) CheckForUpdates(context.Context, *wrapperspb.StringValue) (*pb.AppVersion, error) {
+func (i *SharedServiceImpl) CheckForUpdates(_ context.Context, req *wrapperspb.StringValue) (*pb.AppVersion, error) {
+	appVersion := "0.0.0" // 0.0.0 is the latest version
+	var updateType pb.AppVersion_UpdateType
+	if appVersion == req.GetValue() {
+		updateType = pb.AppVersion_OPTIONAL
+	} else {
+		updateType = pb.AppVersion_MANDATORY
+	}
+
 	return &pb.AppVersion{
-		Version:    "0.0.0", // 0.0.0 is the latest version
+		Version:    appVersion,
 		AndroidUrl: "https://play.google.com/store/apps/details?id=com.qcodelabsllc.proche.mobile",
 		IosUrl:     "https://itunes.apple.com/us/app/yourapp/id123456789", // TODO: update this
+		UpdateType: updateType,
 	}, nil
 }

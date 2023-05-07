@@ -9,11 +9,16 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'shared.pbenum.dart';
+
+export 'shared.pbenum.dart';
+
 class AppVersion extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AppVersion', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'shared'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'version')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'androidUrl', protoName: 'androidUrl')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iosUrl', protoName: 'iosUrl')
+    ..e<AppVersion_UpdateType>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updateType', $pb.PbFieldType.OE, protoName: 'updateType', defaultOrMaker: AppVersion_UpdateType.OPTIONAL, valueOf: AppVersion_UpdateType.valueOf, enumValues: AppVersion_UpdateType.values)
     ..hasRequiredFields = false
   ;
 
@@ -22,6 +27,7 @@ class AppVersion extends $pb.GeneratedMessage {
     $core.String? version,
     $core.String? androidUrl,
     $core.String? iosUrl,
+    AppVersion_UpdateType? updateType,
   }) {
     final _result = create();
     if (version != null) {
@@ -32,6 +38,9 @@ class AppVersion extends $pb.GeneratedMessage {
     }
     if (iosUrl != null) {
       _result.iosUrl = iosUrl;
+    }
+    if (updateType != null) {
+      _result.updateType = updateType;
     }
     return _result;
   }
@@ -82,6 +91,15 @@ class AppVersion extends $pb.GeneratedMessage {
   $core.bool hasIosUrl() => $_has(2);
   @$pb.TagNumber(3)
   void clearIosUrl() => clearField(3);
+
+  @$pb.TagNumber(4)
+  AppVersion_UpdateType get updateType => $_getN(3);
+  @$pb.TagNumber(4)
+  set updateType(AppVersion_UpdateType v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasUpdateType() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearUpdateType() => clearField(4);
 }
 
 class AddressWithLatLngName extends $pb.GeneratedMessage {

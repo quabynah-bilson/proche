@@ -1,5 +1,5 @@
 extern crate bcrypt;
-// Load I18n macro, for allow you use `t!` macro in anywhere.
+
 #[macro_use]
 extern crate rust_i18n;
 
@@ -77,7 +77,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let business_account_collection_name =
         std::env::var("BUSINESS_ACCOUNT_COLLECTION").expect("BUSINESS_ACCOUNT_COLLECTION must be set");
     let country_collection_name =
-        std::env::var("COUNTRY_COLLECTION").expect("ACCOUNT_COLLECTION must be set");
+        std::env::var("COUNTRY_COLLECTION").expect("COUNTRY_COLLECTION must be set");
 
     // create collections based on proto
     let account_collection = mongo_db.collection::<Document>(&account_collection_name);

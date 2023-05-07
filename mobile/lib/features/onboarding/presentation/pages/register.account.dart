@@ -139,15 +139,14 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                           .bodyText2(context, alignment: TextAlign.center)
                           .top(8)
                           .bottom(24),
-                      AppTextField(
+                      FilledTextField(
                         context.localizer.displayName,
                         enabled: _selectedCountry != null && !_loading,
                         controller: _nameController,
                         capitalization: TextCapitalization.words,
                         validator: Validators.validate,
                         maxLength: 20,
-                        floatLabel: true,
-                        prefixIcon: const Icon(TablerIcons.id_badge_2),
+                        prefixIcon: TablerIcons.id_badge_2,
                       ).top(24),
 
                       /// show avatars
@@ -209,13 +208,13 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                           .bodyText2(context, alignment: TextAlign.center)
                           .top(8)
                           .bottom(40),
-                      AppTextField(
+                      FilledTextField(
                         context.localizer.selectCountry,
                         controller: _countryController,
                         readOnly: true,
                         enabled: !_loading,
                         validator: Validators.validate,
-                        prefixIcon: _selectedCountry == null
+                        prefix: _selectedCountry == null
                             ? null
                             : CountryFlagIcon(country: _selectedCountry),
                         onTap: () async {
@@ -226,37 +225,34 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                         },
                       ),
                       if (_selectedCountry != null) ...{
-                        AppTextField(
+                        FilledTextField(
                           context.localizer.phoneNumber,
                           enabled: _selectedCountry != null && !_loading,
                           controller: _phoneNumberController,
-                          textFieldType: AppTextFieldType.phone,
+                          type: AppTextFieldType.phone,
                           validator: (input) =>
-                              Validators.validatePassword(context, input),
-                          maxLength: 10,
-                          onChange: (input) {
-                            if (input == null) return;
-                            if (input.length >= 10) {
+                              Validators.validatePhone(context, input),
+                          onChanged: (input) {
+                            if (input.isNullOrEmpty()) return;
+                            if (input.replaceAll(' ', '').trim().length >= 10) {
                               _currentAccountBloc.add(
                                   GetAccountByPhoneNumberAuthEvent(
                                       _phoneNumberController.text.trim()));
                             }
                           },
-                          floatLabel: true,
-                          prefixIcon: const Icon(TablerIcons.phone_plus),
+                          prefixIcon: TablerIcons.phone_plus,
                         ),
                       },
                       BlocBuilder(
                         bloc: _currentAccountBloc,
                         builder: (context, state) {
                           if (state is ErrorState<String>) {
-                            return AppTextField(
+                            return FilledTextField(
                               context.localizer.password,
                               enabled: !_loading,
                               controller: _passwordController,
-                              floatLabel: true,
-                              textFieldType: AppTextFieldType.password,
-                              prefixIcon: const Icon(Icons.password),
+                              type: AppTextFieldType.password,
+                              prefixIcon: Icons.password,
                               validator: (input) =>
                                   Validators.validatePassword(context, input),
                             );
