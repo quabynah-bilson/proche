@@ -62,10 +62,14 @@ protoc -I=$NOTIFICATION_PROTO_PATH --go_out=$NOTIFICATION_SERVER_DIR/gen --go_op
   $(find $NOTIFICATION_PROTO_PATH -iname "*.proto")
 
 # copy the proto file from media-server to auth-server
-cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
+#rm -f $AUTH_PROTO_PATH/media.proto
+#cp $MEDIA_PROTO_PATH/media.proto $AUTH_PROTO_PATH/media.proto
 
 # generate for auth-server using rust
-cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
+#cargo build --manifest-path $AUTH_SERVER_DIR/Cargo.toml
+
+# generate for sms-server using rust
+#cargo build --manifest-path $SMS_SERVER_DIR/Cargo.toml
 
 # generate for sms-server using rust
 #cargo build --manifest-path $SMS_SERVER_DIR/Cargo.toml

@@ -211,7 +211,7 @@ type LoginRequest struct {
 func (x *LoginRequest) Reset() {
 	*x = LoginRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_auth_proto_msgTypes[3]
+		mi := &file_auth_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -224,7 +224,7 @@ func (x *LoginRequest) String() string {
 func (*LoginRequest) ProtoMessage() {}
 
 func (x *LoginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_proto_msgTypes[3]
+	mi := &file_auth_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -237,7 +237,7 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
 func (*LoginRequest) Descriptor() ([]byte, []int) {
-	return file_auth_proto_rawDescGZIP(), []int{3}
+	return file_auth_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *LoginRequest) GetPhoneNumber() string {
@@ -279,7 +279,7 @@ type RegisterRequest struct {
 func (x *RegisterRequest) Reset() {
 	*x = RegisterRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_auth_proto_msgTypes[4]
+		mi := &file_auth_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -292,7 +292,7 @@ func (x *RegisterRequest) String() string {
 func (*RegisterRequest) ProtoMessage() {}
 
 func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_proto_msgTypes[4]
+	mi := &file_auth_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -305,7 +305,7 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return file_auth_proto_rawDescGZIP(), []int{4}
+	return file_auth_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *RegisterRequest) GetPhoneNumber() string {
@@ -376,7 +376,7 @@ type ResetPasswordRequest struct {
 func (x *ResetPasswordRequest) Reset() {
 	*x = ResetPasswordRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_auth_proto_msgTypes[5]
+		mi := &file_auth_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -389,7 +389,7 @@ func (x *ResetPasswordRequest) String() string {
 func (*ResetPasswordRequest) ProtoMessage() {}
 
 func (x *ResetPasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_proto_msgTypes[5]
+	mi := &file_auth_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -402,7 +402,7 @@ func (x *ResetPasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResetPasswordRequest.ProtoReflect.Descriptor instead.
 func (*ResetPasswordRequest) Descriptor() ([]byte, []int) {
-	return file_auth_proto_rawDescGZIP(), []int{5}
+	return file_auth_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ResetPasswordRequest) GetPhoneNumber() string {
@@ -445,7 +445,7 @@ type Account struct {
 func (x *Account) Reset() {
 	*x = Account{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_auth_proto_msgTypes[6]
+		mi := &file_auth_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -458,7 +458,7 @@ func (x *Account) String() string {
 func (*Account) ProtoMessage() {}
 
 func (x *Account) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_proto_msgTypes[6]
+	mi := &file_auth_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -471,7 +471,7 @@ func (x *Account) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Account.ProtoReflect.Descriptor instead.
 func (*Account) Descriptor() ([]byte, []int) {
-	return file_auth_proto_rawDescGZIP(), []int{6}
+	return file_auth_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Account) GetId() string {
@@ -1218,7 +1218,7 @@ func file_auth_proto_init() {
 				return nil
 			}
 		}
-		file_auth_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_auth_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterRequest); i {
 			case 0:
 				return &v.state
@@ -1230,7 +1230,7 @@ func file_auth_proto_init() {
 				return nil
 			}
 		}
-		file_auth_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_auth_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ResetPasswordRequest); i {
 			case 0:
 				return &v.state
@@ -1242,7 +1242,7 @@ func file_auth_proto_init() {
 				return nil
 			}
 		}
-		file_auth_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_auth_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Account); i {
 			case 0:
 				return &v.state
