@@ -580,7 +580,8 @@ extension BuildContextX on BuildContext {
                                 Validators.validatePhone(context, input),
                             onChanged: (input) {
                               if (input.isEmpty) return;
-                              if (input.length >= 10) {
+                              if (input.trim().replaceAll(' ', '').length >=
+                                  10) {
                                 account = null;
                                 currentAccountBloc.add(
                                     GetAccountByPhoneNumberAuthEvent(
