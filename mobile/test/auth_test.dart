@@ -24,17 +24,17 @@ class MockMessagingRepository extends Mock implements BaseMessagingRepository {}
 
 void main() {
   late final AuthServiceClient _authServiceClient;
-  late final SmsServiceClient _smsServiceClient;
-  late final MediaServiceClient _mediaServiceClient;
-  late final BaseLocalStorageRepository _localStorageRepository;
-  late final BaseMessagingRepository _messagingRepository;
+  // late final SmsServiceClient _smsServiceClient;
+  // late final MediaServiceClient _mediaServiceClient;
+  // late final BaseLocalStorageRepository _localStorageRepository;
+  // late final BaseMessagingRepository _messagingRepository;
 
   setUpAll(() {
     _authServiceClient = MockAuthServiceClient();
-    _smsServiceClient = MockSmsServiceClient();
-    _mediaServiceClient = MockMediaServiceClient();
-    _localStorageRepository = MockLocalRepository();
-    _messagingRepository = MockMessagingRepository();
+    // _smsServiceClient = MockSmsServiceClient();
+    // _mediaServiceClient = MockMediaServiceClient();
+    // _localStorageRepository = MockLocalRepository();
+    // _messagingRepository = MockMessagingRepository();
   });
 
   group('test auth repository', () {
