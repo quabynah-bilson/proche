@@ -67,7 +67,7 @@ impl AuthService for AuthServiceImpl {
         // get account from db
         let account = match self
             .account_col
-            .find_one(doc! {"phone_number": &req.phone_number}, None)
+            .find_one(doc! {"phone_number": req.phone_number}, None)
             .await
         {
             Ok(account) => account,

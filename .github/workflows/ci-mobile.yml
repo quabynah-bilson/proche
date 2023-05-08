@@ -8,7 +8,7 @@ on:
       - feature/*
 
 jobs:
-  flutter_test:
+  ci:
     name: Run a Flutter test & analyze
     runs-on: ubuntu-latest
     steps:
