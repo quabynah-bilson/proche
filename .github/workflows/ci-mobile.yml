@@ -11,7 +11,6 @@ jobs:
   flutter_test:
     name: Run a Flutter test & analyze
     runs-on: ubuntu-latest
-    working-directory: mobile
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
@@ -29,7 +28,10 @@ jobs:
             ${{ runner.os }}-pub-cache-
       - name: Get dependencies
         run: flutter pub get
+        working-directory: mobile
       - name: Analyze
         run: flutter analyze
+        working-directory: mobile
       - name: Run tests
         run: flutter test
+        working-directory: mobile
