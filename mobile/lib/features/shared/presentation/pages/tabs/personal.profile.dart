@@ -420,20 +420,18 @@ class _PersonalProfileTabState extends State<_PersonalProfileTab> {
                       context.localizer.profileEditHeader
                           .subtitle1(context, weight: FontWeight.w600)
                           .vertical(16),
-                      AppTextField(
+                      FilledTextField(
                         context.localizer.username,
                         controller: _nameController,
                         enabled: !_loading,
-                        floatLabel: true,
                         capitalization: TextCapitalization.words,
                         validator: Validators.validate,
                       ),
-                      AppTextField(
+                      FilledTextField(
                         context.localizer.phoneNumber,
                         controller: _phoneController,
                         enabled: !_loading,
                         readOnly: true,
-                        floatLabel: true,
                         validator: (input) =>
                             Validators.validatePhone(context, input),
                       ),

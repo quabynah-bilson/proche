@@ -14,7 +14,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  var _loading = false;
+  final _loading = false;
 
   @override
   Widget build(BuildContext context) {

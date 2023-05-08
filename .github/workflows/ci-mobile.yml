@@ -1,0 +1,33 @@
+name: CI for Mobile App
+on:
+  pull_request:
+    branches:
+      - dev
+    push:
+      branches:
+        - feature/*
+
+jobs:
+  flutter_test:
+    name: Run a Flutter test & analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache-
+      - name: Get dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Run tests
+        run: flutter test

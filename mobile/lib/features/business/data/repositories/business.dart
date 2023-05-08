@@ -3,16 +3,14 @@ import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/features/business/domain/repositories/business.dart';
-import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 import 'package:mobile/generated/protos/auth.pbgrpc.dart';
 import 'package:protobuf_google/protobuf_google.dart';
 
 @Injectable(as: BaseBusinessRepository)
 class ProcheBusinessRepository extends BaseBusinessRepository {
-  final BaseLocalStorageRepository _storage;
   final AuthServiceClient _client;
 
-  ProcheBusinessRepository(this._storage, this._client);
+  ProcheBusinessRepository(this._client);
 
   @override
   Future<Either<Empty, String>> deleteBusinessAccount(String id) async {

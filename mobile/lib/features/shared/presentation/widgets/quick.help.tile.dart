@@ -196,7 +196,7 @@ class SummaryQuickHelpListTile extends StatefulWidget {
 class _SummaryQuickHelpListTileState extends State<SummaryQuickHelpListTile> {
   final _kBorderRadius = 16.0, _authBloc = AuthBloc();
   late final _isOwner = UserSession.kUserId == widget.task.userId;
-  late var _isFavorite = false, _distance = 0.0;
+  late var _distance = 0.0;
 
   @override
   void initState() {

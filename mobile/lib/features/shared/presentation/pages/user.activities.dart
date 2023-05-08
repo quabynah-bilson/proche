@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/core/routing/router.dart';
 import 'package:mobile/core/utils/extensions.dart';
-import 'package:mobile/features/shared/presentation/manager/location/location_cubit.dart';
 import 'package:mobile/features/shared/presentation/manager/post/posts_bloc.dart';
 import 'package:mobile/features/shared/presentation/widgets/quick.help.tile.dart';
 import 'package:mobile/generated/assets.dart';
@@ -21,9 +20,8 @@ class UserActivitiesPage extends StatefulWidget {
 }
 
 class _UserActivitiesPageState extends State<UserActivitiesPage> {
-  late final _postsBloc = PostsBloc(), _locationBloc = LocationCubit(context);
+  late final _postsBloc = PostsBloc();
   var _loading = true, _selectedTabIndex = 0;
-  CommonAddress? _currentAddress;
   var _tasks = <ProcheTask>[],
       _giveaways = <GiveAway>[],
       _trips = <Trip>[],
