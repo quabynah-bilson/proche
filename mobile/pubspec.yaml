@@ -76,7 +76,6 @@ flutter:
     - assets/anim/
     - assets/img/
     - assets/img/avatars/
-    - .env
 
 
 # flutter pub run flutter_launcher_icons
