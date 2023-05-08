@@ -11,6 +11,7 @@ jobs:
   flutter_test:
     name: Run a Flutter test & analyze
     runs-on: ubuntu-latest
+    working-directory: mobile
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
@@ -20,12 +21,12 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
-#      - uses: actions/cache@v2
-#        with:
-#          path: ~/.pub-cache
-#          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.lock') }}
-#          restore-keys: |
-#            ${{ runner.os }}-pub-cache-
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache-
       - name: Get dependencies
         run: flutter pub get
       - name: Analyze
