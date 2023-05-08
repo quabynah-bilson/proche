@@ -492,10 +492,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_multi_formatter
-      sha256: "8da922955cb4d1414e9f8ff5c0811682a20d8a15807c1981499592079b00d9b9"
+      sha256: c8b40c94350eff4730f76059c0e84a6cca9e0ebcf3c7a2c741c6ab327b65bc01
       url: "https://pub.dev"
     source: hosted
-    version: "2.10.4"
+    version: "2.10.9"
   flutter_native_splash:
     dependency: "direct dev"
     description:
