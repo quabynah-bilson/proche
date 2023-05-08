@@ -72,10 +72,10 @@ void main() {
     test('login with phone number & password', () async {
       final request = LoginRequest(
         phoneNumber: phoneNumber,
-        countryId: 'gh-00233-asjsd',
+        countryId: 'gh-sample-id',
         password: '1234',
       );
-      final response = StringValue(value: 'ajshasas');
+      final response = StringValue(value: 'sample-token');
       when(() => _authServiceClient.login(request)).thenAnswer(
           (invocation) => MockResponseFuture<StringValue>(response));
       final result = await _authServiceClient.login(request);
