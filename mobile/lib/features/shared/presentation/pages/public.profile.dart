@@ -284,6 +284,9 @@ class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
             ],
           ),
           body: LoadingIndicator(
+            isLoading: _loading,
+            loadingAnimIsAsset: true,
+            lottieAnimResource: Assets.animLoading,
             child: Column(
               children: [
                 PilledTabContainer(

@@ -234,7 +234,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                               Validators.validatePhone(context, input),
                           onChanged: (input) {
                             if (input.isNullOrEmpty()) return;
-                            if (input.replaceAll(' ', '').trim().length >= 10) {
+                            if (input.length >= 10) {
                               _currentAccountBloc.add(
                                   GetAccountByPhoneNumberAuthEvent(
                                       _phoneNumberController.text.trim()));
@@ -252,7 +252,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                               enabled: !_loading,
                               controller: _passwordController,
                               type: AppTextFieldType.password,
-                              prefixIcon: Icons.password,
+                              prefixIcon: TablerIcons.shield_lock,
                               validator: (input) =>
                                   Validators.validatePassword(context, input),
                             );

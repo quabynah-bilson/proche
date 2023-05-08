@@ -85,11 +85,11 @@ class _CreateBusinessAccountPageState extends State<CreateBusinessAccountPage> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      AppTextField(
+                      FilledTextField(
                         context.localizer.specialization,
                         controller: _specializationController,
                         validator: Validators.validate,
-                        textFieldType: AppTextFieldType.select,
+                        type: AppTextFieldType.select,
                         onTap: () async {
                           var specialization =
                               await context.showSpecializationSheet();
@@ -99,12 +99,12 @@ class _CreateBusinessAccountPageState extends State<CreateBusinessAccountPage> {
                       ),
                       BlocBuilder(
                         bloc: _countryBloc,
-                        builder: (context, state) => AppTextField(
+                        builder: (context, state) => FilledTextField(
                           context.localizer.hourlyRate,
                           controller: _hourlyChargeController,
                           validator: Validators.validate,
-                          textFieldType: AppTextFieldType.currency,
-                          prefixIcon: state is SuccessState<Country>
+                          type: AppTextFieldType.currency,
+                          prefix: state is SuccessState<Country>
                               ? CountryFlagIcon(
                                   country: state.data, showCurrency: true)
                               : null,

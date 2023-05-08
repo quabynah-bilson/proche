@@ -112,36 +112,32 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      AppTextField(
+                      FilledTextField(
                         context.localizer.phoneNumber,
                         controller: _phoneNumberController,
                         validator: (input) =>
                             Validators.validatePhone(context, input),
-                        prefixIcon: const Icon(TablerIcons.phone_plus),
-                        textFieldType: AppTextFieldType.phone,
-                        maxLength: 16,
-                        floatLabel: true,
+                        prefixIcon: TablerIcons.phone_plus,
+                        type: AppTextFieldType.phone,
                         enabled: !_loading && !_showPasswordEntryField,
                       ),
                       if (_showPasswordEntryField) ...{
-                        AppTextField(
+                        FilledTextField(
                           context.localizer.password,
                           controller: _passwordController,
-                          floatLabel: true,
                           validator: (input) =>
                               Validators.validatePassword(context, input),
-                          prefixIcon: const Icon(Icons.password),
-                          textFieldType: AppTextFieldType.password,
+                          prefixIcon: TablerIcons.shield_lock,
+                          type: AppTextFieldType.password,
                           enabled: !_loading,
                         ),
-                        AppTextField(
+                        FilledTextField(
                           context.localizer.confirmPassword,
                           controller: _confirmPasswordController,
-                          floatLabel: true,
                           validator: (value) => Validators.validatePassword(
                               context, value, _passwordController.text.trim()),
-                          prefixIcon: const Icon(Icons.password),
-                          textFieldType: AppTextFieldType.password,
+                          prefixIcon: TablerIcons.shield_check,
+                          type: AppTextFieldType.password,
                           enabled: !_loading,
                         ),
                       },

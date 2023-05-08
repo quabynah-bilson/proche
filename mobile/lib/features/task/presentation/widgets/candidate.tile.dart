@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/core/routing/router.dart';
-import 'package:mobile/core/utils/extensions.dart';
 import 'package:mobile/core/utils/session.dart';
 import 'package:mobile/generated/assets.dart';
 import 'package:mobile/generated/protos/core_shared.pb.dart';

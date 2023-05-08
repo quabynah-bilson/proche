@@ -15,7 +15,7 @@ class UserFavoritesPage extends StatefulWidget {
 
 class _UserFavoritesPageState extends State<UserFavoritesPage> {
   final _quickHelpBloc = TaskBloc();
-  var _loading = false;
+  final _loading = false;
 
   @override
   Widget build(BuildContext context) => BlocListener(

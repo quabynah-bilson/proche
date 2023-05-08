@@ -79,6 +79,7 @@ extension BuildContextX on BuildContext {
                     // TODO uncomment when focus node is added to FilledTextField
                     // focusNode: focusNode,
                     type: AppTextFieldType.password,
+                    prefixIcon: TablerIcons.shield_lock,
                     validator: (input) =>
                         Validators.validatePassword(context, input),
                     controller: passwordController,
