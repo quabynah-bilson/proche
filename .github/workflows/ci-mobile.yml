@@ -3,9 +3,6 @@ on:
   pull_request:
     branches:
       - dev
-  push:
-    branches:
-      - feature/*
 
 jobs:
   flutter_test:
