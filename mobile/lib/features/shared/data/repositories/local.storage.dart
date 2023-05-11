@@ -7,7 +7,7 @@ import 'package:mobile/features/shared/domain/repositories/local.storage.dart';
 class ProcheLocalStorageRepository extends BaseLocalStorageRepository {
   final FlutterSecureStorage storage;
 
-  const ProcheLocalStorageRepository(this.storage);
+  ProcheLocalStorageRepository(this.storage);
 
   @override
   Future<void> clearAccessToken() async {
