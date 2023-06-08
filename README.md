@@ -2,6 +2,8 @@
 
 ###### (means Nearby in French)
 
+###### NB: This repository will be archived until October of this year (2023). I will resume work on it and make it publicly available once again. Sorry for any inconveniences this may lead to 🥲
+
 [//]: # ([![Coverage Status]&#40;https://coveralls.io/repos/github/quabynah-bilson/proche/badge.svg?branch=master&#41;]&#40;https://coveralls.io/github/quabynah-bilson/proche?branch=dev&#41;)
 
 [//]: # ([![Go Report Card]&#40;https://goreportcard.com/badge/github.com/quabynah-bilson/proche&#41;]&#40;https://goreportcard.com/report/github.com/quabynah-bilson/proche&#41;)
