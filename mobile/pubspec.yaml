@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 0.0.0-pilot+0
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -22,16 +22,12 @@ dependencies:
   get_it: ^7.2.0
   bloc: ^8.1.1
   flutter_bloc: ^8.1.2
-  modal_bottom_sheet:
-    git:
-      url: https://github.com/followthemoney1/modal_bottom_sheet.git
-      ref: main
-      path: modal_bottom_sheet
-  pinput: ^2.2.31
+  modal_bottom_sheet: ^3.0.0-pre
+  pinput:
   dartz: ^0.10.1
   lottie: ^2.3.2
   google_fonts: ^4.0.3
-  flutter_secure_storage: ^8.0.0
+  flutter_secure_storage:
   device_info_plus: ^8.2.0
   shared_utils:
     git: https://github.com/quabynah-bilson/shared_utils.git
@@ -44,9 +40,9 @@ dependencies:
   geolocator: ^9.0.2
   rive: ^0.10.4
   sentry_flutter: ^7.4.2
-  geocoding: ^2.1.0
+  geocoding:
   package_info_plus: ^3.1.0
-  geofence_service: ^3.5.0
+  geofence_service:
   flutter_local_notifications: ^14.0.0
   webview_flutter_plus: ^0.3.0+2
   flutter_staggered_animations: ^1.1.1
@@ -63,11 +59,9 @@ dev_dependencies:
   build_runner: ^2.3.3
   injectable_generator: ^2.1.5
   flutter_launcher_icons: ^0.13.0
-  flutter_native_splash: ^2.2.19
+  flutter_native_splash:
   mocktail: ^0.3.0
   change_app_package_name: ^1.1.0
-  integration_test:
-    sdk: flutter
 
 flutter:
   generate: true

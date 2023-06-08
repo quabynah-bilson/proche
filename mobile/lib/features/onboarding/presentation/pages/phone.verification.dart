@@ -67,7 +67,7 @@ class _PhoneNumberVerificationPageState
           inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
           length: 6,
           validator: (input) => Validators.validateAuthCode(context, input),
-          androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
+          // androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
           pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
           showCursor: true,
           onCompleted: (_) => _validateVerificationAuthCode(),
